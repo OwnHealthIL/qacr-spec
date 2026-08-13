@@ -1,0 +1,64 @@
+# Repository pins
+#
+# The commit each code repository stood at when the evidence in this folder was
+# read. A `file:line` citation only means something against a known commit —
+# without this, a citation that stops resolving is indistinguishable from a
+# citation that was always wrong.
+#
+# Re-read with:
+#   for r in iosDip AndroidDip AndroidQacr urine.com.ios-qacr-app; do
+#     git -C ~/Documents/Healthy.io/$r rev-parse HEAD; done
+#
+# If a commit below is no longer HEAD, the rows read at it may have rotted and
+# are the short list worth re-verifying — not the whole table.
+
+read_on: 2026-08-13
+root: ~/Documents/Healthy.io
+
+repositories:
+  - name: iosDip
+    path: ~/Documents/Healthy.io/iosDip
+    product: acr-ios
+    branch: develop
+    commit: e0636af3130ef43716c39f3a5b9f8fe2bf0172cf
+    commit_date: 2026-07-27T11:54:00+03:00
+    working_tree: dirty        # uncommitted local changes present when read
+    still_head: true
+
+  - name: AndroidDip
+    path: ~/Documents/Healthy.io/AndroidDip
+    product: acr-android
+    branch: develop
+    commit: a50d8b03ef3a641d7f5c0e22aa3cb8f2d2d2e0b8
+    commit_date: 2026-06-10T15:40:28+03:00
+    working_tree: clean
+    still_head: true
+
+  - name: urine.com.ios-qacr-app
+    path: ~/Documents/Healthy.io/urine.com.ios-qacr-app
+    product: qacr-ios
+    branch: feature/font-size
+    commit: 6814fb64691e2fe0fa94334816f003836891cb4e
+    commit_date: 2026-05-24T19:51:40+03:00
+    working_tree: dirty
+    still_head: true
+    note: >-
+      Same commit the vault pinned, but checked out on feature/font-size rather
+      than develop. A citation resolves against the commit, so the evidence is
+      unaffected; the branch name in older notes is stale.
+
+  - name: AndroidQacr
+    path: ~/Documents/Healthy.io/AndroidQacr
+    product: qacr-android
+    branch: master
+    commit: e600dff9f0d32eb94f3730b4d7733065fce86ce3
+    commit_date: 2026-06-03T21:23:42+03:00
+    working_tree: clean
+    still_head: true
+
+# All four pinned commits were still HEAD when this file was written.
+#
+# The shared packages the two products consume (ios-camera, ios-chat-services,
+# android.shared-*, and nine more) are not pinned here because no evidence row in
+# this repository cites them yet. The vault's `vault-build/repo_pins.json` carries
+# all sixteen, with a SHA-256 per cited file.

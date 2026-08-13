@@ -1,0 +1,1434 @@
+[
+ {
+  "id": "F01.1",
+  "title": "Store distribution and install-time compatibility",
+  "epic": "E01",
+  "milestones": [
+   "M3",
+   "M4"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-PLT-002",
+   "FR-PLT-003",
+   "FR-PLT-004",
+   "FR-PLT-001"
+  ]
+ },
+ {
+  "id": "F01.2",
+  "title": "Supported-device policy and run-time eligibility",
+  "epic": "E01",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-PLT-005",
+   "FR-RDY-002",
+   "FR-RDY-003",
+   "FR-RDY-004"
+  ]
+ },
+ {
+  "id": "F01.3",
+  "title": "Device integrity check",
+  "epic": "E01",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-RDY-001"
+  ]
+ },
+ {
+  "id": "F01.4",
+  "title": "Pre-test resource and permission checks",
+  "epic": "E01",
+  "milestones": [
+   "M1",
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-RDY-009",
+   "FR-RDY-005",
+   "FR-RDY-006",
+   "FR-RDY-007",
+   "FR-RDY-008",
+   "FR-RDY-010"
+  ]
+ },
+ {
+  "id": "F01.5",
+  "title": "Blocked-state pattern",
+  "epic": "E01",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-RDY-011",
+   "FR-SUP-003",
+   "FR-RDY-013",
+   "FR-RDY-014"
+  ]
+ },
+ {
+  "id": "F01.6",
+  "title": "Deferred-upload recovery at start-up",
+  "epic": "E01",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-RDY-012"
+  ]
+ },
+ {
+  "id": "F01.7",
+  "title": "Cross-platform behavioural parity",
+  "epic": "E01",
+  "milestones": [
+   "M2"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-PLT-006"
+  ]
+ },
+ {
+  "id": "F01.8",
+  "title": "Device and version telemetry on the test record",
+  "epic": "E01",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Algo"
+  ],
+  "requirements": [
+   "FR-PLT-008"
+  ]
+ },
+ {
+  "id": "F01.9",
+  "title": "Run-time configuration",
+  "epic": "E01",
+  "milestones": [
+   "M1",
+   "M3",
+   "M5"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Backend"
+  ],
+  "requirements": [
+   "FR-CFG-004",
+   "FR-CFG-001",
+   "FR-CFG-002",
+   "FR-CFG-003",
+   "FR-CFG-006",
+   "FR-CFG-008",
+   "FR-LCM-018"
+  ]
+ },
+ {
+  "id": "F02.1",
+  "title": "Phone number entry and lookup",
+  "epic": "E02",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Backend"
+  ],
+  "requirements": [
+   "FR-AUT-001",
+   "FR-AUT-002",
+   "FR-AUT-003"
+  ]
+ },
+ {
+  "id": "F02.2",
+  "title": "One-time password verification",
+  "epic": "E02",
+  "milestones": [
+   "M3",
+   "M4"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Backend"
+  ],
+  "requirements": [
+   "FR-AUT-004",
+   "FR-AUT-018",
+   "FR-AUT-019",
+   "FR-AUT-005"
+  ]
+ },
+ {
+  "id": "F02.3",
+  "title": "Invite code for unregistered numbers",
+  "epic": "E02",
+  "milestones": [
+   "M4"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Backend"
+  ],
+  "requirements": [
+   "FR-AUT-006"
+  ]
+ },
+ {
+  "id": "F02.4",
+  "title": "Date-of-birth confirmation at test start",
+  "epic": "E02",
+  "milestones": [
+   "M3",
+   "M5"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Backend"
+  ],
+  "requirements": [
+   "FR-AUT-008",
+   "FR-AUT-010",
+   "FR-AUT-012",
+   "FR-AUT-020",
+   "FR-AUT-007",
+   "FR-AUT-011",
+   "FR-AUT-015"
+  ]
+ },
+ {
+  "id": "F02.5",
+  "title": "Session and token lifecycle",
+  "epic": "E02",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Backend"
+  ],
+  "requirements": [
+   "FR-AUT-013",
+   "FR-AUT-014",
+   "FR-SEC-008",
+   "FR-COM-010"
+  ]
+ },
+ {
+  "id": "F02.6",
+  "title": "Authentication guidance and failure support",
+  "epic": "E02",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-AUT-016"
+  ]
+ },
+ {
+  "id": "F02.7",
+  "title": "Consent acknowledgement",
+  "epic": "E02",
+  "milestones": [
+   "M4",
+   "M5"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-CNS-001",
+   "FR-CNS-002",
+   "FR-CNS-003",
+   "FR-CNS-005",
+   "FR-CNS-006",
+   "FR-CNS-007"
+  ]
+ },
+ {
+  "id": "F02.8",
+  "title": "First-run onboarding",
+  "epic": "E02",
+  "milestones": [
+   "M4"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-AUT-017"
+  ]
+ },
+ {
+  "id": "F03.1",
+  "title": "QR capture and kit validation",
+  "epic": "E03",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Backend"
+  ],
+  "requirements": [
+   "FR-KIT-001",
+   "FR-KIT-002",
+   "FR-KIT-003"
+  ]
+ },
+ {
+  "id": "F03.2",
+  "title": "Reuse detection and new-kit gating",
+  "epic": "E03",
+  "milestones": [
+   "M3",
+   "M5"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Backend"
+  ],
+  "requirements": [
+   "FR-KIT-004",
+   "FR-KIT-007",
+   "FR-KIT-005"
+  ]
+ },
+ {
+  "id": "F04.1",
+  "title": "Step sequencer and confirmation model",
+  "epic": "E04",
+  "milestones": [
+   "M1",
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-FLW-001",
+   "FR-FLW-004",
+   "FR-FLW-005",
+   "FR-FLW-006"
+  ]
+ },
+ {
+  "id": "F04.2",
+  "title": "Instruction media, replay and spoken delivery",
+  "epic": "E04",
+  "milestones": [
+   "M1"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-FLW-002",
+   "FR-FLW-003",
+   "FR-FLW-008"
+  ]
+ },
+ {
+  "id": "F04.3",
+  "title": "State retention and interruption tolerance",
+  "epic": "E04",
+  "milestones": [
+   "M1"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-STA-002",
+   "FR-STA-003",
+   "FR-STA-005"
+  ]
+ },
+ {
+  "id": "F04.4",
+  "title": "Termination detection and invalidation",
+  "epic": "E04",
+  "milestones": [
+   "M1"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-STA-006",
+   "FR-STA-007"
+  ]
+ },
+ {
+  "id": "F04.5",
+  "title": "Cancellation",
+  "epic": "E04",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-STA-008",
+   "FR-STA-009",
+   "FR-STA-010"
+  ]
+ },
+ {
+  "id": "F04.6",
+  "title": "Demonstration navigation",
+  "epic": "E04",
+  "milestones": [
+   "M1"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-FLW-007"
+  ]
+ },
+ {
+  "id": "F04.7",
+  "title": "Scan practice",
+  "epic": "E04",
+  "milestones": [
+   "M1"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-IMG-022"
+  ]
+ },
+ {
+  "id": "F04.8",
+  "title": "Waiting-time card",
+  "epic": "E04",
+  "milestones": [
+   "M1"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-FLW-009"
+  ]
+ },
+ {
+  "id": "F05.1",
+  "title": "Timer framework and elapsed-time derivation",
+  "epic": "E05",
+  "milestones": [
+   "M1",
+   "M5"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-TIM-001",
+   "FR-TIM-002",
+   "FR-TIM-003",
+   "FR-TIM-004"
+  ]
+ },
+ {
+  "id": "F05.2",
+  "title": "Sample-freshness window",
+  "epic": "E05",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-TIM-006"
+  ]
+ },
+ {
+  "id": "F05.3",
+  "title": "Incubation gate and release-button window",
+  "epic": "E05",
+  "milestones": [
+   "M1"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-TIM-007",
+   "FR-TIM-009"
+  ]
+ },
+ {
+  "id": "F05.4",
+  "title": "Colour-evolution gate and scanning window",
+  "epic": "E05",
+  "milestones": [
+   "M1"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-TIM-008",
+   "FR-TIM-011"
+  ]
+ },
+ {
+  "id": "F05.5",
+  "title": "Timing display and expiry notification",
+  "epic": "E05",
+  "milestones": [
+   "M1",
+   "M4"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-TIM-005",
+   "FR-TIM-014",
+   "FR-COM-009",
+   "FR-COM-012"
+  ]
+ },
+ {
+  "id": "F05.6",
+  "title": "Timing invalidation messaging",
+  "epic": "E05",
+  "milestones": [
+   "M2"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-TIM-012"
+  ]
+ },
+ {
+  "id": "F06.1",
+  "title": "Camera acquisition and frame set",
+  "epic": "E06",
+  "milestones": [
+   "M1",
+   "M3",
+   "TBD"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Algo"
+  ],
+  "requirements": [
+   "FR-CAM-001",
+   "FR-CAM-003",
+   "FR-CAM-004",
+   "FR-CAM-002"
+  ]
+ },
+ {
+  "id": "F06.2",
+  "title": "QCR stage",
+  "epic": "E06",
+  "milestones": [
+   "M1"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Algo"
+  ],
+  "requirements": [
+   "FR-IMG-001",
+   "FR-IMG-002",
+   "FR-IMG-010",
+   "FR-IMG-011"
+  ]
+ },
+ {
+  "id": "F06.3",
+  "title": "QCR gates",
+  "epic": "E06",
+  "milestones": [
+   "M1"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Algo"
+  ],
+  "requirements": [
+   "FR-IMG-004",
+   "FR-IMG-005",
+   "FR-IMG-006",
+   "FR-IMG-007",
+   "FR-IMG-008"
+  ]
+ },
+ {
+  "id": "F06.4",
+  "title": "Real-time scan guidance, shown and spoken",
+  "epic": "E06",
+  "milestones": [
+   "M1"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-IMG-013",
+   "FR-IMG-014",
+   "FR-IMG-024"
+  ]
+ },
+ {
+  "id": "F06.5",
+  "title": "Colour normalisation",
+  "epic": "E06",
+  "milestones": [
+   "M1"
+  ],
+  "domains": [
+   "Algo"
+  ],
+  "requirements": [
+   "FR-IMG-016"
+  ]
+ },
+ {
+  "id": "F06.6",
+  "title": "Algorithm pipeline and IVTS boundaries",
+  "epic": "E06",
+  "milestones": [
+   "M1"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Algo"
+  ],
+  "requirements": [
+   "FR-IMG-009",
+   "FR-IMG-021",
+   "FR-IMG-015",
+   "FR-IMG-023"
+  ]
+ },
+ {
+  "id": "F07.1",
+  "title": "Content standards and control",
+  "epic": "E07",
+  "milestones": [
+   "M2",
+   "M3"
+  ],
+  "domains": [
+   "Content"
+  ],
+  "requirements": [
+   "FR-TXT-001",
+   "FR-TXT-002",
+   "FR-TXT-003",
+   "FR-TXT-004"
+  ]
+ },
+ {
+  "id": "F07.2",
+  "title": "Step instructional copy",
+  "epic": "E07",
+  "milestones": [
+   "M1"
+  ],
+  "domains": [
+   "Content"
+  ],
+  "requirements": [
+   "FR-TXT-005",
+   "FR-TXT-006",
+   "FR-TXT-007",
+   "FR-TXT-008",
+   "FR-TXT-009",
+   "FR-TXT-010",
+   "FR-TXT-011",
+   "FR-TXT-012",
+   "FR-TXT-013",
+   "FR-TXT-014",
+   "FR-TXT-015",
+   "FR-TXT-016",
+   "FR-TXT-017"
+  ]
+ },
+ {
+  "id": "F07.3",
+  "title": "Result and invalid-test copy",
+  "epic": "E07",
+  "milestones": [
+   "M1",
+   "M3"
+  ],
+  "domains": [
+   "Content"
+  ],
+  "requirements": [
+   "FR-TXT-019",
+   "FR-TXT-021"
+  ]
+ },
+ {
+  "id": "F07.4",
+  "title": "Blocking and error message content",
+  "epic": "E07",
+  "milestones": [
+   "M1"
+  ],
+  "domains": [
+   "Content"
+  ],
+  "requirements": [
+   "FR-TXT-020"
+  ]
+ },
+ {
+  "id": "F08.1",
+  "title": "Quantitation",
+  "epic": "E08",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "Backend",
+   "Algo"
+  ],
+  "requirements": [
+   "FR-ALG-001"
+  ]
+ },
+ {
+  "id": "F08.2",
+  "title": "Algorithm version governance",
+  "epic": "E08",
+  "milestones": [
+   "M2",
+   "M3",
+   "TBD"
+  ],
+  "domains": [
+   "Backend"
+  ],
+  "requirements": [
+   "FR-ALG-004",
+   "FR-ALG-002",
+   "FR-ALG-003"
+  ]
+ },
+ {
+  "id": "F08.3",
+  "title": "Assay quality control and invalidation",
+  "epic": "E08",
+  "milestones": [
+   "M2",
+   "M3",
+   "TBD"
+  ],
+  "domains": [
+   "Algo"
+  ],
+  "requirements": [
+   "FR-ALG-007",
+   "FR-ALG-009",
+   "FR-ALG-005",
+   "FR-ALG-006",
+   "FR-ALG-008"
+  ]
+ },
+ {
+  "id": "F08.4",
+  "title": "Result payload contract",
+  "epic": "E08",
+  "milestones": [
+   "M2",
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Backend",
+   "Algo"
+  ],
+  "requirements": [
+   "FR-ALG-010",
+   "FR-ALG-012",
+   "FR-ALG-011"
+  ]
+ },
+ {
+  "id": "F09.1",
+  "title": "Result display",
+  "epic": "E09",
+  "milestones": [
+   "M1",
+   "M5"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Backend"
+  ],
+  "requirements": [
+   "FR-RES-001",
+   "FR-RES-002",
+   "FR-RES-003",
+   "FR-RES-007"
+  ]
+ },
+ {
+  "id": "F09.2",
+  "title": "Out-of-range and invalid outcomes",
+  "epic": "E09",
+  "milestones": [
+   "M1",
+   "M2"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-RES-005",
+   "FR-RES-004"
+  ]
+ },
+ {
+  "id": "F09.4",
+  "title": "Demonstration result",
+  "epic": "E09",
+  "milestones": [
+   "M1"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Backend"
+  ],
+  "requirements": [
+   "FR-RES-006"
+  ]
+ },
+ {
+  "id": "F10.1",
+  "title": "PIN protection",
+  "epic": "E10",
+  "milestones": [
+   "M4",
+   "M5"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Backend"
+  ],
+  "requirements": [
+   "FR-ACC-001",
+   "FR-ACC-002",
+   "FR-ACC-004",
+   "FR-ACC-005",
+   "FR-ACC-006",
+   "FR-ACC-003",
+   "FR-ACC-007",
+   "FR-ACC-008"
+  ]
+ },
+ {
+  "id": "F10.2",
+  "title": "Results-center session control",
+  "epic": "E10",
+  "milestones": [
+   "M4"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Backend"
+  ],
+  "requirements": [
+   "FR-ACC-009"
+  ]
+ },
+ {
+  "id": "F10.3",
+  "title": "Results center main screen",
+  "epic": "E10",
+  "milestones": [
+   "M3",
+   "M5"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Backend"
+  ],
+  "requirements": [
+   "FR-PRT-001",
+   "FR-PRT-007",
+   "FR-PRT-009",
+   "FR-PRT-010",
+   "FR-PRT-011",
+   "FR-PRT-014",
+   "FR-PRT-015"
+  ]
+ },
+ {
+  "id": "F10.4",
+  "title": "Main menu",
+  "epic": "E10",
+  "milestones": [
+   "M3",
+   "M4",
+   "M5"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-PRT-002",
+   "FR-PRT-003",
+   "FR-PRT-005",
+   "FR-SUP-001"
+  ]
+ },
+ {
+  "id": "F10.5",
+  "title": "Support contact",
+  "epic": "E10",
+  "milestones": [
+   "M3",
+   "M5"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-SUP-002",
+   "FR-PRT-004",
+   "FR-SUP-004"
+  ]
+ },
+ {
+  "id": "F10.6",
+  "title": "Post-test lobby",
+  "epic": "E10",
+  "milestones": [
+   "M5"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-PRT-012",
+   "FR-PRT-013"
+  ]
+ },
+ {
+  "id": "F11.1",
+  "title": "Tenancy and patient mapping",
+  "epic": "E11",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "Backend"
+  ],
+  "requirements": [
+   "FR-SHR-001",
+   "FR-SHR-002",
+   "FR-SHR-003",
+   "FR-SHR-004"
+  ]
+ },
+ {
+  "id": "F11.2",
+  "title": "Provider integration and delivery",
+  "epic": "E11",
+  "milestones": [
+   "M3",
+   "M5"
+  ],
+  "domains": [
+   "Backend"
+  ],
+  "requirements": [
+   "FR-SHR-005",
+   "FR-SHR-006",
+   "FR-SHR-007",
+   "FR-SHR-008",
+   "FR-SHR-017"
+  ]
+ },
+ {
+  "id": "F11.3",
+  "title": "Post-result journey per partner",
+  "epic": "E11",
+  "milestones": [
+   "TBD"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Backend"
+  ],
+  "requirements": [
+   "FR-SHR-011"
+  ]
+ },
+ {
+  "id": "F11.4",
+  "title": "User-initiated sharing",
+  "epic": "E11",
+  "milestones": [
+   "M5"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-SHR-012",
+   "FR-PRT-008",
+   "FR-SHR-015",
+   "FR-SHR-016",
+   "FR-SHR-018"
+  ]
+ },
+ {
+  "id": "F11.5",
+  "title": "Doctor engagement and post-test consultation",
+  "epic": "E11",
+  "milestones": [
+   "M5"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-SHR-013",
+   "FR-SHR-014"
+  ]
+ },
+ {
+  "id": "F11.6",
+  "title": "Post-test feedback survey",
+  "epic": "E11",
+  "milestones": [
+   "M5"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-ANL-006",
+   "FR-ANL-007",
+   "FR-ANL-008"
+  ]
+ },
+ {
+  "id": "F11.7",
+  "title": "Application rating prompt",
+  "epic": "E11",
+  "milestones": [
+   "M5"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-ANL-009"
+  ]
+ },
+ {
+  "id": "F12.1",
+  "title": "Secure transport",
+  "epic": "E12",
+  "milestones": [
+   "M1",
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-SEC-014",
+   "FR-COM-001",
+   "FR-COM-002"
+  ]
+ },
+ {
+  "id": "F12.2",
+  "title": "Upload, retrieval and integrity",
+  "epic": "E12",
+  "milestones": [
+   "M1",
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Backend"
+  ],
+  "requirements": [
+   "FR-COM-003",
+   "FR-COM-004",
+   "FR-COM-005",
+   "FR-COM-011",
+   "FR-COM-007",
+   "FR-SEC-006"
+  ]
+ },
+ {
+  "id": "F12.3",
+  "title": "Interrupted upload and retry",
+  "epic": "E12",
+  "milestones": [
+   "M1",
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-COM-008",
+   "FR-COM-006"
+  ]
+ },
+ {
+  "id": "F12.4",
+  "title": "Push notifications",
+  "epic": "E12",
+  "milestones": [
+   "M5"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Backend"
+  ],
+  "requirements": [
+   "FR-COM-013"
+  ]
+ },
+ {
+  "id": "F13.1",
+  "title": "Data at rest and minimisation",
+  "epic": "E13",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-SEC-001",
+   "FR-SEC-009"
+  ]
+ },
+ {
+  "id": "F13.2",
+  "title": "Build hardening",
+  "epic": "E13",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-SEC-002",
+   "FR-SEC-003",
+   "FR-SEC-012"
+  ]
+ },
+ {
+  "id": "F13.3",
+  "title": "Screen and preview protection",
+  "epic": "E13",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-SEC-007"
+  ]
+ },
+ {
+  "id": "F13.4",
+  "title": "Error hygiene and input validation",
+  "epic": "E13",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Backend"
+  ],
+  "requirements": [
+   "FR-SEC-004",
+   "FR-SEC-005",
+   "FR-SEC-010",
+   "FR-SEC-011"
+  ]
+ },
+ {
+  "id": "F13.5",
+  "title": "Security audit events",
+  "epic": "E13",
+  "milestones": [
+   "M4"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Backend"
+  ],
+  "requirements": [
+   "FR-SEC-013"
+  ]
+ },
+ {
+  "id": "F14.1",
+  "title": "Event instrumentation",
+  "epic": "E14",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-ANL-001"
+  ]
+ },
+ {
+  "id": "F14.2",
+  "title": "Analytics privacy constraints",
+  "epic": "E14",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-ANL-002",
+   "FR-ANL-003"
+  ]
+ },
+ {
+  "id": "F14.3",
+  "title": "Analytics resilience",
+  "epic": "E14",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "iOS",
+   "Android"
+  ],
+  "requirements": [
+   "FR-ANL-005"
+  ]
+ },
+ {
+  "id": "F14.4",
+  "title": "Proxy routing",
+  "epic": "E14",
+  "milestones": [
+   "M5"
+  ],
+  "domains": [
+   "iOS",
+   "Android",
+   "Backend"
+  ],
+  "requirements": [
+   "FR-ANL-004"
+  ]
+ },
+ {
+  "id": "F15.1",
+  "title": "System parameter control",
+  "epic": "E15",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "Process"
+  ],
+  "requirements": [
+   "FR-LCM-006"
+  ]
+ },
+ {
+  "id": "F15.2",
+  "title": "Timing and state verification",
+  "epic": "E15",
+  "milestones": [
+   "M3",
+   "M4"
+  ],
+  "domains": [
+   "Process"
+  ],
+  "requirements": [
+   "FR-LCM-007",
+   "FR-LCM-011",
+   "FR-LCM-008"
+  ]
+ },
+ {
+  "id": "F15.3",
+  "title": "Algorithm and release verification",
+  "epic": "E15",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "Process"
+  ],
+  "requirements": [
+   "FR-LCM-009",
+   "FR-LCM-010",
+   "FR-LCM-017"
+  ]
+ },
+ {
+  "id": "F15.4",
+  "title": "Off-the-shelf component management",
+  "epic": "E15",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "Process"
+  ],
+  "requirements": [
+   "FR-LCM-002",
+   "FR-LCM-003",
+   "FR-LCM-004",
+   "FR-LCM-005"
+  ]
+ },
+ {
+  "id": "F15.5",
+  "title": "Usability testing",
+  "epic": "E15",
+  "milestones": [
+   "M3"
+  ],
+  "domains": [
+   "Process"
+  ],
+  "requirements": [
+   "FR-LCM-012"
+  ]
+ },
+ {
+  "id": "F15.6",
+  "title": "Provider integration testing",
+  "epic": "E15",
+  "milestones": [
+   "M4"
+  ],
+  "domains": [
+   "Process"
+  ],
+  "requirements": [
+   "FR-LCM-016"
+  ]
+ }
+]

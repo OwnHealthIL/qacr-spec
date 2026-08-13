@@ -1,0 +1,3672 @@
+[
+ {
+  "id": "FR-ACC-001",
+  "text": "The software shall restrict access to the post-test results center to users who have set a PIN code.",
+  "section_number": "18",
+  "section_name": "Results Access Protection",
+  "milestone": "4",
+  "source_refs": [
+   "SRS TSM.30",
+   "SPTA 1.4",
+   "SPTA 1.7"
+  ],
+  "note": "",
+  "feature": "F10.1",
+  "epic": "E10",
+  "sha256": "bd5554c1e31f56929767bf60845a0e7771e35759cccd41c4dd5f1c1ffc5dd3ae"
+ },
+ {
+  "id": "FR-ACC-002",
+  "text": "If a PIN code has not been set, the software shall prompt the user to create one before granting access to the results center. The backend shall report whether a PIN is registered for the user profile.",
+  "section_number": "18",
+  "section_name": "Results Access Protection",
+  "milestone": "4",
+  "source_refs": [
+   "SRS TSM.31",
+   "SRS-BE PIN.1",
+   "SPTA 1.4"
+  ],
+  "note": "",
+  "feature": "F10.1",
+  "epic": "E10",
+  "sha256": "caebb1c4fae2619fd20a7196df3063797e976f5e02465e89fda7544bada9f03e"
+ },
+ {
+  "id": "FR-ACC-003",
+  "text": "The software shall integrate PIN setup into the test workflow, so that the user is prompted to set a PIN as part of completing the test.",
+  "section_number": "18",
+  "section_name": "Results Access Protection",
+  "milestone": "5",
+  "source_refs": [
+   "RA 7.21",
+   "formerly BL-25",
+   "restored to its original identifier"
+  ],
+  "note": "Future development, formerly BL-25. With FR-ACC-007 and FR-ACC-008 also deferred, RA 7.21 has no software control in this version; severity is 1 and the consequence is loss of access to results beyond the initial view.",
+  "feature": "F10.1",
+  "epic": "E10",
+  "sha256": "aca9d98abc19c3ce200b00a23f9fb87f20b094d1c757d091eb1e9002abc39cc5"
+ },
+ {
+  "id": "FR-ACC-004",
+  "text": "The software shall restrict PIN code entry to numeric values only, of four digits.",
+  "section_number": "18",
+  "section_name": "Results Access Protection",
+  "milestone": "4",
+  "source_refs": [
+   "SRS TSM.32",
+   "SPTA 2.1"
+  ],
+  "note": "Length is four digits and the attempt limit is five, both settled at review. Enforced server-side per the backend SRS",
+  "feature": "F10.1",
+  "epic": "E10",
+  "sha256": "61e3e9ca464f42a41b2ac9fe42f5923ad86dca5191340ef11072c3f27ee2ef92"
+ },
+ {
+  "id": "FR-ACC-005",
+  "text": "If the maximum number of incorrect PIN attempts is reached, the software shall deny access to the results center and instruct the user to contact support. The backend shall maintain the failure counter and enforce the limit.",
+  "section_number": "18",
+  "section_name": "Results Access Protection",
+  "milestone": "4",
+  "source_refs": [
+   "SRS TSM.33",
+   "SRS-BE PIN.2",
+   "SRS-BE PIN.4",
+   "SRS-BE PIN.5"
+  ],
+  "note": "Limit is five consecutive failed attempts per the backend SRS, enforced server-side",
+  "feature": "F10.1",
+  "epic": "E10",
+  "sha256": "b3d25af2aa6e62d9d5f786dc6d24e5a756a9f819f8c4ca25047bc8e08c893be5"
+ },
+ {
+  "id": "FR-ACC-006",
+  "text": "If the user has not set a PIN code within the defined period after test completion, the software shall lock PIN setup and direct the user to contact support, who may reset it following identity re-verification. The backend shall reject any PIN setup request received after that period.",
+  "section_number": "18",
+  "section_name": "Results Access Protection",
+  "milestone": "4",
+  "source_refs": [
+   "SRS TSM.34",
+   "SRS-BE PIN.6",
+   "SPTA 1.7"
+  ],
+  "note": "Period is 24 hours, confirmed by both the threat analysis and the backend SRS, and enforced server-side. The support reset path is deferred as FR-ACC-008",
+  "feature": "F10.1",
+  "epic": "E10",
+  "sha256": "9e5498572c746bffcae0d074fcada285b1ae8179147560e493506f41dee9cbc3"
+ },
+ {
+  "id": "FR-ACC-007",
+  "text": "After successful PIN setup, the software shall offer the user the option to enable biometric authentication for results-center access on devices that provide it.",
+  "section_number": "18",
+  "section_name": "Results Access Protection",
+  "milestone": "5",
+  "source_refs": [
+   "SRS TSM.35",
+   "RA 7.21",
+   "formerly BL-26",
+   "restored to its original identifier"
+  ],
+  "note": "Future development, formerly BL-26. With FR-ACC-003 and FR-ACC-008; see the note against FR-ACC-003.",
+  "feature": "F10.1",
+  "epic": "E10",
+  "sha256": "74fcd953fe8c4510d9b5db67aa5137d5df2c2ebf09e380785681dcee48ff48d7"
+ },
+ {
+  "id": "FR-ACC-008",
+  "text": "The software shall support PIN reset by customer support following identity re-verification.",
+  "section_number": "18",
+  "section_name": "Results Access Protection",
+  "milestone": "5",
+  "source_refs": [
+   "RA 7.21",
+   "formerly BL-27",
+   "restored to its original identifier"
+  ],
+  "note": "Future development, formerly BL-27. With FR-ACC-003 and FR-ACC-007; a user who forgets their PIN has no recovery path until this is implemented.",
+  "feature": "F10.1",
+  "epic": "E10",
+  "sha256": "ab5702e59467aac58a6c9ec528d6593422ad59d1fdb3ea57315944df74a72fa8"
+ },
+ {
+  "id": "FR-ACC-009",
+  "text": "After 15 minutes of inactivity in the results center, the software shall return the user to the home screen and shall require the PIN to be entered again before the results center can be re-entered. The backend shall invalidate the session on the same interval.",
+  "section_number": "18",
+  "section_name": "Results Access Protection",
+  "milestone": "4",
+  "source_refs": [
+   "SPTA 1.7",
+   "SRS-BE PIN.7"
+  ],
+  "note": "The 15-minute value comes from the threat analysis and is confirmed by the backend SRS, which enforces it server-side. Applies to the results center only; FR-STA-003 bars any inactivity timeout during an active test. Restated at review: re-entry is by PIN rather than Date of Birth, since the Date of Birth is no longer requested at login",
+  "feature": "F10.2",
+  "epic": "E10",
+  "sha256": "7c3bcaaaf2be8549e1dd7bd84a26a42d34cf78f642cc5ede8b493dbf8b581bcf"
+ },
+ {
+  "id": "FR-ALG-001",
+  "text": "The backend shall determine albumin concentration, creatinine concentration and the albumin-to-creatinine ratio from the validated image data, using an algorithm version approved for the applicable system configuration.",
+  "section_number": "16",
+  "section_name": "Analysis, Quality Control and Algorithm Version Management",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.21",
+   "RA 4.22"
+  ],
+  "note": "Algo",
+  "feature": "F08.1",
+  "epic": "E08",
+  "sha256": "058edc5b1524e20097d1a3bc4cc7bb9c7050b6d6d4b7e84ec4c76ff75a5fb595"
+ },
+ {
+  "id": "FR-ALG-002",
+  "text": "The system shall maintain a controlled mapping between supported software configurations and approved algorithm versions, and shall analyse an exam only using an algorithm version approved for the applicable configuration.",
+  "section_number": "16",
+  "section_name": "Analysis, Quality Control and Algorithm Version Management",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.22"
+  ],
+  "note": "Backend",
+  "feature": "F08.2",
+  "epic": "E08",
+  "sha256": "c3feccf38240d961019cf03e0f62958aeee7562600601dc4e97de24278a5bce9"
+ },
+ {
+  "id": "FR-ALG-003",
+  "text": "The backend shall validate that the mobile algorithm version and the backend algorithm version assigned to an exam are an approved combination, and shall prevent analysis where either version is missing or unsupported, or where the combination is not approved.",
+  "section_number": "16",
+  "section_name": "Analysis, Quality Control and Algorithm Version Management",
+  "milestone": "TBD",
+  "source_refs": [
+   "RA 4.22"
+  ],
+  "note": "Backend. TBD, and may become obsolete when the Risk Analysis is next revised",
+  "feature": "F08.2",
+  "epic": "E08",
+  "sha256": "60e188e0d6daafcfc776d06822a1fe68a807043161ab6c2d5aba0f9257f691f9"
+ },
+ {
+  "id": "FR-ALG-004",
+  "text": "The system shall record, for each exam, the mobile and backend algorithm versions, the application version and the backend version used to produce the result, together with a timestamp, the device identifier, the patient identifier, the reported values, the raw results, error records and diagnostic metadata.",
+  "section_number": "16",
+  "section_name": "Analysis, Quality Control and Algorithm Version Management",
+  "milestone": "2",
+  "source_refs": [
+   "RA 4.22",
+   "SRS-BE LOG.1",
+   "SRS-BE LOG.2"
+  ],
+  "note": "Backend. Record contents stated from the backend SRS",
+  "feature": "F08.2",
+  "epic": "E08",
+  "sha256": "ed0aaf8a9a848a1bd5605c613acdcc78d1a47775e728f42343b5a3a0dcc3e15a"
+ },
+ {
+  "id": "FR-ALG-005",
+  "text": "The system shall perform standard-curve quality control on each test and shall block the reporting of a result where quality control fails.",
+  "section_number": "16",
+  "section_name": "Analysis, Quality Control and Algorithm Version Management",
+  "milestone": "3",
+  "source_refs": [
+   "RA 3.6",
+   "RA 3.7",
+   "RA 7.33",
+   "RA 7.35"
+  ],
+  "note": "Algo",
+  "feature": "F08.3",
+  "epic": "E08",
+  "sha256": "2004ef9a00b7639d1f825031f325577dec633a92c89cb5c0ed091b746a597728"
+ },
+ {
+  "id": "FR-ALG-006",
+  "text": "The system shall evaluate the recovery and blank wells within the Detection Wells in order to detect foreign or interfering substances and discoloration of the diluted urine, and shall block the reporting of a result where the acceptance criteria are not met.",
+  "section_number": "16",
+  "section_name": "Analysis, Quality Control and Algorithm Version Management",
+  "milestone": "3",
+  "source_refs": [
+   "RA 1.6",
+   "RA 7.20",
+   "Glossary"
+  ],
+  "note": "Algo",
+  "feature": "F08.3",
+  "epic": "E08",
+  "sha256": "5caf97a02033295c24cdd1b6f6364f39fa0d12167cafe3465067364a38676f5e"
+ },
+ {
+  "id": "FR-ALG-007",
+  "text": "The system shall detect an incomplete assay run, including the condition in which both albumin and creatinine are below the limit of detection, shall invalidate the test, and shall cause the application to prompt the user to repeat the test with a new kit.",
+  "section_number": "16",
+  "section_name": "Analysis, Quality Control and Algorithm Version Management",
+  "milestone": "2",
+  "source_refs": [
+   "RA 1.1",
+   "RA 1.3",
+   "RA 1.7",
+   "RA 2.1",
+   "RA 2.4",
+   "RA 2.5",
+   "RA 2.6",
+   "RA 2.9",
+   "RA 3.1",
+   "RA 3.2",
+   "RA 3.3",
+   "RA 7.6",
+   "RA 7.7",
+   "RA 7.8",
+   "RA 7.22",
+   "RA 7.29",
+   "RA 7.34"
+  ],
+  "note": "Algo; surfaced in app",
+  "feature": "F08.3",
+  "epic": "E08",
+  "sha256": "ea1e8bd4843c3c75c88c0b3bb56e0137f02a5edbfb352946cea9fefd8d5a1633"
+ },
+ {
+  "id": "FR-ALG-008",
+  "text": "The system shall detect that the urine sample was not introduced into the buffer, and shall detect that insufficient fluid reached the Detection Wells, and shall block the reporting of a result where either condition is present.",
+  "section_number": "16",
+  "section_name": "Analysis, Quality Control and Algorithm Version Management",
+  "milestone": "TBD",
+  "source_refs": [
+   "RA 3.8",
+   "RA 7.9",
+   "RA 7.30",
+   "RA 7.36"
+  ],
+  "note": "Algo. TBD, to be settled when the Risk Analysis is next revised. Out-of-sequence assay signatures cannot be detected; RA 3.8 and RA 7.36 currently have no other software control",
+  "feature": "F08.3",
+  "epic": "E08",
+  "sha256": "dd637c11d444341cf44fb3eb461b16122c06a96c36405dfba75d87a668cb0d14"
+ },
+ {
+  "id": "FR-ALG-009",
+  "text": "The system shall detect insufficient colour output in the standard curves and shall block the reporting of a result where the acceptance criteria are not met.",
+  "section_number": "16",
+  "section_name": "Analysis, Quality Control and Algorithm Version Management",
+  "milestone": "2",
+  "source_refs": [
+   "RA 3.5",
+   "RA 3.6",
+   "RA 3.7"
+  ],
+  "note": "Algo; albumin standards AS1–AS4, creatinine standards CS1–CS4",
+  "feature": "F08.3",
+  "epic": "E08",
+  "sha256": "a6cf017c35bdf0813edd417f0c2f680e6a3e0f216dca628da6a8dec1b30affdc"
+ },
+ {
+  "id": "FR-ALG-010",
+  "text": "The result payload returned to the application shall distinguish unambiguously between a valid quantitative result and an invalid test, and the application shall not present a numeric value for an invalid test under any condition.",
+  "section_number": "16",
+  "section_name": "Analysis, Quality Control and Algorithm Version Management",
+  "milestone": "2",
+  "source_refs": [
+   "RA 4.21",
+   "derived"
+  ],
+  "note": "",
+  "feature": "F08.4",
+  "epic": "E08",
+  "sha256": "7ea97007faa8b0e8701b1e2c45c6cdbcfd8423ec33051d6e5bde585111092886"
+ },
+ {
+  "id": "FR-ALG-011",
+  "text": "The system shall identify results that fall outside the claimed measuring range and shall convey that condition to the application for presentation.",
+  "section_number": "16",
+  "section_name": "Analysis, Quality Control and Algorithm Version Management",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.21"
+  ],
+  "note": "Algo; presentation per FR-RES-004",
+  "feature": "F08.4",
+  "epic": "E08",
+  "sha256": "1f2f175db5d4b3c98a1a5db9d7297242f8b2faaafc6d46a6c33a2772a5c358f8"
+ },
+ {
+  "id": "FR-ALG-012",
+  "text": "The result payload shall include a reason category for each invalid test, drawn from a defined enumeration, sufficient for the application to inform the user of the corrective action required.",
+  "section_number": "16",
+  "section_name": "Analysis, Quality Control and Algorithm Version Management",
+  "milestone": "2",
+  "source_refs": [
+   "RA 4.3",
+   "RA 4.4"
+  ],
+  "note": "Dependency of FR-TXT-021",
+  "feature": "F08.4",
+  "epic": "E08",
+  "sha256": "9c72bd27f13251f0521d50506373cc5f46f7fc597bdeb13563459d9e57a9d262"
+ },
+ {
+  "id": "FR-ANL-001",
+  "text": "The software shall record analytics events for the user's progress through the test flow, including step entry and completion, blocking conditions raised, scan attempts and their outcomes, and test completion or invalidation, and shall transmit them to the analytics service.",
+  "section_number": "22",
+  "section_name": "Analytics and User Feedback",
+  "milestone": "3",
+  "source_refs": [
+   "Review comment"
+  ],
+  "note": "Analytics service is Mixpanel; realised by mixpanelProxyEnabled",
+  "feature": "F14.1",
+  "epic": "E14",
+  "sha256": "14be4315b2c4207faa5bf7cebbe8d50cdb4f0d63b9fc8a86b12a1cd272143da2"
+ },
+ {
+  "id": "FR-ANL-002",
+  "text": "The software shall not include personal information, health information or test result values in any analytics event.",
+  "section_number": "22",
+  "section_name": "Analytics and User Feedback",
+  "milestone": "3",
+  "source_refs": [
+   "Review comment",
+   "RA 6.3",
+   "SRS ATT.6",
+   "SPTA 4.1"
+  ],
+  "note": "Extends FR-SEC-005 to the analytics path, and applies equally to the audit events required by FR-SEC-013",
+  "feature": "F14.2",
+  "epic": "E14",
+  "sha256": "93b348ad4c705a0a00fe93839a25612ae3c540a3991021e255ce2cbec0d4c0bc"
+ },
+ {
+  "id": "FR-ANL-003",
+  "text": "The software shall associate analytics events with a pseudonymous identifier that cannot be resolved to a patient by the analytics service.",
+  "section_number": "22",
+  "section_name": "Analytics and User Feedback",
+  "milestone": "3",
+  "source_refs": [
+   "Review comment"
+  ],
+  "note": "",
+  "feature": "F14.2",
+  "epic": "E14",
+  "sha256": "954f994f5eb50781a272e94983ae6facb42e536b87800563ad61c61d3c1b4308"
+ },
+ {
+  "id": "FR-ANL-004",
+  "text": "The software shall transmit analytics events through the configured proxy endpoint rather than directly to the analytics provider.",
+  "section_number": "22",
+  "section_name": "Analytics and User Feedback",
+  "milestone": "5",
+  "source_refs": [
+   "Review comment",
+   "formerly BL-28",
+   "restored to its original identifier"
+  ],
+  "note": "Future development, formerly BL-28. Analytics events will reach the provider directly rather than through the proxy until this is implemented; FR-ANL-002 and FR-ANL-003 still bar personal and health information.",
+  "feature": "F14.4",
+  "epic": "E14",
+  "sha256": "097ee99414cdf56283ad1bff01b8bcb97c2bc2c71fc55d90e2e5faadbafdec88"
+ },
+ {
+  "id": "FR-ANL-005",
+  "text": "Failure of the analytics service, or unavailability of the analytics endpoint, shall not prevent a test from being started, completed, or reported.",
+  "section_number": "22",
+  "section_name": "Analytics and User Feedback",
+  "milestone": "3",
+  "source_refs": [
+   "Review comment",
+   "derived"
+  ],
+  "note": "Analytics is not permitted to become a dependency of the clinical flow",
+  "feature": "F14.3",
+  "epic": "E14",
+  "sha256": "a1c8002571c755ff7f2ad2c2ce5e5e049c33e2ac6a7e1513dfc2e8200c39c4f3"
+ },
+ {
+  "id": "FR-ANL-006",
+  "text": "The software shall present the configured survey to the user after test completion, opening it in an in-application web view.",
+  "section_number": "22",
+  "section_name": "Analytics and User Feedback",
+  "milestone": "5",
+  "source_refs": [
+   "Review comment",
+   "SRS-adjacent",
+   "formerly BL-29",
+   "originally FR-SUR-001"
+  ],
+  "note": "Future development, formerly BL-29. The post-test survey as a whole moves with FR-ANL-007 and FR-ANL-008.",
+  "feature": "F11.6",
+  "epic": "E11",
+  "sha256": "76539769637c4f8ad7279ae86e480ae5bc6d380223d768197e43913239f56daa"
+ },
+ {
+  "id": "FR-ANL-007",
+  "text": "The software shall permit the user to decline or dismiss the survey, and shall not require its completion in order to reach the test result or the results center.",
+  "section_number": "22",
+  "section_name": "Analytics and User Feedback",
+  "milestone": "5",
+  "source_refs": [
+   "Review comment",
+   "derived",
+   "formerly BL-30",
+   "originally FR-SUR-002"
+  ],
+  "note": "Future development, formerly BL-30. With FR-ANL-006.",
+  "feature": "F11.6",
+  "epic": "E11",
+  "sha256": "698a813304d557f5e48d6345a01a9f4bb7a4b9920f1976e6ab506b366cd46e2b"
+ },
+ {
+  "id": "FR-ANL-008",
+  "text": "The survey web view shall be presented only after the result has been delivered, and shall not be capable of interrupting an active test.",
+  "section_number": "22",
+  "section_name": "Analytics and User Feedback",
+  "milestone": "5",
+  "source_refs": [
+   "Derived",
+   "formerly BL-31",
+   "originally FR-SUR-003"
+  ],
+  "note": "Future development, formerly BL-31. With FR-ANL-006.",
+  "feature": "F11.6",
+  "epic": "E11",
+  "sha256": "4300221a497bde8593378490b86edfad5f0b0578e256cbafbf39ca2fadef00e8"
+ },
+ {
+  "id": "FR-ANL-009",
+  "text": "The software shall present the operating system's application-store rating prompt.",
+  "section_number": "22",
+  "section_name": "Analytics and User Feedback",
+  "milestone": "5",
+  "source_refs": [
+   "—",
+   "formerly BL-32",
+   "originally FR-SUR-004"
+  ],
+  "note": "Future development, formerly BL-32. The application-store rating prompt depends on the chat flow, which is itself deferred.",
+  "feature": "F11.7",
+  "epic": "E11",
+  "sha256": "a41fc06d3acce29c919e22b2d4f96b978c1c063fb43ac5326d816f9b109f9730"
+ },
+ {
+  "id": "FR-AUT-001",
+  "text": "The software shall enable the user to initiate the authentication process by entering a phone number.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "3",
+  "source_refs": [
+   "SRS AUT.1"
+  ],
+  "note": "",
+  "feature": "F02.1",
+  "epic": "E02",
+  "sha256": "65cc8f09fd0d4d3a6604b1ce610af77d19f3813184498343287ddf1514320eba"
+ },
+ {
+  "id": "FR-AUT-002",
+  "text": "The software shall validate the phone-number format and prevent the entry of invalid or special characters.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "3",
+  "source_refs": [
+   "SRS AUT.2"
+  ],
+  "note": "",
+  "feature": "F02.1",
+  "epic": "E02",
+  "sha256": "954c8ff9068bead0039c18605314f76c643dd7d8db37c0662881cc46f7a19f23"
+ },
+ {
+  "id": "FR-AUT-003",
+  "text": "The software shall transmit the phone number to the backend to determine whether it is already registered in the system.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "3",
+  "source_refs": [
+   "SRS AUT.3"
+  ],
+  "note": "Realised by allowCreation (false for this app)",
+  "feature": "F02.1",
+  "epic": "E02",
+  "sha256": "444128a37b77d77cba8c40c39bb5d61f988ccc06bd33e4d608c161c80c097b68"
+ },
+ {
+  "id": "FR-AUT-004",
+  "text": "The software shall complete one-time password (OTP) verification by enabling the user to submit a six-digit OTP delivered by SMS from the backend.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "3",
+  "source_refs": [
+   "SRS AUT.4",
+   "RA 4.16"
+  ],
+  "note": "Length is six digits, taken from the existing kidney application; confirm before design verification",
+  "feature": "F02.2",
+  "epic": "E02",
+  "sha256": "1dab2b1a2b57a5d9d2182e718ca477a260e3ea0d31b7b7a7bac59a350565c281"
+ },
+ {
+  "id": "FR-AUT-005",
+  "text": "The software shall validate the submitted OTP against the defined attempt-count and expiration limits. Where the attempt limit is reached, the phone verification process shall be locked for the defined lockout period.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "4",
+  "source_refs": [
+   "SRS AUT.5",
+   "SRS-BE AUT.4",
+   "SRS-BE AUT.5",
+   "SRS-BE AUT.6"
+  ],
+  "note": "Values set by the backend SRS: OTP expires after 5 minutes, and 5 consecutive failures lock verification for 15 minutes. Enforced server-side. Resolves the parameter formerly open as O-04",
+  "feature": "F02.2",
+  "epic": "E02",
+  "sha256": "825b0a2d2b77b876a7f1ce379904223e2e7641ae5f52fb4f755736aeba91cd90"
+ },
+ {
+  "id": "FR-AUT-006",
+  "text": "If the phone number is not registered, the software shall require the user to enter an invite code, which the backend shall validate for both authenticity and expiry.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "4",
+  "source_refs": [
+   "SRS AUT.6",
+   "SRS-BE AUT.10",
+   "SRS-BE AUT.11",
+   "SRS-BE AUT.12"
+  ],
+  "note": "Expiry validation added from the backend SRS. Realised by allowRegistration (true)",
+  "feature": "F02.3",
+  "epic": "E02",
+  "sha256": "c6f1ce21d8ad911411aaa6a3d41d098d43e408e8477ade32e368a21704001675"
+ },
+ {
+  "id": "FR-AUT-007",
+  "text": "Where the phone number and invite code do not uniquely identify a single registered user, the software shall request the Date of Birth in order to identify which registered user is signing in.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "5",
+  "source_refs": [
+   "SRS AUT.7",
+   "SRS AUT.9",
+   "SRS AUT.11",
+   "RA 6.4",
+   "formerly BL-20",
+   "restored to its original identifier"
+  ],
+  "note": "Future development, formerly BL-20. Reconciled at review: RA 6.4 retains FR-AUT-010, FR-AUT-012, FR-AUT-013, FR-AUT-014 and FR-SHR-003 in the body, all at milestone 3. FR-AUT-009 is withdrawn.",
+  "feature": "F02.4",
+  "epic": "E02",
+  "sha256": "2dfe3367290e91c45bb7c76dee5822133bd7533c64ae92ca33a4d978c87dff69"
+ },
+ {
+  "id": "FR-AUT-008",
+  "text": "The software shall validate that the entered Date of Birth meets the required format.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "3",
+  "source_refs": [
+   "SRS AUT.8"
+  ],
+  "note": "Applies to the Date of Birth confirmed at the start of a test per FR-AUT-012, not to login. Milestone follows FR-AUT-012",
+  "feature": "F02.4",
+  "epic": "E02",
+  "sha256": "5eef5de3e9bfe0935e3d940b0bedb3ecc3871eeb7b5cdd85cc2e0b851ad52858"
+ },
+ {
+  "id": "FR-AUT-010",
+  "text": "If the Date of Birth confirmed at the start of a test is mismatched or invalid, the software shall prevent the user from proceeding and shall present a generic error that does not disclose which element of the identification was at fault.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "3",
+  "source_refs": [
+   "SRS AUT.10",
+   "SRS-BE AUT.15",
+   "RA 6.4",
+   "SPTA 1.3"
+  ],
+  "note": "Restated at review: the Date of Birth is no longer requested at login, so this governs the confirmation required by FR-AUT-012. Everything required for the submission is required for the clinical study, so milestone 3, held behind a feature flag so that the behaviour is present and verifiable without being shown to study participants. The error is generic, per the backend SRS and SPTA 1.3",
+  "feature": "F02.4",
+  "epic": "E02",
+  "sha256": "9aa2301b3faa5bce3b3ea928d821c7dfc5d3e4c1e827383decf95871640052fc"
+ },
+ {
+  "id": "FR-AUT-011",
+  "text": "The software shall permit more than one user to be associated with the same phone number, each uniquely identified by their Date of Birth.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "5",
+  "source_refs": [
+   "SRS AUT.11",
+   "formerly BL-21",
+   "restored to its original identifier"
+  ],
+  "note": "Future development, formerly BL-21. Household use on a shared phone number is therefore not supported until this is implemented. Confirmed at review that appUniqueIdentifier is to remain as configured today; see review register Q-10.",
+  "feature": "F02.4",
+  "epic": "E02",
+  "sha256": "d36ef76867b36b5b55aa6a227c8dc0e31c0c50a4228f9af20aa70473fd3a6fa1"
+ },
+ {
+  "id": "FR-AUT-012",
+  "text": "The software shall require the user to confirm their Date of Birth at the start of every test, independently of the login flow and irrespective of how many users are registered against the phone number.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "3",
+  "source_refs": [
+   "RA 6.4"
+  ],
+  "note": "Everything required for the submission is required for the clinical study, so milestone 3. Held behind a feature flag so that the behaviour is present and verifiable without being shown to study participants. Realised by dobVerification (force)",
+  "feature": "F02.4",
+  "epic": "E02",
+  "sha256": "b9d2fec6d61e0e3574f4557d82140cffbe163aa8a6262eadf1df6ae61a58b661"
+ },
+ {
+  "id": "FR-AUT-013",
+  "text": "Upon successful verification, the software shall obtain a user token and shall associate that token with every subsequent request sent to the backend. The token shall expire after the defined period, after which the software shall require re-verification.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "3",
+  "source_refs": [
+   "RA 6.4",
+   "SRS-BE EX.3",
+   "SRS-BE AUT.8",
+   "SPTA 1.4",
+   "SPTA 6.1"
+  ],
+  "note": "The backend SRS states 24 hours. Flagged at review as incorrect for this application and to be aligned; see the review register. Server-side verification of the token is required by FR-COM-010",
+  "feature": "F02.5",
+  "epic": "E02",
+  "sha256": "8a60eff1cc736c907cdd011ebb477753949d651c6319de0cf8c69ed743af0c0b"
+ },
+ {
+  "id": "FR-AUT-014",
+  "text": "The software shall enable the user to sign out. After sign-out, the software shall require the user to complete the verification process again before further use.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "3",
+  "source_refs": [
+   "SRS AUT.12",
+   "RA 6.4"
+  ],
+  "note": "",
+  "feature": "F02.5",
+  "epic": "E02",
+  "sha256": "f3320e9d1ba327bdeda9ba117f4983aaa4198992a009f51a2cb96775789974de"
+ },
+ {
+  "id": "FR-AUT-015",
+  "text": "Where a test has been completed and more than one user is registered against the phone number, the software shall offer a 'switch user' function before a new test is started, which terminates the current session and returns the user to the authentication flow.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "5",
+  "source_refs": [
+   "SRS TSM.41",
+   "formerly BL-22",
+   "restored to its original identifier"
+  ],
+  "note": "Future development, formerly BL-22. With FR-AUT-011, which it depends upon.",
+  "feature": "F02.4",
+  "epic": "E02",
+  "sha256": "73643b67e6357a31cf26114d1f5c308b94722f09f7fce3b9ff4b5c99d569e171"
+ },
+ {
+  "id": "FR-AUT-016",
+  "text": "The software shall guide the user through each authentication step and, on repeated failure, shall present support contact information.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.16"
+  ],
+  "note": "",
+  "feature": "F02.6",
+  "epic": "E02",
+  "sha256": "5b9f42cdcba2e0a821093d1a7415662f63511273f5cab362e48ad8796582f7de"
+ },
+ {
+  "id": "FR-AUT-017",
+  "text": "On first launch, before the authentication process begins, the software shall present a short introductory sequence of no more than three screens introducing the application and the test, which the user may advance through or dismiss.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "4",
+  "source_refs": [
+   "Review comment"
+  ],
+  "note": "Added at review. Content is part of the versioned set required by FR-TXT-004 and is subject to the reading level of FR-TXT-001. Distinct from the pre-test orientation raised as UX-08, which concerns what the user is told immediately before a test rather than on first launch",
+  "feature": "F02.8",
+  "epic": "E02",
+  "sha256": "8d054fe596d153638d079df2eff35e8d2329f0c3ff1a0c4557f22b1f45b06ba4"
+ },
+ {
+  "id": "FR-AUT-018",
+  "text": "The software shall enable the user to request that the one-time password be sent again. Each such request shall count against the attempt limit of FR-AUT-005, and the software shall require a defined interval to elapse before a further request can be made.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "3",
+  "source_refs": [
+   "Review comment",
+   "SRS AUT.5"
+  ],
+  "note": "Added at review. The interval is 30 seconds. Resending counts against the attempt limit, so the limit governs requests and submissions together",
+  "feature": "F02.2",
+  "epic": "E02",
+  "sha256": "f82f4240a83cfba5b427921a60e1d5d06cc961ffea7cfafe606d8eb2ea80448d"
+ },
+ {
+  "id": "FR-AUT-019",
+  "text": "While awaiting a one-time password, the software shall enable the user to return to phone-number entry in order to correct the number, and shall discard the pending verification when they do.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "3",
+  "source_refs": [
+   "Review comment"
+  ],
+  "note": "Added at review, for the case where the user mistyped the number",
+  "feature": "F02.2",
+  "epic": "E02",
+  "sha256": "4b289acb44248156dda468db7757becc2c59305ed9b0cf2bc11af5277de2a1d3"
+ },
+ {
+  "id": "FR-AUT-020",
+  "text": "If a shared phone number is used to attempt a second test, the software shall prevent test initiation and prompt the user either to switch user or to contact support to obtain a new kit.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "5",
+  "source_refs": [
+   "SRS TSM.41",
+   "formerly BL-04"
+  ],
+  "note": "Future development, formerly BL-04. Interacts with FR-AUT-015 and FR-KIT-004.",
+  "feature": "F02.4",
+  "epic": "E02",
+  "sha256": "4ac6c4cc36ea7f2647f5eded8ea36a5c25d3c06285fa5002e331bb0f16f9c0e3"
+ },
+ {
+  "id": "FR-CAM-001",
+  "text": "The software shall acquire, for each scan, the frame set defined by the IVTS specification, including the number of frames, the torch state applied to each, and any platform-specific additional frames, and shall transmit the complete set for analysis.",
+  "section_number": "14",
+  "section_name": "Camera Control and Image Acquisition",
+  "milestone": "1",
+  "source_refs": [
+   "SRS PER.2",
+   "SRS PER.3",
+   "Glossary — Smartphone Application"
+  ],
+  "note": "Also covers FR-IMG-017. The frame set is defined by the IVTS specification and fixed in the application. Unlinked from featureFlags.selectBestCameraEnabled at review",
+  "feature": "F06.1",
+  "epic": "E06",
+  "sha256": "e27b20c1b7d85bb58cb3e5d5434b33305722976434a42d1ceeff14ccfa9b7100"
+ },
+ {
+  "id": "FR-CAM-002",
+  "text": "The software shall apply the camera adjustments defined by the IVTS specification in response to a raised boundary condition, including white-balance adjustment on devices that support it and exposure adjustment where the image is too dark or too bright.",
+  "section_number": "14",
+  "section_name": "Camera Control and Image Acquisition",
+  "milestone": "TBD",
+  "source_refs": [
+   "SRS PER.4",
+   "SRS PER.5"
+  ],
+  "note": "Priority TBD. Realised by featureFlags.manualWhiteBalanceEnabled, manualExposureEnabled, customToneMappingEnabled",
+  "feature": "F06.1",
+  "epic": "E06",
+  "sha256": "b66979037df534e21ea2eea1b5e7874d1ad51eb4255c6d02022c64077b9ad746"
+ },
+ {
+  "id": "FR-CAM-003",
+  "text": "The software shall record, with each captured image, the camera parameter set that was applied, including torch state, exposure, white balance and any tone-mapping configuration.",
+  "section_number": "14",
+  "section_name": "Camera Control and Image Acquisition",
+  "milestone": "1",
+  "source_refs": [
+   "RA 4.8"
+  ],
+  "note": "Required for IVTS traceability",
+  "feature": "F06.1",
+  "epic": "E06",
+  "sha256": "c27d502d3fa3fa702c408e595354a3381a89c1af0281c34ff6e54163b3731cfd"
+ },
+ {
+  "id": "FR-CAM-004",
+  "text": "If the camera becomes unavailable or returns an invalid frame during capture, the software shall abort the capture, inform the user, and permit the scan to be re-attempted within the permitted scanning window.",
+  "section_number": "14",
+  "section_name": "Camera Control and Image Acquisition",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.10"
+  ],
+  "note": "",
+  "feature": "F06.1",
+  "epic": "E06",
+  "sha256": "7d3757d6985221b06bc82ee1af3ba378296d5564ae773d38ab73300a2ddf44ae"
+ },
+ {
+  "id": "FR-CFG-001",
+  "text": "The software shall retrieve its configuration set from the backend before a test may be started. The set comprises every server-supplied value that governs the behaviour of the application, including those resolved for the application and for the partner associated with the authenticated user. Where retrieval has not yet completed, the software shall indicate that it is not yet ready, and shall not present the condition as a failure.",
+  "section_number": "24",
+  "section_name": "Application Configuration",
+  "milestone": "3",
+  "source_refs": [
+   "Config register"
+  ],
+  "note": "Broadened at review: the partner-specific values are part of the set rather than the whole of it",
+  "feature": "F01.9",
+  "epic": "E01",
+  "sha256": "415c27e4517375dfc1e1bd9cc8d3ffa3bd0a60ab1113f7e2bbcfdb63e4c91f67"
+ },
+ {
+  "id": "FR-CFG-002",
+  "text": "If the configuration set cannot be retrieved, or fails validation against the defined schema, the software shall prevent a test from being started and shall not substitute a configuration set embedded in the application build. Where a retrieved and valid set does not supply an individual value, the software shall apply the default defined in the application for that value.",
+  "section_number": "24",
+  "section_name": "Application Configuration",
+  "milestone": "3",
+  "source_refs": [
+   "Config register",
+   "derived from RA 4.18",
+   "derived from RA 4.22"
+  ],
+  "note": "",
+  "feature": "F01.9",
+  "epic": "E01",
+  "sha256": "3ebb079d1bc0a9f97084b77531a378101f81c7d3fbd7650ba5ae183784b24064"
+ },
+ {
+  "id": "FR-CFG-003",
+  "text": "The software shall record, in the test record transmitted to the backend, the identity and version of the configuration set that was in force for that test.",
+  "section_number": "24",
+  "section_name": "Application Configuration",
+  "milestone": "3",
+  "source_refs": [
+   "Config register",
+   "supports RA 4.22",
+   "formerly BL-33",
+   "restored to its original identifier"
+  ],
+  "note": "Brought into scope at Guy's direction, formerly BL-33. A completed test carries the configuration it ran under, so a test's configuration can be reconstructed after the fact. This is the earliest milestone it can hold: it depends on the configuration set that FR-CFG-001 requires at milestone 3. Closes Q-32.",
+  "feature": "F01.9",
+  "epic": "E01",
+  "sha256": "cb4893f720e04e66fbd4d4bb699f28732fd105135d7a48f0d3884067691b4091"
+ },
+ {
+  "id": "FR-CFG-004",
+  "text": "Demonstration and mock result behaviour shall be enforced server-side. The backend shall not return a demonstration or mock result for a partner that is not designated as a demonstration partner, irrespective of any value supplied by the application.",
+  "section_number": "24",
+  "section_name": "Application Configuration",
+  "milestone": "1",
+  "source_refs": [
+   "Config register",
+   "RA 4.21",
+   "formerly BL-34",
+   "restored to its original identifier"
+  ],
+  "note": "Brought into scope for the demonstration at Guy's direction, formerly BL-34. The clause requiring a demonstration result to be labelled was removed at Rev 1.19 per Q-100, because FR-RES-006 already carries that obligation, leaving this a backend rule alone. Server-side enforcement matters because demonstration mode is a state the backend returns with the configuration, so nothing held on the device can be relied on to keep a demonstration result away from a patient. Settles the doubt recorded against Q-31.",
+  "feature": "F01.9",
+  "epic": "E01",
+  "sha256": "1bcf92aaddbd4e4920bf71f4c0149dd7ff61ff4b06282d678807eaa80b447bbe"
+ },
+ {
+  "id": "FR-CFG-006",
+  "text": "Where the configuration places the application in a blocked state, the software shall prevent a test from being started, shall inform the user of the reason, and shall provide support contact information.",
+  "section_number": "24",
+  "section_name": "Application Configuration",
+  "milestone": "3",
+  "source_refs": [
+   "Config register",
+   "formerly BL-35",
+   "restored to its original identifier"
+  ],
+  "note": "Brought into scope for the submission at Guy's direction, formerly BL-35. The configured blocked state is a response the product already returns and has screens for; SPEC-01 proposed promoting it. The blocking, notifying and configured-off distinction applies: this one blocks.",
+  "feature": "F01.9",
+  "epic": "E01",
+  "sha256": "b53851ac712bd7b55d4d1b0b4aab34e792e203f47a23aa22307bc030a1947384"
+ },
+ {
+  "id": "FR-CFG-008",
+  "text": "The software shall support the integration of components required for the A/B testing interface.",
+  "section_number": "24",
+  "section_name": "Application Configuration",
+  "milestone": "5",
+  "source_refs": [
+   "SRS EX.2",
+   "formerly BL-07"
+  ],
+  "note": "Future development, formerly BL-07. The abTestingEnabled configuration is out of scope; reinstate with this item.",
+  "feature": "F01.9",
+  "epic": "E01",
+  "sha256": "0c4a77067e0c829f6305653c7849599e34ed5f2857c3e28db25c4ce9ce1f9209"
+ },
+ {
+  "id": "FR-CNS-001",
+  "text": "The software shall allow the user to view the Privacy Policy and the Terms and Conditions from the phone verification screen and from the main menu.",
+  "section_number": "7",
+  "section_name": "Consent and Privacy Acknowledgement",
+  "milestone": "4",
+  "source_refs": [
+   "SRS CON.1"
+  ],
+  "note": "Realised by staticData.privacyUrl, staticData.termsUrl, consentUrl. Milestone rationale as FR-CNS-002",
+  "feature": "F02.7",
+  "epic": "E02",
+  "sha256": "a1e28dd978d7a32704e52778d611b4445be58f6aa15d95a5cc18f7bac7948f0a"
+ },
+ {
+  "id": "FR-CNS-002",
+  "text": "Upon entering the phone number, the software shall require the user to explicitly acknowledge acceptance of the Privacy Policy and Terms and Conditions by means of a mandatory checkbox.",
+  "section_number": "7",
+  "section_name": "Consent and Privacy Acknowledgement",
+  "milestone": "4",
+  "source_refs": [
+   "SRS CON.2"
+  ],
+  "note": "Retained at milestone 4 by product decision: users do not go through phone verification at milestone 3, so no personal information is collected before the acknowledgement gate exists. See the decision log",
+  "feature": "F02.7",
+  "epic": "E02",
+  "sha256": "4e35091a60f152fd3023bf5450a9caebe27470bc80d36802e14bc7192e727bb8"
+ },
+ {
+  "id": "FR-CNS-003",
+  "text": "If the user does not select a mandatory acknowledgement checkbox, the software shall prevent the user from proceeding with the requested action.",
+  "section_number": "7",
+  "section_name": "Consent and Privacy Acknowledgement",
+  "milestone": "4",
+  "source_refs": [
+   "SRS CON.4"
+  ],
+  "note": "Milestone rationale as FR-CNS-002",
+  "feature": "F02.7",
+  "epic": "E02",
+  "sha256": "56579e721a0f46d95552ef7318992853d9866e3ff813282b74687785fa6d1c73"
+ },
+ {
+  "id": "FR-CNS-005",
+  "text": "Prior to initiating a chat with a doctor, the software shall require the user to explicitly acknowledge acceptance of the Privacy Policy and Terms and Conditions by means of a mandatory checkbox.",
+  "section_number": "7",
+  "section_name": "Consent and Privacy Acknowledgement",
+  "milestone": "5",
+  "source_refs": [
+   "SRS CON.3",
+   "formerly BL-01"
+  ],
+  "note": "Future development, formerly BL-01. Depends on FR-SHR-013.",
+  "feature": "F02.7",
+  "epic": "E02",
+  "sha256": "212960acb9094cacfdd3380d6bfbb6d36a36e47e336373a3bb2f1ccab7161b22"
+ },
+ {
+  "id": "FR-CNS-006",
+  "text": "When the user elects to share test results with their primary care provider, the software shall present an additional acknowledgement prompt confirming acceptance of the Privacy Policy and Terms and Conditions.",
+  "section_number": "7",
+  "section_name": "Consent and Privacy Acknowledgement",
+  "milestone": "5",
+  "source_refs": [
+   "SRS CON.5",
+   "formerly BL-02"
+  ],
+  "note": "Future development, formerly BL-02. Depends on FR-SHR-012.",
+  "feature": "F02.7",
+  "epic": "E02",
+  "sha256": "dbed82fc1c81612bd0c2930686d9185e5f9bb204324e64b4b9ebaeedc5f99799"
+ },
+ {
+  "id": "FR-CNS-007",
+  "text": "The software shall record, and transmit to the backend, the identity and version of each policy document acknowledged, together with the time of acknowledgement.",
+  "section_number": "7",
+  "section_name": "Consent and Privacy Acknowledgement",
+  "milestone": "5",
+  "source_refs": [
+   "SRS-BE CON.1",
+   "SRS-BE CON.2",
+   "formerly BL-03"
+  ],
+  "note": "Future development, formerly BL-03. Confirmed at review as future development. The backend SRS makes consent recording mandatory before a test starts as SRS-BE CON.1, so that document is to be relaxed to match; see review register Q-11.",
+  "feature": "F02.7",
+  "epic": "E02",
+  "sha256": "7eed378063c9748ccc302c9b663ce891cb89e1471fb7d83cbf4b47075530756a"
+ },
+ {
+  "id": "FR-COM-001",
+  "text": "The software shall interface with the backend via HTTPS over TCP/IP using TLS 1.2 or above, with strong cipher suites, SSL chain verification and strong session identifiers. The software shall refuse to establish a connection negotiated below TLS 1.2.",
+  "section_number": "15",
+  "section_name": "Data Transmission and Backend Communication",
+  "milestone": "3",
+  "source_refs": [
+   "SRS EX.1",
+   "RA 5.1",
+   "SPTA 1.1",
+   "SPTA 2.11",
+   "SPTA 4.4",
+   "SPTA 4.5"
+  ],
+  "note": "TLS floor and cipher requirements added from the threat analysis",
+  "feature": "F12.1",
+  "epic": "E12",
+  "sha256": "a443494352e89b43e227a41ccc5455418f81ef424d33467f00233067fab7f13b"
+ },
+ {
+  "id": "FR-COM-002",
+  "text": "The software shall enforce certificate pinning, so that connections are established only with servers presenting the expected SSL/TLS certificate, and shall reject a connection presenting any other certificate.",
+  "section_number": "15",
+  "section_name": "Data Transmission and Backend Communication",
+  "milestone": "3",
+  "source_refs": [
+   "SRS ATT.1",
+   "SPTA 4.4",
+   "SPTA 4.12"
+  ],
+  "note": "SPTA 4.12 is the highest-scoring threat mitigated by the application alone, at 16 gross",
+  "feature": "F12.1",
+  "epic": "E12",
+  "sha256": "a03b655a0e1f32bf48cbf0723d85dc7feecfaa4de2d3afde45a321b543a07063"
+ },
+ {
+  "id": "FR-COM-003",
+  "text": "Upon successful Test Board capture, the software shall transmit the acquired test data to the backend and shall display an indication confirming the upload status.",
+  "section_number": "15",
+  "section_name": "Data Transmission and Backend Communication",
+  "milestone": "1",
+  "source_refs": [
+   "SRS TSM.17",
+   "SRS TSM.26"
+  ],
+  "note": "",
+  "feature": "F12.2",
+  "epic": "E12",
+  "sha256": "1672203ea078bc4becf334326822eb056bbddfa55041e00391d7271267f37156"
+ },
+ {
+  "id": "FR-COM-004",
+  "text": "The software shall include an integrity check with each transmitted payload so that incomplete or corrupted transmission is detectable by the backend.",
+  "section_number": "15",
+  "section_name": "Data Transmission and Backend Communication",
+  "milestone": "1",
+  "source_refs": [
+   "RA 5.1"
+  ],
+  "note": "",
+  "feature": "F12.2",
+  "epic": "E12",
+  "sha256": "eca803591d47dc8bb5e0b2cb159fc6a4de8cc4d83349827ae7da9112d9a78e17"
+ },
+ {
+  "id": "FR-COM-005",
+  "text": "The backend shall validate received test data and shall reject transmissions that are incomplete, malformed or nonconforming to the defined data format, treating all data received from the application as untrusted.",
+  "section_number": "15",
+  "section_name": "Data Transmission and Backend Communication",
+  "milestone": "1",
+  "source_refs": [
+   "RA 5.1",
+   "SPTA 2.4"
+  ],
+  "note": "Backend. SPTA 2.4 relies on this as the compensating control for a modified or instrumented application",
+  "feature": "F12.2",
+  "epic": "E12",
+  "sha256": "82bad7cd43cbc01b5f490f6892a9b6884cae142e35071386d837b9117adbdd4a"
+ },
+ {
+  "id": "FR-COM-006",
+  "text": "If communication is lost during data upload, the software shall notify the user, retain the test data, initiate an automatic retry, and resume transmission once connectivity is restored.",
+  "section_number": "15",
+  "section_name": "Data Transmission and Backend Communication",
+  "milestone": "3",
+  "source_refs": [
+   "SRS TSM.18",
+   "RA 5.2",
+   "RA 5.3",
+   "SPTA 5.2",
+   "SPTA 5.3"
+  ],
+  "note": "",
+  "feature": "F12.3",
+  "epic": "E12",
+  "sha256": "ea60a736d242a488e504657a5414913d73296d20d88e1ecf57547fdb3e475347"
+ },
+ {
+  "id": "FR-COM-007",
+  "text": "Upon successful data upload and backend acknowledgement, the software shall permit the user to conclude the test process and shall delete all related test data from the smartphone.",
+  "section_number": "15",
+  "section_name": "Data Transmission and Backend Communication",
+  "milestone": "3",
+  "source_refs": [
+   "SRS TSM.24",
+   "SRS TSM.27"
+  ],
+  "note": "",
+  "feature": "F12.2",
+  "epic": "E12",
+  "sha256": "807827880a966cbe94d0590a138c1162d14b8b0298a94cb8a8d907c25302db43"
+ },
+ {
+  "id": "FR-COM-008",
+  "text": "If the backend returns an error, the software shall display an explanatory error message and provide instructions on the next steps available to the user.",
+  "section_number": "15",
+  "section_name": "Data Transmission and Backend Communication",
+  "milestone": "1",
+  "source_refs": [
+   "SRS TSM.29"
+  ],
+  "note": "Content per FR-TXT-020",
+  "feature": "F12.3",
+  "epic": "E12",
+  "sha256": "a82340e3615a3124a984fc92f269dcae56f8d4cd8e93fd0240e9301bc53b329b"
+ },
+ {
+  "id": "FR-COM-009",
+  "text": "The software shall generate local device notifications without dependence on backend connectivity, for the purposes defined in FR-TIM-014.",
+  "section_number": "15",
+  "section_name": "Data Transmission and Backend Communication",
+  "milestone": "4",
+  "source_refs": [
+   "Review comment"
+  ],
+  "note": "Backend push notifications are future development as FR-COM-013",
+  "feature": "F05.5",
+  "epic": "E05",
+  "sha256": "8fa2b5ebd8e59dba1fa59715461ef689fa94c2f4774f1b4f7291b55d24985d8b"
+ },
+ {
+  "id": "FR-COM-010",
+  "text": "The backend shall verify the identity and authorisation carried by every incoming request, and shall reject any request that is unauthenticated, unauthorised for the resource addressed, or attempting to act on a patient record other than the one associated with the verified user.",
+  "section_number": "15",
+  "section_name": "Data Transmission and Backend Communication",
+  "milestone": "3",
+  "source_refs": [
+   "SPTA 6.1",
+   "RA 6.4"
+  ],
+  "note": "Backend. New from the threat analysis. The application obligation is FR-AUT-013",
+  "feature": "F02.5",
+  "epic": "E02",
+  "sha256": "43af2f0dfdc506a50a571cd2597ad05b4947f6e6de1d0803200db20c8aa13702"
+ },
+ {
+  "id": "FR-COM-011",
+  "text": "The software shall request the result for a completed test from the backend, shall present a waiting state until a result or an invalid-test outcome is received, and shall inform the user how the result will reach them if none is received within the defined period.",
+  "section_number": "15",
+  "section_name": "Data Transmission and Backend Communication",
+  "milestone": "1",
+  "source_refs": [
+   "Review decision CR-17",
+   "supports SRS TSM.28"
+  ],
+  "note": "Added at review. FR-RES-001 presumed receipt: no requirement covered the application-side act of requesting a result. The waiting period is a system parameter and is not yet valued; see the review register",
+  "feature": "F12.2",
+  "epic": "E12",
+  "sha256": "70a0f39308df0f951695a8acdb99f418eacfe8ae0deb908065c637f3f46ccfb1"
+ },
+ {
+  "id": "FR-COM-012",
+  "text": "The software shall request the permission required to present device notifications, shall precede the platform permission prompt with an explanation of why notifications are wanted, and shall not prevent a test from being started, completed or reported if permission is refused.",
+  "section_number": "15",
+  "section_name": "Data Transmission and Backend Communication",
+  "milestone": "4",
+  "source_refs": [
+   "Review comment",
+   "supports FR-TIM-014"
+  ],
+  "note": "Added at review. FR-TIM-014 and FR-COM-009 cannot function without this permission and nothing previously required it to be asked for. Milestone follows those two requirements",
+  "feature": "F05.5",
+  "epic": "E05",
+  "sha256": "26b7b77c7a9b32c44f2e49f6f1994e2db5d89b96edcf47ec056d15517fadd9b0"
+ },
+ {
+  "id": "FR-COM-013",
+  "text": "The software shall support the receipt of push notifications from the backend system.",
+  "section_number": "15",
+  "section_name": "Data Transmission and Backend Communication",
+  "milestone": "5",
+  "source_refs": [
+   "SRS OTH.1",
+   "formerly BL-05"
+  ],
+  "note": "Future development, formerly BL-05. Distinct from the local notifications in FR-TIM-014 and FR-COM-009, which are in this version.",
+  "feature": "F12.4",
+  "epic": "E12",
+  "sha256": "e71b559fa1421ebfec1ff80191de469e9be357082b8b5c7b3ba24b471ca38414"
+ },
+ {
+  "id": "FR-FLW-001",
+  "text": "The software shall present the test procedure as a sequence of short, discrete steps, each requiring the user to confirm completion by activating a control provided for that purpose, and shall not advance to the next step without that confirmation.",
+  "section_number": "9",
+  "section_name": "Guided Test Flow — Structure and Behaviour",
+  "milestone": "1",
+  "source_refs": [
+   "RA 4.1",
+   "RA 4.2"
+  ],
+  "note": "The flow is presented as a chat-style exchange, one step at a time, which is the design decision behind the single-step visibility required by FR-FLW-004. How a blocking condition is presented is a user-interface decision and is not specified here",
+  "feature": "F04.1",
+  "epic": "E04",
+  "sha256": "6ab6ef9e39475d8923d551dca73dbf8d65c94118ed4b01e3e396432f8a04bdfe"
+ },
+ {
+  "id": "FR-FLW-002",
+  "text": "The software shall present, for each step, both textual guidance and a video or animated demonstration of the required action.",
+  "section_number": "9",
+  "section_name": "Guided Test Flow — Structure and Behaviour",
+  "milestone": "1",
+  "source_refs": [
+   "SRS TSM.1",
+   "RA 4.1"
+  ],
+  "note": "",
+  "feature": "F04.2",
+  "epic": "E04",
+  "sha256": "357bab34bfa1a4b37d99b01b29ae72f818b372981025c80bf0e4ea9cc6ca8f0d"
+ },
+ {
+  "id": "FR-FLW-003",
+  "text": "Where the demonstration for a step is designated replayable, the software shall allow the instructions and demonstration for that step to be replayed at any time while the step is active.",
+  "section_number": "9",
+  "section_name": "Guided Test Flow — Structure and Behaviour",
+  "milestone": "1",
+  "source_refs": [
+   "RA 4.1",
+   "RA 4.2"
+  ],
+  "note": "Which steps are replayable is defined per step in the content set of FR-TXT-004. Confirmed at review that not every demonstration is replayable, following the current usability application",
+  "feature": "F04.2",
+  "epic": "E04",
+  "sha256": "35cc483cf60cbf9b85b54575a632c84b68bdf011fa7caf2237622ebcd153ddee"
+ },
+ {
+  "id": "FR-FLW-004",
+  "text": "The software shall display only the instruction applicable to the current step, and shall not present instructions for steps that are not yet permitted.",
+  "section_number": "9",
+  "section_name": "Guided Test Flow — Structure and Behaviour",
+  "milestone": "1",
+  "source_refs": [
+   "RA 4.3"
+  ],
+  "note": "",
+  "feature": "F04.1",
+  "epic": "E04",
+  "sha256": "3ccba8143bb1c3cf512cbe4baeddc19f54c167f69e3ff98243c1868025e2960d"
+ },
+ {
+  "id": "FR-FLW-005",
+  "text": "The software shall sequence the steps of the instructional flow in the order defined by the test procedure, and shall not permit a step to be reached out of that order.",
+  "section_number": "9",
+  "section_name": "Guided Test Flow — Structure and Behaviour",
+  "milestone": "1",
+  "source_refs": [
+   "RA 4.1",
+   "RA 4.2"
+  ],
+  "note": "",
+  "feature": "F04.1",
+  "epic": "E04",
+  "sha256": "79d579b2a991a367e7dc9487bb30f34546a9194f9645d2a5e7b0e4c739389df9"
+ },
+ {
+  "id": "FR-FLW-006",
+  "text": "The software shall include or omit defined steps and sections of the guided flow according to a parameter resolved outside the application build, so that behaviour which is required to exist need not be presented to every user, and shall apply the same sequencing and confirmation rules to the steps that remain.",
+  "section_number": "9",
+  "section_name": "Guided Test Flow — Structure and Behaviour",
+  "milestone": "3",
+  "source_refs": [
+   "Review comment",
+   "supports the milestone-3 placement of FR-AUT-010 and FR-AUT-012"
+  ],
+  "note": "Added at review. This is the mechanism by which any step is made conditional; the Date of Birth confirmation withheld from clinical-study participants is one example, the explanatory video after a result another. The full set of conditions and the chat behaviour they drive is held in the chat bubbles specification, and the steps and governing parameters are to be listed before design verification",
+  "feature": "F04.1",
+  "epic": "E04",
+  "sha256": "dc3f4ec4fe315a2c5a00752ef43b46c51a0b54b2991fad07c33b9864dd763b86"
+ },
+ {
+  "id": "FR-FLW-007",
+  "text": "Where the application is in demonstration mode, it shall provide a means of advancing directly to a chosen step of the guided flow. That means shall be reachable only by a deliberate gesture that a user would not perform in the course of taking a test, and shall not be reachable when the application is not in demonstration mode.",
+  "section_number": "9",
+  "section_name": "Guided Test Flow — Structure and Behaviour",
+  "milestone": "1",
+  "source_refs": [
+   "Review comment"
+  ],
+  "note": "Added at review for the milestone-1 demonstration. The gesture is to be specified; a sustained press on the start control or a device shake were the two suggested. Demonstration mode is a state the backend returns before a test starts rather than a separate build, so the gate is a run-time check and not a compile-time one. Complements FR-RES-006, which governs what may be presented as a result in that mode",
+  "feature": "F04.6",
+  "epic": "E04",
+  "sha256": "8cc5e1bea5df0c6ed33c044387f259902b73cb361e022090a773c62be49234e3"
+ },
+ {
+  "id": "FR-FLW-008",
+  "text": "The software shall present the content of the instructional flow in spoken form as well as on screen, using recorded audio rather than synthesised speech, and shall provide a control by which the user can silence and restore it.",
+  "section_number": "9",
+  "section_name": "Guided Test Flow — Structure and Behaviour",
+  "milestone": "1",
+  "source_refs": [
+   "Review comment"
+  ],
+  "note": "The spoken voice is a persona; naming it is a content decision under FR-TXT-004. Because the audio is recorded rather than generated from the displayed text, the spoken and written wording are separate artefacts that have to be released together, which is why FR-TXT-004 covers both. A further language means new recordings, not only new text",
+  "feature": "F04.2",
+  "epic": "E04",
+  "sha256": "49bcc52c08eca7b2a94730b377836d56b22e13b05df225852f3079f0768d287b"
+ },
+ {
+  "id": "FR-FLW-009",
+  "text": "Where a timed waiting period is long enough, the software shall present within the instructional flow a card that displays the time remaining and whose content changes as the period elapses. The thresholds determining whether the card is presented shall be fixed in the application. Its content shall be optional, in that not reading it can affect neither the conduct nor the validity of the test, and the card shall yield whenever the flow requires the user to act.",
+  "section_number": "9",
+  "section_name": "Guided Test Flow — Structure and Behaviour",
+  "milestone": "1",
+  "source_refs": [
+   "Review comment",
+   "supports RA 4.18"
+  ],
+  "note": "The mechanism is what is required: a modal within the chat, opened by the flow rather than by the user, whose content is a function of elapsed time in the current stage. The content itself, currently tips presented in sequence, is part of the approved content set under FR-TXT-004 and can change without changing this requirement",
+  "feature": "F04.8",
+  "epic": "E04",
+  "sha256": "afea8d100f16f1e2cce8b8073e8cc73dd8be323dc05305c01900a986c51b8ec7"
+ },
+ {
+  "id": "FR-IMG-001",
+  "text": "The software shall validate every captured frame against the predefined IVTS acceptance thresholds, and shall permit a result to be produced only where the acquired information meets those thresholds.",
+  "section_number": "13",
+  "section_name": "Image Capture and Validation (IVTS)",
+  "milestone": "1",
+  "source_refs": [
+   "RA 4.8",
+   "RA 4.10",
+   "RA 4.11",
+   "RA 4.12"
+  ],
+  "note": "Thresholds and the minimum number of valid frames are defined in the IVTS specification and fixed in the application. Unlinked from minValidFrames at review",
+  "feature": "F06.2",
+  "epic": "E06",
+  "sha256": "ba61e3199ce8325a0d61e85cabf8004cc7bdf3d4147534758b6f0d123ea73c81"
+ },
+ {
+  "id": "FR-IMG-002",
+  "text": "The software shall capture the Test Board only where the Color Print reference markers are detected and visible within acceptance criteria and the Test Board is entirely within the camera frame, and shall block the scan where either condition is not met.",
+  "section_number": "13",
+  "section_name": "Image Capture and Validation (IVTS)",
+  "milestone": "1",
+  "source_refs": [
+   "SRS TSM.8",
+   "SRS TSM.9",
+   "SRS TSM.10",
+   "RA 3.11"
+  ],
+  "note": "Also covers FR-IMG-003",
+  "feature": "F06.2",
+  "epic": "E06",
+  "sha256": "860b6e744352e719da565a4fc1600ccced3fa22588b5a4643a5a4449a641a82e"
+ },
+ {
+  "id": "FR-IMG-004",
+  "text": "The software shall detect whether the smartphone is too far from the Test Board. If so, the software shall prevent the user from initiating a scan and display an explanatory error message.",
+  "section_number": "13",
+  "section_name": "Image Capture and Validation (IVTS)",
+  "milestone": "1",
+  "source_refs": [
+   "SRS TSM.11",
+   "RA 7.12"
+  ],
+  "note": "",
+  "feature": "F06.3",
+  "epic": "E06",
+  "sha256": "c0b0c6f09d72ad88debceeacb750781fe43c552b76ed0e2dccf11b7037ff8a79"
+ },
+ {
+  "id": "FR-IMG-005",
+  "text": "The software shall detect whether the smartphone is too close to the Test Board. If so, the software shall prevent the user from initiating a scan and display an explanatory error message.",
+  "section_number": "13",
+  "section_name": "Image Capture and Validation (IVTS)",
+  "milestone": "1",
+  "source_refs": [
+   "SRS TSM.12",
+   "RA 7.12"
+  ],
+  "note": "",
+  "feature": "F06.3",
+  "epic": "E06",
+  "sha256": "7161a55d8535f13d9cb6f9bc9de9cc71e689421a5a41c377bc79bae565a3cf60"
+ },
+ {
+  "id": "FR-IMG-006",
+  "text": "The software shall detect whether the smartphone is positioned at an acute angle relative to the Test Board. If so, the software shall prevent the user from initiating a scan and display an explanatory error message.",
+  "section_number": "13",
+  "section_name": "Image Capture and Validation (IVTS)",
+  "milestone": "1",
+  "source_refs": [
+   "SRS TSM.13",
+   "RA 7.14"
+  ],
+  "note": "",
+  "feature": "F06.3",
+  "epic": "E06",
+  "sha256": "7320743e145cbf09daadb383b063960c1ee2598b38ec661f773dbf277125d6e6"
+ },
+ {
+  "id": "FR-IMG-007",
+  "text": "The software shall detect whether the image is too dark. If so, the software shall prevent the user from initiating a scan and display an explanatory error message.",
+  "section_number": "13",
+  "section_name": "Image Capture and Validation (IVTS)",
+  "milestone": "1",
+  "source_refs": [
+   "SRS TSM.14",
+   "RA 7.11"
+  ],
+  "note": "",
+  "feature": "F06.3",
+  "epic": "E06",
+  "sha256": "6b4130b76fb989f25faf232f6a1081cfe1f7faeafc743c47bc775c34cf96af9c"
+ },
+ {
+  "id": "FR-IMG-008",
+  "text": "The software shall detect whether the image is saturated. If so, the software shall prevent the user from initiating a scan and display an explanatory error message.",
+  "section_number": "13",
+  "section_name": "Image Capture and Validation (IVTS)",
+  "milestone": "1",
+  "source_refs": [
+   "SRS TSM.15",
+   "RA 7.11"
+  ],
+  "note": "",
+  "feature": "F06.3",
+  "epic": "E06",
+  "sha256": "143a5ef17074bc35bb59cf429772896b007d9b142c14352d4c2bf897b29ceb28"
+ },
+ {
+  "id": "FR-IMG-009",
+  "text": "The software shall use the Color Print reference anchors to detect shadow conditions across the Test Board, and shall block the scan where shadow conditions fall outside the validated thresholds.",
+  "section_number": "13",
+  "section_name": "Image Capture and Validation (IVTS)",
+  "milestone": "1",
+  "source_refs": [
+   "RA 7.15"
+  ],
+  "note": "",
+  "feature": "F06.6",
+  "epic": "E06",
+  "sha256": "632f2b04951ea04591c2568f029527b718f0eec071c3349f4c939f41c9479c36"
+ },
+ {
+  "id": "FR-IMG-010",
+  "text": "The software shall validate focus and motion in real time during framing, and shall capture an image only where image-quality thresholds are met.",
+  "section_number": "13",
+  "section_name": "Image Capture and Validation (IVTS)",
+  "milestone": "1",
+  "source_refs": [
+   "RA 7.16"
+  ],
+  "note": "",
+  "feature": "F06.2",
+  "epic": "E06",
+  "sha256": "266d2b140d48ddb945bb33370b93085e562b19ffc6caa40d64537d18f486af61"
+ },
+ {
+  "id": "FR-IMG-011",
+  "text": "Upon capture of the Test Board image, the software shall validate image clarity. If the image is too blurry, the software shall display an explanatory message and instruct the user to try again.",
+  "section_number": "13",
+  "section_name": "Image Capture and Validation (IVTS)",
+  "milestone": "1",
+  "source_refs": [
+   "SRS TSM.25",
+   "RA 7.16"
+  ],
+  "note": "",
+  "feature": "F06.2",
+  "epic": "E06",
+  "sha256": "4c43479ef3458c20d185dcd3f4a0d25e251f2d8f4480da5c044e0a84273a1744"
+ },
+ {
+  "id": "FR-IMG-013",
+  "text": "The software shall provide real-time guidance during scanning that directs the user towards a valid distance, angle and framing position.",
+  "section_number": "13",
+  "section_name": "Image Capture and Validation (IVTS)",
+  "milestone": "1",
+  "source_refs": [
+   "RA 7.12",
+   "RA 7.14"
+  ],
+  "note": "",
+  "feature": "F06.4",
+  "epic": "E06",
+  "sha256": "15e132fb28ba4ee5b2ff2c6d8d9582d39111ea8f24f737b729087eaf3a856c1b"
+ },
+ {
+  "id": "FR-IMG-014",
+  "text": "Each QCR condition and each IVTS boundary condition shall produce a distinct user message that names the condition detected and states the corrective action required.",
+  "section_number": "13",
+  "section_name": "Image Capture and Validation (IVTS)",
+  "milestone": "1",
+  "source_refs": [
+   "RA 7.11–7.16"
+  ],
+  "note": "Content per FR-TXT-020",
+  "feature": "F06.4",
+  "epic": "E06",
+  "sha256": "813643f6387d3104015503d07bfc8c60ed2078aee2fd685f35525675ee3a30ad"
+ },
+ {
+  "id": "FR-IMG-015",
+  "text": "Where IVTS validity thresholds are not met, the software shall invalidate the captured image and permit the user to re-scan. If the permitted scanning window expires without a sufficient number of valid frames, the software shall invalidate the test rather than produce a result of reduced reliability.",
+  "section_number": "13",
+  "section_name": "Image Capture and Validation (IVTS)",
+  "milestone": "1",
+  "source_refs": [
+   "RA 4.8",
+   "RA 4.10",
+   "RA 4.12"
+  ],
+  "note": "",
+  "feature": "F06.6",
+  "epic": "E06",
+  "sha256": "5ecfe68ff27f12ee170b6538304d19a79c4f811dbcfd15ee44c93380ac0abd8d"
+ },
+ {
+  "id": "FR-IMG-016",
+  "text": "The software shall use the standardised reference colour spectrum of the Color Print to normalise the captured image before colorimetric values are derived from the Detection Wells.",
+  "section_number": "13",
+  "section_name": "Image Capture and Validation (IVTS)",
+  "milestone": "1",
+  "source_refs": [
+   "Glossary",
+   "RA 4.8"
+  ],
+  "note": "Whether a raw or raw-equivalent representation is used, and whether normalisation happens on the device or in the backend, is undecided. It will not be the mechanism the earlier localLearnedRawEnabled flag implemented. See review register Q-24",
+  "feature": "F06.5",
+  "epic": "E06",
+  "sha256": "6122156f90b9157952dcb3c9c7f471242cc1e88c25bb4b2f32ee247e348c2d6f"
+ },
+ {
+  "id": "FR-IMG-021",
+  "text": "The software shall detect specular reflection on the Test Board surface, and shall block the scan where it falls outside the validated thresholds.",
+  "section_number": "13",
+  "section_name": "Image Capture and Validation (IVTS)",
+  "milestone": "1",
+  "source_refs": [
+   "Review comment",
+   "supports RA 7.11",
+   "supports RA 7.15"
+  ],
+  "note": "Added at review as a further IVTS boundary condition alongside the six in this section. The Risk Analysis trace is to be confirmed when the analysis is next revised: specular reflection is a lighting condition, so RA 7.11 and RA 7.15 are the candidates. Message content per FR-IMG-014",
+  "feature": "F06.6",
+  "epic": "E06",
+  "sha256": "a1913ccec063be5a99a821d6a91697732c694515296af8df6be6458850c0995f"
+ },
+ {
+  "id": "FR-IMG-022",
+  "text": "During a timed waiting period of the test flow the software shall allow the user to start a practice scan from the instructional flow. A practice scan shall behave as a scan of the Test Board does, including the QCR stage, the IVTS boundary detection, the QR-code validation and the guidance, shall not apply the scanning-window limit, shall end when the waiting period during which it was started ends, shall not register the kit identifier as used, and shall neither produce a result nor contribute any image to the test record.",
+  "section_number": "13",
+  "section_name": "Image Capture and Validation (IVTS)",
+  "milestone": "1",
+  "source_refs": [
+   "Review comment",
+   "supports RA 7.11 to 7.16"
+  ],
+  "note": "It exists so that a user meets the scanning interaction, and any difficulty with it, while there is still time to resolve it rather than inside the scanning window. Offered during the first timed stage, where the waiting period is longest. The kit checks run read-only here, so a user who practises on the kit they are about to test with cannot spend it. Validation against the identifier template, FR-KIT-003, arrives at milestone 3. The used-kit check, FR-KIT-004, arrives at milestone 3 as well. Until then a practice scan exercises framing and guidance only",
+  "feature": "F04.7",
+  "epic": "E04",
+  "sha256": "d6426a914ccac98e5fc08d36f816a3789112f49c420e1fda87b1071372c35cbc"
+ },
+ {
+  "id": "FR-IMG-023",
+  "text": "After a complete frame set has been captured the software shall indicate that the images are being prepared and evaluated, and shall then either continue the flow or report a boundary condition and offer the user the opportunity to scan again.",
+  "section_number": "13",
+  "section_name": "Image Capture and Validation (IVTS)",
+  "milestone": "1",
+  "source_refs": [
+   "Review comment"
+  ],
+  "note": "Added at review. The preparation and evaluation stage takes long enough to need a state of its own; without it the user is left on a viewfinder with nothing happening",
+  "feature": "F06.6",
+  "epic": "E06",
+  "sha256": "0f3e9f5f8f5694dec310a6b55c3af8b6e91a3bed9c0fe721a5f3bc3f55cc0fcd"
+ },
+ {
+  "id": "FR-IMG-024",
+  "text": "During capture the software shall deliver the scan guidance in spoken form as it changes, so that a user whose attention is on the Test Board rather than on the screen is guided without having to look.",
+  "section_number": "13",
+  "section_name": "Image Capture and Validation (IVTS)",
+  "milestone": "1",
+  "source_refs": [
+   "Review comment",
+   "supports RA 7.12",
+   "supports RA 7.14",
+   "supports RA 7.16"
+  ],
+  "note": "",
+  "feature": "F06.4",
+  "epic": "E06",
+  "sha256": "358d6df04b50125d7e053e281226b73cc91f0b39af0957302516a49ee72443f6"
+ },
+ {
+  "id": "FR-KIT-001",
+  "text": "The software shall verify the presence of the QR code on the Test Board. If the QR code is missing or damaged, the software shall prevent the user from completing a scan, display an explanatory error message, and instruct the user to contact support.",
+  "section_number": "8",
+  "section_name": "Kit Identification and Validation",
+  "milestone": "3",
+  "source_refs": [
+   "SRS TSM.2",
+   "SRS TSM.3",
+   "RA 4.19"
+  ],
+  "note": "Realised by enabledNoQrBlock, featureFlags.qrDetectionUsingMLPackage",
+  "feature": "F03.1",
+  "epic": "E03",
+  "sha256": "7b6c45af4c997504378e8b04d2e181a30f7aafa8157e70d31f666d72c0c6be2f"
+ },
+ {
+  "id": "FR-KIT-002",
+  "text": "The software shall capture the QR code and transmit it to the backend to verify that the kit identifier is valid and that the kit has not previously been used. The backend shall maintain the record of used kit identifiers against which that check is made.",
+  "section_number": "8",
+  "section_name": "Kit Identification and Validation",
+  "milestone": "3",
+  "source_refs": [
+   "SRS TSM.4",
+   "SRS-BE COM.8",
+   "SRS-BE COM.9",
+   "SRS-BE TSM.1",
+   "RA 7.1"
+  ],
+  "note": "Register of used identifiers added from the backend SRS",
+  "feature": "F03.1",
+  "epic": "E03",
+  "sha256": "c633e972d0fe8cbd4488ed61038f63e1ab18939e12fbfa471bc1a9b933192a36"
+ },
+ {
+  "id": "FR-KIT-003",
+  "text": "The software shall validate the QR-code content against the defined kit-identifier template, and shall not return a test result unless a valid QR code has been read.",
+  "section_number": "8",
+  "section_name": "Kit Identification and Validation",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.19"
+  ],
+  "note": "",
+  "feature": "F03.1",
+  "epic": "E03",
+  "sha256": "b9487074fff47730922ac0c59d3dfc063b8fe53fb6d4da6e570b867da96162ea"
+ },
+ {
+  "id": "FR-KIT-004",
+  "text": "If the QR code is unidentified, or the kit identifier has already been used, the software shall invalidate the test at the point of scanning and display an explanatory error message. A second use of the same kit cannot be prevented before the assay has been run.",
+  "section_number": "8",
+  "section_name": "Kit Identification and Validation",
+  "milestone": "3",
+  "source_refs": [
+   "SRS TSM.5",
+   "SRS TSM.40",
+   "RA 7.1"
+  ],
+  "note": "Revised per review: reuse is detected at scan rather than prevented up front, because the kit identifier is only read during the scan. RA 7.1 states the control as the same kit not being re-usable, which now means detected and blocked from producing a result. Also covers FR-KIT-006. Realised by enabledQrBlock and blockSubsequentTests.moreTestsThanKits",
+  "feature": "F03.2",
+  "epic": "E03",
+  "sha256": "e86bf8f92c9eb12a0e0387d60324f4925ac64a06f5afc667005be860284ef38f"
+ },
+ {
+  "id": "FR-KIT-005",
+  "text": "The software shall automatically verify, from the kit identifier, that the kit is within its valid use period. If the kit has expired, the software shall prevent the test from proceeding and instruct the user to use a new kit.",
+  "section_number": "8",
+  "section_name": "Kit Identification and Validation",
+  "milestone": "5",
+  "source_refs": [
+   "Product requirement",
+   "formerly BL-23",
+   "restored to its original identifier"
+  ],
+  "note": "Future development, formerly BL-23. RA 7.25 has been removed from the Risk Analysis, and it was confirmed at review that the backend obligation follows the Risk Analysis, so SRS-BE TSM.2 and TSM.3 are to be relaxed to match; see review register Q-12. Realised by expiredKitDetection.",
+  "feature": "F03.2",
+  "epic": "E03",
+  "sha256": "f23863a88556da3a644a13699115d6802240fbddf190e0ddd6574595aa6c2c85"
+ },
+ {
+  "id": "FR-KIT-007",
+  "text": "Where the user attempts to start a test within 24 hours after a previous test has completed, whether that test produced a result or was invalidated, the software shall present an alert stating that a new kit is required and shall require the user to confirm that they have one before the test flow begins.",
+  "section_number": "8",
+  "section_name": "Kit Identification and Validation",
+  "milestone": "3",
+  "source_refs": [
+   "RA 7.1"
+  ],
+  "note": "Window confirmed at 24 hours and held as a configurable value. Complements FR-KIT-004, which detects reuse of an already-used kit only at the point of scanning",
+  "feature": "F03.2",
+  "epic": "E03",
+  "sha256": "134fadbc302e9b031023928e48beb3eca5a81c51b5cbcb41f156d58e16b03297"
+ },
+ {
+  "id": "FR-LCM-002",
+  "text": "Off-the-shelf software components shall be evaluated before integration to confirm their suitability, compatibility, and impact on device safety and performance, and shall be obtained only from official sources.",
+  "section_number": "25",
+  "section_name": "Software Lifecycle and Verification",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.20",
+   "SPTA 2.6",
+   "SPTA 8.1"
+  ],
+  "note": "Process",
+  "feature": "F15.4",
+  "epic": "E15",
+  "sha256": "b5001f6de189edd7ad8334de6e568a482ca5c780d6e8f8ad5cc803704969d12a"
+ },
+ {
+  "id": "FR-LCM-003",
+  "text": "Off-the-shelf software components and their updates shall be validated within the complete device software system before release.",
+  "section_number": "25",
+  "section_name": "Software Lifecycle and Verification",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.20"
+  ],
+  "note": "Process",
+  "feature": "F15.4",
+  "epic": "E15",
+  "sha256": "290030e948b2a59f96fe455716130028cb1649d7fadd382f7efc7b613d448e1a"
+ },
+ {
+  "id": "FR-LCM-004",
+  "text": "The versions and configurations of off-the-shelf software components shall be controlled and recorded, with a continuous inventory maintained by a dependency scanning tool.",
+  "section_number": "25",
+  "section_name": "Software Lifecycle and Verification",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.20",
+   "SPTA 2.6",
+   "SPTA 2.7",
+   "SPTA 8.1"
+  ],
+  "note": "Process. SPTA 8.1 requires scanning weekly and on every update to an off-the-shelf component",
+  "feature": "F15.4",
+  "epic": "E15",
+  "sha256": "470b4ed3d07eb4e1b93afe6c2bb10d88ffb4485e9e3599c8b21ed5d7eff055e4"
+ },
+ {
+  "id": "FR-LCM-005",
+  "text": "Updates, patches, known anomalies, security vulnerabilities and supplier notifications associated with off-the-shelf software components shall be monitored throughout the software lifecycle, and identified changes shall be assessed through the established change-control and risk-management processes.",
+  "section_number": "25",
+  "section_name": "Software Lifecycle and Verification",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.20",
+   "SPTA 2.7",
+   "SPTA 8.1"
+  ],
+  "note": "Process. SPTA 2.7 additionally requires subscription to vulnerability bulletins including the CISA Known Exploited Vulnerabilities Catalog",
+  "feature": "F15.4",
+  "epic": "E15",
+  "sha256": "92f6f70ba2cfa2b7c4ef568d6e269c11c976d869c4a851f1445a19c85138c6a4"
+ },
+ {
+  "id": "FR-LCM-006",
+  "text": "Every parameter identified in the system-parameter appendix shall have a defined value, permitted range and documented rationale before design verification, and shall be held under configuration control whether it is fixed in the application or supplied by configuration.",
+  "section_number": "25",
+  "section_name": "Software Lifecycle and Verification",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.18"
+  ],
+  "note": "Process",
+  "feature": "F15.1",
+  "epic": "E15",
+  "sha256": "01dc1c1699c77b143b48e09b6dc92cef0fb432bfd92dd8faae99b7b448705d22"
+ },
+ {
+  "id": "FR-LCM-007",
+  "text": "Each timer and timing window shall be separately verified through release testing, including verification under application backgrounding and interruption.",
+  "section_number": "25",
+  "section_name": "Software Lifecycle and Verification",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.18"
+  ],
+  "note": "Process",
+  "feature": "F15.2",
+  "epic": "E15",
+  "sha256": "701a0e4dacac16764bec2cf8cc21306812febfb339f9357718a8da94da930930"
+ },
+ {
+  "id": "FR-LCM-008",
+  "text": "Regression testing of the timing and test-state controls shall be performed for each applicable software release.",
+  "section_number": "25",
+  "section_name": "Software Lifecycle and Verification",
+  "milestone": "4",
+  "source_refs": [
+   "RA 4.18"
+  ],
+  "note": "Process",
+  "feature": "F15.2",
+  "epic": "E15",
+  "sha256": "034488e73c05b0b8200ca3a0e67026cd9893d27aacfbe1ed4bc8c624c791813e"
+ },
+ {
+  "id": "FR-LCM-009",
+  "text": "Each algorithm version, and each approved combination of mobile and backend algorithm versions, shall undergo software verification and validation before release. Where a full analytical performance study is not repeated, regression testing shall be performed against the validated reference algorithm using predefined datasets and acceptance criteria.",
+  "section_number": "25",
+  "section_name": "Software Lifecycle and Verification",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.21"
+  ],
+  "note": "Process",
+  "feature": "F15.3",
+  "epic": "E15",
+  "sha256": "9e89203c0e89d2774a620c0ef11b9a885097572069f5b4943a2f1ba44bc3c6af"
+ },
+ {
+  "id": "FR-LCM-010",
+  "text": "Release verification shall confirm that the approved algorithm versions and configuration were deployed to the production environment.",
+  "section_number": "25",
+  "section_name": "Software Lifecycle and Verification",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.22"
+  ],
+  "note": "Process",
+  "feature": "F15.3",
+  "epic": "E15",
+  "sha256": "8aba50f3532e62f12a292361da0a90fa2ea90367c5bea78c565a8c45f82f75d3"
+ },
+ {
+  "id": "FR-LCM-011",
+  "text": "Retention and recovery of test state following interruption shall be verified through release testing, and application termination and reopening during each stage of the test flow shall be verified.",
+  "section_number": "25",
+  "section_name": "Software Lifecycle and Verification",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.1",
+   "RA 7.19"
+  ],
+  "note": "Process",
+  "feature": "F15.2",
+  "epic": "E15",
+  "sha256": "c59dffdf178d449386bc024979de3849a6ed4d4e8bdb7bc472dc8ddf4e9e0e6d"
+ },
+ {
+  "id": "FR-LCM-012",
+  "text": "Usability testing shall include representatives of each supported platform and shall evaluate foreseeable interruptions before, during and after result-critical user actions.",
+  "section_number": "25",
+  "section_name": "Software Lifecycle and Verification",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.1",
+   "RA 4.2",
+   "RA 4.7"
+  ],
+  "note": "Process",
+  "feature": "F15.5",
+  "epic": "E15",
+  "sha256": "56e72d3edce045106ae667d88db653555ebd9a83589ae35003096399197f9e04"
+ },
+ {
+  "id": "FR-LCM-016",
+  "text": "A dedicated integration testing phase shall be conducted with each medical provider before go-live, verifying connectivity, the accurate transmission and mapping of test result data, routing to the correct provider destination, and the handling of unsuccessful transmissions.",
+  "section_number": "25",
+  "section_name": "Software Lifecycle and Verification",
+  "milestone": "4",
+  "source_refs": [
+   "RA 6.1",
+   "RA 6.2",
+   "RA 6.3"
+  ],
+  "note": "Process; per provider organisation",
+  "feature": "F15.6",
+  "epic": "E15",
+  "sha256": "ec5dfb3135f35711e61e6674067f9a2995384066177fde9b4e40cd19d860ddc3"
+ },
+ {
+  "id": "FR-LCM-017",
+  "text": "Release testing shall be performed before each release, comprising integration, system and regression testing, as detailed in the Software Development Plan. Unit testing and other development standards are specified separately in that plan.",
+  "section_number": "25",
+  "section_name": "Software Lifecycle and Verification",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.21"
+  ],
+  "note": "Process",
+  "feature": "F15.3",
+  "epic": "E15",
+  "sha256": "52b502abc3c906927f9744f7a723d3d63711f248549798e6db534573a800af93"
+ },
+ {
+  "id": "FR-LCM-018",
+  "text": "A change to any configuration value registered in Appendix H as realising a requirement shall be assessed under the established change-control and risk-management processes before it is applied to the production environment.",
+  "section_number": "25",
+  "section_name": "Software Lifecycle and Verification",
+  "milestone": "5",
+  "source_refs": [
+   "Formerly a requirement in the configuration section",
+   "formerly BL-15"
+  ],
+  "note": "Future development, formerly BL-15.",
+  "feature": "F01.9",
+  "epic": "E01",
+  "sha256": "038c6451cad0cb05c963ce3bab1d81238a85dadfdd6999fd110962cbac289907"
+ },
+ {
+  "id": "FR-PLT-001",
+  "text": "The software shall be distributed exclusively through the Apple App Store and Google Play Store.",
+  "section_number": "4",
+  "section_name": "Platform, Distribution and Compatibility",
+  "milestone": "4",
+  "source_refs": [
+   "RA 4.15"
+  ],
+  "note": "",
+  "feature": "F01.1",
+  "epic": "E01",
+  "sha256": "c9b796d97233394be61be2d14b389461f6510cd1096735b84fec2a5f69a90292"
+ },
+ {
+  "id": "FR-PLT-002",
+  "text": "The software shall be compatible with, and installable on, Apple iOS from the minimum version established by the IVTS device qualification.",
+  "section_number": "4",
+  "section_name": "Platform, Distribution and Compatibility",
+  "milestone": "3",
+  "source_refs": [
+   "SRS LOC.1"
+  ],
+  "note": "Minimum version TBD, to follow from the IVTS device qualification. iosMinOsVersion currently 13.0.0",
+  "feature": "F01.1",
+  "epic": "E01",
+  "sha256": "ff16d51817abd51b30ad4b9d8f3919a3968c1541c2c437a01290d0cb9a571753"
+ },
+ {
+  "id": "FR-PLT-003",
+  "text": "The software shall be compatible with, and installable on, Android OS from the minimum version established by the IVTS device qualification.",
+  "section_number": "4",
+  "section_name": "Platform, Distribution and Compatibility",
+  "milestone": "3",
+  "source_refs": [
+   "SRS LOC.2"
+  ],
+  "note": "Minimum version TBD, to follow from the IVTS device qualification. androidMinOsVersion currently 8.0.0",
+  "feature": "F01.1",
+  "epic": "E01",
+  "sha256": "939338bbe38eff2e8bd661a7b2ea6bf82dcd77e1773d10ce4412aa0cd9a87e33"
+ },
+ {
+  "id": "FR-PLT-004",
+  "text": "The software shall be published to the application stores with hardware and operating-system compatibility filters enabled, so that installation is prevented on device models that are not supported.",
+  "section_number": "4",
+  "section_name": "Platform, Distribution and Compatibility",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.5"
+  ],
+  "note": "",
+  "feature": "F01.1",
+  "epic": "E01",
+  "sha256": "27c2fbf57fecef1147ae943dfb520cf6cfb60057ed05b40fa15bc6e6ea9f7f50"
+ },
+ {
+  "id": "FR-PLT-005",
+  "text": "The software shall maintain a backend-configurable list of supported operating-system versions and minimum hardware characteristics.",
+  "section_number": "4",
+  "section_name": "Platform, Distribution and Compatibility",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.5",
+   "RA 4.8"
+  ],
+  "note": "Narrowed per review: the Risk Analysis calls for hardware characteristics and operating systems, not a list of unsupported phone models. Model-level exclusion remains available through the store compatibility filters in FR-PLT-004",
+  "feature": "F01.2",
+  "epic": "E01",
+  "sha256": "b49a01029523a70ff6b55b501dc30d26e44ca4bc7a7b1c310fbd0cdca17fb5fa"
+ },
+ {
+  "id": "FR-PLT-006",
+  "text": "The iOS and Android implementations shall present functionally equivalent instructional content, step sequence, confirmation behaviour and error handling, so that the user experience is consistent across supported platforms.",
+  "section_number": "4",
+  "section_name": "Platform, Distribution and Compatibility",
+  "milestone": "2",
+  "source_refs": [
+   "RA 4.7"
+  ],
+  "note": "",
+  "feature": "F01.7",
+  "epic": "E01",
+  "sha256": "c77053469edbe763c5d9002834a523c2a47d9fa83b4aef329922baff3cb749fa"
+ },
+ {
+  "id": "FR-PLT-008",
+  "text": "The software shall record the smartphone model, operating-system version and application version in the test record transmitted to the backend.",
+  "section_number": "4",
+  "section_name": "Platform, Distribution and Compatibility",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.7",
+   "RA 4.8",
+   "RA 4.22"
+  ],
+  "note": "Required for IVTS and post-market analysis",
+  "feature": "F01.8",
+  "epic": "E01",
+  "sha256": "9fbba1e6f3bb401cf828b224ab41616f01120a033d46c9f05f3007fdcd5541cb"
+ },
+ {
+  "id": "FR-PRT-001",
+  "text": "The software shall provide a results center as a screen of its own, giving the authenticated user ongoing access to their most recent result and stating the date on which that test was performed. The backend shall transmit that result on request.",
+  "section_number": "19",
+  "section_name": "Results Center and the Main Menu",
+  "milestone": "3",
+  "source_refs": [
+   "Product requirement",
+   "SRS-BE COM.12"
+  ],
+  "note": "Split at review: the results center main screen shows the most recent result and is milestone 3; the history of earlier results is a separate screen and is deferred as FR-PRT-015. Whether invalidated tests appear, and whether results belonging to another registered user on the same phone number are excluded, are to be specified; the second bears on RA 6.4",
+  "feature": "F10.3",
+  "epic": "E10",
+  "sha256": "36ba35af77c3d24515c905c3c042e02c260a3c3aa31f821f73894d14fef10f74"
+ },
+ {
+  "id": "FR-PRT-002",
+  "text": "The software shall present a main menu, reached from a hamburger control on the home screen, available to an authenticated user at any time outside an active test.",
+  "section_number": "19",
+  "section_name": "Results Center and the Main Menu",
+  "milestone": "3",
+  "source_refs": [
+   "Product requirement"
+  ],
+  "note": "The container for FR-PRT-003 to FR-PRT-005, and for the deferred FAQ entry FR-SUP-001. Priority follows the menu items required at milestone 3",
+  "feature": "F10.4",
+  "epic": "E10",
+  "sha256": "9287ce1c1b77da5cfa5dcf73bac01c1def867fc2beac3921511ab8db5e5263d6"
+ },
+ {
+  "id": "FR-PRT-003",
+  "text": "The main menu shall give access to an About screen presenting the regulatory information required for the device.",
+  "section_number": "19",
+  "section_name": "Results Center and the Main Menu",
+  "milestone": "3",
+  "source_refs": [
+   "Product requirement"
+  ],
+  "note": "Content to be specified by regulatory. Subject to FR-TXT-002 for component naming; whether the grade-6 reading level in FR-TXT-001 applies to mandated regulatory wording is to be confirmed",
+  "feature": "F10.4",
+  "epic": "E10",
+  "sha256": "4925f68ab3a25fb57cb003c3dcb5a25d00c5c2a6ddcb0b19506c2fb013b10ba9"
+ },
+ {
+  "id": "FR-PRT-004",
+  "text": "The main menu shall give access to support contact, enabling an authenticated user to reach support without starting a test.",
+  "section_number": "19",
+  "section_name": "Results Center and the Main Menu",
+  "milestone": "3",
+  "source_refs": [
+   "Product requirement",
+   "SRS STM.10"
+  ],
+  "note": "Adds menu access to the support route required by FR-SUP-002. In-application support chat is deferred as FR-SUP-004",
+  "feature": "F10.5",
+  "epic": "E10",
+  "sha256": "6326f738d04bf43c622b3f84c75c2cff337efc5b9fab29a0a4b49cd3dfe08258"
+ },
+ {
+  "id": "FR-PRT-005",
+  "text": "The main menu shall give access to the Privacy Policy and the Terms and Conditions, presented in an in-application web view.",
+  "section_number": "19",
+  "section_name": "Results Center and the Main Menu",
+  "milestone": "4",
+  "source_refs": [
+   "Product requirement",
+   "SRS CON.1"
+  ],
+  "note": "States the presentation mechanism and the menu route for FR-CNS-001, which requires the documents to be viewable. Realised by staticData.privacyUrl and staticData.termsUrl",
+  "feature": "F10.4",
+  "epic": "E10",
+  "sha256": "d5f317d89012dd6c127b31647a8ec54286a6450ed250646c0c459a4777bba871"
+ },
+ {
+  "id": "FR-PRT-007",
+  "text": "The software shall present a control on the home screen by which an authenticated user can open the results center directly, separately from the main menu.",
+  "section_number": "19",
+  "section_name": "Results Center and the Main Menu",
+  "milestone": "3",
+  "source_refs": [
+   "Product requirement"
+  ],
+  "note": "Added at review. A second entry point to the results center alongside the main menu of FR-PRT-002, so that a returning user reaches their result without going through a menu",
+  "feature": "F10.3",
+  "epic": "E10",
+  "sha256": "1a4748fab25bdbfb3d03a9765abe5209f5cd5b67a4e0b5feae5dc2a9b009e46e"
+ },
+ {
+  "id": "FR-PRT-008",
+  "text": "The software shall allow the user to open a configured web page from the application.",
+  "section_number": "19",
+  "section_name": "Results Center and the Main Menu",
+  "milestone": "5",
+  "source_refs": [
+   "SRS TSM.43",
+   "formerly BL-10"
+  ],
+  "note": "Future development, formerly BL-10. The survey web view in FR-SUR-001 is in this version and is separate from this item.",
+  "feature": "F11.4",
+  "epic": "E11",
+  "sha256": "29564df3b2b260a2d53f8b48a63047102d5de9caa85e8aa91e4681fd17337a0d"
+ },
+ {
+  "id": "FR-PRT-009",
+  "text": "The results center shall enable the user to view the results letter.",
+  "section_number": "19",
+  "section_name": "Results Center and the Main Menu",
+  "milestone": "5",
+  "source_refs": [
+   "Product requirement",
+   "formerly BL-16"
+  ],
+  "note": "Future development, formerly BL-16. Part of the results center screen required by FR-PRT-001. Overlaps FR-SHR-015, which covers generation, saving and email sharing as one item; the two should be merged when the milestone-5 set is reconciled.",
+  "feature": "F10.3",
+  "epic": "E10",
+  "sha256": "07a151b6ab0a12f6c90420f41e679af60d27d5e2d379374a729cb6c7d68e3aba"
+ },
+ {
+  "id": "FR-PRT-010",
+  "text": "The results center shall enable the user to share the results letter.",
+  "section_number": "19",
+  "section_name": "Results Center and the Main Menu",
+  "milestone": "5",
+  "source_refs": [
+   "Product requirement",
+   "formerly BL-17"
+  ],
+  "note": "Future development, formerly BL-17. Part of the results center screen; overlaps FR-SHR-015 as above.",
+  "feature": "F10.3",
+  "epic": "E10",
+  "sha256": "949f3471d40bae143d7b9e386dcd1248c94e2a35cc3b694f93257125ed6d0d1b"
+ },
+ {
+  "id": "FR-PRT-011",
+  "text": "The results center shall enable the user to view further information about their result.",
+  "section_number": "19",
+  "section_name": "Results Center and the Main Menu",
+  "milestone": "5",
+  "source_refs": [
+   "Product requirement",
+   "formerly BL-18"
+  ],
+  "note": "Future development, formerly BL-18. Part of the results center screen. Realised by resultPortalMoreInfoUrl, already set for normal and abnormal results. Distinct from the explanatory material required at the point of result delivery by FR-TXT-019, which is in scope now.",
+  "feature": "F10.3",
+  "epic": "E10",
+  "sha256": "11547e1724f46623baed233a9b00d849575fe8362ee5c1f69c05d109de5208b8"
+ },
+ {
+  "id": "FR-PRT-012",
+  "text": "The software shall present a post-test lobby as the state of the home screen following a successful test, comprising a checklist of post-test actions each with an open or closed presentation state and a done or not-done completion state, and a control that navigates to the results center. The lobby shall be shown for a configured period after the most recent result, after which the home screen returns to its regular state.",
+  "section_number": "19",
+  "section_name": "Results Center and the Main Menu",
+  "milestone": "5",
+  "source_refs": [
+   "Post test lobby redesign spec (lobby 4)",
+   "formerly BL-36"
+  ],
+  "note": "Future development, formerly BL-36. The screen and its mechanics. Realised by staticData.resultsLobbyDuration, currently 90 days. Detailed behaviour, including the four state combinations per item, the collapse and expand rules and the row confirming a test was performed, is specified in the lobby spec and is not reproduced here.",
+  "feature": "F10.6",
+  "epic": "E10",
+  "sha256": "ee56a1efb820c3ebc5f3a1bc5f62ee7da85907380ce3a01b9070d1faffb2c9e5"
+ },
+ {
+  "id": "FR-PRT-013",
+  "text": "The post-test lobby shall present the post-test actions defined for the result type, comprising sharing the results letter and booking an appointment for a positive result, sharing the doctor's information according to the primary care provider questionnaire, a simplified layout without actions for a normal result, and a control to start a new test.",
+  "section_number": "19",
+  "section_name": "Results Center and the Main Menu",
+  "milestone": "5",
+  "source_refs": [
+   "Settled at review: the application may retain a non-revealing indicator of recent result positivity and use that to decide what to present",
+   "following the existing kidney application",
+   "rather than depending on the backend to supply positivity. Post test lobby redesign spec (lobby 4)",
+   "formerly BL-37"
+  ],
+  "note": "Future development, formerly BL-37. The action set. Gated per partner by staticData.additionalResultsCTA for the appointment action. Requires result positivity to be available to the application, which the lobby spec records as an open backend dependency. Sharing depends on FR-SHR-012 and FR-PRT-009; starting a new test is subject to FR-KIT-007.",
+  "feature": "F10.6",
+  "epic": "E10",
+  "sha256": "99db68b82dad31dc08c45be0505503e84675261719e7be2195f9006764445ddc"
+ },
+ {
+  "id": "FR-PRT-014",
+  "text": "The results center shall omit a next-steps section, shall present a view-results-letter control within its further-information area, and shall present the result explanation collapsed when the results center is opened.",
+  "section_number": "19",
+  "section_name": "Results Center and the Main Menu",
+  "milestone": "5",
+  "source_refs": [
+   "Post test lobby redesign spec (lobby 4)",
+   "phase 2",
+   "formerly BL-39"
+  ],
+  "note": "Future development, formerly BL-39. Results center changes accompanying the lobby redesign. Interacts with FR-PRT-001, FR-PRT-009 and FR-PRT-011.",
+  "feature": "F10.3",
+  "epic": "E10",
+  "sha256": "7d0e07e63bf63778694970b26a68a2db5a0c0a7452177b4fe0c7a44d90b1c591"
+ },
+ {
+  "id": "FR-PRT-015",
+  "text": "The results center shall provide a results history screen presenting the user's last five results, reachable only where more than one result exists.",
+  "section_number": "19",
+  "section_name": "Results Center and the Main Menu",
+  "milestone": "5",
+  "source_refs": [
+   "Product requirement",
+   "formerly part of FR-PRT-001",
+   "formerly BL-42"
+  ],
+  "note": "Future development, formerly BL-42. Separated from FR-PRT-001 at review. The results center main screen shows the most recent result and is milestone 3; this history screen is future development. Realised by portalResultsHistoryEnabled.",
+  "feature": "F10.3",
+  "epic": "E10",
+  "sha256": "8a7bd1ca42d83ea53afa2b2546475a38a73231dad8ddcb80153c50fbc0c540ee"
+ },
+ {
+  "id": "FR-RDY-001",
+  "text": "Upon start-up, the software shall verify device integrity (root detection on Android, jailbreak detection on iOS). If a compromised device is detected, the software shall block access and prevent further use.",
+  "section_number": "5",
+  "section_name": "Pre-Test Readiness Verification",
+  "milestone": "3",
+  "source_refs": [
+   "SRS STM.1",
+   "SPTA 4.11"
+  ],
+  "note": "",
+  "feature": "F01.3",
+  "epic": "E01",
+  "sha256": "e3e889ef8c79907852846a4b3ce8802bd8790dc869b5abbe5b5c92ad35c36e4a"
+ },
+ {
+  "id": "FR-RDY-002",
+  "text": "Prior to test initiation, the software shall programmatically verify that the smartphone hardware characteristics meet the defined minimum technical specifications. The user shall not be permitted to start a test if the requirements are not met.",
+  "section_number": "5",
+  "section_name": "Pre-Test Readiness Verification",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.5"
+  ],
+  "note": "Specification derived from the analytical studies. Realised by staticData.supportedHardwareConfig",
+  "feature": "F01.2",
+  "epic": "E01",
+  "sha256": "3d2433f6574d80206e2139c1fac2dc2443e6cf971ad405a02e1211b5dc8cfebd"
+ },
+ {
+  "id": "FR-RDY-003",
+  "text": "The software shall verify that the operating-system version is within the supported range. If the version is outside that range, the software shall prevent further use and display an explanatory message.",
+  "section_number": "5",
+  "section_name": "Pre-Test Readiness Verification",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.6",
+   "SPTA 2.5",
+   "SRS STM.4",
+   "SRS STM.5",
+   "SRS-BE COM.2"
+  ],
+  "note": "Range TBD. The lower bound is constrained twice: by the IVTS device qualification, and by SPTA 2.5, which requires that versions no longer receiving security updates cannot be used to take a test. The binding constraint is whichever is higher. Also validated server-side per SRS-BE COM.2",
+  "feature": "F01.2",
+  "epic": "E01",
+  "sha256": "4cce4d8e65fd24998b816899cfe40c4e84cf16e916f124a37fa37d093f3e5187"
+ },
+ {
+  "id": "FR-RDY-004",
+  "text": "The software shall verify its own version against the backend. If the application version is unsupported, the software shall prevent further use and shall direct the user to the application's listing in the store from which it was installed. Whether an available update is mandatory or may be dismissed shall be determined by configuration.",
+  "section_number": "5",
+  "section_name": "Pre-Test Readiness Verification",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.17",
+   "SRS STM.4",
+   "SRS STM.5",
+   "SRS-BE COM.2",
+   "SRS-BE COM.4"
+  ],
+  "note": "The backend independently validates device type, operating-system version and application version on the settings request and returns a failure response, so the check is enforced on both sides. Realised by iosMinAppVersion, androidMinAppVersion, forceUpdateOnPreLogin",
+  "feature": "F01.2",
+  "epic": "E01",
+  "sha256": "7e9cefa2d5738cb338dfa74cc5160b6a72c462e50c28652d448386994f210cde"
+ },
+ {
+  "id": "FR-RDY-005",
+  "text": "The software shall verify that the smartphone has an active internet connection. If no connection is available, the software shall prevent the test from starting and display an explanatory message.",
+  "section_number": "5",
+  "section_name": "Pre-Test Readiness Verification",
+  "milestone": "3",
+  "source_refs": [
+   "RA 5.2"
+  ],
+  "note": "",
+  "feature": "F01.4",
+  "epic": "E01",
+  "sha256": "d1bdfcbdde917f1620fdd17789e0b09d34a171ac67f64ba9a66bc6cdb57c84e1"
+ },
+ {
+  "id": "FR-RDY-006",
+  "text": "The software shall verify that the backend server is reachable. If the backend cannot be reached, the software shall prevent the test from starting and display an explanatory message.",
+  "section_number": "5",
+  "section_name": "Pre-Test Readiness Verification",
+  "milestone": "3",
+  "source_refs": [
+   "RA 5.3",
+   "SRS STM.2"
+  ],
+  "note": "",
+  "feature": "F01.4",
+  "epic": "E01",
+  "sha256": "f36eec268b20a848089fae8dfebcf382aad89d0d94b1bfc6493f48b3b6fcb523"
+ },
+ {
+  "id": "FR-RDY-007",
+  "text": "The software shall verify that the battery level is at or above the defined minimum threshold. If the battery level is below the threshold, the software shall prevent the test from starting and instruct the user to charge the device.",
+  "section_number": "5",
+  "section_name": "Pre-Test Readiness Verification",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.13",
+   "SRS STM.3"
+  ],
+  "note": "Threshold TBD; fixed in the application, not configurable",
+  "feature": "F01.4",
+  "epic": "E01",
+  "sha256": "6385b64923f23899bd9b99cbfe00d1cb719f7d3be0dd0642030eb801b236ac06"
+ },
+ {
+  "id": "FR-RDY-008",
+  "text": "The software shall verify that available storage is at or above the defined minimum threshold. If storage is insufficient, the software shall prevent the test from starting and instruct the user to free storage.",
+  "section_number": "5",
+  "section_name": "Pre-Test Readiness Verification",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.14",
+   "SRS STM.6",
+   "SRS STM.7"
+  ],
+  "note": "Threshold TBD, and fixed in the application rather than configuration-supplied. Unlinked from staticData.lowDiskSpaceSize at review",
+  "feature": "F01.4",
+  "epic": "E01",
+  "sha256": "c30b7122ef658a09297331d6ea6cb4f0803c310f20992b9854e44bdc0f9d76be"
+ },
+ {
+  "id": "FR-RDY-009",
+  "text": "The software shall verify that the camera is present, and shall request camera permission at the point in the instructional flow where it is required. If the camera is absent, if permission is not granted, or if the camera cannot be started, the software shall not permit the user to proceed.",
+  "section_number": "5",
+  "section_name": "Pre-Test Readiness Verification",
+  "milestone": "1",
+  "source_refs": [
+   "RA 4.9"
+  ],
+  "note": "Restated at review. Unlike the other checks in this section, the camera permission is requested inside the instructional flow at the point of need rather than silently before the test starts, so the user understands why it is being asked. Refusal blocks progress rather than warning",
+  "feature": "F01.4",
+  "epic": "E01",
+  "sha256": "5dc57b80184bf13cfaeea4db2ca72421b143b993c4ab1d7fb7a78164cf8626cc"
+ },
+ {
+  "id": "FR-RDY-010",
+  "text": "The software shall re-evaluate all readiness checks immediately before test initiation, and not only at application start-up.",
+  "section_number": "5",
+  "section_name": "Pre-Test Readiness Verification",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.5",
+   "RA 4.13",
+   "RA 4.14"
+  ],
+  "note": "",
+  "feature": "F01.4",
+  "epic": "E01",
+  "sha256": "cda9b0b77b4f2472d7c1f4c7eaa633915886e05203f8ba6a06ae7d88b5c951aa"
+ },
+ {
+  "id": "FR-RDY-011",
+  "text": "When a readiness check fails, the software shall present a single message that identifies the condition and states the corrective action required, together with support contact information. Each condition shall be defined as either preventing the test from starting, or informing the user and permitting them to continue.",
+  "section_number": "5",
+  "section_name": "Pre-Test Readiness Verification",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.15",
+   "RA 4.16"
+  ],
+  "note": "Content per FR-TXT-020",
+  "feature": "F01.5",
+  "epic": "E01",
+  "sha256": "a0b7dd8347a3dfa061eee4cdf4d4a7e49c78b1751338ab3ef8ce16fa64791a0e"
+ },
+ {
+  "id": "FR-RDY-012",
+  "text": "Upon start-up, the software shall determine whether previously collected test data was successfully transmitted to the backend and, if not, shall attempt to retransmit it.",
+  "section_number": "5",
+  "section_name": "Pre-Test Readiness Verification",
+  "milestone": "3",
+  "source_refs": [
+   "SRS STM.8",
+   "RA 5.2",
+   "RA 5.3"
+  ],
+  "note": "RA trace added per review",
+  "feature": "F01.6",
+  "epic": "E01",
+  "sha256": "6b2ab9ce1eaa80d0a92e6d6ad1dfde2a826e882198d94a919b3ed94b768c2afb"
+ },
+ {
+  "id": "FR-RDY-013",
+  "text": "Where a condition that blocks the user can be resolved by attempting the action again, the software shall offer the user a means of retrying it. Where the condition cannot be resolved by retrying, the software shall not offer a retry, and shall present only the route to resolution that applies.",
+  "section_number": "5",
+  "section_name": "Pre-Test Readiness Verification",
+  "milestone": "3",
+  "source_refs": [
+   "Review comment",
+   "extends RA 4.15",
+   "extends RA 4.16"
+  ],
+  "note": "Added at review. The distinction matters because a retry offered on an unrecoverable condition invites the user to repeat an action that cannot succeed. Whether a given condition is retryable is to be stated for each blocking condition in this document before design verification",
+  "feature": "F01.5",
+  "epic": "E01",
+  "sha256": "2d91d8e3d2983d8b5d20464a17a796e215f5752deaeb2e41e117f31063794804"
+ },
+ {
+  "id": "FR-RDY-014",
+  "text": "Where the backend refuses to permit a test, the software shall present a message specific to the reason given, identifying the condition and the action available to the user.",
+  "section_number": "5",
+  "section_name": "Pre-Test Readiness Verification",
+  "milestone": "3",
+  "source_refs": [
+   "Review comment",
+   "QACR-APP-SPEC-01"
+  ],
+  "note": "Added at review. The backend answers the start-up exchange with at most one reason why this user may not test, and each reason needs its own message rather than a generic failure. The reasons themselves are the backend contract and are not enumerated here; SPEC-01 records the set currently returned. Complements FR-CFG-006, which requires a reason to be given without saying what the reasons are",
+  "feature": "F01.5",
+  "epic": "E01",
+  "sha256": "85a6a9ace3222740c2c65766d5de5e8447fd9dded30980ff8874a4f4bbc2637d"
+ },
+ {
+  "id": "FR-RES-001",
+  "text": "After receiving results from the backend, the software shall display them to the user. The backend shall transmit the result for the exam identified in the request.",
+  "section_number": "17",
+  "section_name": "Result Presentation",
+  "milestone": "1",
+  "source_refs": [
+   "SRS TSM.28",
+   "SRS-BE COM.7",
+   "SRS-BE COM.11"
+  ],
+  "note": "",
+  "feature": "F09.1",
+  "epic": "E09",
+  "sha256": "9700b7aeffcdd424e691192c51d870fecf0461401ea610b76efe23946dc87b2f"
+ },
+ {
+  "id": "FR-RES-002",
+  "text": "The software shall present the albumin-to-creatinine ratio both as a numerical value and as a result category.",
+  "section_number": "17",
+  "section_name": "Result Presentation",
+  "milestone": "1",
+  "source_refs": [
+   "RA 7.17"
+  ],
+  "note": "Presentation is fixed: the ratio only, as a value and a category. Unlinked from resultsType and staticData.showAcrResultOnly at review. Presentation of the albumin and creatinine values is deferred; see Appendix E",
+  "feature": "F09.1",
+  "epic": "E09",
+  "sha256": "314c065bffa104a48d807e26580d2b029a357364130cfc39c4c29133353cc057"
+ },
+ {
+  "id": "FR-RES-003",
+  "text": "The software shall present the units of measurement applicable to each reported value.",
+  "section_number": "17",
+  "section_name": "Result Presentation",
+  "milestone": "1",
+  "source_refs": [
+   "Derived",
+   "supports RA 7.17"
+  ],
+  "note": "Not required by RA 7.17; retained as a product decision",
+  "feature": "F09.1",
+  "epic": "E09",
+  "sha256": "2d0d8b2863fa97c691fee0ac7d6f153f1f7b961e7df8fd6a4d0d3f593785ba22"
+ },
+ {
+  "id": "FR-RES-004",
+  "text": "Where the result falls outside the claimed measuring range, the software shall present that condition rather than an unqualified numeric value.",
+  "section_number": "17",
+  "section_name": "Result Presentation",
+  "milestone": "2",
+  "source_refs": [
+   "RA 4.21"
+  ],
+  "note": "",
+  "feature": "F09.2",
+  "epic": "E09",
+  "sha256": "35657dd02fb61565f4bcebb6758f2d64336a73f1f16aa75fe02cfe9b7082ddb4"
+ },
+ {
+  "id": "FR-RES-005",
+  "text": "For an invalid test, the software shall present an invalid-test outcome rather than any numeric value.",
+  "section_number": "17",
+  "section_name": "Result Presentation",
+  "milestone": "1",
+  "source_refs": [
+   "RA 4.3",
+   "RA 4.4",
+   "FR-ALG-010"
+  ],
+  "note": "Messaging per FR-TXT-021",
+  "feature": "F09.2",
+  "epic": "E09",
+  "sha256": "6081fc397d45da0f1470b9acb5ff1f3f34729d24d377c95948b04ebd8cc5509e"
+ },
+ {
+  "id": "FR-RES-006",
+  "text": "Where the backend has placed the application in demonstration mode for the test being performed, the software shall present a result drawn from a fixed demonstration payload rather than from an analysed test, shall not present that result as a clinical result, and shall make the demonstration state evident wherever that result is presented.",
+  "section_number": "17",
+  "section_name": "Result Presentation",
+  "milestone": "1",
+  "source_refs": [
+   "Review decision CR-07",
+   "CR-08"
+  ],
+  "note": "Added at review so that milestone 1 can present a result before any of the analysis pipeline exists. Demonstration mode is a state the backend returns with the configuration before a test starts, not a separate build, so the same artefact that ships to patients can be placed in it — which is why the evidence of the state must be visible to the user and why FR-CFG-004, server-side enforcement of demonstration behaviour, matters more than its deferral suggests. In demonstration mode no algorithm version is exercised, which is why quantitation and the approved-version mapping are not needed at milestone 1",
+  "feature": "F09.4",
+  "epic": "E09",
+  "sha256": "15a25f6c6af5c3ed84feb2cc25fd38f4b32628aaabca76df07e5f10524dfe8e9"
+ },
+ {
+  "id": "FR-RES-007",
+  "text": "The software shall present the albumin and creatinine values in addition to the albumin-to-creatinine ratio.",
+  "section_number": "17",
+  "section_name": "Result Presentation",
+  "milestone": "5",
+  "source_refs": [
+   "Review item R-03",
+   "formerly BL-12"
+  ],
+  "note": "Future development, formerly BL-12. Constrained by staticData.showAcrResultOnly, currently true. See FR-RES-002.",
+  "feature": "F09.1",
+  "epic": "E09",
+  "sha256": "6d684679af1e1a4df16c1451e6fa1bb49b6e69737852445aee901eae47349623"
+ },
+ {
+  "id": "FR-SEC-001",
+  "text": "The software shall encrypt all sensitive data stored on the device, and shall store only the data required to complete the test and deliver the result.",
+  "section_number": "23",
+  "section_name": "Security and Data Protection",
+  "milestone": "3",
+  "source_refs": [
+   "SRS ATT.3",
+   "SPTA 4.1"
+  ],
+  "note": "Minimisation obligation added from the threat analysis; retention is bounded by FR-SEC-006",
+  "feature": "F13.1",
+  "epic": "E13",
+  "sha256": "3a2af023cf45755da545b5b4ea41452891a7ebabf7f0618e4ac398bdafec23ee"
+ },
+ {
+  "id": "FR-SEC-002",
+  "text": "The software shall be published with code obfuscation enabled on the Android platform.",
+  "section_number": "23",
+  "section_name": "Security and Data Protection",
+  "milestone": "3",
+  "source_refs": [
+   "SRS ATT.4",
+   "SPTA 4.11"
+  ],
+  "note": "Applicable to Android only; iOS has no obfuscation. Agrees with SPTA 4.11. Settled at review; see decision log Q-14",
+  "feature": "F13.2",
+  "epic": "E13",
+  "sha256": "68d62267bf6f708c54fc7e90430ce45dd8905f57e531bf481057b536c3673cc6"
+ },
+ {
+  "id": "FR-SEC-003",
+  "text": "The software shall be published with all debugging functionality and development tools disabled, so that a debugger cannot be attached to a release build.",
+  "section_number": "23",
+  "section_name": "Security and Data Protection",
+  "milestone": "3",
+  "source_refs": [
+   "SRS ATT.5",
+   "SPTA 4.13"
+  ],
+  "note": "",
+  "feature": "F13.2",
+  "epic": "E13",
+  "sha256": "7e2f2cca0c7c9f8486974650adfc46245bdec95708fb39918feafe199c86f860"
+ },
+ {
+  "id": "FR-SEC-004",
+  "text": "If an error message occurs, the software shall ensure that no personal information or sensitive details are disclosed to the user.",
+  "section_number": "23",
+  "section_name": "Security and Data Protection",
+  "milestone": "3",
+  "source_refs": [
+   "SRS ATT.6"
+  ],
+  "note": "Content per FR-TXT-020. Technical detail is separately constrained by FR-SEC-010",
+  "feature": "F13.4",
+  "epic": "E13",
+  "sha256": "be991bfc0ede642dd21111552f7ef0b676e539780c1449ad93f08409dc5493d9"
+ },
+ {
+  "id": "FR-SEC-005",
+  "text": "The software shall not write personal or health information to application logs or crash reports.",
+  "section_number": "23",
+  "section_name": "Security and Data Protection",
+  "milestone": "3",
+  "source_refs": [
+   "Derived",
+   "see SPTA"
+  ],
+  "note": "See also FR-ANL-002",
+  "feature": "F13.4",
+  "epic": "E13",
+  "sha256": "7170fffd735463f975dfbcf018ac511ed3989a7b7cec8633d00542de65bd2258"
+ },
+ {
+  "id": "FR-SEC-006",
+  "text": "The software shall retain test data on the device only for as long as required to complete transmission, and shall delete it upon backend acknowledgement.",
+  "section_number": "23",
+  "section_name": "Security and Data Protection",
+  "milestone": "3",
+  "source_refs": [
+   "SRS TSM.27",
+   "FR-COM-007"
+  ],
+  "note": "",
+  "feature": "F12.2",
+  "epic": "E12",
+  "sha256": "2fedfb1dfc817ce991e9bdf0fca13f4ca5232011330e13492af7ae1d51690b87"
+ },
+ {
+  "id": "FR-SEC-007",
+  "text": "The software shall prevent the user from taking a screenshot of any screen containing personal, health or result information, and shall obscure such content when the application is backgrounded or when the operating system captures a preview of it, so that it is not exposed in the application switcher.",
+  "section_number": "23",
+  "section_name": "Security and Data Protection",
+  "milestone": "3",
+  "source_refs": [
+   "SRS ATT.2",
+   "SPTA 4.14"
+  ],
+  "note": "Screenshot prevention added from the threat analysis. This is the sole control for SPTA 4.14, gross score 12",
+  "feature": "F13.3",
+  "epic": "E13",
+  "sha256": "489f42bdf010130a3fc4493be7d203783c9963fabea16aa5fea47e10be04e360"
+ },
+ {
+  "id": "FR-SEC-008",
+  "text": "The software shall not persist any authentication credential, password or long-lived secret on the device. Authentication shall be performed server-side, and a retained session token shall not by itself grant access after sign-out or after the session has expired.",
+  "section_number": "23",
+  "section_name": "Security and Data Protection",
+  "milestone": "3",
+  "source_refs": [
+   "SPTA 1.5"
+  ],
+  "note": "New from the threat analysis. SPTA 1.5 scores 16 gross; the stated control is server-side authentication with persistent authentication removed",
+  "feature": "F02.5",
+  "epic": "E02",
+  "sha256": "bb28775f3c3086c332a34bf249ac859a9d22e1bc54efebf3d9a7f2c3d74fba2f"
+ },
+ {
+  "id": "FR-SEC-009",
+  "text": "The software shall store cryptographic keys and session tokens only in the platform-provided secure storage, being the iOS Keychain or the Android Keystore, and shall not write them to application files, shared preferences or any location readable by another application.",
+  "section_number": "23",
+  "section_name": "Security and Data Protection",
+  "milestone": "3",
+  "source_refs": [
+   "SPTA 4.7"
+  ],
+  "note": "New from the threat analysis",
+  "feature": "F13.1",
+  "epic": "E13",
+  "sha256": "01af8836a32f031a24f082b15a3f19ca222622ae5e5852a2ed975363f80a2683"
+ },
+ {
+  "id": "FR-SEC-010",
+  "text": "Error messages presented to the user shall be generic, and shall not disclose internal technical information including stack traces, class or method names, file paths, backend endpoints, component versions or database detail.",
+  "section_number": "23",
+  "section_name": "Security and Data Protection",
+  "milestone": "3",
+  "source_refs": [
+   "SPTA 1.3"
+  ],
+  "note": "New from the threat analysis. Distinct from FR-SEC-004, which concerns personal information",
+  "feature": "F13.4",
+  "epic": "E13",
+  "sha256": "aaeb8c673542acc495b2b48bbd2446a0bf8624e292f1abbaec57a02511465a49"
+ },
+ {
+  "id": "FR-SEC-011",
+  "text": "The software shall validate and sanitise all user-supplied input before using it, storing it or transmitting it to the backend, accepting only values conforming to the expected type, length and character set for that field.",
+  "section_number": "23",
+  "section_name": "Security and Data Protection",
+  "milestone": "3",
+  "source_refs": [
+   "SPTA 2.1"
+  ],
+  "note": "New from the threat analysis. The field-specific rules in FR-AUT-002, FR-AUT-008 and FR-ACC-004 are instances of this requirement, not a substitute for it",
+  "feature": "F13.4",
+  "epic": "E13",
+  "sha256": "91ce6d38b6ca0ff59d9c0048965e8b9d40eba2b87c72bdd9617976d424ef423e"
+ },
+ {
+  "id": "FR-SEC-012",
+  "text": "Release artefacts for both platforms, being the iOS IPA and the Android APK or AAB, shall be encrypted.",
+  "section_number": "23",
+  "section_name": "Security and Data Protection",
+  "milestone": "3",
+  "source_refs": [
+   "SPTA 4.11"
+  ],
+  "note": "New from the threat analysis. Process requirement, verified at release",
+  "feature": "F13.2",
+  "epic": "E13",
+  "sha256": "e657b8dd99ad0ffd431ba4209009a200a8f5625aecd501777aa359951a38ae17"
+ },
+ {
+  "id": "FR-SEC-013",
+  "text": "The software shall report security-relevant events to the backend for audit logging, including authentication attempts and their outcome, PIN entry failures, device-integrity check failures, and any condition that caused a test to be blocked from starting. These events shall carry no personal or health information.",
+  "section_number": "23",
+  "section_name": "Security and Data Protection",
+  "milestone": "4",
+  "source_refs": [
+   "SPTA 3.1",
+   "SPTA 3.2"
+  ],
+  "note": "New from the threat analysis. This is an audit channel distinct from the analytics events required by section 21; FR-ANL-002 applies to both",
+  "feature": "F13.5",
+  "epic": "E13",
+  "sha256": "0fee0aba7452eb2e754b2ee2d5941e09de98e3dc73b2e1e41870a1e9d57788a2"
+ },
+ {
+  "id": "FR-SEC-014",
+  "text": "The software shall not transmit personal or health information from any build in which the transport controls of FR-COM-001 and FR-COM-002 are not fully implemented. Such a build shall be used only with data that did not come from a patient.",
+  "section_number": "23",
+  "section_name": "Security and Data Protection",
+  "milestone": "1",
+  "source_refs": [
+   "Review decision CR-21",
+   "SPTA 2.11",
+   "SPTA 4.12"
+  ],
+  "note": "Added at review. Test data upload is at milestone 1 while TLS enforcement and certificate pinning are at milestone 3, so this states the constraint that keeps patient data out of the milestone-1 build",
+  "feature": "F12.1",
+  "epic": "E12",
+  "sha256": "3902dc00b9b33aa1cfdd348266b1c5508eded7b29fca7ccd1f96c04b4f2120d2"
+ },
+ {
+  "id": "FR-SHR-001",
+  "text": "The backend data model shall be segmented by partnering organisation, enforcing logical data isolation so that records belonging to one health provider are inaccessible to another, and each patient shall be mapped to a single medical provider organisation, in a manner that supports both prescription generation and the return of results to the prescribing doctor.",
+  "section_number": "20",
+  "section_name": "Result Routing and Provider Communication",
+  "milestone": "3",
+  "source_refs": [
+   "RA 6.3",
+   "SRS-BE LOG.3"
+  ],
+  "note": "Backend. Multi-tenancy isolation stated explicitly from the backend SRS",
+  "feature": "F11.1",
+  "epic": "E11",
+  "sha256": "4d913c727409731fe26e6bed003239573352e335a315ee5a89320cdee53d01f2"
+ },
+ {
+  "id": "FR-SHR-002",
+  "text": "The system shall route test result data according to the medical provider organisation associated with the patient.",
+  "section_number": "20",
+  "section_name": "Result Routing and Provider Communication",
+  "milestone": "3",
+  "source_refs": [
+   "RA 6.3"
+  ],
+  "note": "Backend",
+  "feature": "F11.1",
+  "epic": "E11",
+  "sha256": "51b5cb689ce43a8cb9cc57c8cd38e214b33d2897ec56edbb9baddcd45d18ad7f"
+ },
+ {
+  "id": "FR-SHR-003",
+  "text": "The backend shall map each test result to the patient record associated with the verified user token used to submit the test.",
+  "section_number": "20",
+  "section_name": "Result Routing and Provider Communication",
+  "milestone": "3",
+  "source_refs": [
+   "RA 6.4"
+  ],
+  "note": "Backend; see FR-AUT-013",
+  "feature": "F11.1",
+  "epic": "E11",
+  "sha256": "e9631e2ddf2c9e15e15d7171463463e565e499e4ef1b8430bd7ff8e849105aef"
+ },
+ {
+  "id": "FR-SHR-004",
+  "text": "Each medical provider organisation shall have a separate integration setup and configuration.",
+  "section_number": "20",
+  "section_name": "Result Routing and Provider Communication",
+  "milestone": "3",
+  "source_refs": [
+   "RA 6.3"
+  ],
+  "note": "Backend",
+  "feature": "F11.1",
+  "epic": "E11",
+  "sha256": "74981525759790dc0345a590707650d4fab178db9722b88f1599cc6c5d550342"
+ },
+ {
+  "id": "FR-SHR-005",
+  "text": "Integration protocols with medical providers shall be based on industry standards, using HL7 for data integrity. The provider-specific protocol and data mapping shall be documented and agreed with the provider before implementation, and access shall be denied to unauthorised addresses.",
+  "section_number": "20",
+  "section_name": "Result Routing and Provider Communication",
+  "milestone": "3",
+  "source_refs": [
+   "RA 6.1",
+   "SRS-BE EX.2",
+   "SRS-BE EX.5"
+  ],
+  "note": "Backend. Address restriction added from the backend SRS. HISP delivery to primary care providers was separated at review and is deferred as FR-SHR-017",
+  "feature": "F11.2",
+  "epic": "E11",
+  "sha256": "999fd6160f1294fd70e3708d730a1b4f3e2083974a57756d79da563491bcaa3b"
+ },
+ {
+  "id": "FR-SHR-006",
+  "text": "The provider communication protocol shall include handshake and acknowledgement mechanisms that verify successful transmission of test result data.",
+  "section_number": "20",
+  "section_name": "Result Routing and Provider Communication",
+  "milestone": "3",
+  "source_refs": [
+   "RA 6.2"
+  ],
+  "note": "Backend",
+  "feature": "F11.2",
+  "epic": "E11",
+  "sha256": "6b2e6979061ddff43338e6a9331402c9a0c4f6e1d712fdf94003a12416ac8f73"
+ },
+ {
+  "id": "FR-SHR-007",
+  "text": "The backend shall identify failed provider transmissions and shall retry transmission when communication with the medical provider becomes available.",
+  "section_number": "20",
+  "section_name": "Result Routing and Provider Communication",
+  "milestone": "3",
+  "source_refs": [
+   "RA 6.2"
+  ],
+  "note": "Backend",
+  "feature": "F11.2",
+  "epic": "E11",
+  "sha256": "fff2d46c977165e40f03f155b9bb8fbc4d655a9e08a751cc339df43d543412ab"
+ },
+ {
+  "id": "FR-SHR-008",
+  "text": "The backend shall reject malformed or nonconforming provider transmissions.",
+  "section_number": "20",
+  "section_name": "Result Routing and Provider Communication",
+  "milestone": "3",
+  "source_refs": [
+   "RA 6.1"
+  ],
+  "note": "Backend",
+  "feature": "F11.2",
+  "epic": "E11",
+  "sha256": "076dafe9dac82cf118f9ccff06753c19aa6d1bf48df62036b81fe88ddb5e1d5d"
+ },
+ {
+  "id": "FR-SHR-011",
+  "text": "The configuration shall state, for each partner, whether doctor-to-patient engagement takes place within the application or outside it, and the software shall present the corresponding post-result journey.",
+  "section_number": "20",
+  "section_name": "Result Routing and Provider Communication",
+  "milestone": "TBD",
+  "source_refs": [
+   "Review item R-11"
+  ],
+  "note": "Determines whether the deferred chat and consultation features in Appendix E are in scope for a given partner",
+  "feature": "F11.3",
+  "epic": "E11",
+  "sha256": "8aeee1a41f8b81ba2459c85a066da87a739b4f2a192a81f78c7a254937cdb644"
+ },
+ {
+  "id": "FR-SHR-012",
+  "text": "The software shall provide the user with an option to share test results with their primary care provider.",
+  "section_number": "20",
+  "section_name": "Result Routing and Provider Communication",
+  "milestone": "5",
+  "source_refs": [
+   "SRS CON.5",
+   "SRS TSM.46",
+   "formerly BL-06"
+  ],
+  "note": "Future development, formerly BL-06. Consolidates two deferred requirements.",
+  "feature": "F11.4",
+  "epic": "E11",
+  "sha256": "e8aea5a6bb0a19c594393380dce46f8cbfbdd117a340874f709e141c40b0bbbb"
+ },
+ {
+  "id": "FR-SHR-013",
+  "text": "The software shall enable the user to initiate a chat with a doctor before starting a test or after completing one.",
+  "section_number": "20",
+  "section_name": "Result Routing and Provider Communication",
+  "milestone": "5",
+  "source_refs": [
+   "SRS TSM.39",
+   "formerly BL-08"
+  ],
+  "note": "Future development, formerly BL-08. Scope determined by FR-SHR-011.",
+  "feature": "F11.5",
+  "epic": "E11",
+  "sha256": "5f5a68cad4d43205663b10c17819041e11fcf6817028874ce56911165bf05d48"
+ },
+ {
+  "id": "FR-SHR-014",
+  "text": "The software shall allow the user to call a primary care provider or care team using a configured phone number.",
+  "section_number": "20",
+  "section_name": "Result Routing and Provider Communication",
+  "milestone": "5",
+  "source_refs": [
+   "SRS TSM.42",
+   "formerly BL-09"
+  ],
+  "note": "Future development, formerly BL-09.",
+  "feature": "F11.5",
+  "epic": "E11",
+  "sha256": "bcf6010c1e4999f74cf62a3dc309938c628e4d09d866cab36fedc56bc3a34a12"
+ },
+ {
+  "id": "FR-SHR-015",
+  "text": "The software shall allow the generation of a results letter in PDF format, and shall allow the user to save it to the smartphone and share it by email.",
+  "section_number": "20",
+  "section_name": "Result Routing and Provider Communication",
+  "milestone": "5",
+  "source_refs": [
+   "SRS TSM.36",
+   "SRS TSM.37",
+   "SRS TSM.38",
+   "SRS-BE COM.10",
+   "formerly BL-11"
+  ],
+  "note": "Future development, formerly BL-11. Confirmed for future development. The backend SRS requires letter generation and transmission as SRS-BE COM.10.",
+  "feature": "F11.4",
+  "epic": "E11",
+  "sha256": "055194d10edb837b3bad43a076b1935cc543910cc327ca616beefd9eb62d8464"
+ },
+ {
+  "id": "FR-SHR-016",
+  "text": "Where completing a results-sharing action requires an application outside this one, the software shall hand off to that application. Hand-off shall be limited to applications explicitly configured for that purpose, shall be initiated only by an action the user has taken, and shall pass no more information than the sharing action requires.",
+  "section_number": "20",
+  "section_name": "Result Routing and Provider Communication",
+  "milestone": "5",
+  "source_refs": [
+   "SRS TSM.44",
+   "review register Q-20",
+   "formerly BL-41"
+  ],
+  "note": "Future development, formerly BL-41. Stated generally rather than naming a particular application. The guard is deliberate: SRS TSM.44 permitted launching arbitrary applications, which had no stated purpose and no security rationale.",
+  "feature": "F11.4",
+  "epic": "E11",
+  "sha256": "1282c33f1e236c3986353c40e25237cc0519bd568a0101ade313030803e33caa"
+ },
+ {
+  "id": "FR-SHR-017",
+  "text": "The provider integration shall support the HISP protocol for secure delivery of results to primary care providers.",
+  "section_number": "20",
+  "section_name": "Result Routing and Provider Communication",
+  "milestone": "5",
+  "source_refs": [
+   "RA 6.1",
+   "SRS-BE EX.2",
+   "SRS-BE EX.5",
+   "formerly part of FR-SHR-005",
+   "formerly BL-43"
+  ],
+  "note": "Future development, formerly BL-43. Separated from FR-SHR-005 at review. HL7 and the documented per-provider mapping remain in the body at milestone 3; HISP delivery is future development.",
+  "feature": "F11.2",
+  "epic": "E11",
+  "sha256": "2d2b9b34d95934e706cde633868b4940b24dceecafe129b99b17974b225c9ccc"
+ },
+ {
+  "id": "FR-SHR-018",
+  "text": "The software shall determine whether a configured sharing application is present on the device, and shall present the sharing options that apply accordingly.",
+  "section_number": "20",
+  "section_name": "Result Routing and Provider Communication",
+  "milestone": "5",
+  "source_refs": [
+   "Review comment",
+   "supports FR-SHR-016",
+   "formerly BL-44"
+  ],
+  "note": "Future development, formerly BL-44. With the rest of user-initiated sharing. Detection is limited to applications explicitly configured for sharing, which is the same allow-list FR-SHR-016 restricts hand-off to; neither platform permits enumerating what else is installed.",
+  "feature": "F11.4",
+  "epic": "E11",
+  "sha256": "ac3c8e6164445161e2781a9c857b5a56245f60f2c866429fcb38ec534d188b40"
+ },
+ {
+  "id": "FR-STA-002",
+  "text": "If the test flow is interrupted by a transient event such as an incoming call, message, notification or screen lock, the software shall remain active in the background without terminating.",
+  "section_number": "11",
+  "section_name": "Test State Retention, Interruption and Cancellation",
+  "milestone": "1",
+  "source_refs": [
+   "SRS TSM.21",
+   "RA 4.1"
+  ],
+  "note": "",
+  "feature": "F04.3",
+  "epic": "E04",
+  "sha256": "e8610c8c6328857981967beda6a64c7ecb17970973c9998525dac8c6f9a314d3"
+ },
+ {
+  "id": "FR-STA-003",
+  "text": "The software shall persistently retain the current test state throughout the test flow, including the completed steps and all recorded stage start times. If the user navigates away from the application without terminating it, the software shall permit the test flow to be resumed on return at the step that was active, shall make the applicable instructions and demonstration available for replay, and shall not apply any inactivity timeout while a test is active.",
+  "section_number": "11",
+  "section_name": "Test State Retention, Interruption and Cancellation",
+  "milestone": "1",
+  "source_refs": [
+   "SRS TSM.22",
+   "RA 4.1",
+   "RA 4.2",
+   "RA 4.3",
+   "RA 4.4",
+   "RA 4.18"
+  ],
+  "note": "Covers what was previously stated separately in FR-STA-001 and FR-STA-004",
+  "feature": "F04.3",
+  "epic": "E04",
+  "sha256": "4d9bb8e2a5214713f4729da6ef74ec9614933ba3f86e60214da965256545fed0"
+ },
+ {
+  "id": "FR-STA-005",
+  "text": "If the software is interrupted during data upload, the software shall continue the upload in the background.",
+  "section_number": "11",
+  "section_name": "Test State Retention, Interruption and Cancellation",
+  "milestone": "1",
+  "source_refs": [
+   "SRS TSM.23"
+  ],
+  "note": "",
+  "feature": "F04.3",
+  "epic": "E04",
+  "sha256": "132d0cfed21ad952e56ce4669934c1969e2006f8212f5fbaa082aef5092c138c"
+ },
+ {
+  "id": "FR-STA-006",
+  "text": "The software shall not permit an active test to be resumed after the application has been terminated, whether by the user, by an operating-system action, by a software crash, or by a device restart.",
+  "section_number": "11",
+  "section_name": "Test State Retention, Interruption and Cancellation",
+  "milestone": "1",
+  "source_refs": [
+   "RA 7.19"
+  ],
+  "note": "",
+  "feature": "F04.4",
+  "epic": "E04",
+  "sha256": "72d3ecd5722b7b65a90623a7a76f7ab2ca9087fdf57a7922778a22449f1bd7e8"
+ },
+ {
+  "id": "FR-STA-007",
+  "text": "When the application is reopened following termination during an active test, the software shall identify the incomplete test, invalidate it, and inform the user that a new test must be performed using a new kit.",
+  "section_number": "11",
+  "section_name": "Test State Retention, Interruption and Cancellation",
+  "milestone": "1",
+  "source_refs": [
+   "RA 7.19"
+  ],
+  "note": "",
+  "feature": "F04.4",
+  "epic": "E04",
+  "sha256": "cd99c7573a186129a43cdfeef7eaaf29c378e720aa195b73d4cc445131e51c66"
+ },
+ {
+  "id": "FR-STA-008",
+  "text": "The software shall permit test cancellation only while the Urine Collection Cup has not been filled. Upon cancellation being requested after that step, the software shall warn the user that the current test cannot be resumed and that a new kit will be required, and shall require explicit confirmation.",
+  "section_number": "11",
+  "section_name": "Test State Retention, Interruption and Cancellation",
+  "milestone": "3",
+  "source_refs": [
+   "SRS TSM.19",
+   "RA 7.18"
+  ],
+  "note": "Consistent with RA 7.3: once urine reaches the Capillary Tube it fills completely, so the sample is committed at cup fill",
+  "feature": "F04.5",
+  "epic": "E04",
+  "sha256": "d7b605f2f6e9282a5514ca9d97babd951017c0cbf04b584c8b164be0260d9e1c"
+ },
+ {
+  "id": "FR-STA-009",
+  "text": "If the user does not confirm cancellation, the software shall return to the active test flow at the step that was in progress.",
+  "section_number": "11",
+  "section_name": "Test State Retention, Interruption and Cancellation",
+  "milestone": "3",
+  "source_refs": [
+   "RA 7.18"
+  ],
+  "note": "",
+  "feature": "F04.5",
+  "epic": "E04",
+  "sha256": "ed0aa9c048bf3aa87396bc0a2d700eaea05c5a3f11cede551a982a01c7beb7d7"
+ },
+ {
+  "id": "FR-STA-010",
+  "text": "If cancellation is confirmed, the software shall invalidate the active test, prevent it from being resumed, and return the user to the start-up state.",
+  "section_number": "11",
+  "section_name": "Test State Retention, Interruption and Cancellation",
+  "milestone": "3",
+  "source_refs": [
+   "SRS TSM.19",
+   "RA 7.18"
+  ],
+  "note": "",
+  "feature": "F04.5",
+  "epic": "E04",
+  "sha256": "9291fc2e64bfe37852ebd1e42a0b2ba67a6b889b96545a87295211357d01bf54"
+ },
+ {
+  "id": "FR-SUP-001",
+  "text": "The software shall provide a Frequently Asked Questions page, reachable from the main menu.",
+  "section_number": "21",
+  "section_name": "Support and Help",
+  "milestone": "5",
+  "source_refs": [
+   "SRS STM.9 and FR-PRT-006",
+   "formerly BL-19",
+   "restored to its original identifier"
+  ],
+  "note": "Future development, formerly BL-19. Consolidated per review into a single entry covering both the page and its menu route. Realised by staticData.faqUrl.",
+  "feature": "F10.4",
+  "epic": "E10",
+  "sha256": "f067b9b272ffcffed6b06f0debca4fafb91d41e59d8bbb3e6bf0cf526c858ac1"
+ },
+ {
+  "id": "FR-SUP-002",
+  "text": "The software shall enable the user to contact the support team by telephone or by email.",
+  "section_number": "21",
+  "section_name": "Support and Help",
+  "milestone": "3",
+  "source_refs": [
+   "SRS STM.10",
+   "SPTA 5.2"
+  ],
+  "note": "Split per review. Realised by staticData.supportNumber and staticData.supportEmail. SPTA 5.2 relies on support offering workarounds during a third-party outage",
+  "feature": "F10.5",
+  "epic": "E10",
+  "sha256": "c5adc0cf280c1a46a27e106e88c8066864e8e3417628aef797684f7abf4157b2"
+ },
+ {
+  "id": "FR-SUP-003",
+  "text": "Where the software blocks the user from proceeding and the user cannot resolve the condition themselves, it shall present support contact information.",
+  "section_number": "21",
+  "section_name": "Support and Help",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.15",
+   "RA 4.16"
+  ],
+  "note": "Content per FR-TXT-020",
+  "feature": "F01.5",
+  "epic": "E01",
+  "sha256": "edebee8a90088512236ad30ed1016c2c4f20da2866c7a765313d95d0fa2d6c62"
+ },
+ {
+  "id": "FR-SUP-004",
+  "text": "The software shall enable the user to initiate a chat session with a support agent.",
+  "section_number": "21",
+  "section_name": "Support and Help",
+  "milestone": "5",
+  "source_refs": [
+   "SRS STM.10",
+   "SRS-BE EX.6",
+   "SRS-BE SEC.9",
+   "formerly BL-40",
+   "restored to its original identifier"
+  ],
+  "note": "Future development, formerly BL-40. Support by telephone and email remains in the body as FR-SUP-002. The backend SRS requires the chat endpoint and TLS 1.3 with AES-256 at rest for chat content.",
+  "feature": "F10.5",
+  "epic": "E10",
+  "sha256": "2baef1dc5214a384bf19ea33b50b91956bb9a94218e77f761db6a490375e5015"
+ },
+ {
+  "id": "FR-TIM-001",
+  "text": "For each time-dependent stage of the test flow, the software shall implement a defined start event, minimum duration, permitted completion window and expiry behaviour. These values shall be fixed in the application and shall not be configurable at run time.",
+  "section_number": "12",
+  "section_name": "Timing Control",
+  "milestone": "1",
+  "source_refs": [
+   "RA 4.18"
+  ],
+  "note": "Values TBD, to be established by the timing-flex study. Confirmed at review that the study completes before milestone 3 and is not needed for milestones 1 and 2, so the milestone-1 build enforces these windows against provisional values",
+  "feature": "F05.1",
+  "epic": "E05",
+  "sha256": "4bdd4e3eb1a9b5fa0ff1f719c679ea027541aafde9fed3df1277862c3c3f4da3"
+ },
+ {
+  "id": "FR-TIM-002",
+  "text": "The software shall record and persistently retain the start time of each time-dependent stage.",
+  "section_number": "12",
+  "section_name": "Timing Control",
+  "milestone": "1",
+  "source_refs": [
+   "RA 4.3",
+   "RA 4.4",
+   "RA 4.18"
+  ],
+  "note": "",
+  "feature": "F05.1",
+  "epic": "E05",
+  "sha256": "39c0b386b5c543a171096dfb76b3c85030540c54001b56ab41e35b0b5344134e"
+ },
+ {
+  "id": "FR-TIM-003",
+  "text": "Following application backgrounding, screen locking, or any other temporary interruption, the software shall calculate elapsed time from the retained start time and shall not restart the applicable timer.",
+  "section_number": "12",
+  "section_name": "Timing Control",
+  "milestone": "1",
+  "source_refs": [
+   "RA 4.3",
+   "RA 4.4",
+   "RA 4.18"
+  ],
+  "note": "",
+  "feature": "F05.1",
+  "epic": "E05",
+  "sha256": "b83161bcda198065700dd2cf14b318556fccabc421e108bc3e38f12f00999d88"
+ },
+ {
+  "id": "FR-TIM-004",
+  "text": "The software shall derive elapsed time from a time source that is not affected by user modification of the device clock or time zone.",
+  "section_number": "12",
+  "section_name": "Timing Control",
+  "milestone": "5",
+  "source_refs": [
+   "RA 4.18",
+   "formerly BL-24",
+   "restored to its original identifier"
+  ],
+  "note": "Future development, formerly BL-24. Until implemented, the timing windows in section 12 can be defeated by changing the device clock, since elapsed time is derived from a source the user can alter. RA 4.18 relies on the timers being enforceable.",
+  "feature": "F05.1",
+  "epic": "E05",
+  "sha256": "2bbb4bfef6d1948b4c369d4229890eb60e3f0b779ddcad360bf12ddff3cf89b3"
+ },
+ {
+  "id": "FR-TIM-005",
+  "text": "The software shall display, for each active time-dependent stage, the time remaining until the next action is permitted and the time remaining before the permitted window expires.",
+  "section_number": "12",
+  "section_name": "Timing Control",
+  "milestone": "1",
+  "source_refs": [
+   "RA 4.3",
+   "RA 4.4",
+   "RA 7.9"
+  ],
+  "note": "",
+  "feature": "F05.5",
+  "epic": "E05",
+  "sha256": "a9a3ec5f6f2c8a455f6769ce85ac842884ccb4640d7b67dd300bd772b24ed701"
+ },
+ {
+  "id": "FR-TIM-006",
+  "text": "The software shall measure the time elapsed from the user's confirmation of sample collection to the connection of the Sample Pod to the Mixing Cartridge. If the elapsed time exceeds the defined limit, the software shall prevent the user from proceeding and display an explanatory error message.",
+  "section_number": "12",
+  "section_name": "Timing Control",
+  "milestone": "3",
+  "source_refs": [
+   "SRS TSM.6",
+   "SRS TSM.7"
+  ],
+  "note": "Limit TBD, fixed not configurable; currently specified as 30 minutes. Timed silently in the background: no countdown is shown, so that the user is not hurried",
+  "feature": "F05.2",
+  "epic": "E05",
+  "sha256": "b725fb014be1f70bff0c3b1acf4907b1ef8cab701cc3a14479ac2ac3168984f6"
+ },
+ {
+  "id": "FR-TIM-007",
+  "text": "The software shall present the coloured release button instruction only after both the required Incubation Well residence time has elapsed and the preceding user instructions have been completed.",
+  "section_number": "12",
+  "section_name": "Timing Control",
+  "milestone": "1",
+  "source_refs": [
+   "RA 4.3",
+   "RA 7.9"
+  ],
+  "note": "",
+  "feature": "F05.3",
+  "epic": "E05",
+  "sha256": "abec13b45ea68cb1ec96724dc0d067407e4421b562cebf9c60747511f2717f11"
+ },
+ {
+  "id": "FR-TIM-008",
+  "text": "The software shall prevent progression past any time-dependent stage before the applicable minimum time has elapsed, including preventing the Test Board from being scanned before the required colour-evolution period has elapsed.",
+  "section_number": "12",
+  "section_name": "Timing Control",
+  "milestone": "1",
+  "source_refs": [
+   "RA 4.18",
+   "RA 4.4"
+  ],
+  "note": "Also covers FR-TIM-010",
+  "feature": "F05.4",
+  "epic": "E05",
+  "sha256": "a87287de695f869a34bd8aa050668cd6efb3943a0078f2b313e866fb4a5803e6"
+ },
+ {
+  "id": "FR-TIM-009",
+  "text": "If the coloured release button step is not completed within the permitted timing window, the software shall invalidate the test and prevent continuation.",
+  "section_number": "12",
+  "section_name": "Timing Control",
+  "milestone": "1",
+  "source_refs": [
+   "RA 4.3"
+  ],
+  "note": "",
+  "feature": "F05.3",
+  "epic": "E05",
+  "sha256": "96e575d10cedb8fe7740e6c8238c2fd61f57a8f0db2f2627e5456fa314bf54e5"
+ },
+ {
+  "id": "FR-TIM-011",
+  "text": "The software shall permit the Test Board to be scanned only within the validated scanning-time window, and shall invalidate the test if that window has expired.",
+  "section_number": "12",
+  "section_name": "Timing Control",
+  "milestone": "1",
+  "source_refs": [
+   "RA 4.4"
+  ],
+  "note": "",
+  "feature": "F05.4",
+  "epic": "E05",
+  "sha256": "bc4479df70a91851f15e82d1078340ae3fd573a3484ce5c3924e92733489a2e7"
+ },
+ {
+  "id": "FR-TIM-012",
+  "text": "When a test is invalidated on timing grounds, the software shall inform the user of the reason and instruct the user to repeat the test with a new kit.",
+  "section_number": "12",
+  "section_name": "Timing Control",
+  "milestone": "2",
+  "source_refs": [
+   "RA 4.3",
+   "RA 4.4"
+  ],
+  "note": "",
+  "feature": "F05.6",
+  "epic": "E05",
+  "sha256": "a0bdfa8c39651c55a6210f469779783e37c535b6ff8abdf0f08dbd3ae662d4ea"
+ },
+ {
+  "id": "FR-TIM-014",
+  "text": "The software shall issue a local device notification when a timed window is about to expire, and shall do so only where the application is in the background at that time.",
+  "section_number": "12",
+  "section_name": "Timing Control",
+  "milestone": "4",
+  "source_refs": [
+   "Review comment",
+   "supports RA 4.3",
+   "supports RA 4.4"
+  ],
+  "note": "Local notification, not a backend push; see FR-COM-009",
+  "feature": "F05.5",
+  "epic": "E05",
+  "sha256": "0546a2246fa33a0c6c5fa63ef3721d4967acf1607d13d248aa79c12898eff782"
+ },
+ {
+  "id": "FR-TXT-001",
+  "text": "All user-facing text presented by the software, including component names, instructions, warnings, result descriptions and error messages, shall meet a Flesch-Kincaid reading level of grade 6 or lower.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "2",
+  "source_refs": [
+   "Glossary — Global Naming and Readability Rules"
+  ],
+  "note": "Applies to every supported language",
+  "feature": "F07.1",
+  "epic": "E07",
+  "sha256": "1d1bb411c72539867664e87902e27597f68221d9fc254b2504e29d8e5f52e894"
+ },
+ {
+  "id": "FR-TXT-002",
+  "text": "The software shall refer to kit components using only the approved user-facing component names defined in the Product Glossary, and shall not present internal or engineering sub-component names to the user.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "2",
+  "source_refs": [
+   "Glossary — Global Naming and Readability Rules"
+  ],
+  "note": "User-facing set: Sample Collection Tool, Urine Collection Cup, Sample Pod, Mixing Cartridge, Test Board, coloured release button",
+  "feature": "F07.1",
+  "epic": "E07",
+  "sha256": "2882b5dac1b507cb2965ead8994721599f02ae471f53b00c6f82ed402199e951"
+ },
+ {
+  "id": "FR-TXT-003",
+  "text": "The instructional content, warnings and result messaging presented by the software shall be consistent with the User Manual, and shall not instruct the user to act in a manner the User Manual contradicts.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.7",
+   "derived"
+  ],
+  "note": "",
+  "feature": "F07.1",
+  "epic": "E07",
+  "sha256": "3d63948e764e50871a5a1c39fe8de7f9259e86ec172d7e79705f1eee03241d11"
+ },
+ {
+  "id": "FR-TXT-004",
+  "text": "All user-facing content that is part of the core clinical test procedure, including the recorded audio of the spoken flow, shall be held under configuration control and released as a versioned content set, and the content-set version shall be recorded with each test record.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.7",
+   "derived"
+  ],
+  "note": "Written text and recorded audio are separate artefacts that say the same thing. Holding them in one versioned set is what stops the spoken and the displayed wording drifting apart between releases",
+  "feature": "F07.1",
+  "epic": "E07",
+  "sha256": "1b9b60f515b7fb31599ed08b48d92d96465e3afe802d1e89cdf1f7afb15629db"
+ },
+ {
+  "id": "FR-TXT-005",
+  "text": "The instructional flow shall direct the user to perform the test in a well-lit indoor location, avoiding direct sunlight, very dim lighting and uneven or mixed lighting.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "1",
+  "source_refs": [
+   "RA 7.11"
+  ],
+  "note": "",
+  "feature": "F07.2",
+  "epic": "E07",
+  "sha256": "c427bee2e4b9807f145d1e11572b4c73802f3ed4867e2a28b3e770e8d6fef426"
+ },
+ {
+  "id": "FR-TXT-006",
+  "text": "The instructional flow shall instruct the user in the correct use of the Urine Collection Cup lid and in placing the cup in its designated location in the kit packaging.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "1",
+  "source_refs": [
+   "RA 7.4"
+  ],
+  "note": "",
+  "feature": "F07.2",
+  "epic": "E07",
+  "sha256": "ae2b93a82ff4a12f6f24e1cf33b8a1c8e1fceecea6dcc972924a90696378f2ca"
+ },
+ {
+  "id": "FR-TXT-007",
+  "text": "The instructional flow shall guide the user to fill the Urine Collection Cup to or above the minimum fill line, and shall require the user to confirm that the fill line has been reached.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "1",
+  "source_refs": [
+   "RA 1.1",
+   "RA 7.3"
+  ],
+  "note": "",
+  "feature": "F07.2",
+  "epic": "E07",
+  "sha256": "8d7f88bdc98d8aa0581452bbbc4b80072b390e3edd8e09dced25aefcc490036a"
+ },
+ {
+  "id": "FR-TXT-008",
+  "text": "The instructional flow shall guide the user through detaching the Sample Pod from the Urine Collection Cup, including the twist-and-pull motion required, and shall include a confirmation step.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "1",
+  "source_refs": [
+   "RA 7.6",
+   "RA 7.22"
+  ],
+  "note": "",
+  "feature": "F07.2",
+  "epic": "E07",
+  "sha256": "a841499f7cfccef8f8e1da8b010d3dead202cff3ca835011c6f09d6f5253544b"
+ },
+ {
+  "id": "FR-TXT-009",
+  "text": "The instructional flow shall guide the user through inserting the Sample Pod into the Sample Tank port of the Mixing Cartridge, showing the correct port and orientation, and shall instruct the user to insert it until the audible or tactile confirmation is obtained.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "1",
+  "source_refs": [
+   "RA 7.7",
+   "RA 7.8",
+   "RA 7.26"
+  ],
+  "note": "",
+  "feature": "F07.2",
+  "epic": "E07",
+  "sha256": "f65f7c13ebaae9c02e1c7fb40a95f1879ea4ff8d00908791ebd64eb11d919f33"
+ },
+ {
+  "id": "FR-TXT-010",
+  "text": "The instructional flow shall instruct the user to remove the Peel-Off Seal from the Mixing Cartridge completely before connecting the cartridge to the Test Board, and shall require the user to confirm that it has been fully removed.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "1",
+  "source_refs": [
+   "RA 2.7",
+   "Glossary"
+  ],
+  "note": "User-facing name TBD; see Appendix A.2",
+  "feature": "F07.2",
+  "epic": "E07",
+  "sha256": "1ff89fb9bd1c7d7c55e497c19767889f508fd8ab51c84cc8d5db954374ee1cee"
+ },
+ {
+  "id": "FR-TXT-011",
+  "text": "The instructional flow shall instruct the user to place the Test Board on a flat, stable surface before connecting the Mixing Cartridge, and to avoid applying pressure to the board surface at any point.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "1",
+  "source_refs": [
+   "RA 7.30",
+   "Glossary"
+  ],
+  "note": "",
+  "feature": "F07.2",
+  "epic": "E07",
+  "sha256": "af5ad8940ee13564bf4db190db1f11d102b0d3f111700be395697909b36ea57a"
+ },
+ {
+  "id": "FR-TXT-012",
+  "text": "The instructional flow shall provide a visual guide for aligning the Mixing Cartridge to the Test Board in the correct orientation.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "1",
+  "source_refs": [
+   "RA 7.27"
+  ],
+  "note": "",
+  "feature": "F07.2",
+  "epic": "E07",
+  "sha256": "611942f797f9fb63239292fb07e3c50951f9ebcc6d1120f2634bfcead68e667d"
+ },
+ {
+  "id": "FR-TXT-013",
+  "text": "The instructional flow shall guide the user through connecting the Mixing Cartridge to the Test Board, including the required hand position and applied force, so that the Plunger and Spring assembly is engaged and fluid transfer is initiated.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "1",
+  "source_refs": [
+   "RA 7.28",
+   "Glossary"
+  ],
+  "note": "",
+  "feature": "F07.2",
+  "epic": "E07",
+  "sha256": "31dfcb199aeee856bad70b5174bfc7dea7f3a41801bff5e25dbe3f8fc0cea90c"
+ },
+ {
+  "id": "FR-TXT-014",
+  "text": "The instructional flow shall guide the user through the required mixing or shaking action of the Mixing Cartridge and Test Board, including its duration.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "1",
+  "source_refs": [
+   "RA 7.10"
+  ],
+  "note": "",
+  "feature": "F07.2",
+  "epic": "E07",
+  "sha256": "89b10aa442db7d4e07f544bf2bc3d89eaa2e4a6029cddc36e908bf7bd3e1f930"
+ },
+ {
+  "id": "FR-TXT-015",
+  "text": "The instructional flow shall specify the motion and depth required to operate the coloured release button, and shall state the tactile or audible cue that confirms it has been operated.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "1",
+  "source_refs": [
+   "RA 7.29",
+   "Glossary"
+  ],
+  "note": "Approved user-facing name for the Transfer Valve. See the terminology appendix",
+  "feature": "F07.2",
+  "epic": "E07",
+  "sha256": "ef30b6f06c7a9ee0a3d694c30536fb55f78e564018c8407b0aaca28ca6ce5f7f"
+ },
+ {
+  "id": "FR-TXT-016",
+  "text": "The instructional flow shall direct the user to position themselves relative to the Test Board and the light source so that neither their hand, their body, nor any object casts a shadow over the Test Board during scanning.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "1",
+  "source_refs": [
+   "RA 7.15"
+  ],
+  "note": "Complements the detection control in FR-IMG-009",
+  "feature": "F07.2",
+  "epic": "E07",
+  "sha256": "b9773ffddc0bb2b774c5457e539afdc926b716c59e50e338008fe4a8648378cb"
+ },
+ {
+  "id": "FR-TXT-017",
+  "text": "The instructional flow shall provide disposal instructions for all used kit components and shall instruct the user to wash their hands after handling them.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "1",
+  "source_refs": [
+   "RA 7.30",
+   "RA 7.32"
+  ],
+  "note": "The disposal content is specific to the QACR kit and does not carry over from the predecessor product, whose components differ",
+  "feature": "F07.2",
+  "epic": "E07",
+  "sha256": "4a07d6420ddc220f8fe817619a8f0c848b52ad492ccd1bc282f57278f703d3a3"
+ },
+ {
+  "id": "FR-TXT-019",
+  "text": "The results screen shall instruct the user not to make medical decisions on the basis of the result without consulting a healthcare professional, shall present explanatory material describing what the measurement represents and what the result category means, and shall state that the result is shared with a healthcare professional for further analysis and care.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "1",
+  "source_refs": [
+   "RA 7.17"
+  ],
+  "note": "Content is fixed and released under the versioned content set required by FR-TXT-004. Unlinked from resultPortalMoreInfoUrl and resultsType at review",
+  "feature": "F07.3",
+  "epic": "E07",
+  "sha256": "6105afa97045aeb2de66936ccd7f7aabfc3cc71639339af32cbc1220e8642ea3"
+ },
+ {
+  "id": "FR-TXT-020",
+  "text": "Each message presented when the software blocks an action shall name the condition detected, state the corrective action required, and provide support contact information, without disclosing personal or sensitive information.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "1",
+  "source_refs": [
+   "RA 4.15",
+   "RA 4.16",
+   "SRS ATT.6"
+  ],
+  "note": "Governs the content of every blocking message in this document",
+  "feature": "F07.4",
+  "epic": "E07",
+  "sha256": "85ba98e4aa1eb73110ed33c0097d207ed9c48f9d94756bd10e757991016d6a68"
+ },
+ {
+  "id": "FR-TXT-021",
+  "text": "The invalid-test messaging shall state the reason category returned for the test and the corrective action required, and shall instruct the user to repeat the test with a new kit.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "3",
+  "source_refs": [
+   "RA 4.3",
+   "RA 4.4"
+  ],
+  "note": "Depends on FR-ALG-012",
+  "feature": "F07.3",
+  "epic": "E07",
+  "sha256": "22ba316fc399a6e267bf16d72422e6424637a8fa4df054083cb271d9e22b1fc3"
+ }
+]
