@@ -32,27 +32,23 @@ Also check the spec's own traceability against `features.json` in both direction
 the spec lists that the feature does not own, or one the feature owns that the spec omits, is a
 defect in the spec and goes back to the PM.
 
-## 3 · Check its "same as ACR" claims against the code
+## 3 · Read what the evidence layer already records
 
-This is the step that earns the whole process, and it has one specific failure mode:
+A recreation brief rests on a codebase survey. **That survey is not done here.** It is
+completed before the spec is written, by the people who write the spec, and its result is
+what `evidence/behaviour.tsv` publishes. This repository is where R&D consumes it — not
+where it is re-derived, re-validated or second-guessed.
 
-> **Where the two ACR platforms behave differently, "as-is" is undefined.** It resolves to whichever
-> platform the developer happened to read first, and becomes a silent cross-platform divergence
-> that nobody decided.
+So the step is to read, not to check:
 
-This has already happened once. `FR-RDY-007`: ACR iOS exempts a charging device from the battery
-check and ACR Android does not. It became departure D1 in SPEC-01 only because someone had read
-both codebases.
+- Pull the rows for each requirement the feature owns. They record what the code does, per
+  product, with a `file:line` citation.
+- `evidence/coverage.tsv` says whether anyone has extracted evidence for a requirement at
+  all. A requirement with no rows means the vault carries none — nothing more than that.
+- `evidence/pins.yaml` names the commit every citation was read against.
 
-So for every requirement the spec confirms as-is, compare the `acr-ios` and the `acr-android`
-behaviour. They agree → fine. They disagree → **raise it**, state both, and ask which QACR takes.
-No evidence either way → say so; do not assume the claim holds.
-
-> **Today this check is manual.** It is meant to run against `evidence/behaviour.tsv` — one cited
-> row per claim about what the code does — and that table is not built yet (see
-> `evidence/README.md`). Until it lands, read the codebases, or the vault's reference atlases, and
-> record what you find. Do not skip the check because the table is missing; it is the highest-value
-> thing available before any code is written.
+Re-run `python3 tools/check_citations.py` whenever you want to confirm the citations still
+point at real code. That checks the citations, not the reading of them.
 
 ## 4 · Write the feature file
 

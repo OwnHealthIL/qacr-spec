@@ -68,8 +68,8 @@ This file exists because in a partial table **absence is ambiguous**. Grep `beha
 processed yet" — opposite conclusions that look identical. Always read `coverage.tsv` before
 concluding anything from a missing row.
 
-`no-evidence-found` is the most useful column in the repository. It is the list of things nobody
-has checked in the code, and it is where a spec is most likely to be asserting something untrue.
+`no-evidence-found` records that the vault carries no rows for that requirement. It is a
+statement about this repository's contents, not about the product.
 
 ### `context.tsv`
 
