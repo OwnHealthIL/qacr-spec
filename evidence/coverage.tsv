@@ -1,242 +1,242 @@
 requirement	feature	epic	extraction_scope	evidence_rows	state
-FR-ACC-001	F10.1	E10	-	0	not-extracted
-FR-ACC-002	F10.1	E10	-	0	not-extracted
-FR-ACC-003	F10.1	E10	-	0	not-extracted
-FR-ACC-004	F10.1	E10	-	0	not-extracted
-FR-ACC-005	F10.1	E10	-	0	not-extracted
-FR-ACC-006	F10.1	E10	-	0	not-extracted
-FR-ACC-007	F10.1	E10	-	0	not-extracted
-FR-ACC-008	F10.1	E10	-	0	not-extracted
-FR-ACC-009	F10.2	E10	-	0	not-extracted
-FR-ALG-001	F08.1	E08	-	0	not-extracted
-FR-ALG-002	F08.2	E08	-	0	not-extracted
-FR-ALG-003	F08.2	E08	-	0	not-extracted
-FR-ALG-004	F08.2	E08	-	0	not-extracted
-FR-ALG-005	F08.3	E08	-	0	not-extracted
-FR-ALG-006	F08.3	E08	-	0	not-extracted
-FR-ALG-007	F08.3	E08	-	0	not-extracted
-FR-ALG-008	F08.3	E08	-	0	not-extracted
-FR-ALG-009	F08.3	E08	-	0	not-extracted
-FR-ALG-010	F08.4	E08	-	0	not-extracted
-FR-ALG-011	F08.4	E08	-	0	not-extracted
-FR-ALG-012	F08.4	E08	-	0	not-extracted
-FR-ANL-001	F14.1	E14	-	0	not-extracted
-FR-ANL-002	F14.2	E14	-	0	not-extracted
-FR-ANL-003	F14.2	E14	-	0	not-extracted
-FR-ANL-004	F14.4	E14	-	0	not-extracted
-FR-ANL-005	F14.3	E14	-	0	not-extracted
-FR-ANL-006	F11.6	E11	-	0	not-extracted
-FR-ANL-007	F11.6	E11	-	0	not-extracted
-FR-ANL-008	F11.6	E11	-	0	not-extracted
-FR-ANL-009	F11.7	E11	-	0	not-extracted
-FR-AUT-001	F02.1	E02	-	0	not-extracted
-FR-AUT-002	F02.1	E02	-	0	not-extracted
-FR-AUT-003	F02.1	E02	-	0	not-extracted
-FR-AUT-004	F02.2	E02	-	0	not-extracted
-FR-AUT-005	F02.2	E02	-	0	not-extracted
-FR-AUT-006	F02.3	E02	-	0	not-extracted
-FR-AUT-007	F02.4	E02	-	0	not-extracted
-FR-AUT-008	F02.4	E02	-	0	not-extracted
-FR-AUT-010	F02.4	E02	-	0	not-extracted
-FR-AUT-011	F02.4	E02	-	0	not-extracted
-FR-AUT-012	F02.4	E02	-	0	not-extracted
-FR-AUT-013	F02.5	E02	-	0	not-extracted
-FR-AUT-014	F02.5	E02	-	0	not-extracted
-FR-AUT-015	F02.4	E02	-	0	not-extracted
-FR-AUT-016	F02.6	E02	-	0	not-extracted
-FR-AUT-017	F02.8	E02	-	0	not-extracted
-FR-AUT-018	F02.2	E02	-	0	not-extracted
-FR-AUT-019	F02.2	E02	-	0	not-extracted
-FR-AUT-020	F02.4	E02	-	0	not-extracted
-FR-CAM-001	F06.1	E06	-	0	not-extracted
-FR-CAM-002	F06.1	E06	-	0	not-extracted
-FR-CAM-003	F06.1	E06	-	0	not-extracted
-FR-CAM-004	F06.1	E06	-	0	not-extracted
-FR-CFG-001	F01.9	E01	QACR-APP-SPEC-01	6	evidenced
-FR-CFG-002	F01.9	E01	QACR-APP-SPEC-01	10	evidenced
-FR-CFG-003	F01.9	E01	QACR-APP-SPEC-01	0	no-evidence-found
-FR-CFG-004	F01.9	E01	QACR-APP-SPEC-01	0	no-evidence-found
-FR-CFG-006	F01.9	E01	QACR-APP-SPEC-01	0	no-evidence-found
-FR-CFG-008	F01.9	E01	QACR-APP-SPEC-01	0	no-evidence-found
-FR-CNS-001	F02.7	E02	-	0	not-extracted
-FR-CNS-002	F02.7	E02	-	0	not-extracted
-FR-CNS-003	F02.7	E02	-	0	not-extracted
-FR-CNS-005	F02.7	E02	-	0	not-extracted
-FR-CNS-006	F02.7	E02	-	0	not-extracted
-FR-CNS-007	F02.7	E02	-	0	not-extracted
-FR-COM-001	F12.1	E12	-	0	not-extracted
-FR-COM-002	F12.1	E12	-	0	not-extracted
-FR-COM-003	F12.2	E12	-	0	not-extracted
-FR-COM-004	F12.2	E12	-	0	not-extracted
-FR-COM-005	F12.2	E12	-	0	not-extracted
-FR-COM-006	F12.3	E12	-	0	not-extracted
-FR-COM-007	F12.2	E12	-	0	not-extracted
-FR-COM-008	F12.3	E12	-	0	not-extracted
-FR-COM-009	F05.5	E05	-	0	not-extracted
-FR-COM-010	F02.5	E02	-	0	not-extracted
-FR-COM-011	F12.2	E12	-	0	not-extracted
-FR-COM-012	F05.5	E05	-	0	not-extracted
-FR-COM-013	F12.4	E12	-	0	not-extracted
-FR-FLW-001	F04.1	E04	-	0	not-extracted
-FR-FLW-002	F04.2	E04	-	0	not-extracted
-FR-FLW-003	F04.2	E04	-	0	not-extracted
-FR-FLW-004	F04.1	E04	-	0	not-extracted
-FR-FLW-005	F04.1	E04	-	0	not-extracted
-FR-FLW-006	F04.1	E04	-	0	not-extracted
-FR-FLW-007	F04.6	E04	-	0	not-extracted
-FR-FLW-008	F04.2	E04	-	0	not-extracted
-FR-FLW-009	F04.8	E04	-	0	not-extracted
-FR-IMG-001	F06.2	E06	-	0	not-extracted
-FR-IMG-002	F06.2	E06	-	0	not-extracted
-FR-IMG-004	F06.3	E06	-	0	not-extracted
-FR-IMG-005	F06.3	E06	-	0	not-extracted
-FR-IMG-006	F06.3	E06	-	0	not-extracted
-FR-IMG-007	F06.3	E06	-	0	not-extracted
-FR-IMG-008	F06.3	E06	-	0	not-extracted
-FR-IMG-009	F06.6	E06	-	0	not-extracted
-FR-IMG-010	F06.2	E06	-	0	not-extracted
-FR-IMG-011	F06.2	E06	-	0	not-extracted
-FR-IMG-013	F06.4	E06	-	0	not-extracted
-FR-IMG-014	F06.4	E06	-	0	not-extracted
-FR-IMG-015	F06.6	E06	-	0	not-extracted
-FR-IMG-016	F06.5	E06	-	0	not-extracted
-FR-IMG-021	F06.6	E06	-	0	not-extracted
-FR-IMG-022	F04.7	E04	-	0	not-extracted
-FR-IMG-023	F06.6	E06	-	0	not-extracted
-FR-IMG-024	F06.4	E06	-	0	not-extracted
-FR-KIT-001	F03.1	E03	-	0	not-extracted
-FR-KIT-002	F03.1	E03	-	0	not-extracted
-FR-KIT-003	F03.1	E03	-	0	not-extracted
-FR-KIT-004	F03.2	E03	-	0	not-extracted
-FR-KIT-005	F03.2	E03	-	0	not-extracted
-FR-KIT-007	F03.2	E03	-	0	not-extracted
-FR-LCM-002	F15.4	E15	-	0	not-extracted
-FR-LCM-003	F15.4	E15	-	0	not-extracted
-FR-LCM-004	F15.4	E15	-	0	not-extracted
-FR-LCM-005	F15.4	E15	-	0	not-extracted
-FR-LCM-006	F15.1	E15	-	0	not-extracted
-FR-LCM-007	F15.2	E15	-	0	not-extracted
-FR-LCM-008	F15.2	E15	-	0	not-extracted
-FR-LCM-009	F15.3	E15	-	0	not-extracted
-FR-LCM-010	F15.3	E15	-	0	not-extracted
-FR-LCM-011	F15.2	E15	-	0	not-extracted
-FR-LCM-012	F15.5	E15	-	0	not-extracted
-FR-LCM-016	F15.6	E15	-	0	not-extracted
-FR-LCM-017	F15.3	E15	-	0	not-extracted
-FR-LCM-018	F01.9	E01	QACR-APP-SPEC-01	0	no-evidence-found
-FR-PLT-001	F01.1	E01	QACR-APP-SPEC-01	0	no-evidence-found
-FR-PLT-002	F01.1	E01	QACR-APP-SPEC-01	0	no-evidence-found
-FR-PLT-003	F01.1	E01	QACR-APP-SPEC-01	0	no-evidence-found
-FR-PLT-004	F01.1	E01	QACR-APP-SPEC-01	0	no-evidence-found
-FR-PLT-005	F01.2	E01	QACR-APP-SPEC-01	7	evidenced
-FR-PLT-006	F01.7	E01	-	0	not-extracted
-FR-PLT-008	F01.8	E01	QACR-APP-SPEC-01	0	no-evidence-found
-FR-PRT-001	F10.3	E10	-	0	not-extracted
-FR-PRT-002	F10.4	E10	-	0	not-extracted
-FR-PRT-003	F10.4	E10	-	0	not-extracted
-FR-PRT-004	F10.5	E10	-	0	not-extracted
-FR-PRT-005	F10.4	E10	-	0	not-extracted
-FR-PRT-007	F10.3	E10	-	0	not-extracted
-FR-PRT-008	F11.4	E11	-	0	not-extracted
-FR-PRT-009	F10.3	E10	-	0	not-extracted
-FR-PRT-010	F10.3	E10	-	0	not-extracted
-FR-PRT-011	F10.3	E10	-	0	not-extracted
-FR-PRT-012	F10.6	E10	-	0	not-extracted
-FR-PRT-013	F10.6	E10	-	0	not-extracted
-FR-PRT-014	F10.3	E10	-	0	not-extracted
-FR-PRT-015	F10.3	E10	-	0	not-extracted
-FR-RDY-001	F01.3	E01	QACR-APP-SPEC-01	9	evidenced
-FR-RDY-002	F01.2	E01	QACR-APP-SPEC-01	9	evidenced
-FR-RDY-003	F01.2	E01	QACR-APP-SPEC-01	6	evidenced
-FR-RDY-004	F01.2	E01	QACR-APP-SPEC-01	0	no-evidence-found
-FR-RDY-005	F01.4	E01	QACR-APP-SPEC-01	0	no-evidence-found
-FR-RDY-006	F01.4	E01	QACR-APP-SPEC-01	0	no-evidence-found
-FR-RDY-007	F01.4	E01	QACR-APP-SPEC-01	0	no-evidence-found
-FR-RDY-008	F01.4	E01	QACR-APP-SPEC-01	6	evidenced
-FR-RDY-009	F01.4	E01	QACR-APP-SPEC-01	13	evidenced
-FR-RDY-010	F01.4	E01	QACR-APP-SPEC-01	4	evidenced
-FR-RDY-011	F01.5	E01	QACR-APP-SPEC-01	11	evidenced
-FR-RDY-012	F01.6	E01	QACR-APP-SPEC-01	0	no-evidence-found
-FR-RDY-013	F01.5	E01	QACR-APP-SPEC-01	0	no-evidence-found
-FR-RDY-014	F01.5	E01	QACR-APP-SPEC-01	0	no-evidence-found
-FR-RES-001	F09.1	E09	-	0	not-extracted
-FR-RES-002	F09.1	E09	-	0	not-extracted
-FR-RES-003	F09.1	E09	-	0	not-extracted
-FR-RES-004	F09.2	E09	-	0	not-extracted
-FR-RES-005	F09.2	E09	-	0	not-extracted
-FR-RES-006	F09.4	E09	-	0	not-extracted
-FR-RES-007	F09.1	E09	-	0	not-extracted
-FR-SEC-001	F13.1	E13	-	0	not-extracted
-FR-SEC-002	F13.2	E13	-	0	not-extracted
-FR-SEC-003	F13.2	E13	-	0	not-extracted
-FR-SEC-004	F13.4	E13	-	0	not-extracted
-FR-SEC-005	F13.4	E13	-	0	not-extracted
-FR-SEC-006	F12.2	E12	-	0	not-extracted
-FR-SEC-007	F13.3	E13	-	0	not-extracted
-FR-SEC-008	F02.5	E02	-	0	not-extracted
-FR-SEC-009	F13.1	E13	-	0	not-extracted
-FR-SEC-010	F13.4	E13	-	0	not-extracted
-FR-SEC-011	F13.4	E13	-	0	not-extracted
-FR-SEC-012	F13.2	E13	-	0	not-extracted
-FR-SEC-013	F13.5	E13	-	0	not-extracted
-FR-SEC-014	F12.1	E12	-	0	not-extracted
-FR-SHR-001	F11.1	E11	-	0	not-extracted
-FR-SHR-002	F11.1	E11	-	0	not-extracted
-FR-SHR-003	F11.1	E11	-	0	not-extracted
-FR-SHR-004	F11.1	E11	-	0	not-extracted
-FR-SHR-005	F11.2	E11	-	0	not-extracted
-FR-SHR-006	F11.2	E11	-	0	not-extracted
-FR-SHR-007	F11.2	E11	-	0	not-extracted
-FR-SHR-008	F11.2	E11	-	0	not-extracted
-FR-SHR-011	F11.3	E11	-	0	not-extracted
-FR-SHR-012	F11.4	E11	-	0	not-extracted
-FR-SHR-013	F11.5	E11	-	0	not-extracted
-FR-SHR-014	F11.5	E11	-	0	not-extracted
-FR-SHR-015	F11.4	E11	-	0	not-extracted
-FR-SHR-016	F11.4	E11	-	0	not-extracted
-FR-SHR-017	F11.2	E11	-	0	not-extracted
-FR-SHR-018	F11.4	E11	-	0	not-extracted
-FR-STA-002	F04.3	E04	-	0	not-extracted
-FR-STA-003	F04.3	E04	-	0	not-extracted
-FR-STA-005	F04.3	E04	-	0	not-extracted
-FR-STA-006	F04.4	E04	-	0	not-extracted
-FR-STA-007	F04.4	E04	-	0	not-extracted
-FR-STA-008	F04.5	E04	-	0	not-extracted
-FR-STA-009	F04.5	E04	-	0	not-extracted
-FR-STA-010	F04.5	E04	-	0	not-extracted
-FR-SUP-001	F10.4	E10	-	0	not-extracted
-FR-SUP-002	F10.5	E10	-	0	not-extracted
-FR-SUP-003	F01.5	E01	QACR-APP-SPEC-01	7	evidenced
-FR-SUP-004	F10.5	E10	-	0	not-extracted
-FR-TIM-001	F05.1	E05	-	0	not-extracted
-FR-TIM-002	F05.1	E05	-	0	not-extracted
-FR-TIM-003	F05.1	E05	-	0	not-extracted
-FR-TIM-004	F05.1	E05	-	0	not-extracted
-FR-TIM-005	F05.5	E05	-	0	not-extracted
-FR-TIM-006	F05.2	E05	-	0	not-extracted
-FR-TIM-007	F05.3	E05	-	0	not-extracted
-FR-TIM-008	F05.4	E05	-	0	not-extracted
-FR-TIM-009	F05.3	E05	-	0	not-extracted
-FR-TIM-011	F05.4	E05	-	0	not-extracted
-FR-TIM-012	F05.6	E05	-	0	not-extracted
-FR-TIM-014	F05.5	E05	-	0	not-extracted
-FR-TXT-001	F07.1	E07	-	0	not-extracted
-FR-TXT-002	F07.1	E07	-	0	not-extracted
-FR-TXT-003	F07.1	E07	-	0	not-extracted
-FR-TXT-004	F07.1	E07	-	0	not-extracted
-FR-TXT-005	F07.2	E07	-	0	not-extracted
-FR-TXT-006	F07.2	E07	-	0	not-extracted
-FR-TXT-007	F07.2	E07	-	0	not-extracted
-FR-TXT-008	F07.2	E07	-	0	not-extracted
-FR-TXT-009	F07.2	E07	-	0	not-extracted
-FR-TXT-010	F07.2	E07	-	0	not-extracted
-FR-TXT-011	F07.2	E07	-	0	not-extracted
-FR-TXT-012	F07.2	E07	-	0	not-extracted
-FR-TXT-013	F07.2	E07	-	0	not-extracted
-FR-TXT-014	F07.2	E07	-	0	not-extracted
-FR-TXT-015	F07.2	E07	-	0	not-extracted
-FR-TXT-016	F07.2	E07	-	0	not-extracted
-FR-TXT-017	F07.2	E07	-	0	not-extracted
-FR-TXT-019	F07.3	E07	-	0	not-extracted
-FR-TXT-020	F07.4	E07	-	0	not-extracted
-FR-TXT-021	F07.3	E07	-	0	not-extracted
+FR-ACC-001	F10.1	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ACC-002	F10.1	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ACC-003	F10.1	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ACC-004	F10.1	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ACC-005	F10.1	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ACC-006	F10.1	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ACC-007	F10.1	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ACC-008	F10.1	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ACC-009	F10.2	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ALG-001	F08.1	E08	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ALG-002	F08.2	E08	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ALG-003	F08.2	E08	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ALG-004	F08.2	E08	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ALG-005	F08.3	E08	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ALG-006	F08.3	E08	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ALG-007	F08.3	E08	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ALG-008	F08.3	E08	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ALG-009	F08.3	E08	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ALG-010	F08.4	E08	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ALG-011	F08.4	E08	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ALG-012	F08.4	E08	QACR-APP-FR-01 Rev1.19	15	evidenced
+FR-ANL-001	F14.1	E14	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ANL-002	F14.2	E14	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ANL-003	F14.2	E14	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ANL-004	F14.4	E14	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ANL-005	F14.3	E14	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ANL-006	F11.6	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ANL-007	F11.6	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ANL-008	F11.6	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-ANL-009	F11.7	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-AUT-001	F02.1	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-AUT-002	F02.1	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-AUT-003	F02.1	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-AUT-004	F02.2	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-AUT-005	F02.2	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-AUT-006	F02.3	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-AUT-007	F02.4	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-AUT-008	F02.4	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-AUT-010	F02.4	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-AUT-011	F02.4	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-AUT-012	F02.4	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-AUT-013	F02.5	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-AUT-014	F02.5	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-AUT-015	F02.4	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-AUT-016	F02.6	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-AUT-017	F02.8	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-AUT-018	F02.2	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-AUT-019	F02.2	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-AUT-020	F02.4	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-CAM-001	F06.1	E06	QACR-APP-FR-01 Rev1.19	16	evidenced
+FR-CAM-002	F06.1	E06	QACR-APP-FR-01 Rev1.19	42	evidenced
+FR-CAM-003	F06.1	E06	QACR-APP-FR-01 Rev1.19	23	evidenced
+FR-CAM-004	F06.1	E06	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-CFG-001	F01.9	E01	QACR-APP-FR-01 Rev1.19	6	evidenced
+FR-CFG-002	F01.9	E01	QACR-APP-FR-01 Rev1.19	10	evidenced
+FR-CFG-003	F01.9	E01	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-CFG-004	F01.9	E01	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-CFG-006	F01.9	E01	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-CFG-008	F01.9	E01	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-CNS-001	F02.7	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-CNS-002	F02.7	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-CNS-003	F02.7	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-CNS-005	F02.7	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-CNS-006	F02.7	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-CNS-007	F02.7	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-COM-001	F12.1	E12	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-COM-002	F12.1	E12	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-COM-003	F12.2	E12	QACR-APP-FR-01 Rev1.19	22	evidenced
+FR-COM-004	F12.2	E12	QACR-APP-FR-01 Rev1.19	6	evidenced
+FR-COM-005	F12.2	E12	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-COM-006	F12.3	E12	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-COM-007	F12.2	E12	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-COM-008	F12.3	E12	QACR-APP-FR-01 Rev1.19	19	evidenced
+FR-COM-009	F05.5	E05	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-COM-010	F02.5	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-COM-011	F12.2	E12	QACR-APP-FR-01 Rev1.19	61	evidenced
+FR-COM-012	F05.5	E05	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-COM-013	F12.4	E12	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-FLW-001	F04.1	E04	QACR-APP-FR-01 Rev1.19	15	evidenced
+FR-FLW-002	F04.2	E04	QACR-APP-FR-01 Rev1.19	3	evidenced
+FR-FLW-003	F04.2	E04	QACR-APP-FR-01 Rev1.19	5	evidenced
+FR-FLW-004	F04.1	E04	QACR-APP-FR-01 Rev1.19	12	evidenced
+FR-FLW-005	F04.1	E04	QACR-APP-FR-01 Rev1.19	11	evidenced
+FR-FLW-006	F04.1	E04	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-FLW-007	F04.6	E04	QACR-APP-FR-01 Rev1.19	83	evidenced
+FR-FLW-008	F04.2	E04	QACR-APP-FR-01 Rev1.19	40	evidenced
+FR-FLW-009	F04.8	E04	QACR-APP-FR-01 Rev1.19	18	evidenced
+FR-IMG-001	F06.2	E06	QACR-APP-FR-01 Rev1.19	22	evidenced
+FR-IMG-002	F06.2	E06	QACR-APP-FR-01 Rev1.19	13	evidenced
+FR-IMG-004	F06.3	E06	QACR-APP-FR-01 Rev1.19	10	evidenced
+FR-IMG-005	F06.3	E06	QACR-APP-FR-01 Rev1.19	8	evidenced
+FR-IMG-006	F06.3	E06	QACR-APP-FR-01 Rev1.19	12	evidenced
+FR-IMG-007	F06.3	E06	QACR-APP-FR-01 Rev1.19	19	evidenced
+FR-IMG-008	F06.3	E06	QACR-APP-FR-01 Rev1.19	15	evidenced
+FR-IMG-009	F06.6	E06	QACR-APP-FR-01 Rev1.19	14	evidenced
+FR-IMG-010	F06.2	E06	QACR-APP-FR-01 Rev1.19	23	evidenced
+FR-IMG-011	F06.2	E06	QACR-APP-FR-01 Rev1.19	21	evidenced
+FR-IMG-013	F06.4	E06	QACR-APP-FR-01 Rev1.19	42	evidenced
+FR-IMG-014	F06.4	E06	QACR-APP-FR-01 Rev1.19	35	evidenced
+FR-IMG-015	F06.6	E06	QACR-APP-FR-01 Rev1.19	52	evidenced
+FR-IMG-016	F06.5	E06	QACR-APP-FR-01 Rev1.19	29	evidenced
+FR-IMG-021	F06.6	E06	QACR-APP-FR-01 Rev1.19	45	evidenced
+FR-IMG-022	F04.7	E04	QACR-APP-FR-01 Rev1.19	61	evidenced
+FR-IMG-023	F06.6	E06	QACR-APP-FR-01 Rev1.19	62	evidenced
+FR-IMG-024	F06.4	E06	QACR-APP-FR-01 Rev1.19	56	evidenced
+FR-KIT-001	F03.1	E03	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-KIT-002	F03.1	E03	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-KIT-003	F03.1	E03	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-KIT-004	F03.2	E03	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-KIT-005	F03.2	E03	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-KIT-007	F03.2	E03	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-LCM-002	F15.4	E15	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-LCM-003	F15.4	E15	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-LCM-004	F15.4	E15	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-LCM-005	F15.4	E15	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-LCM-006	F15.1	E15	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-LCM-007	F15.2	E15	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-LCM-008	F15.2	E15	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-LCM-009	F15.3	E15	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-LCM-010	F15.3	E15	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-LCM-011	F15.2	E15	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-LCM-012	F15.5	E15	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-LCM-016	F15.6	E15	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-LCM-017	F15.3	E15	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-LCM-018	F01.9	E01	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-PLT-001	F01.1	E01	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-PLT-002	F01.1	E01	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-PLT-003	F01.1	E01	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-PLT-004	F01.1	E01	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-PLT-005	F01.2	E01	QACR-APP-FR-01 Rev1.19	7	evidenced
+FR-PLT-006	F01.7	E01	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-PLT-008	F01.8	E01	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-PRT-001	F10.3	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-PRT-002	F10.4	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-PRT-003	F10.4	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-PRT-004	F10.5	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-PRT-005	F10.4	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-PRT-007	F10.3	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-PRT-008	F11.4	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-PRT-009	F10.3	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-PRT-010	F10.3	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-PRT-011	F10.3	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-PRT-012	F10.6	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-PRT-013	F10.6	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-PRT-014	F10.3	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-PRT-015	F10.3	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-RDY-001	F01.3	E01	QACR-APP-FR-01 Rev1.19	9	evidenced
+FR-RDY-002	F01.2	E01	QACR-APP-FR-01 Rev1.19	9	evidenced
+FR-RDY-003	F01.2	E01	QACR-APP-FR-01 Rev1.19	6	evidenced
+FR-RDY-004	F01.2	E01	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-RDY-005	F01.4	E01	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-RDY-006	F01.4	E01	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-RDY-007	F01.4	E01	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-RDY-008	F01.4	E01	QACR-APP-FR-01 Rev1.19	6	evidenced
+FR-RDY-009	F01.4	E01	QACR-APP-FR-01 Rev1.19	13	evidenced
+FR-RDY-010	F01.4	E01	QACR-APP-FR-01 Rev1.19	4	evidenced
+FR-RDY-011	F01.5	E01	QACR-APP-FR-01 Rev1.19	11	evidenced
+FR-RDY-012	F01.6	E01	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-RDY-013	F01.5	E01	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-RDY-014	F01.5	E01	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-RES-001	F09.1	E09	QACR-APP-FR-01 Rev1.19	37	evidenced
+FR-RES-002	F09.1	E09	QACR-APP-FR-01 Rev1.19	47	evidenced
+FR-RES-003	F09.1	E09	QACR-APP-FR-01 Rev1.19	10	evidenced
+FR-RES-004	F09.2	E09	QACR-APP-FR-01 Rev1.19	1	evidenced
+FR-RES-005	F09.2	E09	QACR-APP-FR-01 Rev1.19	21	evidenced
+FR-RES-006	F09.4	E09	QACR-APP-FR-01 Rev1.19	48	evidenced
+FR-RES-007	F09.1	E09	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SEC-001	F13.1	E13	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SEC-002	F13.2	E13	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SEC-003	F13.2	E13	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SEC-004	F13.4	E13	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SEC-005	F13.4	E13	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SEC-006	F12.2	E12	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SEC-007	F13.3	E13	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SEC-008	F02.5	E02	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SEC-009	F13.1	E13	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SEC-010	F13.4	E13	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SEC-011	F13.4	E13	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SEC-012	F13.2	E13	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SEC-013	F13.5	E13	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SEC-014	F12.1	E12	QACR-APP-FR-01 Rev1.19	39	evidenced
+FR-SHR-001	F11.1	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SHR-002	F11.1	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SHR-003	F11.1	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SHR-004	F11.1	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SHR-005	F11.2	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SHR-006	F11.2	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SHR-007	F11.2	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SHR-008	F11.2	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SHR-011	F11.3	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SHR-012	F11.4	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SHR-013	F11.5	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SHR-014	F11.5	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SHR-015	F11.4	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SHR-016	F11.4	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SHR-017	F11.2	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SHR-018	F11.4	E11	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-STA-002	F04.3	E04	QACR-APP-FR-01 Rev1.19	24	evidenced
+FR-STA-003	F04.3	E04	QACR-APP-FR-01 Rev1.19	19	evidenced
+FR-STA-005	F04.3	E04	QACR-APP-FR-01 Rev1.19	10	evidenced
+FR-STA-006	F04.4	E04	QACR-APP-FR-01 Rev1.19	16	evidenced
+FR-STA-007	F04.4	E04	QACR-APP-FR-01 Rev1.19	20	evidenced
+FR-STA-008	F04.5	E04	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-STA-009	F04.5	E04	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-STA-010	F04.5	E04	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SUP-001	F10.4	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-SUP-002	F10.5	E10	QACR-APP-FR-01 Rev1.19	33	evidenced
+FR-SUP-003	F01.5	E01	QACR-APP-FR-01 Rev1.19	6	evidenced
+FR-SUP-004	F10.5	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-TIM-001	F05.1	E05	QACR-APP-FR-01 Rev1.19	10	evidenced
+FR-TIM-002	F05.1	E05	QACR-APP-FR-01 Rev1.19	11	evidenced
+FR-TIM-003	F05.1	E05	QACR-APP-FR-01 Rev1.19	17	evidenced
+FR-TIM-004	F05.1	E05	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-TIM-005	F05.5	E05	QACR-APP-FR-01 Rev1.19	6	evidenced
+FR-TIM-006	F05.2	E05	QACR-APP-FR-01 Rev1.19	20	evidenced
+FR-TIM-007	F05.3	E05	QACR-APP-FR-01 Rev1.19	6	evidenced
+FR-TIM-008	F05.4	E05	QACR-APP-FR-01 Rev1.19	8	evidenced
+FR-TIM-009	F05.3	E05	QACR-APP-FR-01 Rev1.19	17	evidenced
+FR-TIM-011	F05.4	E05	QACR-APP-FR-01 Rev1.19	17	evidenced
+FR-TIM-012	F05.6	E05	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-TIM-014	F05.5	E05	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-TXT-001	F07.1	E07	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-TXT-002	F07.1	E07	QACR-APP-FR-01 Rev1.19	10	evidenced
+FR-TXT-003	F07.1	E07	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-TXT-004	F07.1	E07	QACR-APP-FR-01 Rev1.19	21	evidenced
+FR-TXT-005	F07.2	E07	QACR-APP-FR-01 Rev1.19	5	evidenced
+FR-TXT-006	F07.2	E07	QACR-APP-FR-01 Rev1.19	5	evidenced
+FR-TXT-007	F07.2	E07	QACR-APP-FR-01 Rev1.19	5	evidenced
+FR-TXT-008	F07.2	E07	QACR-APP-FR-01 Rev1.19	1	evidenced
+FR-TXT-009	F07.2	E07	QACR-APP-FR-01 Rev1.19	1	evidenced
+FR-TXT-010	F07.2	E07	QACR-APP-FR-01 Rev1.19	5	evidenced
+FR-TXT-011	F07.2	E07	QACR-APP-FR-01 Rev1.19	2	evidenced
+FR-TXT-012	F07.2	E07	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-TXT-013	F07.2	E07	QACR-APP-FR-01 Rev1.19	1	evidenced
+FR-TXT-014	F07.2	E07	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-TXT-015	F07.2	E07	QACR-APP-FR-01 Rev1.19	1	evidenced
+FR-TXT-016	F07.2	E07	QACR-APP-FR-01 Rev1.19	4	evidenced
+FR-TXT-017	F07.2	E07	QACR-APP-FR-01 Rev1.19	7	evidenced
+FR-TXT-019	F07.3	E07	QACR-APP-FR-01 Rev1.19	21	evidenced
+FR-TXT-020	F07.4	E07	QACR-APP-FR-01 Rev1.19	44	evidenced
+FR-TXT-021	F07.3	E07	QACR-APP-FR-01 Rev1.19	20	evidenced

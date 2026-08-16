@@ -7,14 +7,21 @@ merged half-done.
 
 ---
 
-## State today
+## Status
 
-| | |
-|---|---|
-| `master` | committed (`aed9a80`), 15 files, **not pushed** |
-| `product/` | done — 241 requirements, 22 areas, 15 epics, 82 features, all 46 self-stated counts validate |
-| `evidence/pins.yaml` | done — 4 repos, all pinned commits still HEAD |
-| `wip/evidence-extraction` | not yet committed. 2,859 extracted candidates with citations resolved |
+| Phase | | |
+|---|---|---|
+| 1 | Base — plan, parser on master, WIP preserved, both branches pushed | **done** |
+| 2 | `tools/check_citations.py` | **done** |
+| 3 | `evidence/context.tsv`, 11 rows | **done** |
+| 4 | `behaviour.tsv` for SPEC-01 + `coverage.tsv` | **done** |
+| 5 | 8 feature files under `features/E01/` | **done** |
+| 6 | `behaviour.tsv` extended to all 241 requirements | **done** |
+
+Scope note recorded during Phase 5: **the codebase survey is completed before the spec is
+written, by the people who write it.** This repository publishes its result for R&D to
+consume. It does not re-derive, re-validate or adjudicate that survey, and it does not
+compare the two ACR platforms against each other. `SDLC.md` step 3 was corrected to say so.
 
 ### Data already collected (do not re-derive)
 

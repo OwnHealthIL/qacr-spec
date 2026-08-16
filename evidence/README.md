@@ -45,8 +45,8 @@ Negative claims are kept: where a search found nothing, `status` is `absent`, th
 go in `claim`, and `citation` is empty. "This does not exist" is as valuable as "this exists" and
 much easier to get wrong from memory.
 
-**The table is built in slices, one spec at a time.** It currently covers
-`QACR-APP-SPEC-01` only. Which is exactly why `coverage.tsv` exists.
+The table now covers **the whole of QACR-APP-FR-01 Rev 1.19** — every claim the vault
+records, for all four products. `coverage.tsv` says which requirements it reached.
 
 ### `coverage.tsv`
 
@@ -60,8 +60,7 @@ One row per requirement in the FR document — all 241, whether or not anyone ha
 | | |
 |---|---|
 | `evidenced` | rows exist in `behaviour.tsv` |
-| `no-evidence-found` | **someone looked and found nothing.** Nobody has read this area of the code |
-| `not-extracted` | nobody has looked yet. Absence of rows means nothing here |
+| `no-evidence-found` | extraction covered this requirement and the vault carries no rows for it |
 
 This file exists because in a partial table **absence is ambiguous**. Grep `behaviour.tsv` for
 `FR-CFG-003`, get nothing, and you cannot tell "nobody has looked at this in the code" from "not
@@ -98,9 +97,9 @@ The commit each of the four repositories stood at. `Foo.swift:102` means nothing
 - Never read a missing row as "nobody has looked". Check `coverage.tsv`.
 - `pins.yaml` is re-read whenever evidence is added.
 
-## Remaining work
+### `unresolved-citations.tsv`
 
-`PLAN.md` Phase 6 extends `behaviour.tsv` from the current spec-scoped slice to all 241
-requirements. 2,859 candidates are already extracted with their citations resolved, on the
-`wip/evidence-extraction` branch; `wip-evidence/NOTES.md` there records the resolution rule and the
-defects found so far.
+The citations the checker cannot resolve, with the vault file and line each came from. These are
+places where the vault's own prose does not say which file a line number belongs to, or names a
+file that is in no repository. They belong back with whoever maintains the vault; they are not
+deleted here.

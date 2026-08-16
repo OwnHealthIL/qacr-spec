@@ -1,0 +1,76 @@
+citation	reason	vault_source	product
+:156-158	continuation citation — the source prose never names the file these lines are in	05 Reference/acr-android.md:239	acr-android
+:18-22	continuation citation — the source prose never names the file these lines are in	05 Reference/acr-android.md:236	acr-android
+:273-316	continuation citation — the source prose never names the file these lines are in	05 Reference/acr-android.md:208	acr-android
+:317	continuation citation — the source prose never names the file these lines are in	05 Reference/acr-android.md:206	acr-android
+:44	continuation citation — the source prose never names the file these lines are in	05 Reference/acr-android.md:74	acr-android
+:14-24	continuation citation — the source prose never names the file these lines are in	05 Reference/qacr-current-state.md:1215	qacr-android
+:20-30	continuation citation — the source prose never names the file these lines are in	05 Reference/qacr-current-state.md:1215	qacr-android
+:214-218	continuation citation — the source prose never names the file these lines are in	05 Reference/qacr-current-state.md:465	qacr-android
+:271-273	continuation citation — the source prose never names the file these lines are in	05 Reference/qacr-current-state.md:397	qacr-android
+:369	continuation citation — the source prose never names the file these lines are in	05 Reference/qacr-current-state.md:465	qacr-android
+:396-424	continuation citation — the source prose never names the file these lines are in	05 Reference/qacr-current-state.md:833	qacr-android
+:560	continuation citation — the source prose never names the file these lines are in	05 Reference/qacr-current-state.md:786	qacr-android
+:235-244	continuation citation — the source prose never names the file these lines are in	05 Reference/qacr-current-state.md:520	qacr-ios
+:237	continuation citation — the source prose never names the file these lines are in	05 Reference/qacr-current-state.md:523	qacr-ios
+:239	continuation citation — the source prose never names the file these lines are in	05 Reference/qacr-current-state.md:523	qacr-ios
+:309-325	continuation citation — the source prose never names the file these lines are in	05 Reference/qacr-current-state.md:517	qacr-ios
+:430	continuation citation — the source prose never names the file these lines are in	05 Reference/qacr-current-state.md:524	qacr-ios
+:434	continuation citation — the source prose never names the file these lines are in	05 Reference/qacr-current-state.md:525	qacr-ios
+:465-469	continuation citation — the source prose never names the file these lines are in	05 Reference/qacr-current-state.md:517	qacr-ios
+:506-511	continuation citation — the source prose never names the file these lines are in	05 Reference/qacr-current-state.md:517	qacr-ios
+:716-731	continuation citation — the source prose never names the file these lines are in	05 Reference/qacr-current-state.md:518	qacr-ios
+:83	continuation citation — the source prose never names the file these lines are in	05 Reference/qacr-current-state.md:622	qacr-ios
+:299-303	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-CAM-001 — Acquire and transmit the IVTS frame set.md:126	qacr-ios
+:305-314	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-CAM-001 — Acquire and transmit the IVTS frame set.md:126	qacr-ios
+:582-587	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-CAM-001 — Acquire and transmit the IVTS frame set.md:126	qacr-ios
+:93	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-CAM-001 — Acquire and transmit the IVTS frame set.md:126	qacr-ios
+:121-134	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-CAM-003 — Record the applied camera parameter set with each image.md:143	qacr-ios
+:82	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-CAM-003 — Record the applied camera parameter set with each image.md:143	qacr-ios
+:122-124	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-COM-003 — Transmit on successful capture and show the upload status.md:147	qacr-android
+:133-139	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-COM-003 — Transmit on successful capture and show the upload status.md:147	qacr-android
+:210	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-COM-003 — Transmit on successful capture and show the upload status.md:147	qacr-android
+:268-277	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-COM-003 — Transmit on successful capture and show the upload status.md:147	qacr-android
+:303-310	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-COM-003 — Transmit on successful capture and show the upload status.md:147	qacr-android
+:486-525	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-COM-003 — Transmit on successful capture and show the upload status.md:147	qacr-android
+:90-112	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-COM-003 — Transmit on successful capture and show the upload status.md:132	qacr-ios
+:232	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-COM-004 — Integrity check with each transmitted payload.md:127	qacr-ios
+:239	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-COM-004 — Integrity check with each transmitted payload.md:127	qacr-ios
+AndroidDip SyncManager.kt:661-678	no file of that name in any repository	03 Specs/FR-COM-008 — Explanatory error message and next steps on a backend erro.md:151	qacr-android
+:614-623	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-COM-011 — Request the result and show a waiting state.md:102	acr-ios
+:77	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-COM-011 — Request the result and show a waiting state.md:102	acr-ios
+ChatViewPresenter+Playback.swift:34-41	no file of that name in any repository	03 Specs/FR-FLW-003 — Replay available at any time while the step is active.md:119	qacr-ios
+:90-91	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-FLW-004 — Only the current steps instruction is displayed.md:134	qacr-android
+:90-91	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-FLW-005 — Steps sequenced in procedure order no out-of-order arrival.md:120	qacr-android
+:506-511	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-IMG-008 — Detect saturation.md:106	qacr-ios
+:137-139	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-IMG-009 — Shadow detection from the Color Print anchors.md:98	acr-ios
+:547	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-IMG-013 — Real-time guidance toward valid distance angle and framing.md:175	qacr-android
+:765-783	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-IMG-015 — Invalidate the image and permit re-scan invalidate the tes.md:160	qacr-ios
+:290-299	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-IMG-016 — Normalise the captured image against the Color Print refer.md:145	qacr-ios
+:931	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-IMG-021 — Detect specular reflection and block outside thresholds.md:192	qacr-android
+:19	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-IMG-021 — Detect specular reflection and block outside thresholds.md:167	qacr-ios
+:234	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-IMG-021 — Detect specular reflection and block outside thresholds.md:167	qacr-ios
+:224-231	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-IMG-022 — Practice scan during a timed waiting period.md:199	qacr-android
+:316-336	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-IMG-022 — Practice scan during a timed waiting period.md:199	qacr-android
+:324-326	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-IMG-022 — Practice scan during a timed waiting period.md:199	qacr-android
+:411-424	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-IMG-022 — Practice scan during a timed waiting period.md:149	qacr-ios
+:504	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-IMG-022 — Practice scan during a timed waiting period.md:160	qacr-ios
+:487-497	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-IMG-023 — Preparing and evaluating state after the frame set.md:176	qacr-android
+:553-565	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-IMG-023 — Preparing and evaluating state after the frame set.md:176	qacr-android
+:111-115	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-IMG-023 — Preparing and evaluating state after the frame set.md:132	qacr-ios
+:147-148	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-IMG-023 — Preparing and evaluating state after the frame set.md:123	qacr-ios
+:263-264	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-IMG-023 — Preparing and evaluating state after the frame set.md:116	qacr-ios
+:99-118	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-IMG-023 — Preparing and evaluating state after the frame set.md:132	qacr-ios
+:403-541	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-RDY-002 — Minimum hardware characteristics block test start.md:104	acr-ios
+Dip/Features/Chat/Results/Measurements Level/ACR/ResultValueMeasurementLevel.swift:11-21	iosDip/Dip/Features/Chat/Results/Measurements Level/ACR/ResultValueMeasurementLevel.swift has 20 lines, citation needs 21	03 Specs/FR-RES-002 — the ratio as a numerical value and as a result category.md:152	acr-ios
+:437-441	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-RES-005 — invalid test presents an invalid-test outcome.md:140	acr-android
+:486-521	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-RES-005 — invalid test presents an invalid-test outcome.md:140	acr-android
+:691-694	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-RES-005 — invalid test presents an invalid-test outcome.md:140	acr-android
+:598	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-RES-006 — demonstration mode presents a fixed non-clinical result.md:117	acr-ios
+:38	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-SEC-014 — no PHI from a build without the transport controls.md:147	qacr-ios
+FLAG-REGISTER.md:1214-1246	no file of that name in any repository	03 Specs/FR-SEC-014 — no PHI from a build without the transport controls.md:147	qacr-ios
+:173-178	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-TIM-001 — A defined start event minimum duration permitted window an.md:126	qacr-android
+:321-324	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-TXT-019 — the results screens mandatory accompanying content.md:138	acr-ios
+:335, 346	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-TXT-019 — the results screens mandatory accompanying content.md:144	acr-ios
+:356	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-TXT-019 — the results screens mandatory accompanying content.md:138	acr-ios
+:272-278	continuation citation — the source prose never names the file these lines are in	03 Specs/FR-TXT-021 — invalid-test messaging.md:118	acr-ios
