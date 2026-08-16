@@ -1,0 +1,150 @@
+{"n": 150, "claim": "ServerAppSettings retries with an exponential backoff that doubles the delay from 1 s up to maxRetryDelayTime = 8.0 seconds.", "status": ""}
+{"n": 151, "claim": "AuthenticationHelper declares maxRetries = 1 and requestRetryDelayInSeconds = 3.0.", "status": ""}
+{"n": 152, "claim": "SecureAuthenticationHelper declares maxRetries = 2 and requestDelay = 3.0.", "status": ""}
+{"n": 153, "claim": "ExamSenderHandler imports Gzip, which it uses to gzip trace files.", "status": ""}
+{"n": 154, "claim": "PreLoginProvider declares the pre-login endpoint path.", "status": ""}
+{"n": 155, "claim": "AppSettingsNetworkService declares the anonymousSignUp, init and flow-configuration endpoint constants.", "status": ""}
+{"n": 156, "claim": "NextFlowProvider declares the nextFlow/<orderId> endpoint.", "status": ""}
+{"n": 157, "claim": "TimeoutHandler declares the updateOrderStatus/<orderId> endpoint.", "status": ""}
+{"n": 158, "claim": "ConsentUploader declares the consent/add endpoint.", "status": ""}
+{"n": 159, "claim": "AuthorizationHandler declares the send-verification-code, validate-verification-code and session-token endpoints.", "status": ""}
+{"n": 160, "claim": "RegistrationHandler declares the invite-code-validation and create-patient endpoints.", "status": ""}
+{"n": 161, "claim": "TargetSpecificData+MinutefulKidney declares the pcp-questionnaire endpoint.", "status": ""}
+{"n": 162, "claim": "AppSettingsNetworkService declares the provider error enum with cases .internal, .nonFatal, .connectionFailure and .fatal(FatalErrorInfo?) carrying .invalidServerTrust / .authenticationFailure.", "status": ""}
+{"n": 163, "claim": "AppSettingsNetworkService maps HTTP status codes: 200 to success, 400..<500 to fatal, everything else to nonFatal, and 401 to .fatal(.authenticationFailure).", "status": ""}
+{"n": 164, "claim": "ExamAPI calls the C function __runAlgorithm.", "status": ""}
+{"n": 165, "claim": "ExamBuilder calls the C function prepareAlgorithm(workingDirectory:configDirectory:configFile:productConfig:examId:).", "status": ""}
+{"n": 166, "claim": "CameraViewModel calls the per-frame algorithm entry points runScan and runScanLegacy.", "status": ""}
+{"n": 167, "claim": "ExamBuilder consumes the ProductConfiguration JSON string and passes it to prepareAlgorithm.", "status": ""}
+{"n": 168, "claim": "AlgoVersionHelper.versions lazily loads algo_versions.json and calls fatalError if the file is missing or unparseable, and version(forProduct:) calls fatalError on an unknown product.", "status": ""}
+{"n": 169, "claim": "DipioApp+ServiceConfigurator registers the algo version as the Mixpanel super-property algoVersion at startup.", "status": ""}
+{"n": 170, "claim": "ABTestingManager sends the algo version as the Split.io event property Algo_Version.", "status": ""}
+{"n": 171, "claim": "DipioApp+ServiceConfigurator writes the AppDependenciesProvider-reported algo version into the startup log.", "status": ""}
+{"n": 172, "claim": "ExamAPI.saveAlgoInput writes the serialised AlgoInput as algoInput into the exam directory.", "status": ""}
+{"n": 173, "claim": "The local algorithm run sets algoOutput.runOnServer = !isBoundary.", "status": ""}
+{"n": 174, "claim": "ExamAPI honours additionalErrors only when product == \"acr\" && algoFamily == .dip3.", "status": ""}
+{"n": 175, "claim": "ExamAPI reports the localAlgoRunEnded event with a processingTime property giving the local run duration.", "status": ""}
+{"n": 176, "claim": "ExamAPI declares and publishes examsLocalStatus, the local-algo status broadcast.", "status": ""}
+{"n": 177, "claim": "TestCoordinator wires the analysis chat's examStatusProvider to the local-algo status broadcast.", "status": ""}
+{"n": 178, "claim": "ResultData.swift declares ResultData { recognizer(value), analysis } and ExamResults { results: [String: ResultData], resultsInterpretation, info, resultsDate }.", "status": ""}
+{"n": 179, "claim": "Results.swift declares Results.AccompanyingInfo as .diagnosis or .interpretation(Interpretation), where Interpretation carries level: ResultValueMeasurementLevel and withDoctorNotes: Bool.", "status": ""}
+{"n": 180, "claim": "The namespace enum ExamResultsCodableRaw declares the result types onlyResults, resultsWithDiagnosis and resultsWithInterpretation.", "status": ""}
+{"n": 181, "claim": "TargetSpecificData sets resultsDynamicDataKeys = ResultValue.allCases.map(\\.rawValue).", "status": ""}
+{"n": 182, "claim": "ResultsCoordinator builds ResultsChatViewModel from conditions produced by ChatInputConditionsFactory.makeResultsInputConditions(examId:examResults:showSurvey:).", "status": ""}
+{"n": 183, "claim": "ABTestingManager declares the Split.io flag chat_results_verifyUnderstandingOfPositive.", "status": ""}
+{"n": 184, "claim": "LobbyCoordinator takes the results lobby lifetime from the server's resultsLobbyDuration in days, defaulting to TargetSpecificData.testResultsExpiredAfter, which is 30 for ACR US.", "status": ""}
+{"n": 185, "claim": "AppConfiguration.testEnded(isSuccessful:) derives requiredPostTestTasks: always .completeTest, plus .bookAppointment if info.level.isPositive and .shareResults if info.withDoctorNotes.", "status": ""}
+{"n": 186, "claim": "ExamSenderManager writes results to the encrypted results.json only when Natrium.Config.saveResultsToDisk is set, and always sets the session-only AppConfiguration.examResults.", "status": ""}
+{"n": 187, "claim": "ResultsCoordinator calls AppReview.request() after results when the server flag withAppReview is set.", "status": ""}
+{"n": 188, "claim": "AppConfiguration+PersistedSettings persists the SecureAuthenticationState value.", "status": ""}
+{"n": 189, "claim": "securelyStoreCodeIfPossible writes the code and immediately reads it back to verify, deleting the item on failure.", "status": ""}
+{"n": 190, "claim": "SecureAuthenticationHelper surfaces supportedBiometricType and canProceedBiometricsAuthentication from AuthenticationService's deviceSupportedBiometricType() and assess().", "status": ""}
+{"n": 191, "claim": "ResultsPortalInitializerPresenter.viewDidAppear() routes .showLogin plus not-logged-in to .loginRequired, .showSignup to .signupLobbyRequired, and otherwise fetches portal data.", "status": ""}
+{"n": 192, "claim": "ResultsPortalCoordinator.start() always pushes the initializer screen first.", "status": ""}
+{"n": 193, "claim": "ServerAppSettings fires SecurityStatusProvider.fetchSecurityStatus() from the init step and caches the result as AppConfiguration.didSetupSecureAuthentication.", "status": ""}
+{"n": 194, "claim": "AppCoordinator.showLobby() obtains the LobbyCoordinator from LobbyCoordinatorFactory at runtime.", "status": ""}
+{"n": 195, "claim": "LobbyCoordinator hosts the SwiftUI LobbyView in a UIHostingController.", "status": ""}
+{"n": 196, "claim": "MenuItemsDataSource declares the MenuItem enum with cases faq, about, terms, privacy, consent, support, debug and signOut.", "status": ""}
+{"n": 197, "claim": "For ACR US, TargetSpecificData.drawerMenuItems is [.faq, .about, .privacy, .terms, .support, .signOut].", "status": ""}
+{"n": 198, "claim": "LobbyCoordinator presents the drawer menu via DrawerMenuConfigurator with HLTViews' horizontal-slide presentation and a screen-edge pan gesture.", "status": ""}
+{"n": 199, "claim": "The Other AboutPageFactory composes regulation rows regulationLabel1, regulationLabel2, regulationLabel3 (interpolating the SemVer from BundleInfoProvider), regulationLabel8 and an image row of regulationLabel5/6/7, plus a footer of aboutPageVersion and appVersion.", "status": ""}
+{"n": 200, "claim": "The Natrium config sets resultsPortalMoreInfoURL to https://www.nhs.uk/conditions/acr-test for ACR UK and https://kidney.org/kidneycheck for ACR US.", "status": ""}
+{"n": 201, "claim": "HLTWindowFactory.makeShakeableWindow returns a ShakeWindow subclass in DEBUG builds and a plain UIWindow otherwise.", "status": ""}
+{"n": 202, "claim": "SceneDelegate.onShakeDevice() handles the shake by opening EnvironmentConfigurator.", "status": ""}
+{"n": 203, "claim": "PCPConfig declares .enabled(consentConfig: .disabled|.enabled(withChatSkipButton:), showOnPositiveResultsOnly:) and .disabled, decoded from the init response.", "status": ""}
+{"n": 204, "claim": "AppConfiguration.pcpEditingEnabled is set from the server flag enablePCPEditing.", "status": ""}
+{"n": 205, "claim": "AppCoordinator extends the background-reset window to 3 hours when the order status is .pendingPCP.", "status": ""}
+{"n": 206, "claim": "ResultsDoctorNotePDFDataHandler writes the doctor-note PDF bytes to the temporary directory through ProtectedDataPersistenceManager.", "status": ""}
+{"n": 207, "claim": "LobbyViewModel+TargetSpecificActions.configureUnreadMessagesPublisher() surfaces unread consultation messages into the lobby.", "status": ""}
+{"n": 208, "claim": "TargetDataManager creates the consultation chat handler lazily and starts it in start().", "status": ""}
+{"n": 209, "claim": "FlowCoordinator consults PrescriptionConfig.isEngagementRequired.", "status": ""}
+{"n": 210, "claim": "ResultsCoordinator injects ComplementaryCareService into the results chat.", "status": ""}
+{"n": 211, "claim": "ExamSenderService.sendConsent calls updatePatientConsent and fetchOrderStatus calls getOrderStatus.", "status": ""}
+{"n": 212, "claim": "For ACR US, TargetSpecificData.PartnerAppURL.noOrder, .endedSuccessfully and .failed are all nil.", "status": ""}
+{"n": 213, "claim": "FlowCoordinator.returnFromFinalChatAction consumes the TargetSpecificData.PartnerAppURL values.", "status": ""}
+{"n": 214, "claim": "The Natrium config sets the Freshchat domain to msdk.freshchat.com for ACR US and msdk.eu.freshchat.com for ACR UK, alongside the freshchatId and freshchatKey values.", "status": ""}
+{"n": 215, "claim": "FreshchatWrapper loads a bundled theme plist named FreshchatTheme.", "status": ""}
+{"n": 216, "claim": "TargetDataManager instantiates the FreshchatWrapper and starts it from start().", "status": ""}
+{"n": 217, "claim": "AppConfiguration+PersistedSettings persists a stable supportChatID of type UUID.", "status": ""}
+{"n": 218, "claim": "FreshchatWrapper filters Freshchat notifications.", "status": ""}
+{"n": 219, "claim": "AppConfiguration+PersistedSettings persists didShowPreSupportNotificationPermission, tracking the pre-permission prompt.", "status": ""}
+{"n": 220, "claim": "AppConfiguration lets the init response override faqURL, supportEmail and supportNumber.", "status": ""}
+{"n": 221, "claim": "LobbyCoordinator emits a phoneCallClick event recording which screen the call was started from.", "status": ""}
+{"n": 222, "claim": "The autoUpdatingPropertiesInjector re-evaluates battery level, low-power mode, device local hour and confirmatoryTest for every event.", "status": ""}
+{"n": 223, "claim": "Analytics+Event declares Analytics.ChatEventWrapper, which wraps event names supplied by the chat JSON.", "status": ""}
+{"n": 224, "claim": "PreLoginCoordinator takes mixpanelProxyEnabled from the pre-login response and configures Mixpanel with it.", "status": ""}
+{"n": 225, "claim": "AppCoordinator calls fatalError when pre-login succeeds while Mixpanel is still unconfigured.", "status": ""}
+{"n": 226, "claim": "Analytics calls identify(with: patientId) when Natrium.Config.withPatientIdAsIdentifierInMixPanel is true and otherwise uses UIDevice.identifierForVendor.", "status": ""}
+{"n": 227, "claim": "DipioApp+ServiceConfigurator registers the startup Mixpanel super-properties product, appVariant, algoVersion, globalID, confirmatoryTest and fontScale.", "status": ""}
+{"n": 228, "claim": "AppCoordinator registers Mixpanel super-properties after startup, among them patientId, partner, orderId, partnerOrderId and orderExpiration.", "status": ""}
+{"n": 229, "claim": "ServerAppSettings registers cohortId as a Mixpanel super-property.", "status": ""}
+{"n": 230, "claim": "ABTestingManager.handle(event:) maps Mixpanel events to Split events via ABTestingGatekeeper.splitEvent(from:) and decides when to call flush().", "status": ""}
+{"n": 231, "claim": "DipioApp+Delegate calls FirebaseApp.configure() through CrashServiceManager from didFinishLaunching.", "status": ""}
+{"n": 232, "claim": "DipioApp+ServiceConfigurator sets the globalID custom value on Crashlytics.", "status": ""}
+{"n": 233, "claim": "DipioApp+ServiceConfigurator registers AppMetricsHandler at startup.", "status": ""}
+{"n": 234, "claim": "ScanStatistics.generateAnalyticsReport() produces the qCRIssues event carrying a per-torch-level status histogram.", "status": ""}
+{"n": 235, "claim": "CameraViewModel starts and stops the Mixpanel timed event cameraTime around the camera screen.", "status": ""}
+{"n": 236, "claim": "Survey.shouldShowSurvey() requires successfulTestsCounter > Natrium.Config.successfulTestBeforePresentingSurvey, !surveyFilled, and a non-empty AppConfiguration.current.surveyURL.", "status": ""}
+{"n": 237, "claim": "The Natrium config sets successfulTestBeforePresentingSurvey to -1.", "status": ""}
+{"n": 238, "claim": "Survey.surveyURL(forOrderID:partner:) appends orderId and partner as percent-encoded query items, removing + from the allowed character set.", "status": ""}
+{"n": 239, "claim": "AppConfiguration overrides surveyURL from the init response.", "status": ""}
+{"n": 240, "claim": "AppConfiguration+PersistedSettings declares surveyURL as a persisted setting.", "status": ""}
+{"n": 241, "claim": "FlowCoordinator computes returnFromFinalChatAction lazily at coordinator creation as .survey(urlString:) when eligible, otherwise .redirect(url:), otherwise nil.", "status": ""}
+{"n": 242, "claim": "FlowCoordinator.performOnReturnFromFinalChat emits the directedToSurvey event and presents SurveyWebViewContoller full-screen.", "status": ""}
+{"n": 243, "claim": "ResultsCoordinator passes showSurvey into the results chat conditions.", "status": ""}
+{"n": 244, "claim": "ResultsCoordinator persists shouldShowSurveyAlert and orderIDForSurvey when the results chat hands off to the results center.", "status": ""}
+{"n": 245, "claim": "AppConfiguration+PersistedSettings declares shouldShowSurveyAlert and orderIDForSurvey as persisted settings.", "status": ""}
+{"n": 246, "claim": "ProtectedDataPersistenceManager writes every file with Data.WritingOptions.completeFileProtectionUntilFirstUserAuthentication, held as a single constant all protected writes use.", "status": ""}
+{"n": 247, "claim": "ProtectedDataPersistenceHandler adds Codable boxing over ProtectedDataPersistenceManager.", "status": ""}
+{"n": 248, "claim": "ProtectedDataFileURLProvider places the protected files results.json, appSessionInfo.json and userInfo.json in Application Support.", "status": ""}
+{"n": 249, "claim": "ResultsDoctorNotePDFDataHandler writes the doctor-note PDF into the temporary directory as a protected file.", "status": ""}
+{"n": 250, "claim": "ServerTrustPolicyManager scopes pinning with the hostname regex .*\\.secure\\.api\\.healthy\\.io$", "status": ""}
+{"n": 251, "claim": "SessionHelper.urlSession(_:didReceive:) calls sessionTrustManager?.evaluate(serverTrust, forHost:) and supplies no credential when it fails.", "status": ""}
+{"n": 252, "claim": "NetworkManager treats failure to construct the trust manager as non-fatal, leaving pinning off.", "status": ""}
+{"n": 253, "claim": "AppSettingsNetworkService turns ServerError.invalidServerTrust into .fatal(.invalidServerTrust).", "status": ""}
+{"n": 254, "claim": "ServerAppSettings sets state = .failure(.invalidServerTrust) on an invalid-server-trust fatal error.", "status": ""}
+{"n": 255, "claim": "LobbyViewModel shows the .invalidServerTrust alert offering an App Store update or support.", "status": ""}
+{"n": 256, "claim": "SceneDelegate installs the AppIconViewController placeholder on sceneWillResignActive and removes it on sceneDidBecomeActive, unless AppConfiguration.current.disablePlaceHolderWindow is set.", "status": ""}
+{"n": 257, "claim": "TestCoordinator exposes the disablePlaceholderWindow closure by which the instructions chat toggles the placeholder-window flag.", "status": ""}
+{"n": 258, "claim": "No use of isExcludedFromBackupKey or URLResourceValues was found anywhere in iosDip/Dip or ios-foundations, so nothing marks exam frames or protected files as excluded from backup.", "status": "absent"}
+{"n": 259, "claim": "HLTLogging declares LogString.Privacy as .private(Mask), with Mask.generic(String?) or Mask.hash, and .public.", "status": ""}
+{"n": 260, "claim": "appendInterpolation<T>(_ object: T) forwards to privacy: .private, so interpolations are redacted by default.", "status": ""}
+{"n": 261, "claim": "The app builds the console log handler with redactInformationIfNeeded: false and leaves redaction on for the file and remote handlers.", "status": ""}
+{"n": 262, "claim": "HLTLogging's Logger supports denying specific user-info keys.", "status": ""}
+{"n": 263, "claim": "The app sets Logger.logToFileDebugOnly = true, so FileLogHandler is installed only in DEBUG builds.", "status": ""}
+{"n": 264, "claim": "DataManager.start() enables the RemoteMonitoringLogHandler.", "status": ""}
+{"n": 265, "claim": "The app's Logger builds RemoteMonitoringLogHandler with an environment provider, a token provider and a UserInfoFormatter that injects globalID.", "status": ""}
+{"n": 266, "claim": "The app's Logger exposes two tiers, logger.all writing to local and remote handlers and logger.local writing locally only.", "status": ""}
+{"n": 267, "claim": "MixpanelInstanceProvider hard-codes the Mixpanel tokens.", "status": ""}
+{"n": 268, "claim": "DataManager references the per-target TargetSpecificData enum.", "status": ""}
+{"n": 269, "claim": "AppCoordinator references the per-target TargetSpecificData enum.", "status": ""}
+{"n": 270, "claim": "UserDataCleaner references the per-target TargetSpecificData enum.", "status": ""}
+{"n": 271, "claim": "SharedStyling resolves the design system from the per-target TargetSpecificData enum.", "status": ""}
+{"n": 272, "claim": "AppConfiguration.updateInitValues(data:) makes 44 assignments from the init response.", "status": ""}
+{"n": 273, "claim": "ABTestingManager declares the flags chat_results_verifyUnderstandingOfPositive, testPreview, lobby_notifications_permissions, exam_algo_learnedRaw, chat_results_transitionToResultsPortal, qcr_label_color and dateOfBirth_redesign.", "status": ""}
+{"n": 274, "claim": "PreLoginCoordinator tears down Split.io when the pre-login response reports abTestingEnabled == false.", "status": ""}
+{"n": 275, "claim": "ServerEnvironment compiles .appsDevelop, .servicesDevelop and .dynamic(environment: Info) only under #if DEBUG.", "status": ""}
+{"n": 276, "claim": "DipioApp+ServiceConfigurator.updateEnvironmentIfNeeded() sets serverEnvironmentMismatch when the built environment differs from the persisted one.", "status": ""}
+{"n": 277, "claim": "ServerAppSettings guards the bootstrap on serverEnvironmentMismatch and aborts when it is set.", "status": ""}
+{"n": 278, "claim": "Each alert case in Alert+AdditionalObjects is annotated with a numeric id comment such as // 1.3.1, // 3.2.2 or // 4.4.1.", "status": ""}
+{"n": 279, "claim": "AppCoordinator.start() calls showPreLogin().", "status": ""}
+{"n": 280, "claim": "DipioApp.init hands the appServicesConfigurator closure to the app delegate.", "status": ""}
+{"n": 281, "claim": "DipioApp+Delegate runs the appServicesConfigurator closure inside application(_:didFinishLaunchingWithOptions:).", "status": ""}
+{"n": 282, "claim": "PreLoginProvider sends POST pre-login carrying only the secureToken header.", "status": ""}
+{"n": 283, "claim": "PreLoginCoordinator.handleSuccess processes the pre-login response.", "status": ""}
+{"n": 284, "claim": "TargetDataManager.additionalEventsHandlerIfReady(with: 3) waits up to 3 seconds for the Split.io SDK to become ready before wiring it as an additional event sink.", "status": ""}
+{"n": 285, "claim": "AppCoordinator.popToChildCoordinator() calls setActiveChildCoordinator(), which builds the AuthenticationHelper and shows either authentication or the lobby.", "status": ""}
+{"n": 286, "claim": "AppCoordinator calls fatalError when pre-login succeeds while Mixpanel is still unconfigured.", "status": ""}
+{"n": 287, "claim": "PreLoginCoordinator offers support from the pre-login screen.", "status": ""}
+{"n": 288, "claim": "DataManager.init constructs ServerAppSettings with about 14 closures binding it to AppConfiguration, Order and Natrium.Config.", "status": ""}
+{"n": 289, "claim": "DataManager.config() calls serverAppSettings.fetchServerSettings().", "status": ""}
+{"n": 290, "claim": "The MinutefulUS LobbyCoordinator calls fetchServerSettings from startWithWelcome(), i.e. on every entry into the lobby.", "status": ""}
+{"n": 291, "claim": "The Minuteful UK LobbyCoordinator calls fetchServerSettings.", "status": ""}
+{"n": 292, "claim": "The Dip UTI LobbyCoordinator calls fetchServerSettings.", "status": ""}
+{"n": 293, "claim": "The generic Other LobbyCoordinator calls fetchServerSettings.", "status": ""}
+{"n": 294, "claim": "ServerAppSettings+SupportingData declares LoadingStep with cases anonymousSignup, initCall, flowConfiguration, consentUploading and getPCPQuestionnaire.", "status": ""}
+{"n": 295, "claim": "AppSettingsNetworkService issues POST anonymousSignUp with {partner} and returns {accessToken, patientId}.", "status": ""}
+{"n": 296, "claim": "ServerAppSettings builds the init request body from PlatformInfo().asDictionary() plus partner and optional externalPartnerId, orderId, orderStatus, expiration in epoch milliseconds, and language from L10n.appLanguageKey.", "status": ""}
+{"n": 297, "claim": "AppSettingsNetworkService assembles and sends the init request with the authToken header and that body.", "status": ""}
+{"n": 298, "claim": "AppSettingsNetworkService.retrieveInitResponseData(from:) parses the 44 InitResponseData fields by hand out of a [String: Any].", "status": ""}
+{"n": 299, "claim": "ServerAppSettings.setInitValues registers cohortId as a Mixpanel super-property and calls AppConfiguration.updateInitValues(data:).", "status": ""}

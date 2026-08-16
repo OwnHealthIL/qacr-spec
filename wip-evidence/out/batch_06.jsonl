@@ -1,0 +1,150 @@
+{"n": 750, "claim": "partner/us.gradle line 5 wraps the script body in an if (name.contains(...)) guard, with an ordering comment about variant-name substring collisions.", "status": ""}
+{"n": 751, "claim": "AndroidDip/app/build.gradle.kts line 236 carries the ordering comment flagging the variant-name substring collisions (acryd vs acrFda vs acr, Minuteful vs MinutefulUs, dip vs dipyd).", "status": ""}
+{"n": 752, "claim": "FlowInitializationManager.kt lines 94 and 213 compare BuildConfig.FLAVOR_product as a string against acrFda and acryd in the /secure-status step.", "status": ""}
+{"n": 753, "claim": "NetworkService.kt line 155 sends BuildConfig.FLAVOR_server as the x-Healthy-env request header.", "status": ""}
+{"n": 754, "claim": "dip/model/Preferences.kt:82-85 wipes the shared preferences when SHARED_PREFS_VERSION is bumped.", "status": ""}
+{"n": 755, "claim": "dip/order/OrderManager.kt:52-53 uses EXAM_CACHE_VERSION to name the order cache directory.", "status": ""}
+{"n": 756, "claim": "TimerButtonView.kt:90-118 recomputes the visible countdown from System.currentTimeMillis() minus the persisted dippedAt timestamp, so it self-corrects from that timestamp.", "status": ""}
+{"n": 757, "claim": "Model.kt:45-52 defines the Redux store middleware that throws when the store is touched off the main thread.", "status": ""}
+{"n": 758, "claim": "ContentModule.kt:136-144 holds the ACR-specific safety list of five result strings excluded from A/B string substitution.", "status": ""}
+{"n": 759, "claim": "Quant.xcodeproj/project.pbxproj:2527-2584 declares ios-chat-services, ios-camera, ios-foundations, ios-views and iOS-ConfigurationFiles as remote SPM package references rather than local paths.", "status": ""}
+{"n": 760, "claim": "AndroidQacr/settings.gradle.kts:19-40 wires android.shared-urine-algo, android.shared-chat, android.shared-infra and android.shared-camera in through Gradle includeBuild.", "status": ""}
+{"n": 761, "claim": "Quant.xcodeproj/project.pbxproj line 2354 sets IPHONEOS_DEPLOYMENT_TARGET = 17.6 for the Quant app target.", "status": ""}
+{"n": 762, "claim": "Quant.xcodeproj/project.pbxproj line 2395 sets IPHONEOS_DEPLOYMENT_TARGET = 17.6 for the Quant app target's other build configuration.", "status": ""}
+{"n": 763, "claim": "Quant.xcodeproj/project.pbxproj line 2422 sets IPHONEOS_DEPLOYMENT_TARGET = 18.5 for a test target.", "status": ""}
+{"n": 764, "claim": "Quant.xcodeproj/project.pbxproj line 2441 sets IPHONEOS_DEPLOYMENT_TARGET = 18.5 for a test target.", "status": ""}
+{"n": 765, "claim": "Quant.xcodeproj/project.pbxproj line 2260 sets the project-level IPHONEOS_DEPLOYMENT_TARGET default to 18.5.", "status": ""}
+{"n": 766, "claim": "Quant.xcodeproj/project.pbxproj line 2322 sets the project-level IPHONEOS_DEPLOYMENT_TARGET default to 18.5.", "status": ""}
+{"n": 767, "claim": "Quant.xcodeproj/project.pbxproj line 2360 sets PRODUCT_BUNDLE_IDENTIFIER = io.healthy.Quant.", "status": ""}
+{"n": 768, "claim": "Quant.xcodeproj/project.pbxproj line 2401 sets PRODUCT_BUNDLE_IDENTIFIER = io.healthy.Quant, the same value as line 2360 with no configuration suffix.", "status": ""}
+{"n": 769, "claim": "Quant.xcodeproj/project.pbxproj line 2370 sets TARGETED_DEVICE_FAMILY = 1, iPhone only.", "status": ""}
+{"n": 770, "claim": "Quant.xcodeproj/project.pbxproj line 2410 sets TARGETED_DEVICE_FAMILY = 1, iPhone only.", "status": ""}
+{"n": 771, "claim": "Quant.xcodeproj/project.pbxproj line 2353 sets UISupportedInterfaceOrientations to UIInterfaceOrientationPortrait.", "status": ""}
+{"n": 772, "claim": "Quant.xcodeproj/project.pbxproj line 2347 sets INFOPLIST_KEY_LSApplicationCategoryType to public.app-category.medical.", "status": ""}
+{"n": 773, "claim": "Quant.xcodeproj/project.pbxproj line 2359 sets MARKETING_VERSION = 0.1.2.", "status": ""}
+{"n": 774, "claim": "Quant.xcodeproj/project.pbxproj line 2400 sets MARKETING_VERSION = 0.1.2.", "status": ""}
+{"n": 775, "claim": "Quant.xcodeproj/project.pbxproj line 2340 sets CURRENT_PROJECT_VERSION = 2.", "status": ""}
+{"n": 776, "claim": "Quant.xcodeproj/project.pbxproj line 2381 sets CURRENT_PROJECT_VERSION = 2.", "status": ""}
+{"n": 777, "claim": "BundleInfoProvider.swift:29 declares version() throws -> SemVer?, which reads CFBundleShortVersionString and CFBundleVersion.", "status": ""}
+{"n": 778, "claim": "DeviceInfoProvider.swift lines 18 and 24 read the app version into the x-healthy-device string.", "status": ""}
+{"n": 779, "claim": "RequestBuilder.swift:160 attaches the composed x-healthy-device header to the request.", "status": ""}
+{"n": 780, "claim": "Grepping Quant/ for minAppVersion, forceUpdate, endOfLife and blockFlow returns NOT FOUND, and nothing compares BundleInfoProvider.version() against a server-supplied minimum.", "status": "absent"}
+{"n": 781, "claim": "Searching the QACR iOS app for a device-model allow or deny list returns NOT FOUND.", "status": "absent"}
+{"n": 782, "claim": "Searching the QACR iOS app for SKStoreReviewController or any App Store update prompt returns NOT FOUND.", "status": "absent"}
+{"n": 783, "claim": "AndroidQacr/app/build.gradle.kts:28-33 sets minSdk = 26, targetSdk = 36, compileSdk = 36, versionCode = 5, versionName 1.0 and applicationId io.healthy.qacr.", "status": ""}
+{"n": 784, "claim": "AndroidQacr/app/build.gradle.kts:36-64 declares the flavour dimensions product (qacr) and environment (develop, staging, production), with .dev and .stg applicationIdSuffix values.", "status": ""}
+{"n": 785, "claim": "AndroidQacr/app/build.gradle.kts:68-75 defines a single healthy_debug signing config using storeFile ../healthy_debug.jks with keyPassword and storePassword both 123456.", "status": ""}
+{"n": 786, "claim": "AndroidQacr/app/build.gradle.kts:77-89 assigns signingConfigs[healthy_debug] to both the debug and release build types, and release sets isMinifyEnabled = false.", "status": ""}
+{"n": 787, "claim": "AndroidQacr/app/src/main/AndroidManifest.xml:5-7 declares uses-feature android.hardware.camera with android:required set to false.", "status": ""}
+{"n": 788, "claim": "PreScanFlowState.BlockFlow at app/src/main/java/io/healthy/qacr/model/State.kt:135-146 declares INVALID_APP_VERSION, INVALID_OS_VERSION, INVALID_DEVICE and END_OF_LIFE.", "status": ""}
+{"n": 789, "claim": "blockFlow at AndroidQacr/app/src/main/java/io/healthy/qacr/model/State.kt:102 is only a String? field, with no reducer case and no dispatch site outside State.kt.", "status": "scaffold"}
+{"n": 790, "claim": "Grepping Quant/ for AVCaptureDevice.authorizationStatus, requestAccess, AVAuthorizationStatus, jailbreak, jailbroken, batteryLevel, volumeAvailableCapacity, NWPathMonitor, Reachability, SecItem, Keychain and kSec returns zero matches.", "status": "absent"}
+{"n": 791, "claim": "LobbyView.swift:121 short-circuits the environment health check with guard !appConfiguration.isProduction else { return }.", "status": ""}
+{"n": 792, "claim": "The health check's failure path at Quant/Features/Lobby/LobbyView.swift:126 only logs a warning and never blocks the flow.", "status": ""}
+{"n": 793, "claim": "project.pbxproj:2348 sets INFOPLIST_KEY_NSCameraUsageDescription to the placeholder string Let me in!.", "status": ""}
+{"n": 794, "claim": "project.pbxproj:2389 sets INFOPLIST_KEY_NSCameraUsageDescription to the placeholder string Let me in!.", "status": ""}
+{"n": 795, "claim": "CameraViewModel.swift:138 calls cameraManager.start unconditionally, with no .denied branch.", "status": ""}
+{"n": 796, "claim": "MainScaffold.kt:97-111 defines hasCameraPermission() and a rememberLauncherForActivityResult(RequestPermission()) launcher.", "status": ""}
+{"n": 797, "claim": "MainScaffold.kt:179-197 gates both entry points on the camera permission.", "status": ""}
+{"n": 798, "claim": "MainScaffold.kt:224-245 shows the camera-permission denial dialog with an Open Settings deep link.", "status": ""}
+{"n": 799, "claim": "CameraViewModel.kt:425-427 defines checkCameraPermission(), which sets _cameraPermissionGranted from appUtils.hasCameraPermission().", "status": ""}
+{"n": 800, "claim": "ClientInfoProvider.kt:18-20 takes the emulator, ADB and installer checks as injected dependencies.", "status": ""}
+{"n": 801, "claim": "UpdateStateDependentAnalyticsProperties.kt:14 consumes ClientInfoProvider.", "status": ""}
+{"n": 802, "claim": "SyncManager.kt:69 consumes ClientInfoProvider.", "status": ""}
+{"n": 803, "claim": "DeviceReducer.kt:11 holds a reducer case for Actions.DeviceNotTrustworthy, which has no dispatch site anywhere outside reducers/.", "status": "scaffold"}
+{"n": 804, "claim": "DeviceState.isTrustedDevice at State.kt:387-389 stays true and nothing reads it to block the flow.", "status": "scaffold"}
+{"n": 805, "claim": "No connectivity or backend-reachability precheck was found in the QACR Android app.", "status": "absent"}
+{"n": 806, "claim": "No battery check was found in the QACR Android app.", "status": "absent"}
+{"n": 807, "claim": "PreScanFlowState.lowDiskSpaceSize: Long = 100L is declared at State.kt:109 and is never read.", "status": "scaffold"}
+{"n": 808, "claim": "QuantApp.swift:26-38 defines the root scene as AppShell with InfoSideMenuView and LobbyView.", "status": ""}
+{"n": 809, "claim": "LobbyViewModel.Destination at LobbyViewModel.swift:18-20 has exactly one case, .startExam, and no auth destination.", "status": ""}
+{"n": 810, "claim": "QuantApp.swift:54 supplies the token providers as hardcoded literals.", "status": ""}
+{"n": 811, "claim": "QuantApp.swift:58-63 defines the app's sole credential.", "status": ""}
+{"n": 812, "claim": "ConfigurationFields.callAsFunction at ConfigurationFields.swift:34-45 emits an Authorization: Bearer header with an empty token when .authToken is requested.", "status": ""}
+{"n": 813, "claim": "ExamProvider+QRValidator.swift:14 is the only place requesting .authToken, and that call site is itself commented out.", "status": ""}
+{"n": 814, "claim": "No phone entry, OTP, invite code, DOB, session token or login screen was found in the QACR iOS app.", "status": "absent"}
+{"n": 815, "claim": "ExamProvider.swift:37-42 declares the provider's four routes: user/add-exam, trace, image and validateColorBoardQr.", "status": ""}
+{"n": 816, "claim": "UserDefaultKey.accessTokenSubject is declared at AppConfiguration.swift:14 and never used.", "status": "scaffold"}
+{"n": 817, "claim": "NavGraph.kt:82 sets startDestination = Routes.HOME.", "status": ""}
+{"n": 818, "claim": "NavGraph.kt:25-39 declares the routes HOME, INSTRUCTIONS_WITH_PARAM, CAMERA, SETTINGS, DEBUG and GALLERY_WITH_PARAM, with no auth route.", "status": ""}
+{"n": 819, "claim": "State.kt:354-384 fully models AuthState, with phone number, session nonce and DateOfBirthVerificationState, and ResultsAuthState, with signup/login, biometric pin and secure token.", "status": ""}
+{"n": 820, "claim": "AuthState and ResultsAuthState are commented out of the root State at AndroidQacr/app/src/main/java/io/healthy/qacr/model/State.kt:20-30.", "status": ""}
+{"n": 821, "claim": "AppReducer.kt:14-24 keeps the authState and resultsAuthState reducer calls commented out.", "status": ""}
+{"n": 822, "claim": "ClientState at State.kt:35-58 keeps sessionToken, patientId and inviteCode.", "status": ""}
+{"n": 823, "claim": "ClientReducer.kt:52-68 handles UserAuthenticated, UserAuthenticatedWithAnonymousSignUp, InviteCodeUpdated and UpdateSessionToken.", "status": ""}
+{"n": 824, "claim": "ClientReducer.kt:119-120 defines the toBearerAuthenticationToken() and toJWTAuthenticationToken() helpers.", "status": ""}
+{"n": 825, "claim": "NetworkConfig.kt:42-50 hardcodes the same shared credential the iOS app uses.", "status": ""}
+{"n": 826, "claim": "APIKeys.Bootstrap.Response.consentURL is declared at APIKeys.swift:101 and never used.", "status": "scaffold"}
+{"n": 827, "claim": "InfoSideMenuView.swift:40-47 renders only a languageRow, a #if DEBUG debug section and a logo footer, with no Terms or Privacy link.", "status": ""}
+{"n": 828, "claim": "ClientState.ConsentData at State.kt:69-79 holds basicConsentStatus, teleHealthConsentStatus and pcpConsentStatus, each carrying approvalTimeStamp and updatedServer.", "status": ""}
+{"n": 829, "claim": "ClientReducer.kt:86-112 holds reducer cases for all six consent actions.", "status": ""}
+{"n": 830, "claim": "MainScaffold.kt:142-157 opens BuildConfig.TERMS_URL and BuildConfig.PRIVACY_URL in an external browser from the drawer.", "status": ""}
+{"n": 831, "claim": "DrawerContent.kt:40-52 renders the two drawer rows for terms and privacy.", "status": ""}
+{"n": 832, "claim": "ColorBoardQR.swift:31-42 parses the c: prefixed colour-board QR string, requiring 6 to 7 characters after the prefix and returning nil otherwise.", "status": ""}
+{"n": 833, "claim": "QRParser.swift:33-48 reads a QR code from a UIImage using CIDetector.", "status": ""}
+{"n": 834, "claim": "ExamService.swift:153-158 runs a post-capture sweep: when examData.colorBoardData.didDetectQR is false it iterates the captured frames calling QRParser.parse(image, type: .colorBoard).", "status": ""}
+{"n": 835, "claim": "ExamProvider+QRValidator.swift:9-19 defines the server route for colour-board QR validation.", "status": ""}
+{"n": 836, "claim": "ExamProvider+QRValidator.swift:24-50 maps HTTP 404 to .noQR, 409 to .flowMismatch and 412 to .usedKit.", "status": ""}
+{"n": 837, "claim": "ExamData.RequestPayload.ExamMetadata.colorBoardId at ExamData.swift:59-61 defaults to the string N/A when no colour-board ID is present.", "status": ""}
+{"n": 838, "claim": "CameraViewModel.swift:430 switches off live QR detection during capture with a false ? conditional.", "status": ""}
+{"n": 839, "claim": "didCapture(code:) at CameraViewModel.swift:438 is dead in practice because the camera's QR metadata output is permanently nil.", "status": ""}
+{"n": 840, "claim": "didParseCode at CameraViewModel.swift:454 is dead in practice because the camera's QR metadata output is permanently nil.", "status": ""}
+{"n": 841, "claim": "CameraViewModel.swift:540-543 sets foundColorboard from the algorithm scan status.", "status": ""}
+{"n": 842, "claim": "The whole body of validateColorboardQR() at ExamUploadOperation.swift:257-293 is commented out.", "status": ""}
+{"n": 843, "claim": "validateColorboardQR() ends at ExamUploadOperation.swift:292 by calling stepEnded(result: .success(nil)).", "status": ""}
+{"n": 844, "claim": "Grepping Quant/ for expiry, expiration and expiredKit returns NOT FOUND, so no kit expiry check exists.", "status": "absent"}
+{"n": 845, "claim": "ExamData.swift:22 sets self.examID = String(Int(Date().timeIntervalSince1970)), a second-resolution timestamp rather than a UUID.", "status": ""}
+{"n": 846, "claim": "AlgoRunner.kt:62 declares private const val COLOR_BOARD_ID_PREFIX = c:.", "status": ""}
+{"n": 847, "claim": "detectColorBoardId at AlgoRunner.kt:304-310 requires the c: prefix and strips it.", "status": ""}
+{"n": 848, "claim": "AlgoRunner.kt:148-159 runs detectColorBoardId(Strategy.Bytes(...)) while the algorithm processes a frame when scanSession?.colorBoardId is null, then dispatches Actions.AddColorBoardId(...).", "status": ""}
+{"n": 849, "claim": "qrDecodingOptimization at AlgoRunner.kt:511-520 reads the rectified frame files after the algorithm run.", "status": ""}
+{"n": 850, "claim": "AlgoRunner.kt:551-563 dispatches the fallback QR result and emits AnalyticsEvent.QRSecondaryExtraction.", "status": ""}
+{"n": 851, "claim": "ExamState.ScanSession.Error at State.kt:416 declares USED_KIT and NO_QR, both unreachable.", "status": "scaffold"}
+{"n": 852, "claim": "PreScanFlowState.urineExpirationEnabled at State.kt:111 is initialised from BuildConfig.URINE_EXPIRATION_ENABLED, which is false.", "status": "scaffold"}
+{"n": 853, "claim": "The consumer of urineExpirationEnabled at Model.kt:176-178 is commented out.", "status": ""}
+{"n": 854, "claim": "Actions.FullCup(timestamp) is declared at Actions.kt:92 with no reducer case and no dispatch site.", "status": "scaffold"}
+{"n": 855, "claim": "The BlockFlow strings EXPIRED_KIT, USED_ORDER and EXPIRED_ORDER exist at State.kt:141-144 with no producer.", "status": "scaffold"}
+{"n": 856, "claim": "Quant.xcodeproj/project.pbxproj:2560-2567 pins the ios-chat-services package, supplying HLTChatServices and HLTChatCore, by kind = revision with revision 3ab27505deca682d384523f5e997a92f2005ee66 rather than a version.", "status": ""}
+{"n": 857, "claim": "ChatFlowViewController.swift:13 declares final class ChatFlowViewController: BaseChatContainerViewController<Void, ChatError>.", "status": ""}
+{"n": 858, "claim": "ChatFlowViewController.swift:26 loads the chat script by the name chat_input_analysis.", "status": ""}
+{"n": 859, "claim": "ExamSession.swift:56-58 sets destination = .camera when the chat flow requests .showCamera.", "status": ""}
+{"n": 860, "claim": "ChatFlowViewModel.swift:82-110 declares the triggers INSTRUCTIONS_SCAN_TRIGGER, INSTRUCTIONS_SKIP_TRIGGER, CONTINUE_FLOW_TRIGGER and EXAM_COMPLETE_TRIGGER and the events SCAN_COMPLETED_EVENT, CONTINUE_TO_NEXT_CHAT_FLOW_EVENT, INSTRUCTIONS_SKIP_EVENT, plus UPLOAD_EXAM_RETRY_EVENT and SUCCESSFUL_UPLOAD_EVENT which are never emitted.", "status": ""}
+{"n": 861, "claim": "ExamSessionView.swift:15-23 presents the chat as the screen and the camera as a .sheet.", "status": ""}
+{"n": 862, "claim": "InstructionsChatViewModel.kt:90-131 builds ChatImpl with ChatItemProviderImpl(input = json, params = mapOf(withInstructionsSkip to withInstructionsSkip)).", "status": ""}
+{"n": 863, "claim": "InstructionsChatViewModel.kt:252-255 loads chat_input_instructions from the chat-scripts subfolder.", "status": ""}
+{"n": 864, "claim": "InstructionsChatViewModel.kt:208-223 routes INSTRUCTIONS_SCAN_TRIGGER to navigateToScan(), INSTRUCTIONS_SKIP_TRIGGER to handleSkipTrigger(), EXAM_COMPLETE_TRIGGER to navigateToHome(), and also handles CONTINUE_FLOW_TRIGGER.", "status": ""}
+{"n": 865, "claim": "soundToggled() at InstructionsChatViewModel.kt:229-232 is a stub containing only a TODO about implementing sound toggle analytics.", "status": ""}
+{"n": 866, "claim": "NavGraph.kt:21 imports the real ui/screens/settings/SettingsScreen.kt, not the 9-line empty ui/screens/SettingsScreen.kt composable.", "status": ""}
+{"n": 867, "claim": "project.pbxproj:1283 sets path = Localization with a trailing space in the directory name.", "status": ""}
+{"n": 868, "claim": "ChatFactory.swift:58-70 looks a string up in the ChatLocalizable table first and falls back to the Localizable table when the returned value equals the key.", "status": ""}
+{"n": 869, "claim": "SideMenuViewModel.swift:40-43 handles language switching by opening iOS Settings via UIApplication.openSettingsURLString.", "status": ""}
+{"n": 870, "claim": "InfoSideMenuView.swift:79 renders Text(App language) as a hardcoded English literal rather than a localized string.", "status": ""}
+{"n": 871, "claim": "InfoSideMenuView.swift:167 renders Text(Server Environment) as a hardcoded English literal.", "status": ""}
+{"n": 872, "claim": "InfoSideMenuView.swift:111 renders Text(Debug) as a hardcoded English literal.", "status": ""}
+{"n": 873, "claim": "No remote content download path was found anywhere in Quant/; all content is bundled.", "status": "absent"}
+{"n": 874, "claim": "BundledAssetsExtractor.kt:46-70 extracts assets/bundled_chat_assets/ into filesDir/cached_assets/ once per versionCode, wiping the old cache first.", "status": ""}
+{"n": 875, "claim": "QacrApplication.onCreate calls the bundled-assets extractor at QacrApplication.kt:80.", "status": ""}
+{"n": 876, "claim": "ChatAssetsManager.kt:14-16 resolves an asset to filesDir/cached_assets/ plus its relative path.", "status": ""}
+{"n": 877, "claim": "AndroidQacr/app/src/main/AndroidManifest.xml:24 sets android:localeConfig to @xml/locales_config and android:supportsRtl to true.", "status": ""}
+{"n": 878, "claim": "QacrApplication.kt:51 falls back to LanguageManager.HEBREW when the stored language preference is null.", "status": ""}
+{"n": 879, "claim": "ui/MainActivity.kt:58-81 applies a language change by restarting the app.", "status": ""}
+{"n": 880, "claim": "The BundledAssetsExtractor KDoc at lines 15-16 instructs the reader to place Firebase Storage assets in the bundled folder.", "status": ""}
+{"n": 881, "claim": "ExamUploadManager.swift:249-253 defines saveExamToDisk, which persists the exam.", "status": ""}
+{"n": 882, "claim": "ExamUploadManager.swift:239-243 defines loadExamFromDisk, which reads a persisted exam back.", "status": ""}
+{"n": 883, "claim": "ExamUploadManager.swift:257-277 defines readAllExamsIdFromDisk, which enumerates the exam-handler directory at startup.", "status": ""}
+{"n": 884, "claim": "Progress.swift:25-34 defines the upload step machine notStarted, sendExam, uploadTrace, validateColorboardQR, getResults, userStepsEnded, uploadFrames, runEnded, persisted with the exam.", "status": ""}
+{"n": 885, "claim": "ExamUploadOperation.start() at lines 35-42 resumes from exam.progress.step.", "status": ""}
+{"n": 886, "claim": "ExamService.populate(exam:) at ExamService.swift:79-100 copies the previous exam's trace and frames into the new exam.", "status": ""}
+{"n": 887, "claim": "saveBoundaryExamData at ExamService.swift:314-331 stores the carried-over trace and frames.", "status": ""}
+{"n": 888, "claim": "ExamBuilder.prepareForRescan() at ExamBuilder.swift:36-56 keeps capturedFrames, resets scanCount, deletes AlgoOutput.json and calls service.storeBoundaryFrameCount(previousFrameCount).", "status": ""}
+{"n": 889, "claim": "CameraViewModel.swift:332-341 observes AVCaptureSession.wasInterruptedNotification, interruptionEndedNotification and runtimeErrorNotification.", "status": ""}
+{"n": 890, "claim": "CameraViewModel.swift:360-409 publishes .interrupted(reason:), .interruptionEnded and .runtimeError(code:) and auto-restarts the session, with a special case for AVError.mediaServicesWereReset.", "status": ""}
+{"n": 891, "claim": "CameraViewController.swift:144-164 shows the camera interruption overlays.", "status": ""}
+{"n": 892, "claim": "CameraViewModel.handleCancelPressed() at lines 164-170 calls delegate?.cameraViewModelDidCancelCapture().", "status": ""}
+{"n": 893, "claim": "ExamBuilder.cameraViewModelDidCancelCapture() at ExamBuilder.swift:166-168 calls service.storeExamID(with: exam.examID), so the next ExamBuilder re-adopts the abandoned exam's frames.", "status": ""}
+{"n": 894, "claim": "ExamSession.cameraDidCancel() at ExamSession.swift:30-33 only clears the camera sheet.", "status": ""}
+{"n": 895, "claim": "ChatFlowViewController.swift:52-55 calls IdleTimerController.shared.acquire() to suppress screen idle during the chat.", "status": ""}
+{"n": 896, "claim": "ExamSessionView.swift:11 owns the session as @StateObject private var session = ExamSession().", "status": ""}
+{"n": 897, "claim": "didTapDismissButton() at ChatFlowViewController.swift:76-78 calls onDismiss(.failure(.cancelled)) immediately, with no confirmation step.", "status": ""}
+{"n": 898, "claim": "ExamUploadOperation.swift:54-55 handles the .notStarted branch with a fatalError reporting that the exam reached the notStarted state.", "status": ""}
+{"n": 899, "claim": "ExamUploadOperation.swift:100-101 handles the unknown next step with a fatalError reporting that the exam reached an unknown state.", "status": ""}

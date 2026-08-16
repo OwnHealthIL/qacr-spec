@@ -1,0 +1,150 @@
+{"n": 0, "claim": "HLTViews declares a platform floor of .iOS(.v15) in its Package.swift manifest.", "status": ""}
+{"n": 1, "claim": "HLTChatServices declares a platform floor of .iOS(.v15) in its Package.swift manifest.", "status": ""}
+{"n": 2, "claim": "HLTFoundations declares a platform floor of .iOS(.v13) in its Package.swift manifest.", "status": ""}
+{"n": 3, "claim": "ServerAppSettings.BlockFlow is an enum with cases customBlock, invalidDevice, invalidOsVersion, invalidAppVersion, expiredKit, endOfLife, usedOrder, orderNotFound, expiredOrder and unauthorizedPatient.", "status": ""}
+{"n": 4, "claim": "PreLoginCoordinator.handleSuccess handles the blockFlow cases .customBlock and .invalidAppVersion and falls through to .fatalError for every other case.", "status": ""}
+{"n": 5, "claim": "LobbyViewModel.canStartFlow() calls handle(...), which maps .invalidDevice to the .validDevice alert, .invalidOsVersion to .validOS, .invalidAppVersion to .validApp (deep-linking to the App Store via AppURL.External.store(forAppId:)), and also handles .expiredKit, .endOfLife and .unauthorizedPatient.", "status": ""}
+{"n": 6, "claim": "DipioApp+ServiceConfigurator uses the bundle app version SemVer for logging.", "status": ""}
+{"n": 7, "claim": "DipioApp+ServiceConfigurator resets launchCount when the app version indicates an upgrade.", "status": ""}
+{"n": 8, "claim": "AboutPageFactory builds the About page version string from the bundle app version.", "status": ""}
+{"n": 9, "claim": "DipioApp reads the App Store id from Natrium.Config.appId and calls fatalError in a release build when it is still the default -1.", "status": ""}
+{"n": 10, "claim": "DebuggerDetection is compiled out of SecurityDetectionManager's detection list in DEBUG builds.", "status": ""}
+{"n": 11, "claim": "JailbrokenDeviceDetectionFactory is the app-side adapter supplying the Info.plist, canOpenURL and fileExists providers to the detection.", "status": ""}
+{"n": 12, "claim": "PreLoginCoordinator.start() runs the security detection first and, on a positive result, shows the .jailbrokenDevice block screen without proceeding.", "status": ""}
+{"n": 13, "claim": "NetworkManager owns an NWPathMonitor and exposes internetReachable.", "status": ""}
+{"n": 14, "claim": "LobbyViewModel picks between the .serverError and .noNetwork alerts based on network reachability.", "status": ""}
+{"n": 15, "claim": "LobbyViewModel.canStartFlow() refuses to start a test unless ServerAppSettings.state is .finished.", "status": ""}
+{"n": 16, "claim": "DipUtils.isBatteryCharged() passes when battery level is above 5 percent or state is .charging, toggling isBatteryMonitoringEnabled around each read.", "status": ""}
+{"n": 17, "claim": "LobbyViewModel enforces the battery check, producing .lowBattery and the .battery alert.", "status": ""}
+{"n": 18, "claim": "DipUtils.diskSpaceAvailable() reads attributesOfFileSystem(forPath: NSHomeDirectory()) and compares systemFreeSize in MB against AppConfiguration.current.lowDiskSpaceSize.", "status": ""}
+{"n": 19, "claim": "AppConfiguration+PersistedSettings declares the lowDiskSpaceSize threshold with a default of 80 MB.", "status": ""}
+{"n": 20, "claim": "AppConfiguration applies the server's lowDiskSpaceSize field as an override of the local threshold.", "status": ""}
+{"n": 21, "claim": "LobbyViewModel enforces the disk-space check, producing .lowDiskSpace and the .diskSpace alert.", "status": ""}
+{"n": 22, "claim": "HLTCaptureAuthorizationProvider wraps AVCaptureDevice.authorizationStatus and requestAccess as isAuthorized, didDenyAuthorization and requestAuthorization.", "status": ""}
+{"n": 23, "claim": "DipUtils.cameraPermissionNeeded() is the negative form of the camera authorization check.", "status": ""}
+{"n": 24, "claim": "TestCoordinator passes the current camera authorization state into the chat as an input condition and injects the authorization-request closure.", "status": ""}
+{"n": 25, "claim": "InstructionsChatViewModel turns the camera grant/deny outcome into a chat event or the .deniedVideoCaptureAuthorization alert.", "status": ""}
+{"n": 26, "claim": "LobbyViewModel evaluates, in order, blockSubsequentTest, recent results, recent failure, ServerAppSettings.state, battery, disk, then fatalError if orderId is nil.", "status": ""}
+{"n": 27, "claim": "AuthenticationCoordinator sequences Onboarding, then phone verification, then date of birth conditionally.", "status": ""}
+{"n": 28, "claim": "AppCoordinator shows authentication when Natrium.Config.withAuthentication is true and authenticationHelper.isAuthenticated is false.", "status": ""}
+{"n": 29, "claim": "AuthenticationHelper.trySetAsUnauthorized() holds the AuthenticationState transitions and re-entry rules.", "status": ""}
+{"n": 30, "claim": "AppCoordinator.setActiveChildCoordinator() wires the getter/setter tuples AuthenticationHelper uses for persistence.", "status": ""}
+{"n": 31, "claim": "AuthenticationHelper exposes verifyPhoneNumber, verifyPinCode, fetchAccessToken, verifyInviteCode and createPatient.", "status": ""}
+{"n": 32, "claim": "AuthenticationCoordinator emits the multiplePatientsSameDevice event and routes to date of birth when the OTP succeeds with state .additionalIdentificationRequired.", "status": ""}
+{"n": 33, "claim": "AppConfiguration sets the session-only DobVerification from the server's isDOBVerified field.", "status": ""}
+{"n": 34, "claim": "AppCoordinator drops the DOB verification when the app returns to the foreground.", "status": ""}
+{"n": 35, "claim": "FlowCoordinator drops the DOB verification after it has been used.", "status": ""}
+{"n": 36, "claim": "ServerAppSettings calls anonymousSignUp to mint a token and patientId for targets whose withAuthentication is false.", "status": ""}
+{"n": 37, "claim": "AppSettingsNetworkService.BaseURL.anonymousSignUp is the endpoint constant for the anonymous signup call.", "status": ""}
+{"n": 38, "claim": "HealthyServerConfigurationFields.Key has .authToken, .tempToken and .secureToken, all mapped to the Authorization header with the value \"<tokenType> <token>\".", "status": ""}
+{"n": 39, "claim": "AppConfiguration takes tokenType from Natrium.Config.tokenType and re-latches it every time a new token is stored.", "status": ""}
+{"n": 40, "claim": "AppConfiguration.token is the accessor for authToken and tempToken, which live in the encrypted AppSessionInfo file rather than UserDefaults.", "status": ""}
+{"n": 41, "claim": "AppConfiguration exposes phoneNumber, which lives in the encrypted UserInfo file.", "status": ""}
+{"n": 42, "claim": "AppSettingsNetworkService detects a 401 on the init call.", "status": ""}
+{"n": 43, "claim": "ServerAppSettings turns the init 401 into authenticationState = .failed.", "status": ""}
+{"n": 44, "claim": "DataManager propagates the failed authenticationState.", "status": ""}
+{"n": 45, "claim": "LobbyViewModel surfaces the failed authentication state as the .automaticSignOut alert and a forced sign-out.", "status": ""}
+{"n": 46, "claim": "AppConfiguration.resetPatient() wipes patient state, preserving only dataVersion, launchTime, launchCount and installationID.", "status": ""}
+{"n": 47, "claim": "ConsentType has cases .basic, .teleHealth(.preTest|.postTest) and .shareResults, serialised as \"basic\", \"telehealth\" and \"shareResults\".", "status": ""}
+{"n": 48, "claim": "ConsentUploader POSTs consent/add with type and a millisecond timestamp plus the auth token, in both Combine and async variants.", "status": ""}
+{"n": 49, "claim": "ServerAppSettings inserts a .consentUploading step between flow-configuration and completion when withBasicConsentFlow is true and basicConsent.sentToServer is not true, marking it sent on success.", "status": ""}
+{"n": 50, "claim": "AppConfiguration+PersistedSettings persists basicConsent and teleHealthConsent.", "status": ""}
+{"n": 51, "claim": "AppConfiguration lets the server's init response override the policy document URLs.", "status": ""}
+{"n": 52, "claim": "AppConfiguration+PersistedSettings declares the persisted policy URL fields privacyPolicyURL, termsAndConditionsURL, consentURL, faqURL, telehealthConsentURL and telehealthPrivacyURL.", "status": ""}
+{"n": 53, "claim": "AuthenticationCoordinator opens the policy documents from onboarding.", "status": ""}
+{"n": 54, "claim": "AppConfiguration carries the server-supplied isTelehealthConsented field.", "status": ""}
+{"n": 55, "claim": "CameraViewModel attaches MetaData(supportedObjects: [.qr(didReceive:)]) to the CameraOutput only when AppConfiguration.current.readColorboardQr is true.", "status": ""}
+{"n": 56, "claim": "ExamBuilder.parseCode(from:) splits the scanned string on the literal \"c:\" and requires a 6-7 character tail.", "status": ""}
+{"n": 57, "claim": "ExamBuilder writes the parsed colorboard code into exam.examDataSubObject.colorBoardId.", "status": ""}
+{"n": 58, "claim": "ExamAPI re-scans the captured frames with QRDetector.find(in:) after the local algo when qrScanningOptimizationEnabled is on and no live QR was found, reporting the outcome as the qrSeconderyExtraction analytics event.", "status": ""}
+{"n": 59, "claim": "ExamSenderService.validateColorBoardQR(for:) makes the server-side colorboard QR validation call, its path constant declared at line 386.", "status": ""}
+{"n": 60, "claim": "ExamSenderHandler maps validateColorBoardQR errors onto order statuses: .expiredKit(kitExpiration) to order .expiredKit plus AppConfiguration.current.kitExpirationDate, .usedKit to .usedKit, .flowMismatch to .flowMismatch, .noQR to .noQR, each setting exam.isValidQR = false.", "status": ""}
+{"n": 61, "claim": "ExamSenderHandler models kit validity client-side as ValidColorBoard with valid, lastUsage, maxedOut, expired and general.", "status": ""}
+{"n": 62, "claim": "LobbyViewModel treats blockFlow == .expiredKit as a pre-test block.", "status": ""}
+{"n": 63, "claim": "Alert+AdditionalObjects declares the .expiredKit alert key.", "status": ""}
+{"n": 64, "claim": "FlowCoordinator.start() branches on orderStatus(): .pendingSymptoms to symptoms, .hasSymptoms and .expiredSymptoms to the questionnaire sender, .eligibility and .pendingEligibility to eligibility, and by default DOB validation, prescription engagement or the test.", "status": ""}
+{"n": 65, "claim": "FlowCoordinator's children are eligibility, test, symptoms, results, questionnaireSender, pcp, dateOfBirth and prescription.", "status": ""}
+{"n": 66, "claim": "ChatItemsDataProvider.initialItems() and groupedItems(byName:) resolve the starting chat groups against a params dictionary, selecting conditionally between groupNames and altGroupNames.", "status": ""}
+{"n": 67, "claim": "StringProvider.string(_:_:) calls remoteString(for:) into DataManager.shared.targetDataManager.abTestingManager?.text(for:) before falling back to the bundle.", "status": ""}
+{"n": 68, "claim": "ABTestingManager.text(for:) looks up the Split.io feature string_<localizationKey>, treats the treatment control as use-the-bundle, and otherwise decodes text out of the treatment's dynamic config.", "status": ""}
+{"n": 69, "claim": "ABTestingGatekeeper whitelists which localization keys may be overridden remotely.", "status": ""}
+{"n": 70, "claim": "HLTLocalizedString.tr looks up table Localizable and retries table DefaultLocalizable when the returned value equals the key.", "status": ""}
+{"n": 71, "claim": "ChatFactory's text resolver performs the same Localizable then DefaultLocalizable two-table fallback.", "status": ""}
+{"n": 72, "claim": "ServerAppSettings sends L10n.appLanguageKey as the language in the init call.", "status": ""}
+{"n": 73, "claim": "AppCoordinator reports the device locale as analytics.", "status": ""}
+{"n": 74, "claim": "ChatFactory's resolvers load the bundled per-target chat resources.", "status": ""}
+{"n": 75, "claim": "Searched the repo for any lint rule, test or tooling enforcing reading level or a controlled vocabulary, including .danger.yml; no such check exists.", "status": "absent"}
+{"n": 76, "claim": "OrderData.Status mirrors the server order-status vocabulary in 28 cases, including new, client_exam_created, boundary_condition, has_results, client_timeout, client_expired_urine_sample, expired_kit, used_kit, no_qr, pending_diagnosis, client_pending_pcp and flow_mismatch.", "status": ""}
+{"n": 77, "claim": "Order encodes itself into UserDefaults under the key \"flowManagerkey\" and reloads through Order.loadFromMemory().", "status": ""}
+{"n": 78, "claim": "DataManager calls Order.loadFromMemory() during init.", "status": ""}
+{"n": 79, "claim": "AppCoordinator observes the HealthyPublicConstant.Notification.orderIdUpdate notification posted on order changes.", "status": ""}
+{"n": 80, "claim": "ExamSenderManager.setupExamSenderManager() re-reads the exam directory under Application Support at launch and resumes via loadIDsDic(), readAllExamsIdFromDisk() and cleanBadExams().", "status": ""}
+{"n": 81, "claim": "ExamSenderHandler persists the exam's currentStep (ExamHandlerStatus) so upload resumes mid-sequence.", "status": ""}
+{"n": 82, "claim": "HealthyFilesDataProvider.saveFileForExam writes frames per exam into <ApplicationSupport>/.../<examId>/.", "status": ""}
+{"n": 83, "claim": "HLTUserStorageDataHandler.underApplicationSupport supplies the directory root for per-exam frame storage.", "status": ""}
+{"n": 84, "claim": "ExamSenderManager deletes the exam's frames on successful upload.", "status": ""}
+{"n": 85, "claim": "ExamAPI holds prevExamsId, prevColorBoardID, prevPhotosMetaData, prevTraceFile and prevFrameToUpload.", "status": ""}
+{"n": 86, "claim": "ExamAPI.isBoundary(algoOutput:isFirstExam:) passes when validFrames >= 2, or on a second attempt when validFrames >= AppConfiguration.current.minValidFrames.", "status": ""}
+{"n": 87, "claim": "CameraViewModel.handleCancelPressed() calls builder.handleCancelledExam() and emits .didCancel.", "status": ""}
+{"n": 88, "claim": "ExamAPI.saveCancelledExam(id:) only records prevExamsId.", "status": ""}
+{"n": 89, "claim": "InstructionsChatViewModel selects .cancelCritical or .cancelNotCritical from state.isAfterDipping when the chat is dismissed.", "status": ""}
+{"n": 90, "claim": "Alert+AdditionalObjects declares the .cancelCritical and .cancelNotCritical alert keys.", "status": ""}
+{"n": 91, "claim": "AppCoordinator.resetUITime() returns 10800 s when the order is .pendingPCP and 900 s otherwise.", "status": ""}
+{"n": 92, "claim": "AppCoordinator.willMoveToForeground() resets the UI by calling resetDOBVerification(), dismissing, popping to the active child coordinator and clearing the alert.", "status": ""}
+{"n": 93, "claim": "AppCoordinator begins a background task on didEnterBackground and polls it every second until backgroundTimeRemaining is under 10.", "status": ""}
+{"n": 94, "claim": "AppConfiguration.PersistedSettings is JSON-encoded into the single UserDefaults key \"AppConfiguration.PersistedSettings\" through the @UserDefault wrapper.", "status": ""}
+{"n": 95, "claim": "LobbyCoordinator calls UserDataCleaner.clearAll() on every lobby entry.", "status": ""}
+{"n": 96, "claim": "DipioApp+ServiceConfigurator removes the entire UserDefaults persistent domain at launch when Natrium.Config.dataVersion differs from the stored value.", "status": ""}
+{"n": 97, "claim": "MigrateUserDefaultsToDisk runs in didFinishLaunching with an assert on failure.", "status": ""}
+{"n": 98, "claim": "GlobalTimer invalidates the Timer on didEnterBackground and, on willEnterForeground, recomputes the remaining time from startTime, then either schedules a fresh timer or reports expiry immediately.", "status": ""}
+{"n": 99, "claim": "iosDip/.natrium.yml declares the build-time constants totalTestTime and waitTime with the Dip defaults 120.0 s and 55.0 s, overridden per ACR target to 180.0 s and 70.0 s elsewhere in the file.", "status": ""}
+{"n": 100, "claim": "TestCoordinator starts the timer with totalTestTime.", "status": ""}
+{"n": 101, "claim": "ExamBuilder.canAddFrame() returns elapsedTime >= AppConfiguration.current.waitTime.", "status": ""}
+{"n": 102, "claim": "TestCoordinator builds TimerButton.Data(actualRunTime: Int(waitTime), totalDisplayTime: Int(waitTime) + 5).", "status": ""}
+{"n": 103, "claim": "InstructionsChatViewModel feeds the TimerButton chat item its Data.", "status": ""}
+{"n": 104, "claim": "InstructionsChatViewModel starts the clock via timerRunner.start() on the .dipButtonTapped event.", "status": ""}
+{"n": 105, "claim": "TestCoordinator injects a hard-coded sampleValidTime of 900 seconds.", "status": ""}
+{"n": 106, "claim": "InstructionsChatViewModel timestamps the .urineButtonTapped moment and, when the dip tap comes more than 900 s later, sets order status .expiredUrineSample and shows the .expiredUrineSample alert instead of starting the test.", "status": ""}
+{"n": 107, "claim": "TestCoordinator.timerEnded raises the .timeout alert, sets order status .timeout and opens the timeout troubleshooting chat, gated by canPresentTimeoutAlert.", "status": ""}
+{"n": 108, "claim": "CameraViewModel.timerEnded calls builder.save(timeout: true) and stops the camera.", "status": ""}
+{"n": 109, "claim": "CameraViewModel checks on appear whether the timer has already expired.", "status": ""}
+{"n": 110, "claim": "TimeoutHandler.updateOrderStatus POSTs to updateOrderStatus/<orderId>.", "status": ""}
+{"n": 111, "claim": "TargetSpecificData+MinutefulKidney sets the ACR US TimeoutExamUploadConfig to .always.", "status": ""}
+{"n": 112, "claim": "ExamAPI.handleTimeout consumes the TimeoutExamUploadConfig.", "status": ""}
+{"n": 113, "claim": "ChatFactory.makeTimingResourceResolver() force-unwraps the bubble-timing interval and asserts when a key is missing.", "status": ""}
+{"n": 114, "claim": "AppCoordinator.appSetup() sets application.isIdleTimerDisabled = true.", "status": ""}
+{"n": 115, "claim": "ExamBuilder defines three fixed shots at file scope: torch at UIDevice.current.maxTorchLevel, torch at 0.1 (0.25 for the dip10 algo), and torch off.", "status": ""}
+{"n": 116, "claim": "CameraViewModel.didCapture(processedBuffer:configuration:) holds the per-frame gating loop.", "status": ""}
+{"n": 117, "claim": "Algorithm.h declares the Objective-C protocol HLTBaseScanResult, whose Swift name is BaseScanResult.", "status": ""}
+{"n": 118, "claim": "HealthyPublicConstant.swift carries a Swift extension on HLTBaseScanResult.", "status": ""}
+{"n": 119, "claim": "ScanStatistics, a private class inside CameraViewModel.swift, keeps a 5-second sliding window of statuses per torch level and computes predominantStatus.", "status": ""}
+{"n": 120, "claim": "CameraViewModel.didProcessImage holds the corrective feedback loops.", "status": ""}
+{"n": 121, "claim": "CameraViewState.Indicator.indicatorsForPoints derives the topLeft, topRight, bottomLeft and bottomRight indicators from the algo's detected corner points.", "status": ""}
+{"n": 122, "claim": "ExamAPI.asyncRunLocalAlgoAndSendExam calls __runAlgorithm(examId, examDir, configURL, images, points, &error, shouldRunLearnedRawModel) on a .userInitiated global queue and calls fatalError on error at line 188.", "status": ""}
+{"n": 123, "claim": "BoundaryError has cases colorBoundaryThreshold, colorBoundaryCondition, colorBoundaryNormalizer, focusError, missingOrBadStick, stickReflections, shadowBoundaryCondition, stickShadow, cannotExtractStick, cannotValidateStick, suspectedStickFaceDown and other.", "status": ""}
+{"n": 124, "claim": "Alert+AdditionalObjects declares the boundary alert keys .boundaryMissingOrMisplaced, .boundaryLight, .shadow, .boundaryOther, .focus, .colorNormalizer and .stickReflections.", "status": ""}
+{"n": 125, "claim": "ExamBuilder.saveFrame(image:at:) writes each frame asynchronously as PNG when AppConfiguration.current.sendPngImages is set and otherwise as JPEG at quality 1.0.", "status": ""}
+{"n": 126, "claim": "TestCoordinator enables the learned-RAW model only when the server flag localLearnedRawEnabled and the Split.io flag exam_algo_learnedRaw are both on.", "status": ""}
+{"n": 127, "claim": "CameraManager defaults its session preset to AVCaptureSession.Preset.hd1920x1080.", "status": ""}
+{"n": 128, "claim": "CameraManager uses a dedicated session queue and a dedicated output queue.", "status": ""}
+{"n": 129, "claim": "CameraViewModel selects the lens as .back(type: .wideAngle).", "status": ""}
+{"n": 130, "claim": "FrameSettings carries torchLevel, wbGains (.continues or .update(new:)) and exposure (.continues or .adjust(byMultiplier:)), applied through CameraManager.apply(settings:).", "status": ""}
+{"n": 131, "claim": "CameraViewModel calls CameraManager.apply(settings:) per frame.", "status": ""}
+{"n": 132, "claim": "CameraViewModel converts CameraError.failToUpdateTorchMode and .torchLevelUpdateFailure into the torchIssueMismatch and unableToTurnOnTorch analytics events.", "status": ""}
+{"n": 133, "claim": "CameraViewModel waits 0.15 s for torch spin-up before frames are accepted.", "status": ""}
+{"n": 134, "claim": "CameraManager.currentWhiteBalanceGains() reports red, green and blue gains, maxSupportedGain and whether device.whiteBalanceMode is .locked.", "status": ""}
+{"n": 135, "claim": "CameraViewModel gates whether manual white balance is offered to the algo on the server flag manualWhiteBalanceEnabled.", "status": ""}
+{"n": 136, "claim": "CameraManager returns a non-nil customExposureDuration only when device.exposureMode is .custom.", "status": ""}
+{"n": 137, "claim": "CameraViewModel passes cameraManager.customExposureDuration as the exposureTime argument of ExamBuilder.addFrame.", "status": ""}
+{"n": 138, "claim": "Searched CameraManager in the ios-camera HLTCameraModule package for an explicit focus-lock call; none exists.", "status": "absent"}
+{"n": 139, "claim": "CameraViewModel initialises CameraManagerConfiguration with .init(withGlobalToneMappingFlag: appConfiguration.withGlobalToneMappingFlag).", "status": ""}
+{"n": 140, "claim": "ExamBuilder.save() calls exam.updateManuallyDisablesLocalToneMappingFlag() to record whether local tone mapping was manually disabled.", "status": ""}
+{"n": 141, "claim": "The ACR camera path configures rawConfiguration: .disabled.", "status": ""}
+{"n": 142, "claim": "CameraManager.metadataOutput(...) handles the AVCaptureMetadataOutput QR objects.", "status": ""}
+{"n": 143, "claim": "NetworkManager routes retry and completion handling through SessionHelper.RetryHandler.", "status": ""}
+{"n": 144, "claim": "DataManager implements the didProcess and didFinish delegate hooks to feed the logger.", "status": ""}
+{"n": 145, "claim": "DataManager constructs the PlatformInfo whose description becomes the device-details header.", "status": ""}
+{"n": 146, "claim": "AppConfiguration exposes serverURL, authURL and umURL, resolved per environment by ServerEnvironment.info.", "status": ""}
+{"n": 147, "claim": "ExamSenderHandler declares ExamHandlerStatus with 14 cases and SendOrder with 5 orderings.", "status": ""}
+{"n": 148, "claim": "TargetSpecificData+MinutefulKidney sets ACR to SendOrder.results.", "status": ""}
+{"n": 149, "claim": "ExamSenderHandler defines the results ordering as notStarted, sendExam, uploadTrace, validateColorboardQR, getResults, getNextFlow, userStepsEnded, uploadFrames, runEnded.", "status": ""}
