@@ -208,3 +208,15 @@ Also worth keeping: the compression prompt in the batch runs was good and needs 
 line per citation, present tense, no markdown, run long rather than lose meaning, never merge two
 claims, never add an implication. The three completed outputs are a fair sample of what it
 produces.
+
+---
+
+## Data already collected (do not re-derive)
+
+Recorded on master in `PLAN.md`, which was retired once its six phases were done. Moved here,
+where the artefacts it describes actually live.
+
+- **2,859 candidates** from 3 atlases + 87 spec notes, each with citation, sentence, product, vault line.
+- **851 continuation citations** (bare `:2422`) resolved; **44 unresolvable** — listed in `wip-evidence/residual-unresolved.tsv`, a defect in the vault's writing.
+- **450 compressed rows** — all atlas-scoped, **zero** carry a requirement id, so none apply to SPEC-01.
+- **SPEC-01 scope:** 8 features, **28 requirements**. 88 candidates already cover **11** of them; **17 have no evidence at all**.
