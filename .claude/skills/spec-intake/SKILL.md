@@ -1,129 +1,178 @@
 ---
 name: spec-intake
-description: Ingest a new QACR-APP-SPEC-nn brief from the PM — trace it against the requirements, verify its "same as ACR" claims against the code evidence, emit feature files, and escalate what it leaves undecided. Use when a new spec document arrives, when asked to process or ingest a spec, or when checking whether a spec covers everything its features own.
+description: Publish a QACR-APP-SPEC-nn brief as feature files. Assembles the spec's dispositions, the requirements it covers, and the evidence rows already recorded, into one file per feature. Use when a new spec arrives in product/specs/, or when regenerating feature files after a spec or requirements revision.
 ---
 
 # Spec intake
 
-A `QACR-APP-SPEC-nn` brief states **departures** from the current ACR product, **open values**,
-and **confirmed as-is** decisions for a set of features. It does not state behaviour — its
-governing rule is that the current product is the specification.
+Turns one spec brief into one file per feature it covers.
 
-That rule has one failure mode, and catching it is the main reason this process exists.
+**This is assembly, not analysis.** The codebase survey was completed by the PM and the spec author
+before the spec was written. This repository publishes that result. It does not re-derive it.
 
-> **Where the two ACR platforms behave differently, "as-is" is undefined.** It resolves to
-> whichever platform the developer happened to read. Every such case needs an explicit departure
-> or it becomes a silent cross-platform divergence.
+> **The one rule.** Every sentence in a feature file is either a fixed heading from the layout
+> below, or copied from one of the four input files. If you are about to write a sentence that is
+> neither, stop — it does not belong in the output.
 
-This already happened once. `FR-RDY-007` — ACR iOS exempts a charging device from the battery
-check, ACR Android does not. It became departure D1 because someone had read both codebases.
-Step 4 below is that check, run mechanically.
+Consequence: running this twice on unchanged inputs produces byte-identical files. That is the
+correctness test, and it is at the end of this document.
 
-## Inputs
+## Inputs — the only files you read
 
 | | |
 |---|---|
-| The spec | `product/specs/QACR-APP-SPEC-nn.md` |
-| Requirements | `product/FR-01/requirements.json` |
-| Features | `product/EPIC-01/features.json` |
-| Code evidence | `evidence/behaviour.tsv` |
+| `product/specs/QACR-APP-SPEC-nn.md` | the brief |
+| `product/EPIC-01/features.json` | which features exist, which requirements each owns |
+| `product/FR-01/requirements.json` | requirement text, milestone |
+| `evidence/behaviour.tsv` | what the code does, cited |
 
-## Steps
+Nothing else. Not the vault, not the application repositories, not `git log`.
 
-### 1 · Register
+## Step 1 · Read the spec
 
-Place the spec in `product/specs/`. Read its header: document number, revision, status, the
-features it claims to cover, and its milestone spread. Record these — you will check them.
+From its header and traceability table, take: the features it covers, and for each requirement of
+those features, the disposition the spec gives it. Copy the disposition wording from the spec —
+do not restate it.
 
-### 2 · Coverage — does the spec answer for everything it covers?
-
-For each feature the spec names, pull its requirements from `features.json`. For each requirement,
-classify what the spec says about it:
+Four dispositions only:
 
 | | |
 |---|---|
-| **departure** | the spec states QACR must differ. Note the `D-n` reference |
-| **as-is** | the spec confirms the current product's behaviour stands |
-| **open** | the spec names it as an undecided value or question |
-| **silent** | the spec says nothing about it |
+| `as-is` | the spec confirms current behaviour stands |
+| `departure D-n` | the spec states QACR differs. Use the spec's own reference |
+| `open` | the spec names an undecided value or question |
+| `silent` | the spec says nothing about this requirement |
 
-**Report every `silent` requirement.** A silent requirement has no QACR intent, so nobody can
-build it — not because it is hard, but because nobody has said what it should do. Cross-check
-against the spec's own traceability table: if it lists a requirement the feature does not own, or
-omits one the feature does own, that is a defect in the spec.
+`silent` is assigned by set difference, not by judgement: the requirement is in `features.json`
+for a covered feature and does not appear in the spec.
 
-### 3 · Departures — are they backed by evidence?
+## Step 2 · Extract missing evidence
 
-Each departure names the requirements it changes. For each, query `evidence/behaviour.tsv`:
+For each requirement of the covered features, check whether `evidence/behaviour.tsv` has rows.
+
+If some have none, run the extractor scoped to those ids only:
 
 ```
-grep '^FR-XXX-NNN' evidence/behaviour.tsv
+python3 tools/extract_behaviour_candidates.py /tmp/candidates.jsonl
 ```
 
-**Zero rows means the departure is unverified against the code.** The spec is asserting something
-about what the current product does, and nothing in this repo confirms it. That is not a blocker,
-but it must be recorded — SPEC-01's D1 and D2 both landed on requirements with no evidence at all.
+Compress each candidate's sentence into a one-line claim, append the rows to `behaviour.tsv`,
+update `coverage.tsv`. Cap at 5 concurrent agents.
 
-### 4 · As-is claims — the check that matters
+**Scope:** only requirements owned by features this spec covers, and only those with zero rows.
+Never the whole corpus.
 
-For every requirement the spec confirms **as-is**, compare its `acr-ios` and `acr-android` rows.
+If the vault carries nothing for a requirement, it keeps zero rows. That is a valid outcome and
+the feature file states it.
 
-Three outcomes:
+Skip this step entirely when every requirement already has rows.
 
-- **They agree** → as-is is well defined. Nothing to do.
-- **They disagree** → **as-is is undefined. Raise it.** State both behaviours and ask the PM which
-  QACR takes, or whether this needs a departure. This is the D1 case.
-- **One or both have no rows** → the claim is unverified. Say so; do not assume it holds.
+## Step 3 · Write one file per feature
 
-Run this for every as-is requirement, not a sample. It is cheap and it is the highest-value check
-available before code is written.
+`features/<epic>/<feature>.md`. Exactly this layout, in this order, nothing added:
 
-### 5 · Emit feature files
+```markdown
+# F01.4 — Pre-test resource and permission checks
 
-One file per feature covered, at `features/<epic>/<feature>.md`.
+E01 · M1, M3 · iOS, Android · [QACR-APP-SPEC-01](../../product/specs/QACR-APP-SPEC-01 Rev1.2.md)
 
-**Never restate what the spec says.** Link to it. A feature file adds only what the spec does not
-have:
+**Spec disposition:** as-is except D1 · U1 open
 
-- the requirements it owns, as ids, with each one's disposition from step 2
-- the relevant rows from `evidence/behaviour.tsv` — what the code does today, cited
-- the per-platform task
-- the acceptance criteria, one per testable statement, marked automatable or manual with a reason
+## Requirements owned
 
-If you find yourself copying a sentence out of the spec, stop. That is how the two drift apart.
+| Requirement | Milestone | Disposition | Evidence rows |
+|---|---|---|---|
+| FR-RDY-009 | M1 | as-is | 13 |
+| FR-RDY-007 | M3 | departure D1 | 0 |
 
-### 6 · Escalate
+## What the vault records about the code
 
-Everything unresolved goes to `decisions/`, one file per question:
+### FR-RDY-009
 
-```yaml
----
-id: D-nn
-raised_on: <date>
-raised_against: QACR-APP-SPEC-nn Rev n.n
-affects: [FR-XXX-NNN]
-blocks: [F0n.n]
-owner: Product
-status: open        # open -> sent -> answered -> closed
----
+**acr-android**
+
+- **present** — <claim, byte-for-byte from behaviour.tsv> — `<citation>`
+
+**acr-ios**
+
+- ...
+
+### FR-RDY-007
+
+No rows recorded.
+
+## Not covered by this spec
+
+FR-XXX-nnn, FR-YYY-nnn
+
+## Provenance
+
+QACR-APP-SPEC-01 Rev 1.2 · FR-01 Rev 1.19 · EPIC-01 Rev 1.13
 ```
 
-Then the question, what makes it a question, and what happens if it is not answered. When the
-answer comes back, record it **verbatim** and set `status: answered`.
+**Field sources, so nothing is invented:**
 
-Never resolve one of these yourself by picking the more likely reading.
+| Field | From |
+|---|---|
+| title, epic, milestones, domains | `features.json` |
+| requirement list and its order | `features.json`, in its own order |
+| milestone per requirement | `requirements.json`, rendered `M<n>` — the file stores `1`, the column shows `M1` |
+| feature-level spec disposition | the spec's own line for this feature, verbatim. Omit the line if the spec gives none |
+| disposition | the spec |
+| evidence row count | `behaviour.tsv`, counted |
+| product grouping | `behaviour.tsv` `product` column, alphabetical |
+| status, claim, citation | `behaviour.tsv`, copied verbatim |
+| row order within a product | as they appear in `behaviour.tsv` |
+| "Not covered" list | set difference, ascending |
 
-## Report
+**Fixed strings.** A requirement with no rows gets exactly `No rows recorded.` A feature where the
+spec covers everything gets exactly `Nothing.` under *Not covered*. Do not vary the wording.
 
-- Coverage per feature: departures / as-is / open / **silent**
-- Every as-is claim where the two ACR platforms disagree — **lead with these**
-- Every departure with no evidence rows
-- Requirements the spec references that its features do not own, or vice versa
-- Feature files written, decisions raised
+**Never** paste requirement text — reference by id. `product/` holds the wording.
 
-## Never
+## Step 4 · Commit and open a PR
 
-- Fill in a QACR intent by inference from what ACR does. That is the failure this exists to catch.
-- Copy requirement text into a feature file — `product/` holds the current wording.
-- Add an acceptance criterion for behaviour the spec has not stated.
-- Treat a silent requirement as as-is. Silence is not a decision.
+```
+git checkout -b spec/SPEC-nn
+git add features/ evidence/
+git commit -m "SPEC-nn: feature files for <features>"
+git push -u origin spec/SPEC-nn
+```
+
+PR body: the features written, requirement count per disposition, how many rows were extracted in
+step 2, and any requirement that ended with zero rows.
+
+## Do not
+
+These are the three ways this has gone wrong before. Each is a hard stop, not a judgement call.
+
+1. **Do not open the application repositories.** Not `iosDip`, `AndroidDip`, `AndroidQacr` or
+   `urine.com.ios-qacr-app`, not to verify a row, not to fetch a code excerpt, not at a pinned
+   commit. `behaviour.tsv` is the record. If a row looks wrong, say so in the PR body and leave it.
+2. **Do not compare the platforms.** Rows from `acr-ios` and `acr-android` are presented under
+   separate headings and never characterised against each other. A difference between them is data
+   the reader can see, not a finding to report. Do not write "platforms disagree", "diverges",
+   "inconsistent", or any equivalent.
+3. **Do not write to `decisions/`.** That folder is for questions Product raises. Nothing this
+   skill produces belongs there.
+
+Also: do not summarise a set of rows, do not add a section the layout does not list, and do not
+add commentary to the disposition column.
+
+## Self-check before committing
+
+Run the skill twice on unchanged inputs.
+
+```
+git diff --stat -- features/
+```
+
+**Empty diff, or the run is wrong.** A non-empty diff means something in the output came from
+judgement rather than from an input file — find it and remove it.
+
+Then confirm:
+
+- every citation in a new row resolves: `python3 tools/check_citations.py`
+- every requirement of every covered feature appears exactly once in its feature file
+- `decisions/` is unchanged
+- no file outside `features/` and `evidence/` was modified

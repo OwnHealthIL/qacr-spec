@@ -21,15 +21,17 @@ qacr-spec/
 │   ├── FR-01/                QACR-APP-FR-01 Rev1.19.docx + requirements.json
 │   ├── EPIC-01/              QACR-APP-EPIC-01 Rev1.13.docx + Board.html + features.json
 │   └── specs/                QACR-APP-SPEC-nn briefs, as the PM writes them
-├── features/                 one file per specified feature          — EMPTY
-├── evidence/                 what the code does today, with citations — pins.yaml only
-├── decisions/                questions only Product can close         — EMPTY
-└── .claude/skills/           spec-intake, the process in SDLC.md made runnable
+├── features/                 one file per specified feature — E01, from SPEC-01
+├── evidence/                 what the code does today, cited — 2,855 rows over 83 requirements
+├── decisions/                questions only Product can close — empty
+├── tools/                    the parser, the citation checker, the vault extractor
+└── .claude/skills/           spec-intake — SDLC.md steps 1–5, made runnable
 ```
 
-`features/`, `decisions/` and most of `evidence/` are **empty because the work has not been done
-yet — not because it is missing or lost**. Each folder's README says what fills it and in what
-format. The evidence extraction is under way on the `wip/evidence-extraction` branch.
+`evidence/behaviour.tsv` covers 83 of 241 requirements — the ones the vault carries evidence for.
+`evidence/coverage.tsv` records the other 158 as `no-evidence-found`, which means the vault has
+none, not that the code does nothing. `decisions/` is empty because Product has raised no open
+question here yet. Only SPEC-01 has been published, so `features/` holds E01 alone.
 
 ### `product/`
 
@@ -51,9 +53,10 @@ claim, it is a recollection. "ACR already does this" is not usable; `iosDip/Dip/
 ExamBuilder.swift:8-12` is. Citations are recorded against a known commit — see
 `evidence/pins.yaml`.
 
-**3. A feature file never restates what a spec says.** It links to the spec and adds only three
-things the spec does not have: the code evidence, the per-platform task, and the acceptance
-criteria. If you find yourself copying a sentence out of a spec, link to it instead.
+**3. A feature file never restates what a spec says.** It links to the spec and adds only what the
+spec does not have: the requirements it owns, and the evidence rows for them. Every line has a
+named source file, which is why regenerating one produces the same bytes. It holds no task and no
+acceptance criteria — a developer writes those at his desk.
 
 **4. The reasoning lives in the Obsidian vault, not here.** This repository holds conclusions in a
 form you can act on. The argument that produced them — why a requirement was classified as it was,

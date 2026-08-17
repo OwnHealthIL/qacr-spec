@@ -1,9 +1,9 @@
 # How work moves through this repository
 
-From a spec arriving to code merged. Seven steps; the order matters, because each one is a check
-that gets much more expensive to run later.
+From a spec arriving to a feature file a developer can build from. Five steps; the order matters,
+because each one is a check that gets much more expensive to run later.
 
-The mechanical version of steps 1–6 is the `spec-intake` skill in `.claude/skills/spec-intake/`.
+The mechanical version of steps 1–5 is the `spec-intake` skill in `.claude/skills/spec-intake/`.
 Run it rather than doing this by hand.
 
 ---
@@ -52,34 +52,42 @@ point at real code. That checks the citations, not the reading of them.
 
 ## 4 · Write the feature file
 
-One file per feature, at `features/<epic>/<feature>.md`.
+One file per feature, at `features/<epic>/<feature>.md`. This is assembly, not authorship: the
+`spec-intake` skill produces it, and every line in it is copied from the spec, `features.json`,
+`requirements.json` or `evidence/behaviour.tsv`.
 
-A feature file **never restates what the spec says.** It links to the spec and adds only the three
-things the spec does not have:
+A feature file holds four things:
 
-1. the requirements it owns, by id, each with its disposition from step 2
-2. the evidence rows — what the code does today, cited `file:line`
-3. the per-platform task and the acceptance criteria
+1. the feature's spec disposition, verbatim from the brief
+2. the requirements it owns, each with its milestone, disposition, and evidence-row count
+3. the evidence rows themselves — what the code does today, per product, cited `file:line`
+4. the requirements of this feature the spec says nothing about
 
-If you are copying a sentence out of the spec, stop and link instead. Two copies of a statement
-become two statements.
+It holds no task, no acceptance criteria, and no comparison between platforms. Those were tried
+and removed: the task is judgement a developer makes at his desk, and the comparison is work the
+PM and the spec author completed before the brief was written.
 
-## 5 · Derive the per-platform tasks
+Because every line has a named source, running the skill twice produces byte-identical files. If
+it does not, something in the output came from judgement rather than from an input.
 
-iOS and Android are separate tasks against the same requirement ids, because the starting points
-differ — often sharply. Write each one against what that platform actually has today, and name the
-divergences that are sanctioned versus the ones that are defects.
+## 5 · Open a PR
 
-## 6 · Build, with tests tagged by requirement id
+The skill branches, commits and pushes. A human reads the PR before it reaches the team — chiefly
+to confirm the right features were covered and nothing appeared that has no source.
 
-Every acceptance criterion is testable or it is not a criterion. Tag each test with the requirement
-id it demonstrates, so the traceability the submission needs is a query rather than a
-reconstruction. Mark a criterion manual only with a reason — needs a real kit, needs torch
-hardware, needs a person to read a screen.
+---
 
-## 7 · Record the evidence
+## After the repository
 
-New rows for what the code now does, cited, against the commit recorded in `evidence/pins.yaml`.
+What happens next is not this repository's process, but it is what the repository is for.
+
+A developer opens the feature file, reads what the spec says to build and what the code does
+today, and writes the per-platform work himself. Tests carry the requirement id they demonstrate,
+so traceability is a query rather than a reconstruction. A criterion is marked manual only with a
+reason — needs a kit, needs hardware, needs a person to read a screen.
+
+If a particular feature turns out to need its task written down, someone writes it in that one
+file, in a section the skill does not touch. Not for all 82 up front.
 
 ---
 
@@ -99,3 +107,5 @@ question, and what happens if nobody answers. When the answer arrives, record it
   is a fork.
 - Adding an acceptance criterion for behaviour no spec has stated.
 - Treating a silent requirement as as-is.
+- Comparing the two ACR platforms against each other, or opening an application repository to
+  verify a row. `evidence/behaviour.tsv` is the record.
