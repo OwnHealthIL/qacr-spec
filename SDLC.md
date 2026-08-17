@@ -52,9 +52,10 @@ point at real code. That checks the citations, not the reading of them.
 
 ## 4 · Write the feature file
 
-One file per feature, at `features/<epic>/<feature>.md`. This is assembly, not authorship: the
-`spec-intake` skill produces it, and every line in it is copied from the spec, `features.json`,
-`requirements.json` or `evidence/behaviour.tsv`.
+One file per feature, at `features/<epic>/<feature>.md`. This is assembly, not authorship:
+`tools/build_feature_files.py` produces it — the `spec-intake` skill runs that script — and every
+line in it is copied from the spec, `features.json`, `requirements.json` or
+`evidence/behaviour.tsv`.
 
 A feature file holds four things:
 

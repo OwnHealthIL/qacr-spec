@@ -10,12 +10,12 @@ Turns one spec brief into one file per feature it covers.
 **This is assembly, not analysis.** The codebase survey was completed by the PM and the spec author
 before the spec was written. This repository publishes that result. It does not re-derive it.
 
-> **The one rule.** Every sentence in a feature file is either a fixed heading from the layout
-> below, or copied from one of the four input files. If you are about to write a sentence that is
-> neither, stop — it does not belong in the output.
+> **The one rule.** You do not write a feature file. `tools/build_feature_files.py` writes it, and
+> every line it emits is either a fixed heading or a value copied from one of the four input files.
+> If you are about to type markdown into `features/`, stop — that is the script's job.
 
-Consequence: running this twice on unchanged inputs produces byte-identical files. That is the
-correctness test, and it is at the end of this document.
+Consequence: running it twice on unchanged inputs produces byte-identical files, in this session or
+any later one. That is the correctness test, and it is at the end of this document.
 
 ## Inputs — the only files you read
 
@@ -46,6 +46,13 @@ Four dispositions only:
 `silent` is assigned by set difference, not by judgement: the requirement is in `features.json`
 for a covered feature and does not appear in the spec.
 
+**Record what you read in the `SPECS` table of `tools/build_feature_files.py`** — one entry per
+brief, holding its id, its file, its provenance line, its departures keyed by the requirement each
+one names as its driver, and per covered feature the brief's own disposition wording and the
+requirements it answers for. That table is the whole of the judgement in this process. Everything
+after it is mechanical, which is why it lives in the repository and is reviewed in the PR rather
+than being re-read from the brief each time.
+
 ## Step 2 · Extract missing evidence
 
 For each requirement of the covered features, check whether `evidence/behaviour.tsv` has rows.
@@ -67,14 +74,28 @@ the feature file states it.
 
 Skip this step entirely when every requirement already has rows.
 
-## Step 3 · Write one file per feature
+## Step 3 · Build the feature files
 
-`features/<epic>/<feature>.md`. Exactly this layout, in this order, nothing added:
+```
+python3 tools/build_feature_files.py SPEC-nn
+```
+
+One file per covered feature, at `features/<epic>/<feature>.md`. The script writes them; you do
+not. Do not hand-edit what it emits and do not reproduce its output by writing markdown yourself —
+a file written by hand is a file no future session can reproduce, which is the whole guarantee.
+
+If a file comes out wrong, the fault is in one of the four inputs or in the step 1 `SPECS` entry.
+Fix it there and run again.
+
+The rest of this step is documentation of what the script emits, so you can read a feature file
+and know where every line in it came from.
+
+### The layout it produces
 
 ```markdown
 # F01.4 — Pre-test resource and permission checks
 
-E01 · M1, M3 · iOS, Android · [QACR-APP-SPEC-01](../../product/specs/QACR-APP-SPEC-01 Rev1.2.md)
+E01 · M1, M3 · iOS, Android · [QACR-APP-SPEC-01](../../product/specs/QACR-APP-SPEC-01%20Rev1.2.md)
 
 **Spec disposition:** as-is except D1 · U1 open
 
@@ -110,15 +131,16 @@ FR-XXX-nnn, FR-YYY-nnn
 QACR-APP-SPEC-01 Rev 1.2 · FR-01 Rev 1.19 · EPIC-01 Rev 1.13
 ```
 
-**Field sources, so nothing is invented:**
+### Where each field comes from
 
 | Field | From |
 |---|---|
 | title, epic, milestones, domains | `features.json` |
 | requirement list and its order | `features.json`, in its own order |
 | milestone per requirement | `requirements.json`, rendered `M<n>` — the file stores `1`, the column shows `M1` |
-| feature-level spec disposition | the spec's own line for this feature, verbatim. Omit the line if the spec gives none |
-| disposition | the spec |
+| feature-level spec disposition | the `SPECS` entry, verbatim from the brief. The line is omitted when the brief gives none |
+| disposition | the `SPECS` entry: its `departures` map, else `as-is`, else `silent` by set difference |
+| header link and provenance line | the `SPECS` entry |
 | evidence row count | `behaviour.tsv`, counted |
 | product grouping | `behaviour.tsv` `product` column, alphabetical |
 | status, claim, citation | `behaviour.tsv`, copied verbatim |
@@ -126,18 +148,23 @@ QACR-APP-SPEC-01 Rev 1.2 · FR-01 Rev 1.19 · EPIC-01 Rev 1.13
 | "Not covered" list | set difference, ascending |
 
 **Fixed strings.** A requirement with no rows gets exactly `No rows recorded.` A feature where the
-spec covers everything gets exactly `Nothing.` under *Not covered*. Do not vary the wording.
+spec covers everything gets exactly `Nothing.` under *Not covered*. The script emits these; do not
+vary them by hand.
 
-**Never** paste requirement text — reference by id. `product/` holds the wording.
+**Requirement text never appears** — requirements are referenced by id, and `product/` holds the
+wording.
 
 ## Step 4 · Commit and open a PR
 
 ```
 git checkout -b spec/SPEC-nn
-git add features/ evidence/
+git add features/ evidence/ tools/build_feature_files.py
 git commit -m "SPEC-nn: feature files for <features>"
 git push -u origin spec/SPEC-nn
 ```
+
+The `SPECS` entry goes in the same commit as the files it produced, so a reviewer can check the
+output against what the brief was read to say.
 
 PR body: the features written, requirement count per disposition, how many rows were extracted in
 step 2, and any requirement that ended with zero rows.
@@ -156,14 +183,17 @@ These are the three ways this has gone wrong before. Each is a hard stop, not a 
 3. **Do not write to `decisions/`.** That folder is for questions Product raises. Nothing this
    skill produces belongs there.
 
-Also: do not summarise a set of rows, do not add a section the layout does not list, and do not
-add commentary to the disposition column.
+Also: do not summarise a set of rows, do not add a section the layout does not list, do not add
+commentary to the disposition column, and do not edit a file the script emitted — change the input
+and run it again.
 
 ## Self-check before committing
 
-Run the skill twice on unchanged inputs.
+Stage the first run, then run the script a second time on unchanged inputs.
 
 ```
+git add features/
+python3 tools/build_feature_files.py SPEC-nn
 git diff --stat -- features/
 ```
 
@@ -175,4 +205,4 @@ Then confirm:
 - every citation in a new row resolves: `python3 tools/check_citations.py`
 - every requirement of every covered feature appears exactly once in its feature file
 - `decisions/` is unchanged
-- no file outside `features/` and `evidence/` was modified
+- no file outside `features/`, `evidence/` and `tools/build_feature_files.py` was modified

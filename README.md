@@ -24,7 +24,8 @@ qacr-spec/
 ├── features/                 one file per specified feature — E01, from SPEC-01
 ├── evidence/                 what the code does today, cited — 2,855 rows over 83 requirements
 ├── decisions/                questions only Product can close — empty
-├── tools/                    the parser, the citation checker, the vault extractor
+├── tools/                    the parser, the citation checker, the vault extractor,
+│                             the feature-file builder
 └── .claude/skills/           spec-intake — SDLC.md steps 1–5, made runnable
 ```
 
