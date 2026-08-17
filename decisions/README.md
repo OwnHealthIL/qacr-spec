@@ -34,6 +34,6 @@ files it unblocks.
 
 ## The two that already exist elsewhere
 
-SPEC-01 carries departures D1 (battery check — the platforms disagree) and D2 (configuration set
+SPEC-01 carries departures D1 (battery check) and D2 (configuration set
 travels with the test data). They are recorded in the spec itself rather than here, because the PM
 resolved them before the brief was issued. Anything the PM has *not* resolved comes here.

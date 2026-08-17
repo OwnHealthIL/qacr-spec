@@ -106,7 +106,8 @@ question, and what happens if nobody answers. When the answer arrives, record it
   different chemistry. Prior art is evidence, not a decision.
 - Copying requirement text out of `product/` — that document holds the current wording, and a copy
   is a fork.
-- Adding an acceptance criterion for behaviour no spec has stated.
+- Adding an acceptance criterion for behaviour no spec has stated — including at a developer's
+  desk.
 - Treating a silent requirement as as-is.
 - Comparing the two ACR platforms against each other, or opening an application repository to
   verify a row. `evidence/behaviour.tsv` is the record.
