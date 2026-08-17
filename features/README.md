@@ -1,10 +1,23 @@
 # features/
 
-One file per specified feature. **Empty because no spec has been ingested yet — not because the
-files are missing.**
+One file per specified feature, written when a spec covering it arrives. It is what a developer
+opens at the start of a task.
 
-A feature file is written after a spec covering that feature arrives, by step 4 of `SDLC.md` (or
-the `spec-intake` skill). It is the thing a developer opens at the start of a task.
+Currently: `E01`, eight features, from `QACR-APP-SPEC-01 Rev 1.2`.
+
+## How they are made
+
+Not by hand. `tools/build_feature_files.py` emits them, driven by the `spec-intake` skill:
+
+```
+python3 tools/build_feature_files.py SPEC-01
+```
+
+Every line has a named source — the spec, `product/EPIC-01/features.json`,
+`product/FR-01/requirements.json`, or `evidence/behaviour.tsv`. Nothing is judged, so running it
+twice produces byte-identical files. Delete them all and rebuild: you get the same bytes back.
+
+Do not hand-edit one. The next run overwrites it.
 
 ## Layout
 
@@ -12,28 +25,32 @@ the `spec-intake` skill). It is the thing a developer opens at the start of a ta
 features/<epic>/<feature>.md      e.g.  features/E01/F01.4.md
 ```
 
-Epics are `E01`–`E15` and features are numbered within their epic — see
-`product/EPIC-01/features.json`, which is the authority for which requirements a feature owns.
+`product/EPIC-01/features.json` is the authority for which requirements a feature owns.
 
 ## What a feature file contains
 
-**Only what the spec does not already say.** It links to the spec; it never restates it.
+Only what the spec does not already say. It links to the spec; it never restates it.
 
-1. **Header** — the feature id and title, its epic, its milestone, the domains it touches, and a
-   link to the spec that covers it.
-2. **Requirements owned** — by id, each with its disposition from the spec: departure (with its
-   `D-n` reference), as-is, open, or silent. Never the requirement text; `product/` holds the
-   current wording.
-3. **What the code does today** — the relevant rows from `evidence/behaviour.tsv`, per platform,
-   each with its citation. Where the two ACR platforms disagree on an as-is requirement, that
-   disagreement is stated here and a decision is raised.
-4. **Per-platform task** — iOS and Android separately, written against what that platform actually
-   has today.
-5. **Acceptance criteria** — one per testable statement, each marked automatable or manual with a
-   reason.
+1. **Header** — feature id and title, epic, milestones, domains, and a link to the spec.
+2. **Spec disposition** — the brief's own line for this feature, verbatim.
+3. **Requirements owned** — by id, each with its milestone, its disposition from the spec
+   (departure with its `D-n` reference, as-is, open, or silent), and its evidence-row count.
+   Never the requirement text; `product/` holds the current wording.
+4. **What the vault records about the code** — the rows from `evidence/behaviour.tsv`, grouped by
+   product, each with its citation. A requirement with no rows reads `No rows recorded.`
+5. **Not covered by this spec** — requirements of this feature the spec is silent on.
+
+## What it does not contain
+
+**No per-platform task and no acceptance criteria.** A developer writes those at his desk, from
+the spec and the evidence. If one feature turns out to need its task written down, write it in
+that file in a section the generator does not touch — not for all 82 up front.
+
+**No comparison between the platforms.** Rows from `acr-ios` and `acr-android` sit under separate
+headings and are never characterised against each other. The codebase survey was completed by the
+PM and the spec author before the brief was written; this repository publishes its result.
 
 ## Rules
 
 - If you are copying a sentence out of a spec, link to it instead.
-- No acceptance criterion for behaviour no spec has stated.
 - Anything undecided goes to `decisions/` — never into a feature file as an assumption.

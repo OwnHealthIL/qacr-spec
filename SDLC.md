@@ -17,7 +17,7 @@ A brief does **not** describe behaviour. Its governing rule is that the current 
 the specification, and the brief records only what **departs** from it, what is **still undecided**,
 and which requirement each feature answers to.
 
-## 2 · Trace it against `product/requirements.json`
+## 2 · Trace it against `product/FR-01/requirements.json`
 
 For every feature the spec names, pull that feature's requirements from
 `product/EPIC-01/features.json` and classify what the spec says about each one:

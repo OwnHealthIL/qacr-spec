@@ -1,14 +1,12 @@
 # decisions/
 
-Questions only Product can close. **Empty because no spec has been ingested yet — not because the
-questions have been answered.**
+Questions only Product can close. **Empty because Product has raised no question here yet.**
 
 One file per question, `D-nn.md`. Written by whoever ingests a spec, answered by Product.
 
 A question lands here the moment a spec leaves something undecided, or a trace finds a requirement
-the spec is silent on, or the two ACR platforms disagree about an as-is claim. It never gets
-resolved by picking the more likely reading — that buries it until verification, which is the
-expensive place to find it.
+the spec is silent on. It never gets resolved by picking the more likely reading — that buries it
+until verification, which is the expensive place to find it.
 
 ## Format
 

@@ -8,7 +8,8 @@ has at the start of a task — *what am I building, what already exists, and how
 done*. This repository is where that answer lives, in a form you can grep.
 
 It holds the PM's documents unchanged, those documents parsed into data, and — as they get written
-— one file per specified feature with its per-platform tasks and acceptance criteria.
+— one file per specified feature: the requirements it owns, their disposition from the spec, and
+what the code does today.
 
 It does **not** hold reasoning. The analysis behind all of this lives in the Obsidian vault
 (`Healthy.io - MD/QACR - Implementation Plan`). Go there when a claim is disputed.
@@ -66,4 +67,4 @@ to go when a row is disputed rather than re-deriving it.
 
 ## Where to start
 
-Read `SDLC.md`. It is the path from a spec arriving to code merged.
+Read `SDLC.md`. It is the path from a spec arriving to a feature file on master.
