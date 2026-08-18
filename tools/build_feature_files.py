@@ -16,6 +16,12 @@ Because nothing here is generated from judgement, running it twice on unchanged
 inputs produces byte-identical files. That is the correctness test. A non-empty
 `git diff -- features/` after a second run means something leaked in.
 
+The second test is `validate()`, which runs before anything is written: every
+id a SPECS entry names must be one `product/` actually holds. A brief routinely
+lands ahead of the `product/` export and names requirements that have not been
+exported yet — those must be declared `pending`, so that the feature file
+reports them instead of coming up silently short.
+
 ## The SPECS table is step 1's output
 
 Reading a brief *is* judgement — which features it covers, the disposition it
@@ -28,12 +34,16 @@ produced. Everything downstream of this table is mechanical.
 `product/` is read-only, which is why this record lives beside the renderer
 rather than beside the brief.
 
-To publish a new brief: add one entry, run the script, read the diff.
+To publish a new brief: add one entry, run the script, read the diff. The
+script refuses to write anything if the entry names an id `product/` has not
+got and the entry has not acknowledged it.
 """
 import collections
 import csv
+import glob
 import json
 import os
+import re
 import sys
 import urllib.parse
 
@@ -44,8 +54,12 @@ SPECS = {
         "id": "QACR-APP-SPEC-01",
         # `product/specs/<file>`; the header link points here.
         "file": "QACR-APP-SPEC-01 Rev1.2.md",
-        # The brief's revision and what it traces to, from its own header.
-        "provenance": "QACR-APP-SPEC-01 Rev 1.2 · FR-01 Rev 1.19 · EPIC-01 Rev 1.13",
+        # The brief's own revision, from its header.
+        "revision": "Rev 1.2",
+        # What the brief's header claims it traces to. The provenance line
+        # reports the revision actually rendered, and notes this one only where
+        # the two diverge — see `provenance()`.
+        "traces": {"FR-01": "1.19", "EPIC-01": "1.13"},
         # §2 Departures, keyed by the requirement each row names as its driver.
         "departures": {
             "FR-RDY-007": "departure D1",
@@ -95,6 +109,69 @@ SPECS = {
             },
         },
     },
+    "SPEC-02": {
+        "id": "QACR-APP-SPEC-02",
+        "file": "QACR-APP-SPEC-02 Rev1.0.md",
+        "revision": "Rev 1.0",
+        "traces": {"FR-01": "1.20", "EPIC-01": "1.14"},
+        # §2 Departures. D2's cell reads "FR-AUT-012, unchanged — see Q-101";
+        # the requirement it names as the driver is FR-AUT-012.
+        "departures": {
+            "FR-AUT-003": "departure D1",
+            "FR-AUT-012": "departure D2",
+        },
+        # §5 Traceability lists four ids that `product/` has not got yet, at
+        # EPIC-01 Rev 1.13 / FR-01 Rev 1.19. `covers` records the brief as
+        # written; `pending` is the acknowledgement that they cannot render
+        # yet, and the feature file says so rather than reading as complete.
+        # Once the Rev 1.14 / Rev 1.20 export lands, the build fails until
+        # these are removed from here.
+        "pending": {
+            "F02.1": ["FR-AUT-023"],
+            "F02.2": ["FR-AUT-024"],
+            "F02.5": ["FR-AUT-021", "FR-AUT-022"],
+        },
+        "features": {
+            "F02.1": {
+                "disposition": "as-is except D1",
+                "covers": ["FR-AUT-001", "FR-AUT-002", "FR-AUT-003",
+                           "FR-AUT-023"],
+            },
+            "F02.2": {
+                "disposition": "as-is",
+                "covers": ["FR-AUT-004", "FR-AUT-005", "FR-AUT-018",
+                           "FR-AUT-019", "FR-AUT-024"],
+            },
+            "F02.3": {
+                "disposition": "as-is",
+                "covers": ["FR-AUT-006"],
+            },
+            "F02.4": {
+                "disposition": "as-is except D2",
+                "covers": ["FR-AUT-008", "FR-AUT-010", "FR-AUT-012",
+                           "FR-AUT-007", "FR-AUT-011", "FR-AUT-015",
+                           "FR-AUT-020"],
+            },
+            "F02.5": {
+                "disposition": "as-is · U1 open",
+                "covers": ["FR-AUT-013", "FR-AUT-014", "FR-AUT-021",
+                           "FR-AUT-022", "FR-SEC-008", "FR-COM-010"],
+            },
+            "F02.6": {
+                "disposition": "as-is",
+                "covers": ["FR-AUT-016"],
+            },
+            "F02.7": {
+                "disposition": "as-is",
+                "covers": ["FR-CNS-001", "FR-CNS-002", "FR-CNS-003",
+                           "FR-CNS-005", "FR-CNS-006", "FR-CNS-007"],
+            },
+            "F02.8": {
+                "disposition": "as-is",
+                "covers": ["FR-AUT-017"],
+            },
+        },
+    },
 }
 
 # The §5 cells read "as-is except **D1** · U1 open" and "as-is except **D2**".
@@ -116,6 +193,81 @@ def load_inputs():
     return features, requirements, rows
 
 
+def product_revisions():
+    """The revision of each product document actually rendered.
+
+    `features.json` and `requirements.json` carry no revision of their own —
+    they are parsed out of the `.docx` beside them, and that filename is the
+    only record of which revision they hold.
+    """
+    found = {}
+    for key, folder, stem in (("FR-01", "product/FR-01", "QACR-APP-FR-01"),
+                              ("EPIC-01", "product/EPIC-01", "QACR-APP-EPIC-01")):
+        matches = glob.glob(os.path.join(ROOT, folder, f"{stem} Rev*.docx"))
+        if len(matches) != 1:
+            sys.exit(f"{key}: expected exactly one '{stem} Rev*.docx' in "
+                     f"{folder}, found {len(matches)}")
+        found[key] = re.search(r"Rev([\d.]+)\.docx$",
+                               os.path.basename(matches[0])).group(1)
+    return found
+
+
+def provenance(spec, actual):
+    """The brief, then each product document at the revision actually read.
+
+    A brief states what it traces to; this line states what was rendered. The
+    two diverge whenever a brief lands ahead of the `product/` export, and
+    where they do the line carries both rather than repeating the brief's
+    claim over data that is not there yet.
+    """
+    parts = [f"{spec['id']} {spec['revision']}"]
+    for key in ("FR-01", "EPIC-01"):
+        cited, read = spec["traces"][key], actual[key]
+        parts.append(f"{key} Rev {read}"
+                     + (f" (brief cites {cited})" if cited != read else ""))
+    return " · ".join(parts)
+
+
+def validate(spec, features, requirements):
+    """Every id the SPECS entry names must exist in `product/`, or be `pending`.
+
+    The renderer walks the requirements a feature owns, so an id the brief
+    lists but `product/` has not got yet would otherwise be dropped in
+    silence: the file comes out short by a requirement and still says
+    `Nothing.` under *Not covered*, which reads as complete coverage. Fail
+    instead, naming the ids, unless the entry declares them `pending`.
+    """
+    problems = []
+    for fid, entry in spec["features"].items():
+        if fid not in features:
+            problems.append(f"{fid}: no such feature in features.json")
+            continue
+        owned = features[fid]["requirements"]
+        pending = spec.get("pending", {}).get(fid, [])
+        for rid in entry["covers"]:
+            if rid not in owned and rid not in pending:
+                problems.append(
+                    f"{fid}: covers {rid}, which features.json does not give "
+                    f"it — declare it in `pending` or correct the entry")
+        for rid in pending:
+            if rid in owned:
+                problems.append(
+                    f"{fid}: {rid} is declared `pending` but features.json now "
+                    f"carries it — drop it from `pending`")
+            if rid not in entry["covers"]:
+                problems.append(
+                    f"{fid}: {rid} is declared `pending` but is not in `covers`")
+        for rid in owned:
+            if rid not in requirements:
+                problems.append(
+                    f"{fid}: owns {rid}, which is not in requirements.json")
+    if problems:
+        sys.exit("SPECS entry does not agree with product/:\n  "
+                 + "\n  ".join(problems)
+                 + "\n\nEither product/ is behind the brief and needs "
+                   "re-exporting, or the entry misreads the traceability table.")
+
+
 def bullet(row):
     """One evidence row: status, claim and citation, each copied verbatim.
 
@@ -131,7 +283,7 @@ def bullet(row):
     return "- " + " — ".join(parts)
 
 
-def render(spec, fid, feature, requirements, rows):
+def render(spec, fid, feature, requirements, rows, actual):
     covers = spec["features"][fid]["covers"]
     owned = feature["requirements"]
     link = "../../product/specs/" + urllib.parse.quote(spec["file"])
@@ -170,7 +322,19 @@ def render(spec, fid, feature, requirements, rows):
     silent = sorted(set(owned) - set(covers))
     out += ["", "## Not covered by this spec", "",
             ", ".join(silent) if silent else "Nothing."]
-    out += ["", "## Provenance", "", spec["provenance"], ""]
+
+    # Omitted entirely when the entry declares none, so a feature whose
+    # requirements `product/` fully carries renders exactly as before.
+    pending = sorted(spec.get("pending", {}).get(fid, []))
+    if pending:
+        out += ["", "## Named by this spec, absent from `product/`", "",
+                ", ".join(pending), "",
+                f"Listed for this feature in the brief's traceability table, "
+                f"and not carried by EPIC-01 Rev {actual['EPIC-01']} / FR-01 "
+                f"Rev {actual['FR-01']}. They render here once `product/` is "
+                f"re-exported."]
+
+    out += ["", "## Provenance", "", provenance(spec, actual), ""]
     return "\n".join(out)
 
 
@@ -179,12 +343,15 @@ def main():
         sys.exit(f"usage: {sys.argv[0]} <{'|'.join(sorted(SPECS))}>")
     spec = SPECS[sys.argv[1]]
     features, requirements, rows = load_inputs()
+    validate(spec, features, requirements)
+    actual = product_revisions()
 
     for fid in spec["features"]:
         feature = features[fid]
         path = os.path.join(ROOT, "features", feature["epic"], f"{fid}.md")
+        os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "w", encoding="utf-8") as fh:
-            fh.write(render(spec, fid, feature, requirements, rows))
+            fh.write(render(spec, fid, feature, requirements, rows, actual))
         print(f"wrote {os.path.relpath(path, ROOT)}")
 
 

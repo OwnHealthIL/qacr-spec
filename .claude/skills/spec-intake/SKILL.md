@@ -47,11 +47,23 @@ Four dispositions only:
 for a covered feature and does not appear in the spec.
 
 **Record what you read in the `SPECS` table of `tools/build_feature_files.py`** — one entry per
-brief, holding its id, its file, its provenance line, its departures keyed by the requirement each
-one names as its driver, and per covered feature the brief's own disposition wording and the
-requirements it answers for. That table is the whole of the judgement in this process. Everything
-after it is mechanical, which is why it lives in the repository and is reviewed in the PR rather
-than being re-read from the brief each time.
+brief, holding its id, its file, its own revision, the revisions its header claims to trace to, its
+departures keyed by the requirement each one names as its driver, and per covered feature the
+brief's own disposition wording and the requirements it answers for. That table is the whole of the
+judgement in this process. Everything after it is mechanical, which is why it lives in the
+repository and is reviewed in the PR rather than being re-read from the brief each time.
+
+**A brief may name requirements `product/` has not got yet.** A brief is written against the
+revision of FR-01 and EPIC-01 that is current when it is written, and `product/` is re-exported on
+its own schedule, so a traceability table can list ids that `features.json` and `requirements.json`
+do not carry. Record those in the entry's `pending` map, keyed by feature. Do not quietly drop them
+from `covers` — `covers` is the record of what the brief said. The script refuses to build until
+every such id is either present in `product/` or acknowledged in `pending`, and the feature file
+names them under *Named by this spec, absent from `product/`* rather than reading as though the
+brief covered less than it did.
+
+Once `product/` catches up, the build fails again until the id is removed from `pending` — which is
+how the entry stays honest without anyone having to remember to revisit it.
 
 ## Step 2 · Extract missing evidence
 
@@ -131,6 +143,11 @@ FR-XXX-nnn, FR-YYY-nnn
 QACR-APP-SPEC-01 Rev 1.2 · FR-01 Rev 1.19 · EPIC-01 Rev 1.13
 ```
 
+*Named by this spec, absent from `product/`* appears only for a feature whose entry declares
+`pending` ids, and lists them. The provenance line always reports the revision the file was
+actually rendered from; where the brief's header claims a different one it is appended in
+parentheses, as `FR-01 Rev 1.19 (brief cites 1.20)`.
+
 ### Where each field comes from
 
 | Field | From |
@@ -140,7 +157,9 @@ QACR-APP-SPEC-01 Rev 1.2 · FR-01 Rev 1.19 · EPIC-01 Rev 1.13
 | milestone per requirement | `requirements.json`, rendered `M<n>` — the file stores `1`, the column shows `M1` |
 | feature-level spec disposition | the `SPECS` entry, verbatim from the brief. The line is omitted when the brief gives none |
 | disposition | the `SPECS` entry: its `departures` map, else `as-is`, else `silent` by set difference |
-| header link and provenance line | the `SPECS` entry |
+| header link | the `SPECS` entry |
+| provenance line | the `SPECS` entry for the brief's id and revision; the `Rev<n>.docx` filenames in `product/FR-01` and `product/EPIC-01` for the revision actually rendered |
+| *Named by this spec, absent from `product/`* | the `SPECS` entry's `pending` map; the section is omitted where it declares none |
 | evidence row count | `behaviour.tsv`, counted |
 | product grouping | `behaviour.tsv` `product` column, alphabetical |
 | status, claim, citation | `behaviour.tsv`, copied verbatim |
@@ -151,6 +170,11 @@ QACR-APP-SPEC-01 Rev 1.2 · FR-01 Rev 1.19 · EPIC-01 Rev 1.13
 spec covers everything gets exactly `Nothing.` under *Not covered*. The script emits these; do not
 vary them by hand.
 
+**The provenance line states what was read, not what the brief claims.** A brief's header records
+what it was written against; the footer of a feature file records the revision of `product/` that
+produced it. Where they differ, both are shown. Do not paste the brief's `Traces to` line in as the
+provenance — that asserts a lineage the file does not have.
+
 **Requirement text never appears** — requirements are referenced by id, and `product/` holds the
 wording.
 
@@ -158,13 +182,18 @@ wording.
 
 ```
 git checkout -b spec/SPEC-nn
-git add features/ evidence/ tools/build_feature_files.py
+git add features/ evidence/ tools/build_feature_files.py "product/specs/<brief>.md"
 git commit -m "SPEC-nn: feature files for <features>"
 git push -u origin spec/SPEC-nn
 ```
 
 The `SPECS` entry goes in the same commit as the files it produced, so a reviewer can check the
 output against what the brief was read to say.
+
+**The brief goes in that commit too.** Every feature file's header links to
+`product/specs/<brief>.md`; if the brief is left untracked the link is dead for everyone but you.
+This is the one thing the skill adds to `product/`, which is otherwise read-only — the brief is an
+input that arrived by hand, and it has to travel with the files built from it.
 
 PR body: the features written, requirement count per disposition, how many rows were extracted in
 step 2, and any requirement that ended with zero rows.
@@ -200,9 +229,17 @@ git diff --stat -- features/
 **Empty diff, or the run is wrong.** A non-empty diff means something in the output came from
 judgement rather than from an input file — find it and remove it.
 
+The script's own `validate()` covers the traceability half of this before it writes anything: it
+fails, naming ids, if the entry claims a feature or requirement `product/` does not hold. A clean
+run means the entry and `product/` agree.
+
 Then confirm:
 
 - every citation in a new row resolves: `python3 tools/check_citations.py`
 - every requirement of every covered feature appears exactly once in its feature file
+- rebuilding the *previous* brief leaves its files untouched — `python3 tools/build_feature_files.py
+  SPEC-nn-1` then `git diff -- features/` — so a change to the script has not rewritten history
 - `decisions/` is unchanged
-- no file outside `features/`, `evidence/` and `tools/build_feature_files.py` was modified
+- the brief is staged, and every feature file's header link resolves to it
+- no file outside `features/`, `evidence/`, `tools/build_feature_files.py` and the brief was
+  modified
