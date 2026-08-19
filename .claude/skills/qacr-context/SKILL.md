@@ -30,7 +30,7 @@ classification here. It gets recorded as a stop, and the spec is written without
 
 | | |
 |---|---|
-| `features/<epic>/<feature>.md` | the feature file — requirements owned, disposition each, milestones, domains |
+| `features/<epic>/<feature>.md` | the feature file — read whole, section by section; see step 2 |
 | `product/specs/QACR-APP-SPEC-nn Rev x.y.md` | the brief — departure text, open items, confirmed-as-is answers |
 | `product/EPIC-01/features.json` | which features a brief covers, and what each owns |
 | `product/FR-01/requirements.json` | requirement text, milestone, and the `note` field |
@@ -73,6 +73,105 @@ From the **feature file**: title, epic, milestones, domains, the requirements ow
 order, and the disposition against each. This file is generated and deterministic — it is the
 record, not a summary of one.
 
+### Read it by its sections, not by the fields you came for
+
+`build_feature_files.py` writes a fixed set of sections. A run that reads the file looking only for
+the fields the contract happens to name will not see a section added since, and will report nothing
+missing — the file is well-formed and the contract validates. That is how a generator and its reader
+drift apart in silence, and it is why this is a walk rather than a lookup.
+
+**Walk the sections. Each one is carried or refused, and the refusal is recorded.**
+
+| Section | What it holds | Where it goes |
+|---|---|---|
+| header line | epic, milestone, domains, the link to the brief | `feature` |
+| `**Spec disposition:**` | the brief's feature-level wording | `feature.spec_disposition` |
+| `## Requirements owned` | one row per requirement, with milestone and disposition | `requirements`, and the note pass |
+| `## What the vault records about the code` | the analysis phase's evidence rows | **refused** — recorded in `excluded_deliberately` |
+| `## Not covered by this spec` | requirements the feature owns that the brief never mentions | `not_covered_by_brief`, and a stop for each |
+| `` ## Named by this spec, absent from `product/` `` | requirements the brief claims that `product/` has not exported | `named_but_absent` |
+| `## Provenance` | the brief, and the document revisions actually rendered | `_contract.sources` |
+
+A section present in the file and absent from this table is a defect in this skill, not in the
+file. Do not drop it. Raise a `skill-behaviour` flag against `skill/step-2`, resolved by
+`the skill author`, and put the section's heading and its body **verbatim** in that flag's `what` —
+that field is the destination, so the text survives the run and the next author can see what the
+table is missing. Nothing else in the contract takes arbitrary section text: `excluded_deliberately`
+maps a refusal to its reason and is for sections this document already knows about, so an
+unrecognised section does not belong there.
+
+The last two sections are new to this reader and each has its own rule below.
+
+### Named by this spec, absent from `product/`
+
+A brief is written against a document revision; `product/` is exported from that document
+afterwards. In between, a brief's traceability table names requirements `requirements.json` does
+not hold. `spec-intake` declares those `pending`, and the generator renders them in their own
+section — fixed heading, comma-separated ids, one reason paragraph:
+
+    ## Named by this spec, absent from `product/`
+
+    FR-AUT-021, FR-AUT-022
+
+    Listed for this feature in the brief's traceability table, and not carried by EPIC-01 Rev 1.13 / FR-01 Rev 1.19. They render here once `product/` is re-exported.
+
+A generator writes it, so the shape is stable. The section is **omitted entirely** when there are
+none, which is the common case; absent means none, and `named_but_absent` is then empty.
+
+**The reason paragraph is one paragraph, emitted unwrapped as a single line**, and it is carried
+whole — not its first sentence, not a summary of it. This document says *reason paragraph*
+throughout and means that same string every time.
+
+**These requirements belong to the feature and cannot be specified.** No text, no milestone, no
+note — `requirements.json` has nothing to read. That is the situation the refusal at the top of this
+document already describes: a requirement the feature owns that the spec cannot cover. It travels
+for the same reason stops travel, so the spec can say what it left out and why.
+
+Carry them in `named_but_absent`, each with the section's reason paragraph **verbatim**. Not in
+`requirements` — a consumer walks that array and specifies what it finds, and these have nothing to
+specify from. Not in `stops` either: a stop is a decision this skill took about a requirement it
+could read, and reading one of these as a stop invites someone to go and resolve it.
+
+**This never halts the run.** The ids are genuinely unspecifiable and no amount of asking changes
+that before the next export. The feature is specified from the requirements that did render, and the
+contract states which ones did not. They also take **no note-pass row** — see the rule below.
+
+### The provenance line — which revisions this contract stands on
+
+The last section names the brief, then each product document **at the revision actually rendered**,
+noting the brief's own claim only where the two diverge:
+
+    QACR-APP-SPEC-02 Rev 1.0 · FR-01 Rev 1.19 (brief cites 1.20) · EPIC-01 Rev 1.13 (brief cites 1.14)
+
+**The leading number is what `product/` holds; the parenthetical is what the brief cites.** Reading
+those the wrong way round inverts the meaning of every divergence in the contract. Where no
+parenthetical appears, the two agree.
+
+**Take the revisions from this line, never from this document.** The schema in step 6 carries
+example revisions to show the shape, and they go stale the moment an ingest lands. A contract whose
+`sources` were copied from an example states which revisions the spec was written against, and is
+wrong while looking exactly like a record. Carry the line itself verbatim in
+`sources.provenance_line`, so the claim can be checked against its source.
+
+**A divergence is carried, not smoothed over.** It runs in both directions and neither is an error:
+
+| Direction | `divergence_direction` | What it means for this run |
+|---|---|---|
+| the two agree | `none` | nothing to carry |
+| `product/` **behind** the brief | `product-behind-brief` | the brief classifies requirements that have not rendered — expect a `Named by this spec` section |
+| `product/` **ahead** of the brief | `product-ahead-of-brief` | dispositions were decided against text that has since been re-exported: the disposition comes from one revision and the requirement text and `note` from another, and nothing here can tell whether either changed in between |
+| the two documents diverge opposite ways | `mixed` | read each document's own row; the pair has no single direction |
+
+The third row is the quiet one — nothing announces it but a parenthetical, and it was the live case
+across every E01 feature file when this rule was written on 2026-08-19.
+
+Set `diverges` on each document where the two differ, and record **one value from that closed set**
+in `sources.divergence_direction`, every run, `none` included. It is a reading of a generated line,
+so two runs over the same file record the same value. Naming it is the point: left unnamed, a run
+that notices the consequence narrates it in prose of its own invention and the next run does not
+mention it at all. The consumer rule below carries the obligation onward; this skill reports the
+direction and does not try to reconcile it.
+
 From the **brief**: for each departure the feature carries, the row from the departures table
 verbatim — its reference, what changes, and the requirement driving it. The feature file names
 `departure D1`; only the brief says what D1 *is*. Also take the open items and the
@@ -89,6 +188,12 @@ are the highest-value findings this skill produces and they are **enumerated, ne
 **Walk every requirement the feature owns, in order, and record one verdict for each.** Not the ones
 that look interesting. All of them, including the ones with an empty note, which get `no-note`. A
 requirement absent from this list is a defect in the run, not a requirement without a note.
+
+**"Every requirement the feature owns" means the `## Requirements owned` table — not the brief's
+traceability list.** The two are the same set only while `product/` is level with the brief. A
+`named_but_absent` requirement gets **no row**: a verdict is a reading of a `note` field, and there
+is no record to read one from. Its absence from `note_pass` is correct, and `named_but_absent` is
+where it is accounted for instead.
 
 | Verdict | When |
 |---|---|
@@ -215,6 +320,8 @@ per-run artifact in it would end that.
     "rules_for_the_consumer": [
       "Reference a requirement by id. Never restate one — a copy is a second requirement.",
       "A stopped requirement does not enter the spec. Say what was left out and why.",
+      "A named_but_absent requirement belongs to this feature and cannot be specified yet — it is not in product/ at the revision read. State it in the spec as uncovered, with the reason given, and do not describe the feature as fully covered. Omitting it is how a spec gets signed off over requirements nobody knew were missing.",
+      "Record the revisions from _contract.sources in the spec. Where a document diverges, say so: the dispositions were decided against the revision the brief cites, and the requirement text and notes were read from the revision product/ holds.",
       "Never choose a value for an open item, and never treat a silent requirement as as-is.",
       "ACR behaviour is evidence about a solved problem, not a requirement. Derive, do not copy.",
       "Every acceptance criterion names the requirement it proves; every derived test carries that id.",
@@ -225,10 +332,16 @@ per-run artifact in it would end that.
     ],
     "incomplete": false,
     "incomplete_why": "Set whenever a step was skipped or could not run. A skipped step 4 means ACR behaviour is absent by instruction — not evidence that ACR has no prior art.",
+    // Read off the feature file's Provenance line — never copied from here. `read` is the
+    // revision `product/` holds, `brief_cites` is what the brief claims to trace to, and
+    // `diverges` is true when they differ. The values below show shape and are stale by the
+    // next ingest; `provenance_line` is what makes the claim checkable.
     "sources": {
       "brief": "QACR-APP-SPEC-01 Rev 1.2",
-      "requirements": "QACR-APP-FR-01 Rev 1.19",
-      "epic_map": "QACR-APP-EPIC-01 Rev 1.13",
+      "requirements": { "read": "QACR-APP-FR-01 Rev 1.20", "brief_cites": "1.19", "diverges": true },
+      "epic_map": { "read": "QACR-APP-EPIC-01 Rev 1.14", "brief_cites": "1.13", "diverges": true },
+      "provenance_line": "<the feature file's Provenance line, verbatim>",
+      "divergence_direction": "none|product-behind-brief|product-ahead-of-brief|mixed",
       "qacr_spec_commit": "<sha>"
     },
     "gathered": "<ISO date>"
@@ -250,6 +363,13 @@ per-run artifact in it would end that.
     "departure": "D1",
     "open_item": null
   }],
+
+  // Named for this feature by the brief's traceability table, and not in `product/` yet.
+  // They belong to the feature and cannot be specified — no text, no milestone, no note.
+  // Deliberately outside `requirements` so nothing downstream mistakes them for specifiable,
+  // and outside `stops` so nothing reads them as a decision this skill took. Empty is normal.
+  "named_but_absent": [{ "id": "FR-AUT-021", "feature": "F02.5",
+                         "why": "<the section's reason paragraph, verbatim>" }],
 
   "departures": [{ "ref": "D1", "what_changes": "<verbatim from the brief>", "driven_by": "FR-RDY-007" }],
   "open_items": [{ "ref": "U1", "question": "<verbatim>", "owner": "...",
@@ -323,7 +443,8 @@ does not ask them again. Dropping them here reintroduces the questions one layer
 
 ## Step 7 — Verify before handing over
 
-- every requirement the feature file lists appears exactly once, either with a `build` or in `stops`
+- every requirement in the `## Requirements owned` table appears exactly once, either with a
+  `build` or in `stops`
 - no disposition was assigned that the feature file does not state
 - no requirement text was paraphrased
 - `acr_behaviour.called` is true if and only if at least one requirement recreates
@@ -335,8 +456,21 @@ does not ask them again. Dropping them here reintroduces the questions one layer
   of the three is an invalid contract, not a stylistic lapse
 - every `flags[].kind` and `resolves_with` is exactly one of the listed values
 - every flag names what resolves it
-- `note_pass` holds exactly one row per requirement the feature owns — none skipped
+- `note_pass` holds exactly one row per requirement in the `## Requirements owned` table — none
+  skipped, and no row for a `named_but_absent` id
 - every flag's `ref` matches its content, per the derivation table
+- every section of the feature file is carried, or named in `excluded_deliberately` — a section
+  this skill does not recognise is a `skill-behaviour` flag against `skill/step-2` whose `what`
+  holds that section's heading and body verbatim, never a silent drop
+- where the feature file carries a `` ## Named by this spec, absent from `product/` `` section,
+  every id in it reaches `named_but_absent` with the reason paragraph verbatim, and none of those
+  ids appears in `requirements`, `stops` or `note_pass`
+- `_contract.sources` agrees with the feature file's Provenance line and carries it verbatim in
+  `provenance_line`; `diverges` is set wherever `read` and `brief_cites` differ. A revision that
+  matches this document's schema example but not the Provenance line was copied, not read — that is
+  a defect, not a coincidence
+- `sources.divergence_direction` is present on every run and is exactly one of the four listed
+  values, `none` included — it is never omitted, and never replaced by prose of the run's own
 - nothing was written into `qacr-spec` except `decisions/`
 - the contract was written to the application repository, not here
 
@@ -364,6 +498,18 @@ does not ask them again. Dropping them here reintroduces the questions one layer
   the behaviour is still specifiable. Only the per-requirement column stops anything.
 - **Recording an inferred open-item link as though the brief stated it.** Mark it inferred.
 - **Silently dropping a stopped requirement.** The spec must be able to say what it left out.
+- **Dropping the named-but-absent section** because those requirements have nothing to specify.
+  Having nothing to specify is the finding, not a reason to omit it.
+- **Filing a named-but-absent requirement in `requirements`**, where a consumer will try to specify
+  a requirement with no text, or in `stops`, where it reads as a decision someone can go and resolve.
+- **Halting the run on a named-but-absent section.** The export is not arriving today; specify the
+  rest and say what is uncovered.
+- **Copying the `sources` revisions out of the schema example.** The example goes stale at the next
+  ingest; the Provenance line is the record.
+- **Reading the Provenance line's parenthetical as the rendered revision.** It is the brief's claim.
+  The leading number is what was read.
+- **Narrating a divergence in an invented field** instead of recording `divergence_direction`. A
+  field one run adds and the next omits is not a record of anything.
 - **Inferring a guideline here.** This skill reports what exists; the spec writer infers, and the
   contract tells it to record what it inferred.
 - **Scanning the notes instead of enumerating them.** A note pass that looks for conflicts misses
@@ -422,3 +568,49 @@ Append what each run corrected, so the next feature is cheaper.
   Also: flag `ref` is now derived from content, because `F2` naming different findings in different
   runs makes "look at F2" a dangerous sentence. Open: whether the open-ended flag kinds
   (`requirement-vs-requirement`) can be enumerated too, or whether they stay discovery.
+- **Review of the feature-file reader, 2026-08-19, no run.** A brief is written against a document
+  revision and `product/` is exported from that document afterwards, so a brief routinely names
+  requirements `requirements.json` has not got. `spec-intake` declares those `pending` and the
+  generator gives them their own section; step 2 never read it. Those requirements left the record
+  entirely — a feature specified, approved as covering it, two requirements never in it and nothing
+  to send anyone back when the export lands. The refusal at the top of this document already
+  covered the case in principle ("a requirement the brief does not classify does not get a
+  classification here … the spec is written without it") and could not reach it, because the reader
+  could not see the section. Three corrections, and the third is the one that matters.
+  (i) **`named_but_absent` is its own field.** Not a `requirements` entry, which a consumer would
+  try to specify from nothing, and not a `stop`, which reads as a decision someone can go and
+  resolve. It does not halt the run: these ids are genuinely unspecifiable — no text, no milestone,
+  absent from `requirements.json` — so the feature is specified from what rendered and the contract
+  states what did not. It travels for exactly the reason stops travel.
+  (ii) **"Every requirement the feature owns" stopped being unambiguous** the moment a second list
+  of ids existed for a feature. It means the `## Requirements owned` table. A `named_but_absent` id
+  takes no `note_pass` row, because a verdict is a reading of a `note` and there is no record to
+  read one from.
+  (iii) **The reader was enumerating fields, not sections, and that is the actual defect.** The
+  missing section was a symptom. `## Provenance` was missing too, and worse: nothing in this
+  document said where `_contract.sources` came from, and the only revisions written anywhere in it
+  were the schema example's. The first two runs emitted those strings exactly — indistinguishable
+  from having read them, because `product/` happened to hold Rev 1.19 / Rev 1.13 that day. It now
+  holds Rev 1.20 / Rev 1.14, so the same copy would state the wrong revisions while looking like a
+  record. Step 2 now walks the generator's sections against a table, each carried or refused, so
+  the next section added upstream is a named defect rather than a silent omission, and the
+  Provenance line is read with `provenance_line` carried verbatim so the claim can be checked
+  against its source.
+  Also: **revision divergence is carried in `_contract.sources`, not as a flag.** It runs both ways.
+  `product/` behind the brief produces the section above; `product/` ahead of it — which is every
+  E01 feature file today, reading `FR-01 Rev 1.20 (brief cites 1.19)` — pairs a disposition decided
+  against one revision with text and notes read from another, and said nothing at all. Only
+  `FR-AUT-003` changed between Rev 1.19 and Rev 1.20 and it belongs to E02, so nothing E01 owns was
+  affected; a reader of the old contract could not have known that, which is the point. A new flag
+  `kind` was considered and dropped: the set is closed and checked, and a value read off a generated
+  line is a record rather than a discovery.
+  Then the F01.4 pair was re-run against the edited skill, and it caught one more thing.
+  **`divergence_direction` is adopted from the run, which invented it unprompted — and only in one
+  of the two runs.** Both runs read the revisions correctly and agreed on every schema'd field, but
+  A felt the consequence needed saying, had no field to say it in, and wrote a paragraph of its own
+  under a key B never produced. That is the second-run flag instability in miniature: a finding that
+  exists in one run and not the next is not a record. The name is A's; the value is now a closed set
+  of four, recorded every run including `none`, because the direction is a reading of a generated
+  line and prose cannot be compared across runs. Open: whether `spec-intake` should refuse to render
+  a brief against a `product/` export newer than the one it cites, which would remove the
+  `product-ahead-of-brief` direction rather than reporting it.
