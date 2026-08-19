@@ -39,7 +39,7 @@ from collections import Counter
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
-from parse_product_docs import only_docx  # noqa: E402
+from parse_product_docs import only_docx, revision_of  # noqa: E402
 
 COVERAGE = os.path.join(REPO, "evidence", "coverage.tsv")
 BEHAVIOUR = os.path.join(REPO, "evidence", "behaviour.tsv")
@@ -48,10 +48,20 @@ COLUMNS = ["requirement", "feature", "epic", "extraction_scope",
            "evidence_rows", "state"]
 
 
+FR_STEM = "QACR-APP-FR-01"
+
+
 def scope_now():
-    """'QACR-APP-FR-01 Rev1.20' — the document's own filename, less the suffix."""
-    p = only_docx(os.path.join(REPO, "product", "FR-01"), "QACR-APP-FR-01")
-    return os.path.basename(p)[:-len(".docx")]
+    """'QACR-APP-FR-01 Rev1.20' — the document's id and its revision.
+
+    Both halves come from the filename, but not the whole filename: the PM's
+    title drifts between revisions (Rev 1.19 was `QACR-APP-FR-01 Rev1.19.docx`,
+    Rev 1.20 `QACR-APP-FR-01 Functional Requirements Rev1.20.docx`) and this
+    column exists to be compared down the file. Carrying the full basename would
+    leave two naming shapes in one column and nothing able to sort them.
+    """
+    p = only_docx(os.path.join(REPO, "product", "FR-01"), FR_STEM)
+    return f"{FR_STEM} Rev{revision_of(p)}"
 
 
 def main():

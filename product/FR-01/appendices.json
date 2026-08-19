@@ -1,5 +1,5 @@
 {
- "revision": "1.19",
+ "revision": "1.20",
  "part_titles": {
   "terminology.1": "Superseded Component Names",
   "terminology.2": "Names for User-Operated Parts",
@@ -727,12 +727,12 @@
     "counts": {
      "1": 0,
      "2": 0,
-     "3": 12,
-     "4": 3,
-     "5": 4,
+     "3": 14,
+     "4": 4,
+     "5": 5,
      "TBD": 0
     },
-    "total": 19,
+    "total": 23,
     "unreadable": false
    },
    {
@@ -988,12 +988,12 @@
    "counts": {
     "1": 69,
     "2": 10,
-    "3": 100,
-    "4": 20,
-    "5": 38,
+    "3": 102,
+    "4": 21,
+    "5": 39,
     "TBD": 4
    },
-   "total": 241,
+   "total": 245,
    "unreadable": false
   }
  }

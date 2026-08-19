@@ -41,6 +41,7 @@ FR_JSON = "product/FR-01/requirements.json"
 EPIC_JSON = "product/EPIC-01/features.json"
 DEC_JSON = "product/FR-01/decisions.json"
 REG_JSON = "product/FR-01/register.json"
+ROAD_JSON = "product/EPIC-01/roadmap.json"
 
 # Every pattern a changed raw line may match and still count as housekeeping.
 # The list is deliberately short and explicit: anything not named here is a
@@ -163,7 +164,13 @@ def epic_features(features):
 
 
 def diff_keyed(old, new, key, label_fields):
-    """Added / removed / changed for a list keyed by one stable reference."""
+    """Added / removed / changed for a list keyed by one stable reference.
+
+    A changed row carries WHICH fields moved and both values. Reporting only
+    that a row changed is the same failure as reporting only a total: Rev 1.20
+    rewrote the body of one open register question and left its id, its group and
+    the row count alone, so every count stayed put.
+    """
     o = {r[key]: r for r in old} if old else {}
     n = {r[key]: r for r in new} if new else {}
     out = {"added": [], "removed": [], "changed": []}
@@ -172,10 +179,23 @@ def diff_keyed(old, new, key, label_fields):
     for k in sorted(set(o) - set(n)):
         out["removed"].append({key: k, **{f: o[k].get(f, "") for f in label_fields}})
     for k in sorted(set(o) & set(n)):
-        if o[k] != n[k]:
-            out["changed"].append({key: k,
-                                   **{f: n[k].get(f, "") for f in label_fields}})
+        if o[k] == n[k]:
+            continue
+        fields = {f: [o[k].get(f, ""), n[k].get(f, "")]
+                  for f in sorted(set(o[k]) | set(n[k]))
+                  if o[k].get(f, "") != n[k].get(f, "")}
+        out["changed"].append({key: k, "fields": fields,
+                               **{f: n[k].get(f, "") for f in label_fields}})
     return out
+
+
+def print_changed(rows, key, label):
+    for r in rows:
+        print(f"  ~ {r[key]}  {label(r)}")
+        for f, (a, b) in r["fields"].items():
+            print(f"      {f}")
+            print(f"        was: {a or '—'}")
+            print(f"        now: {b or '—'}")
 
 
 # ------------------------------------------------------------- the null-diff rule
@@ -261,6 +281,17 @@ def main():
     decisions = diff_keyed(dec_old, dec_new, "ref", ("question", "decision"))
     register = diff_keyed(reg_old, reg_new, "ref", ("group",))
 
+    def road_cells(rows):
+        return [{"cell": f"{r['epic']}@M{r['milestone']}",
+                 "features": ", ".join(r["features"]),
+                 "new_reqs": r["new_reqs"]} for r in (rows or [])]
+
+    road_new = json.load(open(os.path.join(REPO, ROAD_JSON))) \
+        if os.path.exists(os.path.join(REPO, ROAD_JSON)) else []
+    road_old = old_json(ROAD_JSON)
+    roadmap = diff_keyed(road_cells(road_old), road_cells(road_new), "cell",
+                         ("features", "new_reqs"))
+
     W = 78
     print("=" * W)
     print(f"CHANGE MANIFEST      FR-01 Rev {fr_rev}  ·  EPIC-01 Rev {ep_rev}")
@@ -274,7 +305,12 @@ def main():
                      ("source", "source changed"), ("section", "section moved")):
         print(f"{len(reqs[k]):4d}  {label}")
 
-    structurally_empty = not any(reqs.values()) and not any(feats.values())
+    # A roadmap-only change is still a structured change, and must not send this
+    # off hunting for invisible edits in the raw text.
+    structurally_empty = (not any(reqs.values()) and not any(feats.values())
+                          and not any(roadmap.values())
+                          and not any(decisions.values())
+                          and not any(register.values()))
 
     if reqs["removed"]:
         # Loudest by design: nothing else in this pipeline notices that a
@@ -332,28 +368,48 @@ def main():
         if feats[k]:
             print(f"  {label}: {[x['id'] for x in feats[k]]}")
 
+    # ---- the section 3 milestone roadmap
+    if road_old is None:
+        print(f"\n--- MILESTONE ROADMAP ---\n  {len(road_new)} cells; HEAD has no "
+              f"roadmap.json, so this is the first parse of it, not a diff")
+    elif any(roadmap.values()):
+        print(f"\n--- MILESTONE ROADMAP ({len(road_old)} -> {len(road_new)} cells): "
+              f"{len(roadmap['added'])} added, {len(roadmap['removed'])} removed, "
+              f"{len(roadmap['changed'])} changed ---")
+        for c in roadmap["added"]:
+            print(f"  + {c['cell']}  {c['new_reqs']} from {c['features']}")
+        for c in roadmap["removed"]:
+            print(f"  - {c['cell']}  was {c['new_reqs']} from {c['features']}")
+        print_changed(roadmap["changed"], "cell", lambda c: "")
+    else:
+        print(f"\n--- MILESTONE ROADMAP ---\n  {len(road_new)} cells, unchanged")
+
     # ---- the decision log and the review register
     if dec_old is None:
         print(f"\n--- DECISION LOG ---\n  {len(dec_new)} closed decisions; HEAD has "
               f"no decisions.json, so this is the first parse of it, not a diff")
     else:
-        print(f"\n--- DECISION LOG ({len(dec_old)} -> {len(dec_new)}) ---")
+        print(f"\n--- DECISION LOG ({len(dec_old)} -> {len(dec_new)}): "
+              f"{len(decisions['added'])} closed, {len(decisions['removed'])} gone, "
+              f"{len(decisions['changed'])} reworded ---")
         for d in decisions["added"]:
             print(f"  + {d['ref']}  {d['question'][:110]}")
             print(f"        {d['decision'][:150]}")
         for d in decisions["removed"]:
             print(f"  - {d['ref']}  {d['question'][:110]}")
-        for d in decisions["changed"]:
-            print(f"  ~ {d['ref']}  {d['question'][:110]}")
+        print_changed(decisions["changed"], "ref", lambda d: d["question"][:100])
     if reg_old is None:
         print(f"\n--- REVIEW REGISTER ---\n  {len(reg_new)} open items; HEAD has no "
               f"register.json, so this is the first parse of it, not a diff")
     else:
-        print(f"\n--- REVIEW REGISTER ({len(reg_old)} -> {len(reg_new)}) ---")
+        print(f"\n--- REVIEW REGISTER ({len(reg_old)} -> {len(reg_new)}): "
+              f"{len(register['added'])} raised, {len(register['removed'])} closed, "
+              f"{len(register['changed'])} reworded ---")
         for r in register["added"]:
             print(f"  + {r['ref']}  ({r['group']})")
         for r in register["removed"]:
             print(f"  - {r['ref']}  ({r['group']})  closed or withdrawn")
+        print_changed(register["changed"], "ref", lambda r: f"({r['group']})")
 
     # ---- the null-diff rule
     unexplained_total, raw_changed_total = [], 0
@@ -390,7 +446,7 @@ def main():
                 "epics_touched": {e: {"requirements": [oc[e], nc[e]],
                                       "features": [of[e], nf[e]]}
                                   for e in moved_epics},
-                "decisions": decisions, "register": register,
+                "decisions": decisions, "register": register, "roadmap": roadmap,
                 "structurally_empty": structurally_empty}
     if args.json:
         with open(args.json, "w") as fh:

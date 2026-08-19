@@ -127,7 +127,7 @@
   "ref": "Q-63",
   "conflict": "The session-token expiry period",
   "where": "FR-AUT-013",
-  "what_is_needed": "The backend SRS states 24 hours and the requirement quotes it. Flagged at review as incorrect for this application. A value is needed, and the backend SRS aligned to it",
+  "what_is_needed": "The backend SRS states 24 hours and the requirement quotes it. Flagged at review as incorrect for this application. Researched at the SPEC-02 review: no expiry or lifetime is held client-side at all, so the period is enforced entirely by the backend and the question cannot be settled from the application. A value is needed, and the backend SRS aligned to it",
   "comments": "",
   "group": "R.3"
  },

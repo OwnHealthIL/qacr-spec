@@ -89,7 +89,7 @@ What it checks, strongest first:
 **Appendix H also states the document's own milestone vocabulary**, in its column headings, so the
 vocabulary is read rather than hardcoded. Both documents are then validated against it.
 
-The parse writes five files, and they are never edited by hand:
+The parse writes six files, and they are never edited by hand:
 
 ```
 product/FR-01/requirements.json      the body
@@ -98,6 +98,8 @@ product/FR-01/register.json          the Review Register — open Q-nn, in six g
 product/FR-01/appendices.json        Appendix D.1–D.4, configurations, parameters,
                                      and the Priority Summary as data
 product/EPIC-01/features.json        the epic map
+product/EPIC-01/roadmap.json         the section 3 milestone roadmap, persisted so a
+                                     change to it can be reported and not just checked
 ```
 
 ### The traps, each of which has already drawn blood
@@ -201,7 +203,13 @@ step 2, not this skill's.
 total, the covered/uncovered split and the revision of each document. They are as stale as any
 generated file and nothing regenerates them.
 
-**5 · `product/EPIC-01/QACR-APP-EPIC-01 Board.html` is supplied by the PM, not built here.** It is a
+**5 · Two tables of the epic document are not parsed, so no tool can tell you they moved.**
+Section 4's dispositions and section 5's design queue — nine rows each — are read by nobody here.
+They were unchanged at Rev 1.20, verified by hand. Until something parses them, check them by eye
+and say in the commit message that you did; a blind spot that is written down is survivable, one that
+is not is the `86 generated notes` failure again.
+
+**6 · `product/EPIC-01/QACR-APP-EPIC-01 Board.html` is supplied by the PM, not built here.** It is a
 rendering of the epic map, and if it did not arrive with the revision it is now stale while looking
 current — its filename carries no revision, so nothing shows it. Ask for the matching export, and
 until it arrives say in the commit message which revision the Board is at. Prefer a filename that

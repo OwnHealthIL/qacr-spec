@@ -1,0 +1,293 @@
+[
+ {
+  "milestone": "1",
+  "epic": "E01",
+  "features": [
+   "F01.4",
+   "F01.9"
+  ],
+  "new_reqs": 2
+ },
+ {
+  "milestone": "2",
+  "epic": "E01",
+  "features": [
+   "F01.7"
+  ],
+  "new_reqs": 1
+ },
+ {
+  "milestone": "3",
+  "epic": "E01",
+  "features": [
+   "F01.1",
+   "F01.2",
+   "F01.3",
+   "F01.5",
+   "F01.6",
+   "F01.8"
+  ],
+  "new_reqs": 14
+ },
+ {
+  "milestone": "3",
+  "epic": "E02",
+  "features": [
+   "F02.1",
+   "F02.2",
+   "F02.4",
+   "F02.5",
+   "F02.6"
+  ],
+  "new_reqs": 16
+ },
+ {
+  "milestone": "4",
+  "epic": "E02",
+  "features": [
+   "F02.3",
+   "F02.8",
+   "F02.7"
+  ],
+  "new_reqs": 5
+ },
+ {
+  "milestone": "3",
+  "epic": "E03",
+  "features": [
+   "F03.1",
+   "F03.2"
+  ],
+  "new_reqs": 5
+ },
+ {
+  "milestone": "1",
+  "epic": "E04",
+  "features": [
+   "F04.1",
+   "F04.2",
+   "F04.3",
+   "F04.4",
+   "F04.7",
+   "F04.6",
+   "F04.8"
+  ],
+  "new_reqs": 14
+ },
+ {
+  "milestone": "3",
+  "epic": "E04",
+  "features": [
+   "F04.5"
+  ],
+  "new_reqs": 3
+ },
+ {
+  "milestone": "1",
+  "epic": "E05",
+  "features": [
+   "F05.1",
+   "F05.3",
+   "F05.4",
+   "F05.5"
+  ],
+  "new_reqs": 8
+ },
+ {
+  "milestone": "2",
+  "epic": "E05",
+  "features": [
+   "F05.6"
+  ],
+  "new_reqs": 1
+ },
+ {
+  "milestone": "3",
+  "epic": "E05",
+  "features": [
+   "F05.2"
+  ],
+  "new_reqs": 1
+ },
+ {
+  "milestone": "1",
+  "epic": "E06",
+  "features": [
+   "F06.1",
+   "F06.2",
+   "F06.3",
+   "F06.6",
+   "F06.4",
+   "F06.5"
+  ],
+  "new_reqs": 19
+ },
+ {
+  "milestone": "1",
+  "epic": "E07",
+  "features": [
+   "F07.2",
+   "F07.3",
+   "F07.4"
+  ],
+  "new_reqs": 15
+ },
+ {
+  "milestone": "2",
+  "epic": "E07",
+  "features": [
+   "F07.1"
+  ],
+  "new_reqs": 2
+ },
+ {
+  "milestone": "2",
+  "epic": "E08",
+  "features": [
+   "F08.2",
+   "F08.3",
+   "F08.4"
+  ],
+  "new_reqs": 5
+ },
+ {
+  "milestone": "3",
+  "epic": "E08",
+  "features": [
+   "F08.1"
+  ],
+  "new_reqs": 1
+ },
+ {
+  "milestone": "1",
+  "epic": "E09",
+  "features": [
+   "F09.1",
+   "F09.2",
+   "F09.4"
+  ],
+  "new_reqs": 5
+ },
+ {
+  "milestone": "3",
+  "epic": "E10",
+  "features": [
+   "F10.3",
+   "F10.4",
+   "F10.5"
+  ],
+  "new_reqs": 6
+ },
+ {
+  "milestone": "4",
+  "epic": "E10",
+  "features": [
+   "F10.1",
+   "F10.2"
+  ],
+  "new_reqs": 6
+ },
+ {
+  "milestone": "5",
+  "epic": "E10",
+  "features": [
+   "F10.6"
+  ],
+  "new_reqs": 2
+ },
+ {
+  "milestone": "3",
+  "epic": "E11",
+  "features": [
+   "F11.1",
+   "F11.2"
+  ],
+  "new_reqs": 8
+ },
+ {
+  "milestone": "5",
+  "epic": "E11",
+  "features": [
+   "F11.4",
+   "F11.5",
+   "F11.6",
+   "F11.7"
+  ],
+  "new_reqs": 11
+ },
+ {
+  "milestone": "1",
+  "epic": "E12",
+  "features": [
+   "F12.1",
+   "F12.2",
+   "F12.3"
+  ],
+  "new_reqs": 6
+ },
+ {
+  "milestone": "5",
+  "epic": "E12",
+  "features": [
+   "F12.4"
+  ],
+  "new_reqs": 1
+ },
+ {
+  "milestone": "3",
+  "epic": "E13",
+  "features": [
+   "F13.1",
+   "F13.2",
+   "F13.3",
+   "F13.4"
+  ],
+  "new_reqs": 10
+ },
+ {
+  "milestone": "4",
+  "epic": "E13",
+  "features": [
+   "F13.5"
+  ],
+  "new_reqs": 1
+ },
+ {
+  "milestone": "3",
+  "epic": "E14",
+  "features": [
+   "F14.1",
+   "F14.2",
+   "F14.3"
+  ],
+  "new_reqs": 4
+ },
+ {
+  "milestone": "5",
+  "epic": "E14",
+  "features": [
+   "F14.4"
+  ],
+  "new_reqs": 1
+ },
+ {
+  "milestone": "3",
+  "epic": "E15",
+  "features": [
+   "F15.1",
+   "F15.2",
+   "F15.3",
+   "F15.4",
+   "F15.5"
+  ],
+  "new_reqs": 11
+ },
+ {
+  "milestone": "4",
+  "epic": "E15",
+  "features": [
+   "F15.6"
+  ],
+  "new_reqs": 1
+ }
+]

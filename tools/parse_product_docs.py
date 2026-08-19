@@ -424,8 +424,13 @@ def parse_fr(path):
 
 
 # ---------------------------------------------------------------- EPIC document
+# '\u00b7 M3\u2013M5 \u00b7 31 requirements, 8 future development'. The second number is a
+# separate statement the epic makes about itself: how many of its requirements
+# sit at the last milestone. Rev 1.20 moved E02's from 7 to 8, and nothing else
+# in either document says so.
 EPIC_HEAD = re.compile(
-    r"\u00b7\s*M(\d+)(?:\u2013M(\d+))?\s*\u00b7\s*(\d+) requirements")
+    r"\u00b7\s*M(\d+)(?:\u2013M(\d+))?\s*\u00b7\s*(\d+) requirements"
+    r"(?:,\s*(\d+) future development)?")
 ROADMAP_MS = re.compile(r"^3\.\d Milestone (\d+)")
 # The milestone vocabulary is NOT fixed here. M5 arrived at Rev 1.19, and a
 # reader holding M[1-4] grouped every M5 line under the previous heading without
@@ -438,6 +443,7 @@ def parse_epic(path):
     epics, features = {}, {}
     cur_epic, in_catalogue, sec = None, False, None
     stated_epic_counts, roadmap, road_ms = {}, [], None
+    stated_future_dev = {}
     seen_ms = set()
     for kind, val in blocks(path):
         if kind == "p":
@@ -464,6 +470,8 @@ def parse_epic(path):
                 m = EPIC_HEAD.search(val)
                 if m and cur_epic not in stated_epic_counts:
                     stated_epic_counts[cur_epic] = int(m.group(3))
+                    if m.group(4) is not None:
+                        stated_future_dev[cur_epic] = int(m.group(4))
             continue
 
         cells = list(val)
@@ -513,7 +521,7 @@ def parse_epic(path):
             "domains": domains,
             "requirements": ids,
         }
-    return epics, features, stated_epic_counts, roadmap, seen_ms
+    return epics, features, stated_epic_counts, roadmap, seen_ms, stated_future_dev
 
 
 # --------------------------------------------------------------------- validate
@@ -548,7 +556,7 @@ def priority_summary(header, rows):
 
 
 def validate(reqs, dupes, stated, epics, features, epic_counts, roadmap,
-             seen_ms, meta):
+             seen_ms, future_dev, meta):
     problems, notes = [], []
     lists, register = meta["lists"], meta["register"]
 
@@ -726,6 +734,27 @@ def validate(reqs, dupes, stated, epics, features, epic_counts, roadmap,
                             f"its feature table carries {got[eid]}")
     notes.append(f"per-epic header counts checked: {len(epic_counts)} epics")
 
+    # ---- each epic header states a SECOND count about itself: how many of its
+    # requirements sit at the last milestone — "31 requirements, 8 future
+    # development". Rev 1.20 moved E02's from 7 to 8 and nothing else in either
+    # document says so. Which milestone counts as "future development" is derived
+    # from the vocabulary rather than named here; writing M5 in would reintroduce
+    # the fixed-vocabulary trap one level up.
+    numeric = sorted((int(m) for m in known if m.isdigit()), reverse=True)
+    if future_dev and numeric:
+        last = str(numeric[0])
+        got_fd = Counter(r["epic"] for r in reqs.values() if r["milestone"] == last)
+        for eid in sorted(future_dev):
+            if future_dev[eid] != got_fd[eid]:
+                problems.append(f"{eid} header states {future_dev[eid]} future "
+                                f"development requirements, the Pri column gives "
+                                f"{got_fd[eid]} at M{last}")
+        notes.append(f"'future development' counts checked against M{last}: "
+                     f"{len(future_dev)} epics, {sum(future_dev.values())} "
+                     f"requirements")
+    elif not future_dev:
+        notes.append("no epic header states a 'future development' count")
+
     # ---- section 3 roadmap: each cell states how many requirements the features
     # FIRST NEEDED at that milestone introduce there. Not the same population as
     # "every requirement of this epic at this Pri" — a feature that starts at M1
@@ -755,7 +784,7 @@ def main():
     print(f"EPIC : {os.path.basename(epic_path)}\n")
 
     reqs, dupes, stated, meta = parse_fr(fr_path)
-    epics, features, epic_counts, roadmap, seen_ms = parse_epic(epic_path)
+    epics, features, epic_counts, roadmap, seen_ms, future_dev = parse_epic(epic_path)
 
     # the epic a requirement belongs to is the epic of its feature
     epic_of_feature = {f["id"]: f["epic"] for f in features.values()}
@@ -763,7 +792,7 @@ def main():
         r["epic"] = epic_of_feature.get(r["feature"], "")
 
     problems, notes = validate(reqs, dupes, stated, epics, features,
-                               epic_counts, roadmap, seen_ms, meta)
+                               epic_counts, roadmap, seen_ms, future_dev, meta)
     for n in notes:
         print("note    ", n)
     for p in problems:
@@ -777,6 +806,11 @@ def main():
     write(os.path.join(FR_DIR, "requirements.json"), [reqs[k] for k in sorted(reqs)])
     write(os.path.join(EPIC_DIR, "features.json"),
           [features[k] for k in sorted(features)])
+    # The section 3 roadmap is validated on every parse, but it is also a thing
+    # that CHANGES — Rev 1.20 moved E02's milestone-3 cell from 14 to 16 — and a
+    # manifest cannot report a change to a table nobody persisted.
+    write(os.path.join(EPIC_DIR, "roadmap.json"),
+          sorted(roadmap, key=lambda c: (c["epic"], int(c["milestone"]))))
     # The Decision Log and the Review Register get a file each, under the
     # document's own name for them, because they are read on their own.
     write(os.path.join(FR_DIR, "decisions.json"), lists["decisions"])

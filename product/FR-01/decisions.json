@@ -1,5 +1,21 @@
 [
  {
+  "ref": "Q-101",
+  "question": "The date-of-birth requirement says the user shall confirm, and configuration can suppress the step",
+  "decision": "FR-AUT-012 stays as written. The suppression state is intended for demonstration partners, and the control is guarded by the product manager, who determines which state a partner receives — not by the software. Recorded because a reader who meets that state will ask how it squares with the requirement",
+  "where_it_landed": "FR-AUT-012",
+  "closed_at": "Rev 1.20",
+  "comments": ""
+ },
+ {
+  "ref": "Q-102",
+  "question": "Consent acknowledgement and the invite-code path arrive at milestone 4 while phone entry is at milestone 3",
+  "decision": "Not a gap. Phone verification is not needed in the clinical studies, so no study collects personal information ahead of the acknowledgement gate, and an unregistered number needing an invite code does not arise. This single fact settles both questions",
+  "where_it_landed": "FR-CNS-002, FR-AUT-006",
+  "closed_at": "Rev 1.20",
+  "comments": ""
+ },
+ {
   "ref": "Q-32",
   "question": "The configuration-set version is not recorded with the test record",
   "decision": "Recorded. FR-CFG-003 moves from milestone 5 to milestone 3, so a completed test carries the configuration it ran under. Milestone 3 is also the earliest it can hold, because it depends on the configuration set that FR-CFG-001 requires there",

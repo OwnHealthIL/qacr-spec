@@ -514,7 +514,7 @@
  },
  {
   "id": "FR-AUT-003",
-  "text": "The software shall transmit the phone number to the backend to determine whether it is already registered in the system.",
+  "text": "The software shall transmit the phone number to the backend to determine whether it is already registered in the system. Where the backend does not respond, the software shall not present the number as unregistered.",
   "section_number": "6",
   "section_name": "User Onboarding, Identification and Authentication",
   "milestone": "3",
@@ -524,7 +524,7 @@
   "note": "Realised by allowCreation (false for this app)",
   "feature": "F02.1",
   "epic": "E02",
-  "sha256": "444128a37b77d77cba8c40c39bb5d61f988ccc06bd33e4d608c161c80c097b68"
+  "sha256": "2852516350a8d956f766dce681b2a6e6da681e6882f3605ac1d6b76a95c09c5e"
  },
  {
   "id": "FR-AUT-004",
@@ -775,6 +775,66 @@
   "feature": "F02.4",
   "epic": "E02",
   "sha256": "4ac6c4cc36ea7f2647f5eded8ea36a5c25d3c06285fa5002e331bb0f16f9c0e3"
+ },
+ {
+  "id": "FR-AUT-021",
+  "text": "Where test data has not yet been successfully transmitted to the backend, the software shall not complete a sign-out, and shall inform the user that the transmission must finish first.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "3",
+  "source_refs": [
+   "Review comment",
+   "QACR-APP-SPEC-02"
+  ],
+  "note": "Added at review. Signing out before the data has reached the backend discards the test irrecoverably. Complements FR-RDY-012, which retransmits data that did not arrive",
+  "feature": "F02.5",
+  "epic": "E02",
+  "sha256": "6115dd51deb284cbbc2e6e480850366cf7de02781ef49fd90cd9634b5302c0b1"
+ },
+ {
+  "id": "FR-AUT-022",
+  "text": "Where the backend holds no identity for the authenticated user, the software shall require the user to complete the verification process again.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "3",
+  "source_refs": [
+   "Review comment",
+   "QACR-APP-SPEC-02"
+  ],
+  "note": "Added at review. FR-AUT-013 requires re-verification when the token expires; this is a different trigger with the same outcome and nothing covered it",
+  "feature": "F02.5",
+  "epic": "E02",
+  "sha256": "2e681d4d53d79092e5a0b702133ec22fa370d1f3436bfc94b461438697149cb4"
+ },
+ {
+  "id": "FR-AUT-023",
+  "text": "At phone-number entry, where the platform provides a means of offering the phone numbers held by the device, the software shall present it.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "5",
+  "source_refs": [
+   "Review comment",
+   "QACR-APP-SPEC-02"
+  ],
+  "note": "Added at review, future development. Available on Android only. The step, its content and its outcome are identical on both platforms, so FR-PLT-006 is unaffected",
+  "feature": "F02.1",
+  "epic": "E02",
+  "sha256": "7df81c6ac3ff0f4be18f788ba3f41dbbdefbc2e7f32a347fb621268c03bb6aba"
+ },
+ {
+  "id": "FR-AUT-024",
+  "text": "The software shall accept a one-time password entered automatically by the platform.",
+  "section_number": "6",
+  "section_name": "User Onboarding, Identification and Authentication",
+  "milestone": "4",
+  "source_refs": [
+   "Review comment",
+   "QACR-APP-SPEC-02"
+  ],
+  "note": "Added at review. Both platforms",
+  "feature": "F02.2",
+  "epic": "E02",
+  "sha256": "22699df1c3bc42bea9f9a12fddc5af8d5ae86593e3ad3221c0d47c7aa24a3778"
  },
  {
   "id": "FR-CAM-001",
