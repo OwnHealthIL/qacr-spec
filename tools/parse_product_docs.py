@@ -89,9 +89,26 @@ def revision_of(docx_path):
 
     Never a brief's `Traces to` header: a brief is written against the revision
     its author expects, which is routinely ahead of what product/ holds.
+
+    A filename naming no revision is a HARD STOP, not a "?". This function is the
+    single definition of which revision product/ holds, and five callers write its
+    answer somewhere that gets committed — appendices.json, every feature file's
+    provenance footer, coverage.tsv's extraction_scope, the change manifest, and
+    the parse summary. A sentinel would put "Rev?" in all of them while the parse
+    still exited zero, which is the exact failure this pipeline exists to prevent:
+    "nobody knows" rendered indistinguishably from a known value.
+
+    The pattern is deliberately narrow. A file called `... Rev 1.21 FINAL.docx`
+    fails here rather than being read as Rev 1.21 — whether it is, is a human's
+    call, not a regex's.
     """
     m = re.search(r"Rev\s*([\d.]+)\.docx$", os.path.basename(docx_path))
-    return m.group(1) if m else "?"
+    if not m:
+        sys.exit(f"cannot read a revision from '{os.path.basename(docx_path)}' — a "
+                 f"product document's filename must end 'Rev<n>.docx'. That "
+                 f"filename is the only record of which revision product/ holds, "
+                 f"so it is not something this script may guess at.")
+    return m.group(1)
 
 
 def cell_text(tc):
