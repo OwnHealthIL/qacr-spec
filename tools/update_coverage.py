@@ -69,13 +69,14 @@ def main():
     ap.add_argument("--write", action="store_true")
     args = ap.parse_args()
 
-    reqs = {r["id"]: r for r in json.load(open(REQS))}
+    with open(REQS, encoding="utf-8") as fh:
+        reqs = {r["id"]: r for r in json.load(fh)}
     rows_per_req = Counter()
-    with open(BEHAVIOUR) as fh:
+    with open(BEHAVIOUR, encoding="utf-8", newline="") as fh:
         for row in csv.DictReader(fh, delimiter="\t"):
             rows_per_req[row["requirement"]] += 1
     existing = {}
-    with open(COVERAGE) as fh:
+    with open(COVERAGE, encoding="utf-8", newline="") as fh:
         for row in csv.DictReader(fh, delimiter="\t"):
             existing[row["requirement"]] = row
 
@@ -83,7 +84,7 @@ def main():
     added = sorted(set(reqs) - set(existing))
     dropped = sorted(set(existing) - set(reqs))
 
-    out, rescoped, recounted, remapped = [], [], [], []
+    out, recounted, remapped = [], [], []
     for rid in sorted(reqs):
         r = reqs[rid]
         n = rows_per_req.get(rid, 0)
@@ -135,7 +136,7 @@ def main():
         print("\nno change" if unchanged else "\nrun again with --write to apply")
         return 0
 
-    with open(COVERAGE, "w", newline="") as fh:
+    with open(COVERAGE, "w", encoding="utf-8", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=COLUMNS, delimiter="\t",
                            lineterminator="\n")
         w.writeheader()

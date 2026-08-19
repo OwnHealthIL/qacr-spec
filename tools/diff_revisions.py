@@ -73,6 +73,20 @@ def old_json(path):
     return None if raw is None else json.loads(raw.decode("utf8"))
 
 
+def new_json(path, default=None):
+    """The file as the working tree holds it, or `default` where it has not got it.
+
+    UTF-8 explicitly, and through a context manager: these files are written with
+    ensure_ascii=False and carry the documents' en and em dashes, so a cp1252
+    platform default would fail to read back what the parser just wrote.
+    """
+    full = os.path.join(REPO, path)
+    if not os.path.exists(full):
+        return default
+    with open(full, encoding="utf-8") as fh:
+        return json.load(fh)
+
+
 def by_id(rows, key="id"):
     return {r[key]: r for r in rows} if rows else {}
 
@@ -259,8 +273,8 @@ def main():
                          "a manifest in the tree goes stale, git holds the history)")
     args = ap.parse_args()
 
-    new_reqs = json.load(open(os.path.join(REPO, FR_JSON)))
-    new_feats = json.load(open(os.path.join(REPO, EPIC_JSON)))
+    new_reqs = new_json(FR_JSON, [])
+    new_feats = new_json(EPIC_JSON, [])
     old_reqs, old_feats = old_json(FR_JSON), old_json(EPIC_JSON)
     if old_reqs is None:
         sys.exit(f"HEAD has no {FR_JSON} — nothing to diff against")
@@ -273,10 +287,8 @@ def main():
     reqs = diff_requirements(old_reqs, new_reqs)
     feats = diff_features(old_feats, new_feats)
 
-    dec_new = json.load(open(os.path.join(REPO, DEC_JSON))) \
-        if os.path.exists(os.path.join(REPO, DEC_JSON)) else []
-    reg_new = json.load(open(os.path.join(REPO, REG_JSON))) \
-        if os.path.exists(os.path.join(REPO, REG_JSON)) else []
+    dec_new = new_json(DEC_JSON, [])
+    reg_new = new_json(REG_JSON, [])
     dec_old, reg_old = old_json(DEC_JSON), old_json(REG_JSON)
     decisions = diff_keyed(dec_old, dec_new, "ref", ("question", "decision"))
     register = diff_keyed(reg_old, reg_new, "ref", ("group",))
@@ -286,8 +298,7 @@ def main():
                  "features": ", ".join(r["features"]),
                  "new_reqs": r["new_reqs"]} for r in (rows or [])]
 
-    road_new = json.load(open(os.path.join(REPO, ROAD_JSON))) \
-        if os.path.exists(os.path.join(REPO, ROAD_JSON)) else []
+    road_new = new_json(ROAD_JSON, [])
     road_old = old_json(ROAD_JSON)
     roadmap = diff_keyed(road_cells(road_old), road_cells(road_new), "cell",
                          ("features", "new_reqs"))
@@ -449,7 +460,7 @@ def main():
                 "decisions": decisions, "register": register, "roadmap": roadmap,
                 "structurally_empty": structurally_empty}
     if args.json:
-        with open(args.json, "w") as fh:
+        with open(args.json, "w", encoding="utf-8") as fh:
             json.dump(manifest, fh, indent=1, ensure_ascii=False)
         print(f"\nmanifest -> {args.json}")
 

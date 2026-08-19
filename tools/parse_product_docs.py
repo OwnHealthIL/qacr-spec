@@ -546,9 +546,14 @@ def priority_summary(header, rows):
                 bad = True
             counts[ms] = n or 0
         stated_total = count_cell(cells[i_total]) if i_total < len(cells) else None
-        rec = {"area": cells[0], "counts": counts, "total": stated_total,
+        # The area name comes from the column the HEADER calls 'Area', like every
+        # other cell here. Reading it from cells[0] instead would go wrong the
+        # moment the table gains a leading column — the same positional
+        # assumption this parser exists to stop making.
+        area = cells[i_area] if i_area < len(cells) else ""
+        rec = {"area": area, "counts": counts, "total": stated_total,
                "unreadable": bad}
-        if re.match(r"^All areas", cells[0], re.I):
+        if re.match(r"^All areas", area, re.I):
             totals = rec
         else:
             areas.append(rec)
@@ -799,7 +804,10 @@ def main():
         print("MISMATCH", p)
 
     def write(path, obj):
-        with open(path, "w") as fh:
+        # UTF-8 explicitly, not the platform default. These files are dumped with
+        # ensure_ascii=False and the documents are full of en and em dashes, so a
+        # cp1252 default would raise UnicodeEncodeError rather than write them.
+        with open(path, "w", encoding="utf-8") as fh:
             json.dump(obj, fh, indent=1, ensure_ascii=False)
 
     lists = meta["lists"]
