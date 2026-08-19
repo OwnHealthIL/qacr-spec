@@ -1,0 +1,466 @@
+[
+ {
+  "ref": "Q-32",
+  "question": "The configuration-set version is not recorded with the test record",
+  "decision": "Recorded. FR-CFG-003 moves from milestone 5 to milestone 3, so a completed test carries the configuration it ran under. Milestone 3 is also the earliest it can hold, because it depends on the configuration set that FR-CFG-001 requires there",
+  "where_it_landed": "FR-CFG-003",
+  "closed_at": "Rev 1.19",
+  "comments": ""
+ },
+ {
+  "ref": "Q-100",
+  "question": "Does FR-CFG-004 duplicate FR-RES-006?",
+  "decision": "Yes. The clause requiring a demonstration result to be labelled has been removed from FR-CFG-004, which is now a backend rule alone; FR-RES-006 carries the user-facing obligation. One requirement, one idea",
+  "where_it_landed": "FR-CFG-004, FR-RES-006",
+  "closed_at": "Rev 1.19",
+  "comments": ""
+ },
+ {
+  "ref": "Q-07",
+  "question": "PIN length and composition",
+  "decision": "Four digits, numeric only. The attempt limit is five, from the backend SRS",
+  "where_it_landed": "FR-ACC-004, Appendix B",
+  "closed_at": "Rev 1.4",
+  "comments": ""
+ },
+ {
+  "ref": "Q-08",
+  "question": "Time window within which the new-kit alert is shown",
+  "decision": "24 hours, held as a configurable value",
+  "where_it_landed": "FR-KIT-007, Appendix B",
+  "closed_at": "Rev 1.4",
+  "comments": ""
+ },
+ {
+  "ref": "Q-10",
+  "question": "Maximum number of users per phone number",
+  "decision": "appUniqueIdentifier remains as configured today. The requirement itself is deferred, so multiple users on one phone number is not supported in this version",
+  "where_it_landed": "FR-AUT-011, Appendix B",
+  "closed_at": "Rev 1.4",
+  "comments": ""
+ },
+ {
+  "ref": "Q-11",
+  "question": "Consent recording mandatory in the backend SRS but deferred here",
+  "decision": "Consent recording is future development. FR-CNS-007 moved to milestone 5, and the backend SRS is to be relaxed to match. Briefly reversed at Rev 1.14 and reinstated at Rev 1.15; the Rev 1.4 decision stands",
+  "where_it_landed": "FR-CNS-007; SRS-BE CON.1 and CON.2 to be revised",
+  "closed_at": "Rev 1.4",
+  "comments": ""
+ },
+ {
+  "ref": "Q-12",
+  "question": "Kit-expiry validation mandatory in the backend SRS but deferred here",
+  "decision": "The backend obligation follows the Risk Analysis. RA 7.25 has been removed, so SRS-BE TSM.2 and TSM.3 are to be relaxed to match",
+  "where_it_landed": "FR-KIT-005; SRS-BE TSM.2 and TSM.3 to be revised",
+  "closed_at": "Rev 1.4",
+  "comments": ""
+ },
+ {
+  "ref": "Q-13",
+  "question": "The backend SRS uses strip-product terminology",
+  "decision": "The backend SRS will be updated. No change to this document",
+  "where_it_landed": "SRS-BE COM.5, COM.6, COM.7, COM.8 to be revised",
+  "closed_at": "Rev 1.4",
+  "comments": ""
+ },
+ {
+  "ref": "Q-14",
+  "question": "Code obfuscation — which platform",
+  "decision": "Android only; iOS has no obfuscation. This agrees with SPTA 4.11",
+  "where_it_landed": "FR-SEC-002, Appendix G.3",
+  "closed_at": "Rev 1.5",
+  "comments": ""
+ },
+ {
+  "ref": "Q-19",
+  "question": "Is the administrator mode in scope?",
+  "decision": "Excluded. An authenticated administrator viewing database records does not constrain the application; SPTA 1.2 and 1.6 treat administrator misuse as a cloud-side threat",
+  "where_it_landed": "SRS-BE AD.1 and AD.2, out of scope",
+  "closed_at": "Rev 1.4",
+  "comments": ""
+ },
+ {
+  "ref": "Q-20",
+  "question": "Does the application need to launch external applications?",
+  "decision": "Yes, but only where a results-sharing action requires it, and only for applications explicitly configured for the purpose. Stated generally rather than naming a particular application, and guarded so that arbitrary applications cannot be launched",
+  "where_it_landed": "FR-SHR-016",
+  "closed_at": "Rev 1.5",
+  "comments": ""
+ },
+ {
+  "ref": "Q-48",
+  "question": "The milestone calendar",
+  "decision": "Milestone 1 is mid-October 2026, milestone 2 early-December 2026, milestones 3 and 4 both early-January 2027. The priority number a requirement carries is its milestone number",
+  "where_it_landed": "Section 2.2",
+  "closed_at": "Rev 1.7",
+  "comments": ""
+ },
+ {
+  "ref": "Q-49",
+  "question": "Does configuration retrieval arrive before the requirements that depend on it?",
+  "decision": "Yes. FR-CFG-001 and FR-CFG-002 move to milestone 3, and five requirements that had been realised by configuration are restated as fixed in the application",
+  "where_it_landed": "FR-CFG-001, FR-CFG-002, FR-RDY-008, FR-TXT-019, FR-RES-002, FR-IMG-001, FR-CAM-001, Appendix F",
+  "closed_at": "Rev 1.7",
+  "comments": ""
+ },
+ {
+  "ref": "Q-50",
+  "question": "Do the timing definitions arrive with the controls that enforce them?",
+  "decision": "Yes. FR-TIM-001, FR-TIM-002 and FR-TIM-003 move to milestone 1. FR-TIM-012, the invalidation message, is not needed for the demonstration and stays at milestone 3",
+  "where_it_landed": "Section 12",
+  "closed_at": "Rev 1.7",
+  "comments": ""
+ },
+ {
+  "ref": "Q-51",
+  "question": "Does the blocking-message content standard arrive before the messages that must meet it?",
+  "decision": "Yes. FR-TXT-020 moves to milestone 1, alongside the twelve milestone-1 requirements that block the user",
+  "where_it_landed": "FR-TXT-020",
+  "closed_at": "Rev 1.7",
+  "comments": ""
+ },
+ {
+  "ref": "Q-52",
+  "question": "Do the support channels arrive before the messages that name them?",
+  "decision": "Yes. FR-SUP-002 moves to milestone 3, alongside the six requirements that direct the user to support",
+  "where_it_landed": "FR-SUP-002",
+  "closed_at": "Rev 1.7",
+  "comments": ""
+ },
+ {
+  "ref": "Q-53",
+  "question": "Does the control that blocks a reused kit arrive with the detection?",
+  "decision": "Yes. FR-KIT-004 moves to milestone 3, alongside FR-KIT-002 and FR-KIT-007",
+  "where_it_landed": "FR-KIT-004",
+  "closed_at": "Rev 1.7",
+  "comments": ""
+ },
+ {
+  "ref": "Q-54",
+  "question": "How does milestone 1 present a result before the payload contract exists?",
+  "decision": "By a fixed demonstration payload. FR-RES-006 requires a demonstration build to present a fixed payload, not to present it as a clinical result, and to make the demonstration state evident on every screen showing a result",
+  "where_it_landed": "FR-RES-006",
+  "closed_at": "Rev 1.7",
+  "comments": ""
+ },
+ {
+  "ref": "Q-55",
+  "question": "Does the requirement that gates verification arrive before what it gates?",
+  "decision": "Yes. FR-LCM-006 moves to milestone 3. Whether provider integration testing must also move is held open as Q-41",
+  "where_it_landed": "FR-LCM-006",
+  "closed_at": "Rev 1.7",
+  "comments": ""
+ },
+ {
+  "ref": "Q-56",
+  "question": "Is acceptance of the policy documents a precondition of use at milestone 3?",
+  "decision": "Not at milestone 3. Users do not go through phone verification at that milestone, so no personal information is collected before the acknowledgement gate exists, and the consent requirements stay at milestone 4. Recorded so that the placement does not read as an oversight. This answer raises Q-38",
+  "where_it_landed": "FR-CNS-001 to FR-CNS-003, FR-PRT-005",
+  "closed_at": "Rev 1.7",
+  "comments": ""
+ },
+ {
+  "ref": "Q-57",
+  "question": "Is model-level exclusion committed?",
+  "decision": "Yes. FR-PLT-004 moves to milestone 3, so the scope FR-PLT-005 hands to it is committed by something",
+  "where_it_landed": "FR-PLT-004",
+  "closed_at": "Rev 1.7",
+  "comments": ""
+ },
+ {
+  "ref": "Q-58",
+  "question": "Is there a milestone between the clinical study and the submission?",
+  "decision": "No. Everything required for the submission is required for the clinical study. Behaviour that should not be shown to study participants is held behind a feature flag rather than deferred, so FR-AUT-010 and FR-AUT-012 are milestone 3",
+  "where_it_landed": "FR-AUT-010, FR-AUT-012",
+  "closed_at": "Rev 1.7",
+  "comments": ""
+ },
+ {
+  "ref": "Q-59",
+  "question": "Is the Date of Birth part of login in this version?",
+  "decision": "No. FR-AUT-009 is withdrawn: while shared phone numbers are deferred its condition was always true, so it was satisfied by writing no code. The confirmation at the start of every test, FR-AUT-012, is unaffected. Results-center re-entry after a timeout now uses the PIN, and the RA 6.4 trace is reconciled to one list",
+  "where_it_landed": "FR-AUT-009 to Appendix D; FR-AUT-008, FR-AUT-010 and FR-ACC-009 restated; FR-AUT-007 note",
+  "closed_at": "Rev 1.7",
+  "comments": ""
+ },
+ {
+  "ref": "Q-60",
+  "question": "Is the maximum number of incorrect PIN attempts still outstanding?",
+  "decision": "No. It was settled at Rev 1.4 as five consecutive attempts and is stated in FR-ACC-004 and FR-ACC-005. BL-13 was still recording it as deferred and is now closed",
+  "where_it_landed": "BL-13 removed from Appendix E",
+  "closed_at": "Rev 1.7",
+  "comments": ""
+ },
+ {
+  "ref": "Q-61",
+  "question": "May patient data pass through a build that does not enforce the transport controls?",
+  "decision": "No. FR-SEC-014 requires that no build in which FR-COM-001 and FR-COM-002 are unimplemented transmits personal or health information",
+  "where_it_landed": "FR-SEC-014",
+  "closed_at": "Rev 1.7",
+  "comments": ""
+ },
+ {
+  "ref": "Q-35",
+  "question": "Result positivity is not available to the application",
+  "decision": "The application can retain a non-revealing indicator of recent result positivity and use that to decide what to present, following the existing kidney application, rather than depending on the backend to supply positivity",
+  "where_it_landed": "FR-PRT-013 note; the post-test lobby items in F10.6",
+  "closed_at": "Rev 1.8",
+  "comments": ""
+ },
+ {
+  "ref": "Q-38",
+  "question": "Phone verification is milestone 3, but users are not expected to go through it at milestone 3",
+  "decision": "Both placements stand and are not in conflict. The verification flow is milestone 3 because it must exist for the submission; consent is milestone 4 because users will not log in at milestone 3, so nothing collects personal information before the acknowledgement gate exists",
+  "where_it_landed": "FR-AUT-001 to FR-AUT-006 at 3; FR-CNS-001 to FR-CNS-003 at 4",
+  "closed_at": "Rev 1.8",
+  "comments": ""
+ },
+ {
+  "ref": "Q-68",
+  "question": "What does step confirmation mean physically?",
+  "decision": "A button. FR-FLW-001 now requires the user to confirm by activating a control provided for that purpose",
+  "where_it_landed": "FR-FLW-001; closes UX-05",
+  "closed_at": "Rev 1.8",
+  "comments": ""
+ },
+ {
+  "ref": "Q-69",
+  "question": "Is the readiness gate visible to the user?",
+  "decision": "No. The checks run silently when the user taps start test and each surfaces as an alert only on failure. There is no visible checklist, and the blocked-state pattern is an alert pattern rather than a set of screens",
+  "where_it_landed": "F01.2, F01.4, F01.5, F01.9; closes UX-04",
+  "closed_at": "Rev 1.8",
+  "comments": ""
+ },
+ {
+  "ref": "Q-70",
+  "question": "Is every demonstration replayable?",
+  "decision": "No. Which steps are replayable is defined per step in the content set, following the current usability application. FR-FLW-003 is restated accordingly",
+  "where_it_landed": "FR-FLW-003",
+  "closed_at": "Rev 1.8",
+  "comments": ""
+ },
+ {
+  "ref": "Q-71",
+  "question": "Does the results center show a history of results?",
+  "decision": "Not in this version. The results center main screen shows the most recent result at milestone 3; a history screen of the last five results, reachable only where more than one exists, is deferred as FR-PRT-015",
+  "where_it_landed": "FR-PRT-001; FR-PRT-015",
+  "closed_at": "Rev 1.8",
+  "comments": ""
+ },
+ {
+  "ref": "Q-72",
+  "question": "Is HISP delivery required in this version?",
+  "decision": "No. HL7 and the documented per-provider mapping remain at milestone 3; HISP delivery to primary care providers is separated out and deferred as FR-SHR-017",
+  "where_it_landed": "FR-SHR-005; FR-SHR-017",
+  "closed_at": "Rev 1.8",
+  "comments": ""
+ },
+ {
+  "ref": "Q-73",
+  "question": "Where does the post-test survey belong?",
+  "decision": "After the doctor consultation rather than immediately after the result, since by then the user has already seen the result. The survey and rating-prompt items move from the result-presentation epic to the doctor-engagement feature",
+  "where_it_landed": "F11.5; FR-ANL-006 to FR-ANL-009",
+  "closed_at": "Rev 1.8",
+  "comments": ""
+ },
+ {
+  "ref": "Q-74",
+  "question": "Is support contact shown on every blocking alert?",
+  "decision": "No. Only where the user cannot resolve the condition themselves. FR-SUP-003 is narrowed accordingly, since whether contact is offered depends on the alert type and its design",
+  "where_it_landed": "FR-SUP-003",
+  "closed_at": "Rev 1.8",
+  "comments": ""
+ },
+ {
+  "ref": "Q-75",
+  "question": "Is a countdown shown during the sample-freshness window or the scan?",
+  "decision": "No. Both are timed silently in the background so that the user is not hurried. FR-TIM-006 records this and the scan guidance conveys that another attempt is possible without implying time pressure",
+  "where_it_landed": "FR-TIM-006, F05.2, F06.2",
+  "closed_at": "Rev 1.8",
+  "comments": ""
+ },
+ {
+  "ref": "Q-76",
+  "question": "How is the scope of a milestone made legible in the epic map?",
+  "decision": "Twice over. A feature spanning several milestones now breaks itself down in words, one labelled line per milestone in its description, and groups its requirement identifiers the same way. Both are generated from the requirement priorities, and the build fails if a feature spanning several milestones has no per-milestone description",
+  "where_it_landed": "QACR-APP-EPIC-01 section 2.2 and every feature table",
+  "closed_at": "Rev 1.9",
+  "comments": ""
+ },
+ {
+  "ref": "Q-77",
+  "question": "Should doctor engagement, the survey and the rating prompt be one feature?",
+  "decision": "No, three. F11.5 is the consultation itself, F11.6 the post-test feedback survey, F11.7 the platform rating prompt. The prompt is separated because it is the operating system's own rather than ours, is asked once per install rather than after every test, and must not follow an invalid test or a raised result",
+  "where_it_landed": "F11.5, F11.6, F11.7",
+  "closed_at": "Rev 1.9",
+  "comments": ""
+ },
+ {
+  "ref": "Q-78",
+  "question": "Where is camera permission requested, and what happens if it is refused?",
+  "decision": "Inside the instructional flow at the point the scan is reached, not as part of the silent pre-test check set, so that the user understands why it is being asked. Refusal blocks progress rather than warning. FR-RDY-009 is restated accordingly",
+  "where_it_landed": "FR-RDY-009, F01.4",
+  "closed_at": "Rev 1.10",
+  "comments": ""
+ },
+ {
+  "ref": "Q-79",
+  "question": "How is the instructional flow presented?",
+  "decision": "As a chat-style exchange: one step at a time, the user confirms, the next arrives. Recorded because it is the design decision behind several requirements — single-step visibility, blocking conditions appearing as alerts rather than screens, and the camera permission being asked inside the flow",
+  "where_it_landed": "FR-FLW-001 note, E04 summary, F04.1",
+  "closed_at": "Rev 1.10",
+  "comments": ""
+ },
+ {
+  "ref": "Q-80",
+  "question": "Is available storage checked for the demonstration?",
+  "decision": "No. FR-RDY-008 moves to milestone 3, leaving the camera check as the only readiness requirement at milestone 1",
+  "where_it_landed": "FR-RDY-008, F01.4",
+  "closed_at": "Rev 1.10",
+  "comments": ""
+ },
+ {
+  "ref": "Q-82",
+  "question": "How is a blocking condition presented?",
+  "decision": "A user-interface decision, not a requirement, so the requirements document no longer says. In the existing application a condition raised on a cold start is a full screen, because an alert over the splash screen reads badly, and everything inside the flow is an alert. Recorded in the epic map design notes only",
+  "where_it_landed": "FR-FLW-001 note, F01.2, F01.4, F01.5, F09.2",
+  "closed_at": "Rev 1.11",
+  "comments": ""
+ },
+ {
+  "ref": "Q-83",
+  "question": "Must the application offer a retry when it blocks the user?",
+  "decision": "Yes where retrying can succeed, and no where it cannot — a retry offered on an unrecoverable condition invites the user to repeat an action that cannot work. FR-RDY-013 states both halves. Which conditions are retryable is to be listed before design verification",
+  "where_it_landed": "FR-RDY-013, F01.5",
+  "closed_at": "Rev 1.11",
+  "comments": ""
+ },
+ {
+  "ref": "Q-84",
+  "question": "What are the one-time password resend semantics?",
+  "decision": "The user may request the code again; each request counts against the same five-attempt limit as a submission, and thirty seconds must elapse between requests. The code is six digits. The user can also go back and correct the phone number, which discards the pending verification",
+  "where_it_landed": "FR-AUT-004, FR-AUT-018, FR-AUT-019",
+  "closed_at": "Rev 1.11",
+  "comments": ""
+ },
+ {
+  "ref": "Q-85",
+  "question": "Does anything request notification permission?",
+  "decision": "Nothing did, which left FR-TIM-014 unable to function. FR-COM-012 now requires the permission to be asked for behind an explanation of our own, and requires that refusing it never prevents a test being started, completed or reported. Milestone follows FR-TIM-014 and FR-COM-009",
+  "where_it_landed": "FR-COM-012, F05.5",
+  "closed_at": "Rev 1.11",
+  "comments": ""
+ },
+ {
+  "ref": "Q-86",
+  "question": "How much of the flow is spoken?",
+  "decision": "All of it. A spoken persona reads every bubble and the user can silence it. FR-FLW-008 replaces FR-IMG-020, which covered the scanning guidance alone; the widened requirement carries the same Risk Analysis traces",
+  "where_it_landed": "FR-FLW-008; FR-IMG-020 consolidated in Appendix D",
+  "closed_at": "Rev 1.11",
+  "comments": ""
+ },
+ {
+  "ref": "Q-87",
+  "question": "How does the user reach the results center from the home screen?",
+  "decision": "By a dedicated control on the home screen, in addition to the main menu. FR-PRT-007 states it",
+  "where_it_landed": "FR-PRT-007, F10.3",
+  "closed_at": "Rev 1.11",
+  "comments": ""
+ },
+ {
+  "ref": "Q-88",
+  "question": "Should a pre-test orientation be added?",
+  "decision": "No. The equivalent in the predecessor application is obsolete and is not carried forward. UX-08 is closed unadopted",
+  "where_it_landed": "UX-08, epic map section 5",
+  "closed_at": "Rev 1.11",
+  "comments": ""
+ },
+ {
+  "ref": "Q-89",
+  "question": "Can the application detect whether a sharing application is installed?",
+  "decision": "Yes, for a specific application it declares in advance, which is how the predecessor varies its sharing options. Neither platform permits enumerating what else is installed, so detection is limited to the same configured allow-list that FR-SHR-016 restricts hand-off to. Deferred with the rest of user-initiated sharing as FR-SHR-018",
+  "where_it_landed": "FR-SHR-018, F11.4",
+  "closed_at": "Rev 1.11",
+  "comments": ""
+ },
+ {
+  "ref": "Q-90",
+  "question": "How does image validation actually stage?",
+  "decision": "In two. The QCR stage is live: every Color Print marker found, then five gates applied frame by frame, a frame accepted or rejected as it is seen. Acceptance triggers capture of the rest of the set; the images are then rectified and colour-normalised, and only then are the boundary conditions evaluated, because several cannot be judged before normalisation. Either stage can send the user back to scan again. The epic map previously described the two stages the wrong way round",
+  "where_it_landed": "Section 13 intro, FR-IMG-014, FR-IMG-023, F06.1 to F06.6",
+  "closed_at": "Rev 1.12",
+  "comments": ""
+ },
+ {
+  "ref": "Q-91",
+  "question": "Is there a practice scan?",
+  "decision": "Yes. FR-IMG-022: the user may start one from the flow during a timed wait, it exercises the same QCR stage, boundary detection and guidance as a real scan, has no scanning-window limit, ends with the waiting period, and produces nothing. It exists so a user meets the scanning interaction while there is still time to struggle with it",
+  "where_it_landed": "FR-IMG-022, F04.7",
+  "closed_at": "Rev 1.12",
+  "comments": ""
+ },
+ {
+  "ref": "Q-92",
+  "question": "What fills the waiting time?",
+  "decision": "A card the user can open during a timed wait whose content changes as the wait elapses. FR-FLW-009 states the mechanism rather than the content — currently a sequence of tips — so the content can change without changing the requirement. From the reaction-phase research, which settled on changing content rather than a countdown",
+  "where_it_landed": "FR-FLW-009, F04.8",
+  "closed_at": "Rev 1.12",
+  "comments": ""
+ },
+ {
+  "ref": "Q-93",
+  "question": "Is the real-time scan guidance spoken?",
+  "decision": "Yes, and it is a separate requirement from the read-aloud flow. FR-IMG-024 speaks the framing guidance as it changes, generated from the live state of the gates; FR-FLW-008 reads the scripted content of the flow. FR-IMG-020, consolidated into FR-FLW-008 at the previous revision, stated a narrower version of FR-IMG-024",
+  "where_it_landed": "FR-IMG-024, F06.4",
+  "closed_at": "Rev 1.12",
+  "comments": ""
+ },
+ {
+  "ref": "Q-94",
+  "question": "Is demonstration mode a separate build?",
+  "decision": "No. It is a flag the backend returns with the configuration before a test starts, like any other configured behaviour, so the artefact that ships to patients can be placed in it. The three requirements that said build now say mode, and the marking required by FR-RES-006 is the only thing distinguishing a demonstration result from a real one — which raises the weight of FR-CFG-004, server-side enforcement",
+  "where_it_landed": "FR-RES-006, FR-FLW-007, FR-SEC-014, F04.6, F09.4",
+  "closed_at": "Rev 1.12",
+  "comments": ""
+ },
+ {
+  "ref": "Q-95",
+  "question": "Where is a result presented?",
+  "decision": "Not on a screen of its own. The same display is embedded in the chat at the end of the test and again in the results center, so it has to work in both places",
+  "where_it_landed": "F09.1, FR-RES-006",
+  "closed_at": "Rev 1.12",
+  "comments": ""
+ },
+ {
+  "ref": "Q-96",
+  "question": "Is consent recording in scope?",
+  "decision": "No. It remains future development as FR-CNS-007, and the Rev 1.4 decision at Q-11 stands. Brought into scope at Rev 1.14 as FR-CNS-004 on a mistaken reading of a review comment about logging consent type and timestamp, and reverted at Rev 1.15. FR-CNS-004 is recorded in Appendix D and its identifier is not reissued",
+  "where_it_landed": "FR-CNS-007 restored to Appendix E; FR-CNS-004 in Appendix D",
+  "closed_at": "Rev 1.15",
+  "comments": ""
+ },
+ {
+  "ref": "Q-97",
+  "question": "Is the configuration set only partner-specific?",
+  "decision": "No. FR-CFG-001 is broadened: the set comprises every server-supplied value that governs the behaviour of the application, of which the partner-resolved values are one part",
+  "where_it_landed": "FR-CFG-001, F01.9",
+  "closed_at": "Rev 1.14",
+  "comments": ""
+ },
+ {
+  "ref": "Q-98",
+  "question": "How is the development domain of a feature decided?",
+  "decision": "By a curated list, not a derivation. It began as a derivation from the requirement wording; ten of the eighty-two came out wrong at review, so each feature now carries an explicit set of domains and the build fails if a feature has none",
+  "where_it_landed": "domains.js; epic map section 2.3",
+  "closed_at": "Rev 1.14",
+  "comments": ""
+ },
+ {
+  "ref": "Q-62",
+  "question": "Are backlog and requirement references stable?",
+  "decision": "Yes, from Rev 1.7 onward. Every identifier ever issued is recorded in a manifest the build checks, so an identifier cannot disappear or be reused without the build failing",
+  "where_it_landed": "Section 2.1; the identifier manifest",
+  "closed_at": "Rev 1.7",
+  "comments": ""
+ }
+]

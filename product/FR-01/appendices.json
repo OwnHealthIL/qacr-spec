@@ -1,0 +1,1000 @@
+{
+ "revision": "1.19",
+ "part_titles": {
+  "terminology.1": "Superseded Component Names",
+  "terminology.2": "Names for User-Operated Parts",
+  "excluded.1": "Not Included in This Version — 15 requirements",
+  "superseded.2": "Superseded Wording and Capability Limits — 1 row",
+  "consolidated.3": "Consolidated into Another Requirement — 6 requirements",
+  "unaccounted.4": "Identifiers Not Accounted For",
+  "configs.1": "Configurations That Realise an Existing Requirement",
+  "configs.2": "Configurations Controlling Deferred Features",
+  "configs.3": "Configurations Outside the Scope of This Document",
+  "threat.1": "Threats With an Application Control",
+  "threat.2": "Threats Controlled Outside the Application",
+  "threat.3": "Observations"
+ },
+ "excluded": [
+  {
+   "requirement": "BL-38",
+   "description": "The software shall record analytics events for the post-test lobby, comprising lobby display with the completion state of each action, and action, done, undone, collapse and expand interactions, each identifying the action type.",
+   "disposition": "Not included",
+   "risk_analysis_impact": "Withdrawn at Guy's direction, 12 Aug 2026. Withdrawn at Guy's direction: the lobby analytics event set is feature-spec detail, not a functional requirement. FR-ANL-001 already requires analytics for progress through the test flow. Was a deferred backlog item and is not carried into milestone 5.",
+   "comments": "",
+   "id": "BL-38",
+   "part": "1"
+  },
+  {
+   "requirement": "FR-IMG-012",
+   "description": "The backend shall independently re-validate image quality and block a result where thresholds are not met",
+   "disposition": "Not included",
+   "risk_analysis_impact": "RESOLVED. The current RA draft has replaced the backend re-validation clause in RA 7.16 with “Software Algorithms safely invalidate scans…”, which FR-IMG-015 covers. No further RA edit is needed.",
+   "comments": "",
+   "id": "FR-IMG-012",
+   "part": "1"
+  },
+  {
+   "requirement": "FR-CFG-005",
+   "description": "No configuration value shall be capable of disabling a requirement that implements a risk control",
+   "disposition": "Not included",
+   "risk_analysis_impact": "NO — an addition of this document. The intent is now largely met by other means: the timing values in section 12, the PIN parameters in section 18 and the readiness thresholds in section 5 are stated as fixed in the application rather than configurable, so they are not reachable by configuration. The residual exposure is the controls that remain configuration-driven, principally the IVTS thresholds and the demonstration flags, and FR-CFG-004 covers the latter server-side.",
+   "comments": "",
+   "id": "FR-CFG-005",
+   "part": "1"
+  },
+  {
+   "requirement": "FR-CFG-007",
+   "description": "User-facing text supplied by configuration shall be drawn from the approved content set and meet section 10",
+   "disposition": "Not included",
+   "risk_analysis_impact": "NO — an addition of this document. Note the consequence: customBlockFlowAlertParams carries a free-text title and body set per partner, so blocking-message text can be authored outside the approved content set and outside the grade-6 reading level required by FR-TXT-001.",
+   "comments": "",
+   "id": "FR-CFG-007",
+   "part": "1"
+  },
+  {
+   "requirement": "FR-LCM-001",
+   "description": "The device software shall be developed and maintained in accordance with the Class B classification under IEC 62304",
+   "disposition": "Not included",
+   "risk_analysis_impact": "NO — the classification is stated in RA section 6 and the obligation stands irrespective of this document. Development standards belong in the Software Development Plan; FR-LCM-017 covers release testing.",
+   "comments": "",
+   "id": "FR-LCM-001",
+   "part": "1"
+  },
+  {
+   "requirement": "FR-LCM-013",
+   "description": "Usability testing shall evaluate whether the user understands each content requirement that is a risk control",
+   "disposition": "Not included",
+   "risk_analysis_impact": "PARTIAL — RA 7.3, 7.6 and 7.19 each cite usability testing of the instruction as a mitigation. FR-LCM-012 retains usability testing but only for platform coverage and interruptions, so evaluation of instructional comprehension is no longer required by this document. Confirm it is covered by the Usability Engineering Plan, otherwise those three RA clauses have no verification activity.",
+   "comments": "",
+   "id": "FR-LCM-013",
+   "part": "1"
+  },
+  {
+   "requirement": "FR-LCM-014",
+   "description": "The reading level of all user-facing text shall be measured before each release",
+   "disposition": "Not included",
+   "risk_analysis_impact": "NO — no RA row cites it. Note that FR-TXT-001 remains at milestone 2, so the grade-6 ceiling is required but no longer has a stated verification activity in this document.",
+   "comments": "",
+   "id": "FR-LCM-014",
+   "part": "1"
+  },
+  {
+   "requirement": "FR-LCM-015",
+   "description": "Component names shall be reconciled against the Product Glossary at each release",
+   "disposition": "Not included",
+   "risk_analysis_impact": "NO — no RA row cites it. As above, FR-TXT-002 remains at milestone 2 without a stated verification activity here.",
+   "comments": "",
+   "id": "FR-LCM-015",
+   "part": "1"
+  },
+  {
+   "requirement": "FR-STA-011",
+   "description": "If the Urine Collection Cup was filled, disable cancellation, complete the test flow and upload the data",
+   "disposition": "Not included",
+   "risk_analysis_impact": "NO — SRS TSM.20 maps to it and should be marked withdrawn when the SRS is updated. FR-STA-008 still bars cancellation once the cup is filled, so the gate remains; what is no longer stated is the positive obligation to carry the test through to upload.",
+   "comments": "",
+   "id": "FR-STA-011",
+   "part": "1"
+  },
+  {
+   "requirement": "FR-TXT-018",
+   "description": "The instructional flow shall present the safety information applicable to buffer or reagent contact with skin or eyes, including the instruction to rinse with water",
+   "disposition": "Not included",
+   "risk_analysis_impact": "NO — RA 2.2, 2.5 and 7.36 each assign the safety warning and the rinse instruction to the User Manual alone. There is no in-app clause to delete, so the Risk Analysis is unaffected.",
+   "comments": "",
+   "id": "FR-TXT-018",
+   "part": "1"
+  },
+  {
+   "requirement": "FR-CNS-004",
+   "description": "Record the type of consent given and the time it was given, and transmit both to the backend",
+   "disposition": "Not included",
+   "risk_analysis_impact": "NO — consent recording remains future development as FR-CNS-007 at milestone 5, which is where the obligation and the Q-11 decision sit. The identifier was issued for one draft revision on a mistaken reading of a review comment and is recorded here so that it is not reissued.",
+   "comments": "",
+   "id": "FR-CNS-004",
+   "part": "1"
+  },
+  {
+   "requirement": "FR-SUR-005",
+   "description": "The application-store rating prompt shall not be presented during an active test, on a results screen, or after an invalid test",
+   "disposition": "Not included",
+   "risk_analysis_impact": "NO — an addition of this document. Note that the rating prompt itself is future development as FR-ANL-009, so nothing currently triggers the prompt. If FR-ANL-009 is implemented, the constraint should be reconsidered.",
+   "comments": "",
+   "id": "FR-SUR-005",
+   "part": "1"
+  },
+  {
+   "requirement": "FR-PLT-007",
+   "description": "The software shall be published with automatic update enabled wherever the application store supports it",
+   "disposition": "Not included",
+   "risk_analysis_impact": "NO — RA 4.17 relies on the version check in FR-RDY-004, which blocks an unsupported application version outright, rather than on automatic update. The RA clause is satisfied without this requirement.",
+   "comments": "",
+   "id": "FR-PLT-007",
+   "part": "1"
+  },
+  {
+   "requirement": "FR-IMG-020",
+   "description": "Present the framing guidance in spoken form during scanning",
+   "disposition": "Restated as FR-IMG-024",
+   "risk_analysis_impact": "NO — RA 7.12, 7.14 and 7.16 trace to FR-IMG-024.",
+   "comments": "",
+   "id": "FR-IMG-020",
+   "part": "1"
+  },
+  {
+   "requirement": "FR-AUT-009",
+   "description": "Where the phone number and invite code do uniquely identify a single registered user, the software shall not request the Date of Birth at login",
+   "disposition": "Not included",
+   "risk_analysis_impact": "RESOLVED. The Date of Birth is not part of login in this version. Requesting it at login is only meaningful where more than one patient shares a phone number or an address, and both cases are future development as FR-AUT-007 and FR-AUT-011, so the condition was always true and the requirement was satisfied by writing no code. The Date of Birth confirmation at the start of every test, FR-AUT-012, is unaffected and is now milestone 3. The traceability is also reconciled: RA 6.4 traces to FR-AUT-010, FR-AUT-012, FR-AUT-013, FR-AUT-014 and FR-SHR-003, all in scope and all at milestone 3. That single list replaces the two inconsistent lists this appendix and the note now carried by FR-AUT-007 previously held.",
+   "comments": "",
+   "id": "FR-AUT-009",
+   "part": "1"
+  }
+ ],
+ "superseded": [
+  {
+   "requirement": "FR-ALG-008 (earlier wording)",
+   "description": "Detect out-of-sequence assay signatures and block a result where present",
+   "disposition": "Capability not achievable; FR-ALG-008 states the detectable conditions instead",
+   "risk_analysis_impact": "RESOLVED IN THE RISK ANALYSIS, EXCEPT RA 7.34. Nine rows cited “Software Algorithms detect out-of-sequence assay signatures and block invalid results”. Out-of-sequence detection is not achievable. What is achievable, and is required by FR-ALG-008, is detecting that the sample was not introduced into the buffer and that insufficient fluid reached the Detection Wells. The rows resolve as follows. RA 3.8, no fluid flow to the detection wells, is covered by the insufficient-fluid detection. RA 3.9 and RA 3.10, the release button operated before incubation is complete, no longer rely on software detection; RA 3.9 relies on the instruction and the timer, which are FR-TXT-015, FR-TIM-007 and FR-TIM-009. RA 7.9, 7.23, 7.29, 7.30 and 7.36 each retain at least one other requirement at milestone 1 to 3. RA 7.34, the test performed at extreme ambient temperature or humidity, is not yet resolved and is the one row whose only software control is a requirement at TBD priority.",
+   "comments": "",
+   "id": "FR-ALG-008",
+   "part": "2"
+  }
+ ],
+ "consolidated": [
+  {
+   "requirement": "FR-IMG-003",
+   "description": "Detect whether the Test Board is entirely within the camera frame",
+   "disposition": "Consolidated into FR-IMG-002",
+   "risk_analysis_impact": "NO — SRS TSM.10 now traces to FR-IMG-002.",
+   "comments": "",
+   "id": "FR-IMG-003",
+   "part": "3"
+  },
+  {
+   "requirement": "FR-IMG-017",
+   "description": "Capture a set of images rather than a single image and transmit the complete set",
+   "disposition": "Consolidated into FR-CAM-001",
+   "risk_analysis_impact": "NO — SRS PER.2, PER.3 and the Glossary now trace to FR-CAM-001.",
+   "comments": "",
+   "id": "FR-IMG-017",
+   "part": "3"
+  },
+  {
+   "requirement": "FR-KIT-006",
+   "description": "Prevent an additional test where the kit identifier has already been used",
+   "disposition": "Consolidated into FR-KIT-004",
+   "risk_analysis_impact": "NO — SRS TSM.40 now traces to FR-KIT-004.",
+   "comments": "",
+   "id": "FR-KIT-006",
+   "part": "3"
+  },
+  {
+   "requirement": "FR-STA-001",
+   "description": "Persistently retain the current test state throughout the test flow",
+   "disposition": "Consolidated into FR-STA-003",
+   "risk_analysis_impact": "NO — the persistence obligation and all five RA traces (4.1, 4.2, 4.3, 4.4, 4.18) were carried into FR-STA-003 rather than dropped.",
+   "comments": "",
+   "id": "FR-STA-001",
+   "part": "3"
+  },
+  {
+   "requirement": "FR-STA-004",
+   "description": "On return to the application, resume at the active step and make instructions available for replay",
+   "disposition": "Consolidated into FR-STA-003",
+   "risk_analysis_impact": "NO.",
+   "comments": "",
+   "id": "FR-STA-004",
+   "part": "3"
+  },
+  {
+   "requirement": "FR-TIM-010",
+   "description": "Prevent the Test Board being scanned before the colour-evolution period has elapsed",
+   "disposition": "Consolidated into FR-TIM-008",
+   "risk_analysis_impact": "NO — RA 4.4 now traces to FR-TIM-008 as well as FR-TIM-011.",
+   "comments": "",
+   "id": "FR-TIM-010",
+   "part": "3"
+  }
+ ],
+ "unaccounted": [
+  {
+   "identifier": "FR-IMG-018",
+   "status": "Not accounted for. Never traced in any revision of this document",
+   "comments": "",
+   "id": "FR-IMG-018",
+   "part": "4"
+  },
+  {
+   "identifier": "FR-IMG-019",
+   "status": "Not accounted for",
+   "comments": "",
+   "id": "FR-IMG-019",
+   "part": "4"
+  },
+  {
+   "identifier": "FR-SHR-009",
+   "status": "Not accounted for",
+   "comments": "",
+   "id": "FR-SHR-009",
+   "part": "4"
+  },
+  {
+   "identifier": "FR-SHR-010",
+   "status": "Not accounted for",
+   "comments": "",
+   "id": "FR-SHR-010",
+   "part": "4"
+  },
+  {
+   "identifier": "FR-TIM-013",
+   "status": "Not accounted for",
+   "comments": "",
+   "id": "FR-TIM-013",
+   "part": "4"
+  }
+ ],
+ "configs": [
+  {
+   "configuration": "iosMinAppVersion, androidMinAppVersion",
+   "set_in": "service.json",
+   "requirement": "FR-RDY-004",
+   "note": "iOS 9.34.0 / Android 7.28.0 currently set",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "iosMinOsVersion, androidMinOsVersion",
+   "set_in": "service.json",
+   "requirement": "FR-RDY-003, FR-PLT-002, FR-PLT-003",
+   "note": "iOS 13.0.0 / Android 8.0.0. FR-PLT-002, FR-PLT-003 and FR-RDY-003 defer the bounds to the IVTS device qualification; see open item O-02.",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "iosMaxOsVersion, androidMaxOsVersion",
+   "set_in": "service.json",
+   "requirement": "FR-RDY-003",
+   "note": "FR-RDY-003 now requires the version to be within the supported range, so both bounds are covered",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "staticData.supportedHardwareConfig",
+   "set_in": "base.json, schema.ts",
+   "requirement": "FR-RDY-002",
+   "note": "Camera count, sensor resolution, aperture and sensor size bounds. Values are derived from the analytical studies. Note the schema comments this as Android-only; confirm iOS enforcement",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "forceUpdateOnPreLogin",
+   "set_in": "base.json, schema.ts",
+   "requirement": "FR-RDY-004",
+   "note": "Governs whether the version check blocks before or after login",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "allowCreation",
+   "set_in": "base.json",
+   "requirement": "FR-AUT-003",
+   "note": "false for this app — patient records are not created at phone verification",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "allowRegistration",
+   "set_in": "base.json",
+   "requirement": "FR-AUT-006",
+   "note": "true — invite-code registration is enabled",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "dobVerification",
+   "set_in": "base.json",
+   "requirement": "FR-AUT-012",
+   "note": "Set to force. skip and allowNull must not be used for this app. FR-AUT-012 requires confirmation at every test start. The login-identification case is deferred as FR-AUT-007",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "staticData.privacyUrl, staticData.termsUrl, consentUrl",
+   "set_in": "base.json",
+   "requirement": "FR-CNS-001",
+   "note": "The documents FR-CNS-001 makes viewable",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "enabledQrBlock",
+   "set_in": "base.json",
+   "requirement": "FR-KIT-002, FR-KIT-004",
+   "note": "true — enables QR validation to block kit reuse",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "enabledNoQrBlock",
+   "set_in": "base.json",
+   "requirement": "FR-KIT-001",
+   "note": "true — validates that a colour-board identifier exists for the exam",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "expiredKitDetection",
+   "set_in": "base.json, schema.ts",
+   "requirement": "FR-KIT-005",
+   "note": "true — the automatic expiry check. Not present in the MD. The requirement is future development at milestone 5",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "blockSubsequentTests.moreTestsThanKits",
+   "set_in": "base.json",
+   "requirement": "FR-KIT-004",
+   "note": "true. Supersedes the MD entries blockSubsequentTest, validateMoreKitsThanExams and duplicateThresholdDays",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "featureFlags.manualWhiteBalanceEnabled, featureFlags.manualExposureEnabled, featureFlags.customToneMappingEnabled",
+   "set_in": "service.json",
+   "requirement": "FR-CAM-002",
+   "note": "All true. FR-CAM-002 is at TBD priority, so these remain provisional; see open item O-10",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "featureFlags.qrScanningOptimizationEnabled, featureFlags.qrDetectionUsingMLPackage",
+   "set_in": "service.json",
+   "requirement": "FR-KIT-001, FR-KIT-002",
+   "note": "Both true — implementation options for reading the QR code",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "staticData.fieldOfVision",
+   "set_in": "base.json",
+   "requirement": "FR-IMG-002, FR-IMG-004, FR-IMG-005",
+   "note": "80.0 — bounds the framing distance checks",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "staticData.supportNumber, staticData.supportEmail",
+   "set_in": "base.json, overrides",
+   "requirement": "FR-SUP-002, FR-SUP-003, FR-TXT-020",
+   "note": "844-688-5055 for this app",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "appName",
+   "set_in": "MD only; not set for this app",
+   "requirement": "FR-TXT-002",
+   "note": "The application name shown to the user, subject to the approved user-facing naming rule",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "mixpanelProxyEnabled",
+   "set_in": "base.json (true)",
+   "requirement": "FR-ANL-001, FR-ANL-004",
+   "note": "Analytics itself is in scope; routing events through the proxy rather than direct to the provider is deferred as FR-ANL-004",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "staticData.surveyUrl",
+   "set_in": "15 partner overrides",
+   "requirement": "FR-ANL-006",
+   "note": "The post-test survey is future development at milestone 5",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "staticData.blockFlow, appDownTime",
+   "set_in": "schema.ts",
+   "requirement": "FR-CFG-006",
+   "note": "Enum endOfLife / expiredKit / custom. The blocked-state behaviour is in scope at milestone 3 as FR-CFG-006, so these values now have a defined response. The enum here lists three; the product returns ten, which SPEC-01 raises",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "staticData.withAppReview",
+   "set_in": "base.json (true)",
+   "requirement": "FR-ANL-009",
+   "note": "Governs the application-store rating prompt, future development at milestone 5 along with the chat flow it attaches to",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "configuration": "staticData.pcpConfig",
+   "current_value": "base.json (enabled: false)",
+   "requirement": "FR-SHR-012",
+   "note": "enabled, mandatory, showOnPositiveResultsOnly, isConsentRequired, withChatSkipButton. isConsentRequired maps to FR-CNS-006",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "configuration": "staticData.enabledPushNotifications",
+   "current_value": "base.json (true)",
+   "requirement": "FR-COM-013",
+   "note": "True in configuration although backend push is deferred. Notification behaviour is fixed rather than configurable; the local notifications in FR-TIM-014 and FR-COM-009 are in this version",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "configuration": "abTestingEnabled",
+   "current_value": "Not in scope",
+   "requirement": "FR-CFG-008",
+   "note": "Removed from scope. Reinstate with FR-CFG-008",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "configuration": "postResultConsultation",
+   "current_value": "base.json",
+   "requirement": "FR-SHR-013",
+   "note": "enableStartChat and enableResumeChat both false",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "configuration": "staticData.chatTransitionToResultsPortal",
+   "current_value": "base.json (true)",
+   "requirement": "FR-SHR-013",
+   "note": "Only meaningful once chat exists",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "configuration": "withDoctorNotes, doctorsNoteTemplateName",
+   "current_value": "base.json",
+   "requirement": "FR-SHR-015",
+   "note": "true — doctor notes returned with results.",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "configuration": "resultsLetterFeedbackSurveyUrl",
+   "current_value": "schema.ts",
+   "requirement": "FR-SHR-015",
+   "note": "Survey on the results letter",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "configuration": "enableFollowupTests",
+   "current_value": "MD only",
+   "requirement": "No requirement",
+   "note": "Not set for this app; no requirement exists for a follow-up test flow",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "configuration": "staticData.faqUrl",
+   "current_value": "base.json",
+   "requirement": "FR-SUP-001",
+   "note": "The FAQ page and its menu route are future development at milestone 5",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "configuration": "staticData.additionalResultsCTA",
+   "current_value": "base.json, 9 overrides",
+   "requirement": "FR-SUP-004",
+   "note": "resultsChatCTAEnabled, resultsCenterCTAEnabled and type. Gates whether the book-an-appointment action in the post-test lobby offers a call control as well as mark-as-done",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "configuration": "staticData.resultsLobbyDuration",
+   "current_value": "base.json (90)",
+   "requirement": "FR-PRT-012",
+   "note": "90 days. The home screen presents the post-test lobby for this period after a result, then reverts to its regular state",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "configuration": "prescriptionFlowEnabled",
+   "current_value": "base.json (true)",
+   "requirement": "FR-SHR-001, FR-SHR-011",
+   "note": "FR-SHR-011 states whether doctor-to-patient engagement occurs in the application, which bounds this flow",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "reason": "Backend messaging and ordering",
+   "configurations": "fromNumber, outgoingNumber, fromPhoneVerificationNumber, smsPartnerConsentOutgoingNumber, appLink, appHash / androidAppHash, leaflet, partners, partnerInitFlow, newService, allowOrderCreation, blockMultipleExamsOnOrder, doNotSendDuplicateResults, flagOrderManualInspection, checkPatientEndOfService",
+   "basis": "Backend behaviour and outbound messaging. Belongs to the backend requirements specification, not the application. checkPatientEndOfService can block a patient holding a kit; if it does, the user-facing behaviour should use the blocked-state handling in FR-CFG-006 rather than a separate path.",
+   "comments": "",
+   "part": "3"
+  },
+  {
+   "reason": "Analytics",
+   "configurations": "useDeprecatedMixpanelToken, surveyViewProbability",
+   "basis": "mixpanelProxyEnabled, surveyUrl and withAppReview each realise a requirement and appear in F.1. Analytics token selection has no bearing on device safety or performance, and surveyViewProbability is a sampling rate rather than a behaviour.",
+   "comments": "",
+   "part": "3"
+  },
+  {
+   "reason": "Other products",
+   "configurations": "getIpLocationInfo, shouldProcessColorBoardId, ignoreEmptyColorBoardId, storeLocatorUrl, pharmacyNotice, deliveryNotice, deliveryHours, withBloodPressure, checkPatientConsent, useUkMeasurements, isScaleNumerical, customBlockByFlow",
+   "basis": "Velieve, Dip UTI, NHS or UK-market configurations. Not applicable to QACR US.",
+   "comments": "",
+   "part": "3"
+  },
+  {
+   "reason": "Superseded by newer configuration",
+   "configurations": "blockSubsequentTest, validateMoreKitsThanExams, duplicateThresholdDays, complementaryCareConfig",
+   "basis": "Replaced by blockSubsequentTests and additionalResultsCTA respectively. schema.ts marks complementaryCareConfig as retained only for backward compatibility.",
+   "comments": "",
+   "part": "3"
+  }
+ ],
+ "params": [
+  {
+   "parameter": "Minimum battery level",
+   "referenced_by": "FR-RDY-007",
+   "status": "TBD",
+   "comments": "",
+   "part": null
+  },
+  {
+   "parameter": "Minimum available storage",
+   "referenced_by": "FR-RDY-008",
+   "status": "TBD. staticData.lowDiskSpaceSize currently 80, units to confirm",
+   "comments": "",
+   "part": null
+  },
+  {
+   "parameter": "Minimum hardware specification",
+   "referenced_by": "FR-RDY-002, FR-PLT-005",
+   "status": "Derived from the analytical studies. Realised by staticData.supportedHardwareConfig",
+   "comments": "",
+   "part": null
+  },
+  {
+   "parameter": "Supported operating-system range",
+   "referenced_by": "FR-RDY-003, FR-PLT-002, FR-PLT-003",
+   "status": "TBD, to follow from the IVTS device qualification. Open item O-02",
+   "comments": "",
+   "part": null
+  },
+  {
+   "parameter": "OTP attempt limit and expiry",
+   "referenced_by": "FR-AUT-005",
+   "status": "5 minutes to expiry; 5 consecutive failures lock verification for 15 minutes, per SRS-BE AUT.5 and AUT.6",
+   "comments": "",
+   "part": null
+  },
+  {
+   "parameter": "Maximum users per phone number",
+   "referenced_by": "FR-AUT-011",
+   "status": "TBD. Realised by appUniqueIdentifier",
+   "comments": "",
+   "part": null
+  },
+  {
+   "parameter": "Results-center inactivity timeout",
+   "referenced_by": "FR-ACC-009",
+   "status": "15 minutes per SPTA 1.7, fixed not configurable. No timeout applies during an active test, per FR-STA-003",
+   "comments": "",
+   "part": null
+  },
+  {
+   "parameter": "Post-test lobby duration",
+   "referenced_by": "FR-PRT-012",
+   "status": "90 days per staticData.resultsLobbyDuration. The home screen shows the post-test lobby for this period after a result, then returns to its regular state",
+   "comments": "",
+   "part": null
+  },
+  {
+   "parameter": "Sample collection to Sample Pod connection limit",
+   "referenced_by": "FR-TIM-006",
+   "status": "TBD, fixed not configurable. Currently specified as 30 minutes",
+   "comments": "",
+   "part": null
+  },
+  {
+   "parameter": "Incubation Well residence time and release-button window",
+   "referenced_by": "FR-TIM-001, FR-TIM-007, FR-TIM-009",
+   "status": "TBD, fixed not configurable. To be established by timing-flex study",
+   "comments": "",
+   "part": null
+  },
+  {
+   "parameter": "Colour-evolution period and scanning window",
+   "referenced_by": "FR-TIM-001, FR-TIM-008, FR-TIM-011",
+   "status": "TBD, fixed not configurable. To be established by timing-flex study",
+   "comments": "",
+   "part": null
+  },
+  {
+   "parameter": "IVTS acceptance thresholds and minimum valid frames",
+   "referenced_by": "FR-IMG-001, FR-IMG-015",
+   "status": "Defined in the IVTS document and referenced rather than restated. Realised by minValidFrames and staticData.fieldOfVision (80.0)",
+   "comments": "",
+   "part": null
+  },
+  {
+   "parameter": "PIN length and composition",
+   "referenced_by": "FR-ACC-004",
+   "status": "Four digits, numeric only. Settled at review",
+   "comments": "",
+   "part": null
+  },
+  {
+   "parameter": "Maximum incorrect PIN attempts",
+   "referenced_by": "FR-ACC-005",
+   "status": "5 consecutive failed attempts per SRS-BE PIN.5, enforced server-side",
+   "comments": "",
+   "part": null
+  },
+  {
+   "parameter": "New-kit alert window",
+   "referenced_by": "FR-KIT-007",
+   "status": "24 hours, configurable. Settled at review",
+   "comments": "",
+   "part": null
+  },
+  {
+   "parameter": "PIN setup grace period",
+   "referenced_by": "FR-ACC-006",
+   "status": "24 hours, confirmed by SPTA 1.7 and SRS-BE PIN.6. After this the PIN is locked and only support can reset it",
+   "comments": "",
+   "part": null
+  },
+  {
+   "parameter": "Session token lifetime",
+   "referenced_by": "FR-AUT-013",
+   "status": "24 hours per SRS-BE AUT.8",
+   "comments": "",
+   "part": null
+  },
+  {
+   "parameter": "Reading-level ceiling",
+   "referenced_by": "FR-TXT-001, FR-RES-012",
+   "status": "Flesch-Kincaid grade 6 per the Product Glossary. Fixed, not configurable",
+   "comments": "",
+   "part": null
+  }
+ ],
+ "backlog": [],
+ "priority_summary": {
+  "milestones": [
+   "1",
+   "2",
+   "3",
+   "4",
+   "5",
+   "TBD"
+  ],
+  "areas": [
+   {
+    "area": "4. Platform, Distribution and Compatibility",
+    "counts": {
+     "1": 0,
+     "2": 1,
+     "3": 5,
+     "4": 1,
+     "5": 0,
+     "TBD": 0
+    },
+    "total": 7,
+    "unreadable": false
+   },
+   {
+    "area": "5. Pre-Test Readiness Verification",
+    "counts": {
+     "1": 1,
+     "2": 0,
+     "3": 13,
+     "4": 0,
+     "5": 0,
+     "TBD": 0
+    },
+    "total": 14,
+    "unreadable": false
+   },
+   {
+    "area": "6. User Onboarding, Identification and Authentication",
+    "counts": {
+     "1": 0,
+     "2": 0,
+     "3": 12,
+     "4": 3,
+     "5": 4,
+     "TBD": 0
+    },
+    "total": 19,
+    "unreadable": false
+   },
+   {
+    "area": "7. Consent and Privacy Acknowledgement",
+    "counts": {
+     "1": 0,
+     "2": 0,
+     "3": 0,
+     "4": 3,
+     "5": 3,
+     "TBD": 0
+    },
+    "total": 6,
+    "unreadable": false
+   },
+   {
+    "area": "8. Kit Identification and Validation",
+    "counts": {
+     "1": 0,
+     "2": 0,
+     "3": 5,
+     "4": 0,
+     "5": 1,
+     "TBD": 0
+    },
+    "total": 6,
+    "unreadable": false
+   },
+   {
+    "area": "9. Guided Test Flow — Structure and Behaviour",
+    "counts": {
+     "1": 8,
+     "2": 0,
+     "3": 1,
+     "4": 0,
+     "5": 0,
+     "TBD": 0
+    },
+    "total": 9,
+    "unreadable": false
+   },
+   {
+    "area": "10. User-Facing Content",
+    "counts": {
+     "1": 15,
+     "2": 2,
+     "3": 3,
+     "4": 0,
+     "5": 0,
+     "TBD": 0
+    },
+    "total": 20,
+    "unreadable": false
+   },
+   {
+    "area": "11. Test State Retention, Interruption and Cancellation",
+    "counts": {
+     "1": 5,
+     "2": 0,
+     "3": 3,
+     "4": 0,
+     "5": 0,
+     "TBD": 0
+    },
+    "total": 8,
+    "unreadable": false
+   },
+   {
+    "area": "12. Timing Control",
+    "counts": {
+     "1": 8,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "TBD": 0
+    },
+    "total": 12,
+    "unreadable": false
+   },
+   {
+    "area": "13. Image Capture and Validation (IVTS)",
+    "counts": {
+     "1": 18,
+     "2": 0,
+     "3": 0,
+     "4": 0,
+     "5": 0,
+     "TBD": 0
+    },
+    "total": 18,
+    "unreadable": false
+   },
+   {
+    "area": "14. Camera Control and Image Acquisition",
+    "counts": {
+     "1": 2,
+     "2": 0,
+     "3": 1,
+     "4": 0,
+     "5": 0,
+     "TBD": 1
+    },
+    "total": 4,
+    "unreadable": false
+   },
+   {
+    "area": "15. Data Transmission and Backend Communication",
+    "counts": {
+     "1": 5,
+     "2": 0,
+     "3": 5,
+     "4": 2,
+     "5": 1,
+     "TBD": 0
+    },
+    "total": 13,
+    "unreadable": false
+   },
+   {
+    "area": "16. Analysis, Quality Control and Algorithm Version Management",
+    "counts": {
+     "1": 0,
+     "2": 5,
+     "3": 5,
+     "4": 0,
+     "5": 0,
+     "TBD": 2
+    },
+    "total": 12,
+    "unreadable": false
+   },
+   {
+    "area": "17. Result Presentation",
+    "counts": {
+     "1": 5,
+     "2": 1,
+     "3": 0,
+     "4": 0,
+     "5": 1,
+     "TBD": 0
+    },
+    "total": 7,
+    "unreadable": false
+   },
+   {
+    "area": "18. Results Access Protection",
+    "counts": {
+     "1": 0,
+     "2": 0,
+     "3": 0,
+     "4": 6,
+     "5": 3,
+     "TBD": 0
+    },
+    "total": 9,
+    "unreadable": false
+   },
+   {
+    "area": "19. Results Center and the Main Menu",
+    "counts": {
+     "1": 0,
+     "2": 0,
+     "3": 5,
+     "4": 1,
+     "5": 8,
+     "TBD": 0
+    },
+    "total": 14,
+    "unreadable": false
+   },
+   {
+    "area": "20. Result Routing and Provider Communication",
+    "counts": {
+     "1": 0,
+     "2": 0,
+     "3": 8,
+     "4": 0,
+     "5": 7,
+     "TBD": 1
+    },
+    "total": 16,
+    "unreadable": false
+   },
+   {
+    "area": "21. Support and Help",
+    "counts": {
+     "1": 0,
+     "2": 0,
+     "3": 2,
+     "4": 0,
+     "5": 2,
+     "TBD": 0
+    },
+    "total": 4,
+    "unreadable": false
+   },
+   {
+    "area": "22. Analytics and User Feedback",
+    "counts": {
+     "1": 0,
+     "2": 0,
+     "3": 4,
+     "4": 0,
+     "5": 5,
+     "TBD": 0
+    },
+    "total": 9,
+    "unreadable": false
+   },
+   {
+    "area": "23. Security and Data Protection",
+    "counts": {
+     "1": 1,
+     "2": 0,
+     "3": 12,
+     "4": 1,
+     "5": 0,
+     "TBD": 0
+    },
+    "total": 14,
+    "unreadable": false
+   },
+   {
+    "area": "24. Application Configuration",
+    "counts": {
+     "1": 1,
+     "2": 0,
+     "3": 4,
+     "4": 0,
+     "5": 1,
+     "TBD": 0
+    },
+    "total": 6,
+    "unreadable": false
+   },
+   {
+    "area": "25. Software Lifecycle and Verification",
+    "counts": {
+     "1": 0,
+     "2": 0,
+     "3": 11,
+     "4": 2,
+     "5": 1,
+     "TBD": 0
+    },
+    "total": 14,
+    "unreadable": false
+   }
+  ],
+  "all_areas": {
+   "area": "All areas",
+   "counts": {
+    "1": 69,
+    "2": 10,
+    "3": 100,
+    "4": 20,
+    "5": 38,
+    "TBD": 4
+   },
+   "total": 241,
+   "unreadable": false
+  }
+ }
+}
