@@ -89,12 +89,16 @@ drift apart in silence, and it is why this is a walk rather than a lookup.
 | `## Requirements owned` | one row per requirement, with milestone and disposition | `requirements`, and the note pass |
 | `## What the vault records about the code` | the analysis phase's evidence rows | **refused** — recorded in `excluded_deliberately` |
 | `## Not covered by this spec` | requirements the feature owns that the brief never mentions | `not_covered_by_brief`, and a stop for each |
-| `## Named by this spec, absent from product/` | requirements the brief claims that `product/` has not exported | `named_but_absent` |
+| `` ## Named by this spec, absent from `product/` `` | requirements the brief claims that `product/` has not exported | `named_but_absent` |
 | `## Provenance` | the brief, and the document revisions actually rendered | `_contract.sources` |
 
-A section present in the file and absent from this table is a defect in this skill, not in the file.
-Carry its text verbatim rather than dropping it, and raise a `skill-behaviour` flag against
-`skill/step-2` so the omission is named instead of silent.
+A section present in the file and absent from this table is a defect in this skill, not in the
+file. Do not drop it. Raise a `skill-behaviour` flag against `skill/step-2`, resolved by
+`the skill author`, and put the section's heading and its body **verbatim** in that flag's `what` —
+that field is the destination, so the text survives the run and the next author can see what the
+table is missing. Nothing else in the contract takes arbitrary section text: `excluded_deliberately`
+maps a refusal to its reason and is for sections this document already knows about, so an
+unrecognised section does not belong there.
 
 The last two sections are new to this reader and each has its own rule below.
 
@@ -114,12 +118,16 @@ section — fixed heading, comma-separated ids, one reason paragraph:
 A generator writes it, so the shape is stable. The section is **omitted entirely** when there are
 none, which is the common case; absent means none, and `named_but_absent` is then empty.
 
+**The reason paragraph is one paragraph, emitted unwrapped as a single line**, and it is carried
+whole — not its first sentence, not a summary of it. This document says *reason paragraph*
+throughout and means that same string every time.
+
 **These requirements belong to the feature and cannot be specified.** No text, no milestone, no
 note — `requirements.json` has nothing to read. That is the situation the refusal at the top of this
 document already describes: a requirement the feature owns that the spec cannot cover. It travels
 for the same reason stops travel, so the spec can say what it left out and why.
 
-Carry them in `named_but_absent`, each with the section's reason line **verbatim**. Not in
+Carry them in `named_but_absent`, each with the section's reason paragraph **verbatim**. Not in
 `requirements` — a consumer walks that array and specifies what it finds, and these have nothing to
 specify from. Not in `stops` either: a stop is a decision this skill took about a requirement it
 could read, and reading one of these as a stop invites someone to go and resolve it.
@@ -361,7 +369,7 @@ per-run artifact in it would end that.
   // Deliberately outside `requirements` so nothing downstream mistakes them for specifiable,
   // and outside `stops` so nothing reads them as a decision this skill took. Empty is normal.
   "named_but_absent": [{ "id": "FR-AUT-021", "feature": "F02.5",
-                         "why": "<the section's reason line, verbatim>" }],
+                         "why": "<the section's reason paragraph, verbatim>" }],
 
   "departures": [{ "ref": "D1", "what_changes": "<verbatim from the brief>", "driven_by": "FR-RDY-007" }],
   "open_items": [{ "ref": "U1", "question": "<verbatim>", "owner": "...",
@@ -452,10 +460,11 @@ does not ask them again. Dropping them here reintroduces the questions one layer
   skipped, and no row for a `named_but_absent` id
 - every flag's `ref` matches its content, per the derivation table
 - every section of the feature file is carried, or named in `excluded_deliberately` — a section
-  this skill does not recognise is a `skill-behaviour` flag, never a silent drop
-- where the feature file carries a `Named by this spec, absent from product/` section, every id in
-  it reaches `named_but_absent` with the reason line verbatim, and none of those ids appears in
-  `requirements`, `stops` or `note_pass`
+  this skill does not recognise is a `skill-behaviour` flag against `skill/step-2` whose `what`
+  holds that section's heading and body verbatim, never a silent drop
+- where the feature file carries a `` ## Named by this spec, absent from `product/` `` section,
+  every id in it reaches `named_but_absent` with the reason paragraph verbatim, and none of those
+  ids appears in `requirements`, `stops` or `note_pass`
 - `_contract.sources` agrees with the feature file's Provenance line and carries it verbatim in
   `provenance_line`; `diverges` is set wherever `read` and `brief_cites` differ. A revision that
   matches this document's schema example but not the Provenance line was copied, not read — that is
