@@ -412,3 +412,37 @@ Append what each run corrected, so the next feature is cheaper.
   shape. (v) **Local clones no longer required** — `gh api` at a pinned commit reads a repository the
   developer does not have. Open for the first run: whether `confidence_why` proves worth its width,
   and whether `mind_traced` belongs on every `not_derivable` kind or only on `backend`.
+- **F01.4 — Pre-test resource and permission checks, 2026-08-19.** Called by `qacr-context`; five
+  areas, 34 scenarios, 138 lines, 353 citations, 124 `high` / 14 `medium` / 0 `low`, 27 `do_not_copy`,
+  42 `open_behaviour`, 28 `not_derivable` with all five `backend` entries `/mind`-traced. Five
+  corrections, and the first is the one to keep.
+  (i) **The reconciliation pass caught a citation that did not say what its line claimed — in this
+  skill's own output.** One area asserted, at `high`, that iOS readiness alerts cannot be dismissed by
+  tapping away, citing `AlertViewModel.swift:78-84`. Opened during reconciliation, that range is
+  `isExistingAlertIdentical(type:)` — duplicate-alert *suppression*, not dismissal policy. Two other
+  areas had independently **refused** to state the same thing. The anti-pattern "a passing citation
+  proves a line exists, not that it says what was claimed" was written about a caller-supplied atlas;
+  it applies just as much to a subagent's own evidence, and **the only thing that caught it was
+  opening the cited line.** Reconciliation must re-read the citations behind any line where two areas
+  disagree, not merely notice that they disagree.
+  (ii) **Confidence must be a ceiling derived from coverage, never an assignment.** Recomputing Step 6
+  mechanically first *undid* the correction in (i) (both platforms are cited, so the rule said `high`)
+  and *wiped* a substantive runtime caveat on another line. Order matters: derive the coverage ceiling,
+  let a substantive caveat cap it lower, apply reconciliation corrections last as authoritative.
+  A content judgement is invisible to a coverage rule and must outrank it.
+  (iii) **Step 6's "both platforms read" is ambiguous for an `ios-only` / `android-only` line.** The
+  platform without the behaviour still gets read and its absence still gets cited. Applied here as:
+  `high` when both sides carry a citation, a cited absence counting; `medium` when only one does.
+  Eight lines moved to `medium` under it. Worth stating in Step 6 rather than re-deciding per run.
+  (iv) **Citations come in three shapes and they do not prove equally much** — 341 line-ranges, 7
+  whole-file (flow scripts and string catalogues, where line numbers carry no stable meaning), and 4
+  directory-scope. A directory-scope cite backs an *absence* claim: it records where someone looked,
+  not what the product does, and the absence claims it supports are the weakest lines in the document.
+  The Step 9 gate script only understands `path:line` and reports the other two as unresolved — it
+  needs to classify them instead of failing them.
+  (v) **A sibling repo reached through SPM must be read at the pin, not at the working copy.**
+  `ios-camera`'s local checkout differed from the revision `iosDip` pins by 115 insertions and 149
+  deletions in the very file three lines cited; the ranges were re-read at the pin and confirmed.
+  `ios-foundations` happened to be byte-identical, which is luck, not method. Take the pin from
+  `Package.resolved` and cite that — and note the highest-value line in this whole extraction (iOS's
+  no-internet alert being unreachable) rests on exactly such a read.

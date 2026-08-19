@@ -614,3 +614,41 @@ Append what each run corrected, so the next feature is cheaper.
   line and prose cannot be compared across runs. Open: whether `spec-intake` should refuse to render
   a brief against a `product/` export newer than the one it cites, which would remove the
   `product-ahead-of-brief` direction rather than reporting it.
+- **F01.4 with step 4, 2026-08-19 — the first run with ACR behaviour actually attached.**
+  Deliberately not given an ordinal: the entry above is a review that then re-ran the F01.4
+  pair, so "third run" would have named two different things. **This run predates that entry's
+  edits** and was gathered at `c80d686`, so its contract carries no `provenance_line`, no
+  `divergence_direction` and no `named_but_absent` — those fields postdate it, and its `sources`
+  block states the revisions from the feature file's Provenance line without the machinery that
+  now makes the claim checkable. Re-run F01.4 against the current skill before trusting that
+  block. What follows is unaffected by the change, because it comes from `product/` and from
+  source. It changed what the contract is worth: every one of the six requirements recreates, so the
+  extraction is the bulk of the output rather than an appendix. All 22 structural assertions passed.
+  Four findings.
+  (i) **The exhaustive note pass paid off exactly as designed, and the proof is a pair.** FR-RDY-007
+  and FR-RDY-008 carry the *same note shape* — "threshold TBD, fixed in the application, not
+  configurable" — and resolved in **opposite directions**. ACR hardcodes the battery minimum, so
+  007's note describes what the product already does; ACR reads the storage minimum from
+  `staticData.lowDiskSpaceSize` on both platforms, so 008's note prescribes a change the brief never
+  declared. Neither note contradicts its requirement text, so a run that scanned for conflicts would
+  have missed **both**, and a run that spot-checked would have had a 50% chance of picking the inert
+  one. Enumerate; the value is in the pair, not the finding.
+  (ii) **The `kind` closed set has no value for the most consequential thing step 4 produces:** a
+  requirement whose text the current product does not satisfy while the brief dispositions it
+  `as-is`. Three arose here (FR-RDY-005's iOS no-internet alert is dead code; FR-RDY-006 has no
+  backend probe at all; FR-RDY-010 re-evaluates some conditions and caches others). `note-vs-brief`,
+  `requirement-vs-requirement` and `needs-acr-behaviour` all misdescribe them. Carried in a new
+  `requirement_vs_acr` field rather than forced into a wrong kind — the same move the first run made
+  with `_contract.incomplete`. **Step 3's disposition table probably needs a fourth outcome**, and it
+  is not a stop: the requirement still specifies, it just cannot be satisfied by recreation alone.
+  (iii) **The open-item rule held.** U1 withholds the values behind two of the six requirements and
+  neither stopped; both mechanisms are fully specifiable with the threshold stated as a threshold.
+  The superseded `open`-stops rule would have deleted two of six requirements from the spec.
+  (iv) `confirmed_as_is` earned its place a second time, and more sharply: two of the five answers are
+  **contradicted on one platform** by source. "A camera that fails to start blocks" is true on
+  Android and false on iOS, where nothing is shown at all. An answer recorded as settled can still be
+  settled about only one platform — worth checking each against the extraction rather than carrying
+  them as closed.
+  Open: `requirement_vs_acr` needs a real home in the schema. And the 26 vault evidence rows are
+  still embedded in the feature file and still refused on every run; deleting that section from
+  `build_feature_files.py` would remove the temptation instead of policing it.
