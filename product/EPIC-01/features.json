@@ -165,7 +165,8 @@
   "title": "Phone number entry and lookup",
   "epic": "E02",
   "milestones": [
-   "M3"
+   "M3",
+   "M5"
   ],
   "domains": [
    "iOS",
@@ -175,7 +176,8 @@
   "requirements": [
    "FR-AUT-001",
    "FR-AUT-002",
-   "FR-AUT-003"
+   "FR-AUT-003",
+   "FR-AUT-023"
   ]
  },
  {
@@ -195,7 +197,8 @@
    "FR-AUT-004",
    "FR-AUT-018",
    "FR-AUT-019",
-   "FR-AUT-005"
+   "FR-AUT-005",
+   "FR-AUT-024"
   ]
  },
  {
@@ -253,7 +256,9 @@
    "FR-AUT-013",
    "FR-AUT-014",
    "FR-SEC-008",
-   "FR-COM-010"
+   "FR-COM-010",
+   "FR-AUT-021",
+   "FR-AUT-022"
   ]
  },
  {

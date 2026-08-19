@@ -1,0 +1,374 @@
+[
+ {
+  "req_id": "FR-CAM-002",
+  "requirement": "The software shall apply the camera adjustments defined by the IVTS specification in response to a raised boundary condition, including white-balance adjustment on devices that support it an…",
+  "section": "14. Camera Control and Image Acquisition",
+  "note": "Priority TBD. Realised by featureFlags.manualWhiteBalanceEnabled, manualExposureEnabled, customToneMappingEnabled",
+  "comments": "",
+  "ref": "FR-CAM-002",
+  "group": "R.1"
+ },
+ {
+  "req_id": "FR-ALG-003",
+  "requirement": "The backend shall validate that the mobile algorithm version and the backend algorithm version assigned to an exam are an approved combination, and shall prevent analysis where either versio…",
+  "section": "16. Analysis, Quality Control and Algorithm Version Management",
+  "note": "Backend. TBD, and may become obsolete when the Risk Analysis is next revised",
+  "comments": "",
+  "ref": "FR-ALG-003",
+  "group": "R.1"
+ },
+ {
+  "req_id": "FR-ALG-008",
+  "requirement": "The system shall detect that the urine sample was not introduced into the buffer, and shall detect that insufficient fluid reached the Detection Wells, and shall block the reporting of a res…",
+  "section": "16. Analysis, Quality Control and Algorithm Version Management",
+  "note": "Algo. TBD, to be settled when the Risk Analysis is next revised. Out-of-sequence assay signatures cannot be detected; RA 3.8 and RA 7.36 currently have no other software control",
+  "comments": "",
+  "ref": "FR-ALG-008",
+  "group": "R.1"
+ },
+ {
+  "req_id": "FR-SHR-011",
+  "requirement": "The configuration shall state, for each partner, whether doctor-to-patient engagement takes place within the application or outside it, and the software shall present the corresponding post-…",
+  "section": "20. Result Routing and Provider Communication",
+  "note": "Determines whether the deferred chat and consultation features in Appendix E are in scope for a given partner",
+  "comments": "",
+  "ref": "FR-SHR-011",
+  "group": "R.1"
+ },
+ {
+  "ref": "Q-01",
+  "parameter": "Minimum battery level below which a test cannot start",
+  "where": "FR-RDY-007, Appendix B",
+  "what_is_needed": "Value to be set and fixed in the application",
+  "comments": "",
+  "group": "R.2"
+ },
+ {
+  "ref": "Q-02",
+  "parameter": "Minimum available storage below which a test cannot start",
+  "where": "FR-RDY-008, Appendix B",
+  "what_is_needed": "Value to be set and fixed in the application. Unlinked from staticData.lowDiskSpaceSize at this review, so the previous value of 80 is now only a starting point",
+  "comments": "",
+  "group": "R.2"
+ },
+ {
+  "ref": "Q-03",
+  "parameter": "Supported operating-system range, iOS and Android",
+  "where": "FR-PLT-002, FR-PLT-003, FR-RDY-003, Appendix B",
+  "what_is_needed": "Two constraints apply and the higher governs: the IVTS device qualification, and SPTA 2.5, which bars versions no longer receiving vendor security updates. Configuration currently admits iOS 13.0.0 and Android 8.0.0, below the 15.0 and 9.0 the application SRS states",
+  "comments": "",
+  "group": "R.2"
+ },
+ {
+  "ref": "Q-04",
+  "parameter": "Minimum hardware specification",
+  "where": "FR-RDY-002, Appendix B",
+  "what_is_needed": "To be derived from the analytical studies. Realised by staticData.supportedHardwareConfig, which the backend schema comments as Android-only — confirm whether iOS is enforced",
+  "comments": "",
+  "group": "R.2"
+ },
+ {
+  "ref": "Q-05",
+  "parameter": "Incubation residence time, release-button window, colour-evolution period and scanning window",
+  "where": "FR-TIM-001, FR-TIM-007 to FR-TIM-011, Appendix B",
+  "what_is_needed": "To be established by the timing-flex study. Confirmed at review that the study completes before milestone 3 and is not needed for milestones 1 and 2, so the milestone-1 build enforces these windows against provisional values. A date for the study is still needed",
+  "comments": "",
+  "group": "R.2"
+ },
+ {
+  "ref": "Q-06",
+  "parameter": "Time limit from sample collection to Sample Pod connection",
+  "where": "FR-TIM-006, Appendix B",
+  "what_is_needed": "Currently specified as 30 minutes; to be confirmed and fixed",
+  "comments": "",
+  "group": "R.2"
+ },
+ {
+  "ref": "Q-09",
+  "parameter": "IVTS acceptance thresholds and minimum valid frames",
+  "where": "FR-IMG-001, FR-IMG-015, Appendix B",
+  "what_is_needed": "Held in the IVTS specification and fixed in the application. Unlinked from minValidFrames at this review, so the shared configuration default no longer applies and the IVTS value governs",
+  "comments": "",
+  "group": "R.2"
+ },
+ {
+  "ref": "Q-37",
+  "parameter": "Period after which the user is told how a result will reach them rather than continuing to wait",
+  "where": "FR-COM-011, Appendix B",
+  "what_is_needed": "New with FR-COM-011. The requirement holds a waiting state until a result arrives; the point at which it stops waiting and explains instead needs a value",
+  "comments": "",
+  "group": "R.2"
+ },
+ {
+  "ref": "Q-15",
+  "conflict": "The Risk Analysis states the software prevents a used Test Board being reused; the application can only detect reuse at the point of scanning",
+  "where": "RA 7.1 against FR-KIT-004",
+  "what_is_needed": "To be reviewed after the next Risk Analysis revision. FR-KIT-004 is now milestone 3, so the detection and the alert that complements it sit at the same milestone",
+  "comments": "",
+  "group": "R.3"
+ },
+ {
+  "ref": "Q-16",
+  "conflict": "The Risk Analysis uses a component name the glossary does not define",
+  "where": "RA 7.3 says “Urine Collection Tool”; the glossary says Sample Collection Tool",
+  "what_is_needed": "To be reviewed after the next Risk Analysis revision",
+  "comments": "",
+  "group": "R.3"
+ },
+ {
+  "ref": "Q-17",
+  "conflict": "A Risk Analysis mitigation line is incomplete",
+  "where": "RA 7.20, second mitigation line: “The the user not to use the kit if any component appears soiled”",
+  "what_is_needed": "To be reviewed after the next Risk Analysis revision",
+  "comments": "",
+  "group": "R.3"
+ },
+ {
+  "ref": "Q-63",
+  "conflict": "The session-token expiry period",
+  "where": "FR-AUT-013",
+  "what_is_needed": "The backend SRS states 24 hours and the requirement quotes it. Flagged at review as incorrect for this application. Researched at the SPEC-02 review: no expiry or lifetime is held client-side at all, so the period is enforced entirely by the backend and the question cannot be settled from the application. A value is needed, and the backend SRS aligned to it",
+  "comments": "",
+  "group": "R.3"
+ },
+ {
+  "ref": "Q-81",
+  "conflict": "Screenshot prevention against saving the results letter to the photo library",
+  "where": "FR-SEC-007 against FR-SHR-015 and FR-SHR-016",
+  "what_is_needed": "For the security officer. FR-SEC-007 prevents the user screenshotting any screen carrying result information, on the strength of SPTA 4.14. One of the deferred sharing options saves the results letter into the device photo library, where every application can read it. Both cannot be right as they stand: either the letter is an approved export and the screenshot rule is about something narrower, or saving to the gallery is not an acceptable route. Raised from the predecessor application's sharing screens",
+  "comments": "",
+  "group": "R.3"
+ },
+ {
+  "ref": "Q-18",
+  "conflict": "No user-facing name exists for the Peel-Off Seal",
+  "where": "FR-TXT-010, Appendix A.2",
+  "what_is_needed": "Product and regulatory to choose a name; the instructional copy cannot be drafted without it. Candidates considered were Pull Tab, Sticker and Cover. The Transfer Valve is settled as the coloured release button",
+  "comments": "",
+  "group": "R.3"
+ },
+ {
+  "ref": "Q-21",
+  "question": "Does doctor-to-patient engagement take place within the application?",
+  "where": "FR-SHR-011, priority undecided",
+  "what_is_needed": "Product decision per partner. It determines whether the deferred chat and consultation entries apply at all",
+  "comments": "",
+  "group": "R.4"
+ },
+ {
+  "ref": "Q-22",
+  "question": "Does the grade-6 reading level apply to mandated regulatory wording?",
+  "where": "FR-TXT-001 against FR-PRT-003",
+  "what_is_needed": "Regulatory to confirm. Some required wording may not be reducible to grade 6",
+  "comments": "",
+  "group": "R.4"
+ },
+ {
+  "ref": "Q-23",
+  "question": "What does the results center contain?",
+  "where": "FR-PRT-001",
+  "what_is_needed": "Two questions: whether invalidated tests appear, and whether results belonging to another registered user on the same phone number are excluded. The second bears on RA 6.4",
+  "comments": "",
+  "group": "R.4"
+ },
+ {
+  "ref": "Q-64",
+  "question": "Does the demonstration build need real quantitation?",
+  "where": "FR-ALG-001, moved to milestone 3 at review; FR-RES-006 at milestone 1",
+  "what_is_needed": "Raised at review when FR-ALG-001 moved to milestone 3. If the demonstration presents a fixed payload per FR-RES-006 then it does not, and the move is right. Confirm, because it is the difference between the demonstration needing the analysis pipeline or not",
+  "comments": "",
+  "group": "R.4"
+ },
+ {
+  "ref": "Q-65",
+  "question": "Which steps of the guided flow are conditional, and on what parameter?",
+  "where": "FR-FLW-006",
+  "what_is_needed": "The mechanism is now a requirement. The list of conditional steps and the parameter governing each is needed before design verification. The Date of Birth confirmation is the first known case",
+  "comments": "",
+  "group": "R.4"
+ },
+ {
+  "ref": "Q-66",
+  "question": "Which gesture reveals the demonstration skip-to-step control?",
+  "where": "FR-FLW-007",
+  "what_is_needed": "A sustained press on the start control and a device shake were both suggested. It has to be something a user cannot reach accidentally",
+  "comments": "",
+  "group": "R.4"
+ },
+ {
+  "ref": "Q-24",
+  "question": "Will a raw or raw-equivalent image representation be used, and where?",
+  "where": "FR-IMG-016",
+  "what_is_needed": "The localLearnedRawEnabled flag and its requirement are removed, and it is settled that the mechanism will not be the same. Whether raw is used at all, and whether normalisation happens on the device or in the backend, is still open",
+  "comments": "",
+  "group": "R.4"
+ },
+ {
+  "ref": "Q-39",
+  "question": "Can the results center be delivered in time for milestone 3?",
+  "where": "FR-PRT-001 at milestone 3 against the whole of section 18 at milestone 4",
+  "what_is_needed": "Held open at the reviewer's request. Whatever is decided, the results center and the six controls that protect access to it are to carry the same milestone, so that the screen is never committed without its protection",
+  "comments": "",
+  "group": "R.4"
+ },
+ {
+  "ref": "Q-40",
+  "question": "Should FR-ALG-002 move to milestone 1 as well?",
+  "where": "FR-ALG-001 at 1, FR-ALG-002 at 3, FR-RES-006 new at 1",
+  "what_is_needed": "The review recorded a priority change against this conflict and also accepted the recommendation, which was not to move it. FR-RES-006 should remove the need, because a demonstration build presents a fixed payload and exercises no algorithm version. Confirm that FR-ALG-002 stays at 3",
+  "comments": "",
+  "group": "R.4"
+ },
+ {
+  "ref": "Q-41",
+  "question": "Does provider integration testing need to be milestone 3?",
+  "where": "FR-LCM-016 at milestone 4 against FR-SHR-001 to FR-SHR-008, all at milestone 3",
+  "what_is_needed": "Left open when FR-LCM-006 moved to 3. Provider routing is committed for the study; the integration test that proves a result reaches the right provider is not",
+  "comments": "",
+  "group": "R.4"
+ },
+ {
+  "ref": "Q-99",
+  "question": "Is the real-time capture guidance recorded, as the instructional flow is?",
+  "where": "FR-IMG-024 against FR-FLW-008",
+  "what_is_needed": "The instructional flow is settled as recorded audio. The capture guidance changes in real time and is drawn from a finite set of messages, so recording it per message is feasible, but it has not been confirmed. It decides whether the guidance wording is authored in the content set alongside its recording or generated from the displayed text",
+  "comments": "",
+  "group": "R.4"
+ },
+ {
+  "ref": "Q-25",
+  "item": "Two rows still name the in-app instructional flow for component inspection",
+  "risk_analysis_rows": "RA 1.6 and RA 3.6",
+  "what_is_needed": "Delete the in-app clause, leaving the User Manual clause. The corresponding requirement is not included; see Appendix D",
+  "comments": "",
+  "group": "R.5"
+ },
+ {
+  "ref": "Q-26",
+  "item": "One row still names the in-app instructional flow for Sample Pod seating",
+  "risk_analysis_rows": "RA 7.22",
+  "what_is_needed": "Delete the in-app clause. The corresponding requirement is not included",
+  "comments": "",
+  "group": "R.5"
+ },
+ {
+  "ref": "Q-27",
+  "item": "Two rows depend solely on a requirement whose priority is undecided",
+  "risk_analysis_rows": "RA 3.8 (pre 12, post 2) and RA 7.36 (pre 18, post 3), both relying on FR-ALG-008",
+  "what_is_needed": "To be cleared in the next Risk Analysis revision. Either assign FR-ALG-008 a milestone of 1 to 3, or re-examine those two rows. They are the only rows in the analysis with no requirement at milestone 1 to 3",
+  "comments": "",
+  "group": "R.5"
+ },
+ {
+  "ref": "Q-28",
+  "item": "One row has no software control in this version",
+  "risk_analysis_rows": "RA 7.21 (pre 6, post 4, severity 1), relying on FR-ACC-003, FR-ACC-007 and FR-ACC-008, all deferred",
+  "what_is_needed": "Accept the residual, or bring one of the three into scope. A user who forgets their PIN currently has no recovery path",
+  "comments": "",
+  "group": "R.5"
+ },
+ {
+  "ref": "Q-29",
+  "item": "Instructional comprehension has no stated verification activity",
+  "risk_analysis_rows": "RA 7.3, 7.6 and 7.20 cite usability testing of the instruction; the requirement that verified it is not included",
+  "what_is_needed": "Confirm the Usability Engineering Plan covers it, otherwise those three clauses have no verification",
+  "comments": "",
+  "group": "R.5"
+ },
+ {
+  "ref": "Q-67",
+  "item": "The Risk Analysis trace for the specular-reflection boundary",
+  "risk_analysis_rows": "FR-IMG-021, new at review",
+  "what_is_needed": "Specular reflection is a lighting condition, so RA 7.11 and RA 7.15 are the candidates. Confirm which rows it belongs to, or add a row, when the Risk Analysis is next revised",
+  "comments": "",
+  "group": "R.5"
+ },
+ {
+  "ref": "Q-42",
+  "item": "RA 4.17 rests on an application control that does not exist until milestone 3",
+  "risk_analysis_rows": "RA 4.17 against FR-RDY-004, the sole remaining software control after FR-PLT-007 was withdrawn",
+  "what_is_needed": "Confirmed at review that the version check alone carries the clause. The Risk Analysis should drop any reference to automatic update, and should record that the application-side control arrives at milestone 3 while the backend validation carries the risk until then",
+  "comments": "",
+  "group": "R.5"
+ },
+ {
+  "ref": "Q-43",
+  "item": "The Date of Birth is no longer requested at login",
+  "risk_analysis_rows": "RA 6.4; FR-AUT-009 withdrawn",
+  "what_is_needed": "RA 6.4 now traces to FR-AUT-010, FR-AUT-012, FR-AUT-013, FR-AUT-014 and FR-SHR-003, all at milestone 3. If the Risk Analysis names a login-time Date of Birth check, that clause should be removed when it is next revised",
+  "comments": "",
+  "group": "R.5"
+ },
+ {
+  "ref": "Q-30",
+  "consequence": "Elapsed time can be derived from a source the user can alter",
+  "deferred_item": "FR-TIM-004, milestone 5",
+  "what_is_affected": "Until implemented, the timing windows in section 12 can be defeated by changing the device clock. RA 4.18 assumes the timers are enforceable, and those windows are the only remaining software control on RA 3.9 and 3.10",
+  "comments": "",
+  "group": "R.6"
+ },
+ {
+  "ref": "Q-31",
+  "consequence": "Server-side enforcement of demonstration behaviour is deferred",
+  "deferred_item": "FR-CFG-004, now milestone 1",
+  "what_is_affected": "CLOSED at Rev 1.18. FR-CFG-004 came into scope at milestone 1, so enforcement is no longer deferred. FR-RES-006 remains the application-side control alongside it. Retained here until the register is next reconciled, so the closure is visible rather than silent",
+  "comments": "",
+  "group": "R.6"
+ },
+ {
+  "ref": "Q-33",
+  "consequence": "The application has no defined behaviour for a configured blocked state",
+  "deferred_item": "FR-CFG-006, now milestone 3",
+  "what_is_affected": "CLOSED at Rev 1.18. FR-CFG-006 came into scope and defines the response: no test starts, the user is told the reason and given a route to support. Retained here until the register is next reconciled, so the closure is visible rather than silent. What blockFlow, appDownTime and checkPatientEndOfService may each return is the subject of the SPEC-01 proposal to define the refusal set",
+  "comments": "",
+  "group": "R.6"
+ },
+ {
+  "ref": "Q-34",
+  "consequence": "Analytics events will reach the provider directly rather than through the proxy",
+  "deferred_item": "FR-ANL-004, milestone 5",
+  "what_is_affected": "FR-ANL-002 and FR-ANL-003 still bar personal and health information, so the exposure is limited to event metadata",
+  "comments": "",
+  "group": "R.6"
+ },
+ {
+  "ref": "Q-36",
+  "consequence": "The application SRS carries requirements that are no longer in force",
+  "deferred_item": "AUT.9 is withdrawn with FR-AUT-009; TSM.16 and PER.1 are not included; CON.3, CON.5, TSM.35 to TSM.39, TSM.41 to TSM.43, TSM.46, EX.2 and OTH.1 are deferred; TSM.44 is scoped to FR-SHR-016",
+  "what_is_affected": "Mark them accordingly when the application SRS is next revised, so it does not read as though they are all still required",
+  "comments": "",
+  "group": "R.6"
+ },
+ {
+  "ref": "Q-44",
+  "consequence": "Five requirement identifiers are unaccounted for",
+  "deferred_item": "FR-IMG-018, FR-IMG-019, FR-SHR-009, FR-SHR-010, FR-TIM-013 appear in none of the three places an identifier may live",
+  "what_is_affected": "Appendix D now records the gap. Before the document is finalised, confirm whether these ever carried text; if they did, each needs a withdrawal row of its own",
+  "comments": "",
+  "group": "R.6"
+ },
+ {
+  "ref": "Q-45",
+  "consequence": "The results endpoint contract and the invalid-reason enumeration have no owner",
+  "deferred_item": "FR-COM-011, FR-RES-001, FR-ALG-012, FR-TXT-021",
+  "what_is_affected": "The application-side request is now a requirement, but the route, the authentication scheme, the payload schema and the enumeration of invalid reasons still need a named owner",
+  "comments": "",
+  "group": "R.6"
+ },
+ {
+  "ref": "Q-46",
+  "consequence": "The Software Development Plan has no owner and no date",
+  "deferred_item": "FR-LCM-017, and the Appendix D exclusion of FR-LCM-001",
+  "what_is_affected": "Two obligations rest on it: the scope of release testing, and the IEC 62304 Class B development standards. A question to put to RAQA accompanies this revision",
+  "comments": "",
+  "group": "R.6"
+ },
+ {
+  "ref": "Q-47",
+  "consequence": "The Appendix D claim about readiness thresholds is broader than the requirements support",
+  "deferred_item": "Appendix D, FR-CFG-005 row",
+  "what_is_affected": "Held open at the reviewer's request until the configuration decisions are implemented. FR-RDY-008 is now fixed in the application, so the claim is closer to true; FR-RDY-002 and FR-RDY-004 still name configuration keys",
+  "comments": "",
+  "group": "R.6"
+ }
+]

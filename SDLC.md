@@ -6,6 +6,13 @@ because each one is a check that gets much more expensive to run later.
 The mechanical version of steps 1–5 is the `spec-intake` skill in `.claude/skills/spec-intake/`.
 Run it rather than doing this by hand.
 
+**A revision of the documents is the other way in, and it is not this path.** When a new
+`QACR-APP-FR-01 Rev<n>.docx` or `QACR-APP-EPIC-01 Rev<n>.docx` arrives, run the `revision-intake`
+skill: it replaces the documents, re-parses them, reports what changed id by id, and brings every
+generated file back into agreement — including re-running the steps below for briefs already
+published. The two are never mixed in one commit; they fail differently and are reverted
+differently.
+
 ---
 
 ## 1 · A spec arrives

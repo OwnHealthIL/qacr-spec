@@ -40,7 +40,6 @@ got and the entry has not acknowledged it.
 """
 import collections
 import csv
-import glob
 import json
 import os
 import re
@@ -48,6 +47,9 @@ import sys
 import urllib.parse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# One definition of "which document is this, and what revision does it name".
+from parse_product_docs import only_docx, revision_of  # noqa: E402
 
 SPECS = {
     "SPEC-01": {
@@ -120,17 +122,13 @@ SPECS = {
             "FR-AUT-003": "departure D1",
             "FR-AUT-012": "departure D2",
         },
-        # §5 Traceability lists four ids that `product/` has not got yet, at
-        # EPIC-01 Rev 1.13 / FR-01 Rev 1.19. `covers` records the brief as
-        # written; `pending` is the acknowledgement that they cannot render
-        # yet, and the feature file says so rather than reading as complete.
-        # Once the Rev 1.14 / Rev 1.20 export lands, the build fails until
-        # these are removed from here.
-        "pending": {
-            "F02.1": ["FR-AUT-023"],
-            "F02.2": ["FR-AUT-024"],
-            "F02.5": ["FR-AUT-021", "FR-AUT-022"],
-        },
+        # §5 Traceability named four ids `product/` had not got at EPIC-01
+        # Rev 1.13 / FR-01 Rev 1.19 — FR-AUT-021, -022, -023, -024 — and they
+        # were declared `pending` so the feature files said so rather than
+        # reading as complete. The Rev 1.14 / Rev 1.20 export landed those four
+        # ids, the build failed until this map was emptied, and it is now gone.
+        # That failure is the mechanism working: the declaration cannot outlive
+        # what it describes without someone being told.
         "features": {
             "F02.1": {
                 "disposition": "as-is except D1",
@@ -199,17 +197,19 @@ def product_revisions():
     `features.json` and `requirements.json` carry no revision of their own —
     they are parsed out of the `.docx` beside them, and that filename is the
     only record of which revision they hold.
+
+    Which file that is, and what revision it names, are `parse_product_docs`'s
+    `only_docx()` and `revision_of()` — imported rather than reimplemented. This
+    function used to glob `'<stem> Rev*.docx'`, which requires the revision to
+    follow the stem immediately. Rev 1.19 arrived as `QACR-APP-FR-01 Rev1.19.docx`
+    and Rev 1.20 as `QACR-APP-FR-01 Functional Requirements Rev1.20.docx`, so the
+    glob found nothing while the parser found it: two definitions of "which
+    document is this" that agreed until the PM renamed a file. One definition.
     """
-    found = {}
-    for key, folder, stem in (("FR-01", "product/FR-01", "QACR-APP-FR-01"),
-                              ("EPIC-01", "product/EPIC-01", "QACR-APP-EPIC-01")):
-        matches = glob.glob(os.path.join(ROOT, folder, f"{stem} Rev*.docx"))
-        if len(matches) != 1:
-            sys.exit(f"{key}: expected exactly one '{stem} Rev*.docx' in "
-                     f"{folder}, found {len(matches)}")
-        found[key] = re.search(r"Rev([\d.]+)\.docx$",
-                               os.path.basename(matches[0])).group(1)
-    return found
+    return {key: revision_of(only_docx(os.path.join(ROOT, folder), stem))
+            for key, folder, stem in
+            (("FR-01", "product/FR-01", "QACR-APP-FR-01"),
+             ("EPIC-01", "product/EPIC-01", "QACR-APP-EPIC-01"))}
 
 
 def provenance(spec, actual):
