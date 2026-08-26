@@ -1,0 +1,2101 @@
+{
+ "epic": "E03",
+ "title": "Kit Identification and Eligibility",
+ "purpose": "Verified ACR behaviour, reviewed by Product, as input for writing a same-as-ACR specification.",
+ "acr_reference": {
+  "variant": "Minuteful Kidney US",
+  "ios_target": "Acr/MinutefulKidneyUS",
+  "android_flavour": "acrFda + minutefulUs",
+  "out_of_scope": [
+   "Acr/AcrUs",
+   "Acr/Minuteful (UK)",
+   "non-ACR flavours"
+  ]
+ },
+ "read_at": {
+  "iosDip": "develop @ e0636af31",
+  "AndroidDip": "develop @ a50d8b0"
+ },
+ "total_lines": 86,
+ "requirements": [
+  {
+   "id": "FR-KIT-001",
+   "milestone": "M3",
+   "feature": "F03.1",
+   "text": "The software shall verify the presence of the QR code on the Test Board. If the QR code is missing or damaged, the software shall prevent the user from completing a scan, display an explanatory error message, and instruct the user to contact support.",
+   "document_note": "Realised by enabledNoQrBlock, featureFlags.qrDetectionUsingMLPackage"
+  },
+  {
+   "id": "FR-KIT-002",
+   "milestone": "M3",
+   "feature": "F03.1",
+   "text": "The software shall capture the QR code and transmit it to the backend to verify that the kit identifier is valid and that the kit has not previously been used. The backend shall maintain the record of used kit identifiers against which that check is made.",
+   "document_note": "Register of used identifiers added from the backend SRS"
+  },
+  {
+   "id": "FR-KIT-003",
+   "milestone": "M3",
+   "feature": "F03.1",
+   "text": "The software shall validate the QR-code content against the defined kit-identifier template, and shall not return a test result unless a valid QR code has been read.",
+   "document_note": "—"
+  },
+  {
+   "id": "FR-KIT-004",
+   "milestone": "M3",
+   "feature": "F03.2",
+   "text": "If the QR code is unidentified, or the kit identifier has already been used, the software shall invalidate the test at the point of scanning and display an explanatory error message. A second use of the same kit cannot be prevented before the assay has been run.",
+   "document_note": "Revised per review: reuse is detected at scan rather than prevented up front, because the kit identifier is only read during the scan. RA 7.1 states the control as the same kit not being re-usable, which now means detected and blocked from producing a result. Also covers FR-KIT-006. Realised by enabledQrBlock and blockSubsequentTests.moreTestsThanKits"
+  },
+  {
+   "id": "FR-KIT-007",
+   "milestone": "M3",
+   "feature": "F03.2",
+   "text": "Where the user attempts to start a test within 24 hours after a previous test has completed, whether that test produced a result or was invalidated, the software shall present an alert stating that a new kit is required and shall require the user to confirm that they have one before the test flow begins.",
+   "document_note": "Window confirmed at 24 hours and held as a configurable value. Complements FR-KIT-004, which detects reuse of an already-used kit only at the point of scanning"
+  }
+ ],
+ "features": [
+  {
+   "id": "F03.1",
+   "title": "QR capture and kit validation",
+   "requirements": [
+    "FR-KIT-001",
+    "FR-KIT-002",
+    "FR-KIT-003"
+   ],
+   "scenarios": [
+    {
+     "id": "happy",
+     "title": "Happy path - a valid, unused, unexpired kit",
+     "lines": [
+      {
+       "id": "F03.1-happy-1",
+       "behaviour": "While the user scans the test board, the app silently reads the kit's QR code from the camera.",
+       "ios": "The QR code is read from the camera stream during the scan, alongside the scan itself.",
+       "android": "The QR code is read from each camera frame in parallel with the scan, until one is found.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-002"
+       ],
+       "relation": "realises",
+       "relation_note": "FR-KIT-002 requires the software to capture the QR code; ACR captures it from the live camera stream during the board scan rather than as a scan step of its own.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.1-happy-2",
+       "behaviour": "Nothing on the scan screen mentions the QR code; the user only sees the normal scan guidance and corner markers.",
+       "ios": "Only the frame corner markers and scan status are shown; no QR-specific message exists.",
+       "android": "Only the scan guidance from the scan engine is shown; QR reading produces no screen change.",
+       "platforms": "same",
+       "requirements": [
+        "FR-IMG-013"
+       ],
+       "relation": "partly",
+       "relation_note": "The scan screen shows only the framing guidance FR-IMG-013 requires; no requirement asks for, or forbids, an indication that the QR code has been read, so ACR's silence here is unspecified either way.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.1-happy-3",
+       "behaviour": "After the scan, the app checks the kit with its server while the usual analysis explanation plays on screen.",
+       "ios": "The kit check runs as a hidden step between uploading the scan and requesting results.",
+       "android": "The kit check runs as a hidden step between uploading the scan and requesting results.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-002",
+        "FR-COM-011"
+       ],
+       "relation": "realises",
+       "relation_note": "This is the transmit-and-verify half of FR-KIT-002, run behind the waiting state FR-COM-011 requires; note it happens after the scan has been uploaded rather than at the point of scanning as FR-KIT-004 words it.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.1-happy-4",
+       "behaviour": "A valid kit produces no confirmation of its own; the user simply continues to their results.",
+       "ios": "On success the flow moves straight on to fetching and showing results.",
+       "android": "On success the flow moves straight on to fetching and showing results.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-002",
+        "FR-RES-001"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-KIT-002 demands the check but says nothing about how a passing check is surfaced; ACR shows nothing and goes on to the result display of FR-RES-001.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      }
+     ]
+    },
+    {
+     "id": "qr-absent",
+     "title": "QR code absent, damaged or never read",
+     "lines": [
+      {
+       "id": "F03.1-qrabsent-1",
+       "behaviour": "A missing or unreadable QR code does not interrupt or stop the scan; the scan finishes normally.",
+       "ios": "The scan is never blocked on having read a code; the test is submitted without one.",
+       "android": "The scan is never blocked on having read a code; the test is submitted without one.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-001"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-KIT-001 requires the software to prevent the user from completing a scan when the QR code is missing or damaged; ACR does the opposite, letting the scan finish and submitting the test with no identifier.",
+       "pm_mark": "change",
+       "pm_comment": "1. This depends on a feature flag from the backend (\"no-qr block\"). it should remain the same - depending on the feature flag\n2. there's a fallback mechanism to try and extract the QR code from the rectified image\n3. In Qacr- we should have another fallback mechanism, manual, that asks the user to scan the QR code in case that it was missing in the first two attempts. if succeeds, the process continues normally. if fail - the user gets an error and gets transfered to troubleshooting. "
+      },
+      {
+       "id": "F03.1-qrabsent-2",
+       "behaviour": "The server then rejects the test, and after the analysis explanation the user sees \"Something went wrong\".",
+       "ios": "Shown as a full-screen alert titled \"Something went wrong\" once the sending explanation has finished.",
+       "android": "Shown as a full-screen alert titled \"Something went wrong\" once the sending explanation has finished.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-001",
+        "FR-KIT-004",
+        "FR-COM-008"
+       ],
+       "relation": "partly",
+       "relation_note": "An explanatory error is displayed and the test invalidated as FR-KIT-004 requires, but it is the backend's rejection surfaced after the scan (FR-COM-008), not the on-device prevention FR-KIT-001 asks for.",
+       "pm_mark": "wrong",
+       "pm_comment": "im not sure if the backend is the one rejecting it. i think that it is on the device. need to recheck"
+      },
+      {
+       "id": "F03.1-qrabsent-3",
+       "behaviour": "The message reads \"We ran into an error validating the kit and it is no longer valid for use.\"",
+       "ios": "Body text identical; single button labelled \"Continue\".",
+       "android": "Body text identical; single button labelled \"CONTINUE\" (upper case).",
+       "platforms": "same",
+       "requirements": [
+        "FR-TXT-020",
+        "FR-KIT-001"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-TXT-020 requires a blocking message to name the condition, state the corrective action and carry support contact information; \"We ran into an error validating the kit\" names none of the three, and FR-KIT-001's instruction to contact support is not in the message.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.1-qrabsent-4",
+       "behaviour": "Continuing takes the user into a troubleshooting support conversation, and no test result is ever shown.",
+       "ios": "Continue leads to the general troubleshooting chat; results are never requested for that scan.",
+       "android": "Continue leads to the general troubleshooting screen; results are never requested for that scan.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-003",
+        "FR-SUP-003"
+       ],
+       "relation": "realises",
+       "relation_note": "No result is requested for a scan with no valid code, which is FR-KIT-003's bar, and the user reaches support as FR-SUP-003 requires — though by way of a scripted troubleshooting conversation rather than support contact details.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      }
+     ]
+    },
+    {
+     "id": "kit-used",
+     "title": "Kit already used",
+     "lines": [
+      {
+       "id": "F03.1-used-1",
+       "behaviour": "The user completes the scan as normal; only afterwards is the kit found to have been used before.",
+       "ios": "The used-kit verdict comes back from the server after the scan is uploaded.",
+       "android": "The used-kit verdict comes back from the server after the scan is uploaded.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-002",
+        "FR-KIT-004"
+       ],
+       "relation": "realises",
+       "relation_note": "The used-kit verdict comes from the backend register FR-KIT-002 requires; it arrives after the scan is uploaded, which is later than FR-KIT-004's \"at the point of scanning\".",
+       "pm_mark": "correct",
+       "pm_comment": "depends on a feature flag in the backend"
+      },
+      {
+       "id": "F03.1-used-2",
+       "behaviour": "The user sees \"This kit has been used\" with \"To ensure the accuracy of the results, each test kit can only be used once.\"",
+       "ios": "Same title and body, with a kit icon; one button labelled \"Continue\".",
+       "android": "Same title and body, no icon; one button labelled \"CONTINUE\".",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-004",
+        "FR-TXT-020"
+       ],
+       "relation": "realises",
+       "relation_note": "FR-KIT-004 requires an explanatory error message for an already-used kit; the message names the condition and the reason but carries no support contact information, which FR-TXT-020 requires.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.1-used-3",
+       "behaviour": "Continuing opens a used-kit troubleshooting conversation; the test ends with no result.",
+       "ios": "Continue opens the used-kit troubleshooting chat and the test is recorded as failed.",
+       "android": "Continue opens the used-kit troubleshooting screen and the test is recorded as failed.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-004",
+        "FR-SUP-003"
+       ],
+       "relation": "realises",
+       "relation_note": "The test is invalidated with no result as FR-KIT-004 requires, and the user is routed to support as FR-SUP-003 requires.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      }
+     ]
+    },
+    {
+     "id": "kit-expired",
+     "title": "Kit expired",
+     "lines": [
+      {
+       "id": "F03.1-expired-1",
+       "behaviour": "After the scan the user sees \"The kit has expired\" instead of results.",
+       "ios": "Alert titled \"The kit has expired\" with a kit icon.",
+       "android": "Alert titled \"The kit has expired\" with a used-kit icon.",
+       "platforms": "same",
+       "requirements": [],
+       "relation": "unlisted",
+       "relation_note": "Kit expiry is not a requirement in this version: FR-KIT-005 was removed and deferred as BL-23, so nothing asks the software to detect or report an expired kit, which ACR does today.",
+       "pm_mark": "correct",
+       "pm_comment": "depends on a feature flag"
+      },
+      {
+       "id": "F03.1-expired-2",
+       "behaviour": "The message says the kit is no longer valid for use, and that the user may continue with a new kit instead.",
+       "ios": "Body text identical.",
+       "android": "Body text identical.",
+       "platforms": "same",
+       "requirements": [],
+       "relation": "unlisted",
+       "relation_note": "The expired-kit wording, including the offer to continue with a new kit, exists only because ACR implements the deferred BL-23; no requirement governs its content.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.1-expired-3",
+       "behaviour": "This is the only kit failure offering two choices: \"I HAVE A NEW KIT\" and \"SUPPORT\".",
+       "ios": "\"I HAVE A NEW KIT\" is the primary button, \"SUPPORT\" the secondary.",
+       "android": "\"I HAVE A NEW KIT\" is the primary button, \"SUPPORT\" the secondary.",
+       "platforms": "same",
+       "requirements": [
+        "FR-RDY-013"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-RDY-013 requires that only the resolution route which applies be offered; expiry is the one kit condition the user can resolve themselves, and ACR is the only kit failure offering two routes — but FR-RDY-013 does not name expiry, since BL-23 defers it.",
+       "pm_mark": "change",
+       "pm_comment": "This error should have a troubleshooting chat, same as the other errors"
+      },
+      {
+       "id": "F03.1-expired-4",
+       "behaviour": "Choosing \"I HAVE A NEW KIT\" returns the user to the app's home screen so they can start again.",
+       "ios": "The test flow closes and the user lands back on the lobby.",
+       "android": "The order is marked as the user having a new kit and the lobby is reopened.",
+       "platforms": "same",
+       "requirements": [],
+       "relation": "unlisted",
+       "relation_note": "Returning the user to the home screen so they can start again with a new kit is behaviour of the deferred BL-23 condition; no requirement covers it.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.1-expired-5",
+       "behaviour": "Choosing \"SUPPORT\" opens the support conversation directly from the failed test.",
+       "ios": "The flow closes with a support request and the support chat is opened.",
+       "android": "The support screen is opened directly from the alert.",
+       "platforms": "same",
+       "requirements": [
+        "FR-SUP-003"
+       ],
+       "relation": "partly",
+       "relation_note": "Reaching support from a blocked state is what FR-SUP-003 asks for, but the condition that blocks the user here is the deferred kit-expiry check of BL-23.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.1-expired-6",
+       "behaviour": "The message never tells the user the actual expiry date, even though the app receives it.",
+       "ios": "The received expiry date is stored and reported internally, never rendered in the message.",
+       "android": "The received expiry date is stored and reported internally, never rendered in the message.",
+       "platforms": "same",
+       "requirements": [],
+       "relation": "unlisted",
+       "relation_note": "Whether the expiry date the backend returns is shown to the user is undecided; the F03.2 behaviour file records it as not derivable, and with BL-23 deferred no requirement states it either way.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      }
+     ]
+    },
+    {
+     "id": "invalid-identifier",
+     "title": "QR content does not match the kit-identifier format",
+     "lines": [
+      {
+       "id": "F03.1-format-1",
+       "behaviour": "A QR code that does not match the expected kit-identifier pattern is ignored and the app keeps looking for one.",
+       "ios": "A non-matching code is discarded and the camera continues offering codes until one matches.",
+       "android": "A non-matching code is discarded and later frames are still checked for a valid one.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-003"
+       ],
+       "relation": "realises",
+       "relation_note": "FR-KIT-003 requires the QR content to be validated against the defined kit-identifier template; both clients discard a non-matching code on device and keep looking.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.1-format-2",
+       "behaviour": "The two apps disagree on what counts as a valid identifier, so one may accept a code the other rejects.",
+       "ios": "Accepts only an identifier of six or seven characters after the expected marker.",
+       "android": "Accepts any identifier length after the expected marker.",
+       "platforms": "differs",
+       "requirements": [
+        "FR-KIT-003",
+        "FR-PLT-006"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-KIT-003 presumes one defined template, and FR-PLT-006 requires equivalent error handling across platforms; ACR's two clients accept different identifier lengths, so neither is satisfied by the pair together.",
+       "pm_mark": "change",
+       "pm_comment": "align platforms"
+      },
+      {
+       "id": "F03.1-format-3",
+       "behaviour": "If no acceptable code is ever read, the user ends up with the same \"Something went wrong\" kit message as a missing code.",
+       "ios": "The test is submitted with no kit identifier and rejected by the server.",
+       "android": "The test is submitted with no kit identifier and rejected by the server.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-004",
+        "FR-TXT-020"
+       ],
+       "relation": "partly",
+       "relation_note": "Invalidation for an unidentified QR code is what FR-KIT-004 requires, but the message is the same generic one used for a missing code and does not name the condition detected as FR-TXT-020 requires.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      }
+     ]
+    },
+    {
+     "id": "wrong-kit-type",
+     "title": "Kit belongs to a different test than the one being performed",
+     "lines": [
+      {
+       "id": "F03.1-mismatch-1",
+       "behaviour": "When the kit belongs to a different test, the two apps show the user completely different things.",
+       "ios": "Shows \"Something went wrong\" with \"Your stick and kit are no longer valid for use.\" and a Continue button.",
+       "android": "Shows an alert whose title, body and button text are all empty for this app, so it appears blank.",
+       "platforms": "differs",
+       "requirements": [],
+       "relation": "unlisted",
+       "relation_note": "No requirement covers a well-formed kit identifier that belongs to a different product: FR-KIT-003 governs only template conformance, so this condition — and Android's empty message, which FR-TXT-020 and FR-PLT-006 would both forbid — is unspecified.",
+       "pm_mark": "change",
+       "pm_comment": "should show something went wrong (general error alert)"
+      },
+      {
+       "id": "F03.1-mismatch-2",
+       "behaviour": "Either way the test ends without a result and the user is moved into a troubleshooting conversation.",
+       "ios": "The general troubleshooting chat opens after the message is dismissed.",
+       "android": "The flow-mismatch troubleshooting screen opens after the alert is dismissed.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-003",
+        "FR-SUP-003"
+       ],
+       "relation": "partly",
+       "relation_note": "The test ends with no result and the user reaches support, which matches FR-KIT-003 and FR-SUP-003 in effect, but the triggering condition (a kit for another product) is not a requirement.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      }
+     ]
+    },
+    {
+     "id": "backend-unreachable",
+     "title": "Backend unreachable during the kit check",
+     "lines": [
+      {
+       "id": "F03.1-offline-1",
+       "behaviour": "A failed or unreachable server shows nothing at first; the app keeps retrying quietly behind the waiting screen.",
+       "ios": "The step is retried later and the analysis screen keeps waiting with no message.",
+       "android": "The step is retried with a growing delay and the analysis screen keeps waiting.",
+       "platforms": "same",
+       "requirements": [
+        "FR-COM-006",
+        "FR-COM-011"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-COM-006 requires the software to notify the user when communication is lost as well as retain the data and retry; ACR retains and retries but notifies nothing at first, leaving the FR-COM-011 waiting state on screen.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.1-offline-2",
+       "behaviour": "If the wait runs long with no connection, the user sees \"No Internet Connection\" and is asked to reconnect.",
+       "ios": "Shown when the device reports no reachable internet at the moment of the timeout.",
+       "android": "Shown when the device reports it is not connected at the moment of the timeout.",
+       "platforms": "same",
+       "requirements": [
+        "FR-COM-006",
+        "FR-TXT-020"
+       ],
+       "relation": "realises",
+       "relation_note": "The no-connection message is the notification FR-COM-006 requires, and it names the condition and the corrective action as FR-TXT-020 requires, though without support contact information.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.1-offline-3",
+       "behaviour": "If the wait runs long but the phone is online, the user first sees \"Connectivity Issue\" with a single acknowledgement.",
+       "ios": "First occurrence shows the connectivity warning with an OK button and keeps retrying.",
+       "android": "First occurrence shows the connectivity warning with an OK button and keeps retrying.",
+       "platforms": "same",
+       "requirements": [
+        "FR-COM-006",
+        "FR-COM-008"
+       ],
+       "relation": "realises",
+       "relation_note": "A stalled but connected exchange is reported to the user and retrying continues, which is FR-COM-006's notify-and-retry; the threshold at which it fires is not a registered parameter.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.1-offline-4",
+       "behaviour": "If it persists, the same title returns offering a choice between retrying and contacting support.",
+       "ios": "Second message offers \"Retry\" and \"Support\".",
+       "android": "Second message offers \"RETRY\" and \"SUPPORT\".",
+       "platforms": "same",
+       "requirements": [
+        "FR-RDY-013",
+        "FR-SUP-003"
+       ],
+       "relation": "partly",
+       "relation_note": "Offering retry for a condition that retrying can resolve, plus a support route, is FR-RDY-013 and FR-SUP-003; the two-stage escalation from acknowledge-only to retry-or-support is not required anywhere.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.1-offline-5",
+       "behaviour": "Nothing tells the user that it is the kit check specifically that is stuck; the wording is about uploading the test.",
+       "ios": "The wording is the generic upload-connectivity message used for every sending step.",
+       "android": "The wording is the generic upload-connectivity message used for every sending step.",
+       "platforms": "same",
+       "requirements": [
+        "FR-TXT-020"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-TXT-020 requires the message to name the condition detected; ACR reuses the generic upload wording, so a stalled kit check is indistinguishable from a stalled image upload.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      }
+     ]
+    },
+    {
+     "id": "interruption",
+     "title": "Interruption and resume",
+     "lines": [
+      {
+       "id": "F03.1-resume-1",
+       "behaviour": "Leaving the scan screen stops the camera; coming back continues the same test rather than starting over.",
+       "ios": "Returning restarts the camera and preview but keeps the frames and code already collected.",
+       "android": "Returning restarts the preview and keeps the existing scan session, frames and code.",
+       "platforms": "same",
+       "requirements": [
+        "FR-STA-002",
+        "FR-STA-003"
+       ],
+       "relation": "realises",
+       "relation_note": "FR-STA-002 and FR-STA-003 require the software to survive an interruption and resume at the step that was active rather than start over; ACR keeps the scan session, its frames and its code.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.1-resume-2",
+       "behaviour": "A QR code already read during the scan is not asked for again after the interruption.",
+       "ios": "The app stops looking for a code once one has been accepted, across leaving and returning.",
+       "android": "The app only looks for a code while none has been stored for the current scan session.",
+       "platforms": "same",
+       "requirements": [
+        "FR-STA-003"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-STA-003 requires completed steps and stage start times to be retained but does not name the captured QR code among them, so retaining the read code across an interruption is ACR's own decision.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.1-resume-3",
+       "behaviour": "If the app is closed after the scan, the kit check resumes by itself next time the app opens.",
+       "ios": "The pending test is reloaded from storage and continues from the step it had reached.",
+       "android": "The pending test is reloaded from its saved state and continues from the kit-check step.",
+       "platforms": "same",
+       "requirements": [
+        "FR-RDY-012",
+        "FR-STA-005"
+       ],
+       "relation": "realises",
+       "relation_note": "FR-RDY-012 requires the software to determine on start-up whether collected test data reached the backend and to retransmit it, and FR-STA-005 to continue an interrupted upload; the kit check is one step of that sequence.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.1-resume-4",
+       "behaviour": "The user is never asked to rescan the kit because of an interruption after the scan finished.",
+       "ios": "Resuming continues the upload sequence; no rescan is requested.",
+       "android": "Resuming continues the upload sequence; no rescan is requested.",
+       "platforms": "same",
+       "requirements": [
+        "FR-RDY-012",
+        "FR-STA-003"
+       ],
+       "relation": "realises",
+       "relation_note": "Resuming the upload sequence rather than asking for a rescan follows from FR-RDY-012 and FR-STA-003; note FR-STA-006 bars resuming an active test after termination, and ACR treats the post-capture pipeline as outside that bar.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      }
+     ]
+    },
+    {
+     "id": "boundary",
+     "title": "Boundary and edge behaviour",
+     "lines": [
+      {
+       "id": "F03.1-edge-1",
+       "behaviour": "A kit failure message never interrupts the on-screen explanation; it waits until that finishes playing.",
+       "ios": "The failure is only presented once the sending explanation part of the flow has completed.",
+       "android": "The failure is held back until the sending explanation trigger has fired.",
+       "platforms": "same",
+       "requirements": [
+        "FR-IMG-023",
+        "FR-COM-011"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-IMG-023 requires a preparation-and-evaluation state that then continues or reports a boundary condition, and FR-COM-011 a waiting state; neither requires a kit verdict to be held back until the on-screen explanation finishes playing.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.1-edge-2",
+       "behaviour": "When the kit is rejected, no result is ever requested or shown for that scan.",
+       "ios": "The results request is skipped whenever the kit check marked the code invalid.",
+       "android": "The results request only happens after the kit check has succeeded.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-003"
+       ],
+       "relation": "realises",
+       "relation_note": "FR-KIT-003 states the software shall not return a test result unless a valid QR code has been read; ACR skips the results request entirely once the kit check has failed.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.1-edge-3",
+       "behaviour": "If the server rejects the kit without saying why, the user is told the kit has already been used.",
+       "ios": "An unrecognised rejection of that kind falls back to the used-kit message.",
+       "android": "An unrecognised rejection of that kind falls back to the used-kit message.",
+       "platforms": "same",
+       "requirements": [],
+       "relation": "unlisted",
+       "relation_note": "Nothing defines the enumeration of kit-check rejection reasons or what to present for a rejection the software does not recognise; ACR asserts \"This kit has been used\", which may be untrue. FR-ALG-012 does exactly this job for invalid tests, and there is no kit-check equivalent.",
+       "pm_mark": "change",
+       "pm_comment": "if there is no known reason for the mobile - a general error alert should be shown (something went wrong)"
+      },
+      {
+       "id": "F03.1-edge-4",
+       "behaviour": "A scan that already failed the on-device image checks is never kit-checked, so kit problems stay hidden.",
+       "ios": "Only tests that passed the local checks go through the sequence that includes the kit check.",
+       "android": "Only tests in the successful-test queue reach the kit-check step.",
+       "platforms": "same",
+       "requirements": [
+        "FR-IMG-015",
+        "FR-KIT-002"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-IMG-015 requires an image failing IVTS thresholds to be invalidated and re-scanned, but nothing orders the image checks before the kit check, so ACR's consequence — a used or wrong kit staying hidden until a scan passes locally — is unspecified.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.1-edge-5",
+       "behaviour": "The same expired-kit wording can also appear before any scan, when the server blocks the user from starting.",
+       "ios": "The pre-scan block shows the same two-button expired-kit alert, but both buttons only close it.",
+       "android": "The pre-scan block shows the same title and body with a single \"OK\" button.",
+       "platforms": "differs",
+       "requirements": [],
+       "relation": "unlisted",
+       "relation_note": "A pre-scan block delivered by the backend is not a requirement in this version: kit expiry is deferred as BL-23 and the configured blocked state as BL-35, so neither the condition nor its message is covered, and the platforms diverge (two inert buttons on iOS, one OK on Android) as FR-PLT-006 would forbid.",
+       "pm_mark": "wrong",
+       "pm_comment": "im not familiar with a pre-scan block. expired kit is detected after the scan. if there is any expired kit before test start - it needs to be surfaced to the product manager"
+      },
+      {
+       "id": "F03.1-edge-6",
+       "behaviour": "Starting another test soon after a kit failure first shows \"This kit has been used\" offering support or a new kit.",
+       "ios": "The recent-failed-test prompt offers \"Support\" and \"I Have A New Kit\".",
+       "android": "The recent-failed-test prompt offers \"SUPPORT\" and \"I HAVE A NEW KIT\".",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-007"
+       ],
+       "relation": "realises",
+       "relation_note": "This is the failed-previous-test branch of FR-KIT-007's window: an alert stating the kit has been used and a new kit is needed, with a confirmation before the flow begins.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.1-edge-7",
+       "behaviour": "All of these kit messages are also available in Spanish, with slightly different wording between the two apps.",
+       "ios": "Spanish expired-kit title reads \"El kit ha caducado\".",
+       "android": "Spanish expired-kit title reads \"Este kit ha expirado\".",
+       "platforms": "differs",
+       "requirements": [
+        "FR-TXT-001",
+        "FR-PLT-006",
+        "FR-TXT-004"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-TXT-001's note presumes \"every supported language\" and FR-TXT-004 puts user-facing content under configuration control, but no requirement states which languages are supported or brings translations into the versioned set; ACR ships Spanish and the two platforms' Spanish differs, which FR-PLT-006 would forbid.",
+       "pm_mark": "change",
+       "pm_comment": "should align between platforms"
+      }
+     ]
+    }
+   ],
+   "not_knowable_from_code": [
+    {
+     "what": "Whether the server actually checks the QR content against a kit-identifier template, and what it considers valid",
+     "why": "backend response - the apps only send the identifier and react to accept/reject"
+    },
+    {
+     "what": "Which rejection the server returns for a kit that is both used and expired",
+     "why": "backend response - the apps branch on whatever single answer arrives"
+    },
+    {
+     "what": "What the user sees after force-quitting the app in the middle of a scan, before it completed",
+     "why": "needs a run - the in-progress scan state is partly in memory on both platforms"
+    },
+    {
+     "what": "Whether the QR code is ever read from the still images rather than the live camera on Android",
+     "why": "needs a run - a second, image-based read path exists on both platforms and is config-gated on iOS"
+    },
+    {
+     "what": "Whether the on-device scan engine itself requires the board's QR code to be visible before accepting frames",
+     "why": "binary framework - the image-processing engine is a compiled component on both platforms"
+    },
+    {
+     "what": "Whether tapping outside a kit-failure message dismisses it on iOS",
+     "why": "needs a run - Android marks these alerts non-dismissible explicitly, iOS has no equivalent flag"
+    }
+   ],
+   "requirement_asks_acr_does_not_do": [],
+   "expected_missing_but_present": [],
+   "exact_user_wording": [
+    {
+     "where": "Post-scan, QR missing or unreadable - title (both platforms)",
+     "en": "Something went wrong"
+    },
+    {
+     "where": "Post-scan, QR missing or unreadable - body (both platforms)",
+     "en": "We ran into an error validating the kit and it is no longer valid for use."
+    },
+    {
+     "where": "Post-scan, QR missing or unreadable - button",
+     "en": "Continue (iOS) / CONTINUE (Android)"
+    },
+    {
+     "where": "Post-scan, kit already used - title (both platforms)",
+     "en": "This kit has been used"
+    },
+    {
+     "where": "Post-scan, kit already used - body (both platforms)",
+     "en": "To ensure the accuracy of the results, each test kit can only be used once."
+    },
+    {
+     "where": "Post-scan, kit already used - button",
+     "en": "Continue (iOS) / CONTINUE (Android)"
+    },
+    {
+     "where": "Post-scan, kit expired - title (both platforms)",
+     "en": "The kit has expired"
+    },
+    {
+     "where": "Post-scan, kit expired - body (both platforms)",
+     "en": "This test kit is no longer valid for use. If you already have a new kit, you can continue with that kit instead."
+    },
+    {
+     "where": "Post-scan, kit expired - primary button (both platforms)",
+     "en": "I HAVE A NEW KIT"
+    },
+    {
+     "where": "Post-scan, kit expired - secondary button (both platforms)",
+     "en": "SUPPORT"
+    },
+    {
+     "where": "Pre-scan expired-kit block - button (Android only)",
+     "en": "OK"
+    },
+    {
+     "where": "Wrong kit type for this test - title (iOS only; Android string is empty)",
+     "en": "Something went wrong"
+    },
+    {
+     "where": "Wrong kit type for this test - body (iOS only; Android string is empty)",
+     "en": "Your stick and kit are no longer valid for use."
+    },
+    {
+     "where": "Kit check stuck, no connection - title (both platforms)",
+     "en": "No Internet Connection"
+    },
+    {
+     "where": "Kit check stuck, no connection - body (both platforms)",
+     "en": "There seems to be a problem with your internet connection. Make sure you are connected to the internet and try again."
+    },
+    {
+     "where": "Kit check stuck, first warning - title (both platforms)",
+     "en": "Connectivity Issue"
+    },
+    {
+     "where": "Kit check stuck, first warning - body (both platforms)",
+     "en": "There seems to be a problem uploading your test. Make sure you are connected to the internet."
+    },
+    {
+     "where": "Kit check stuck, second warning - body (both platforms)",
+     "en": "There seems to be a problem uploading your test. You can either keep retrying, or contact support."
+    },
+    {
+     "where": "Kit check stuck, second warning - buttons",
+     "en": "Retry / Support (iOS) - RETRY / SUPPORT (Android)"
+    },
+    {
+     "where": "Starting a new test after a kit failure - title (both platforms)",
+     "en": "This kit has been used"
+    },
+    {
+     "where": "Starting a new test after a kit failure - body (both platforms)",
+     "en": "It looks like you used your kit already. The stick and the kit are designed for one use only. To perform a new test, please use a new kit."
+    },
+    {
+     "where": "Starting a new test after a kit failure - buttons",
+     "en": "Support / I Have A New Kit (iOS) - SUPPORT / I HAVE A NEW KIT (Android)"
+    },
+    {
+     "where": "Post-scan, kit expired - Spanish title",
+     "en": "El kit ha caducado (iOS) / Este kit ha expirado (Android)"
+    },
+    {
+     "where": "Post-scan, kit expired - Spanish buttons (both platforms)",
+     "en": "TENGO UN KIT NUEVO (iOS) / TENGO UN NUEVO KIT (Android); SOPORTE"
+    }
+   ]
+  },
+  {
+   "id": "F03.2",
+   "title": "Reuse detection and new-kit gating",
+   "requirements": [
+    "FR-KIT-004",
+    "FR-KIT-007"
+   ],
+   "scenarios": [
+    {
+     "id": "happy",
+     "title": "Happy path - a first-use kit, no reuse and no recency in play",
+     "lines": [
+      {
+       "id": "F03.2-happy-1",
+       "behaviour": "The user taps to start a test and no reuse or recency warning appears.",
+       "ios": "No recent successful or failed test on record, so the start check passes straight through to the flow.",
+       "android": "No recent order timestamp on record, so the start check passes straight through to the flow.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-007"
+       ],
+       "relation": "realises",
+       "relation_note": "FR-KIT-007's gate is scoped to an attempt within 24 hours of a previous test; with no recent test on record ACR passes straight through, which is the requirement's implied negative case.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-happy-2",
+       "behaviour": "After the scan the app checks the kit identifier with the backend while the analysing screen is shown.",
+       "ios": "The kit check runs as one step of the post-scan sending sequence, behind the 'ANALYZING' chat screen.",
+       "android": "The kit check runs as one step of the post-scan sync queue, behind the 'ANALYZING' chat screen.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-002",
+        "FR-COM-011"
+       ],
+       "relation": "realises",
+       "relation_note": "The kit identifier is transmitted to the backend for verification as FR-KIT-002 requires, behind the waiting state FR-COM-011 requires.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-happy-3",
+       "behaviour": "The kit passes the check silently and the user continues to results with no message about the kit.",
+       "ios": "A passing check advances the sending sequence to fetching results; nothing is surfaced to the user.",
+       "android": "A passing check marks the colour board validated and advances the queue; nothing is surfaced to the user.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-002"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-KIT-002 requires the check but not any particular treatment of a passing one; ACR surfaces nothing and advances.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      }
+     ]
+    },
+    {
+     "id": "kit-used",
+     "title": "Kit already used - detected after the scan",
+     "lines": [
+      {
+       "id": "F03.2-used-1",
+       "behaviour": "After the scan the user is told \"This kit has been used\" and that each kit may be used only once.",
+       "ios": "Shows the used-kit alert with body \"To ensure the accuracy of the results, each test kit can only be used once.\"",
+       "android": "Shows the same used-kit alert with the identical title and body text.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-004"
+       ],
+       "relation": "realises",
+       "relation_note": "FR-KIT-004 requires an explanatory error message where the kit identifier has already been used; this is that message.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-used-2",
+       "behaviour": "The alert has a single \"Continue\" button and cannot be dismissed any other way.",
+       "ios": "One positive button labelled \"Continue\"; the alert is not user-dismissible.",
+       "android": "One primary button labelled \"CONTINUE\"; the alert is declared not dismissible.",
+       "platforms": "same",
+       "requirements": [
+        "FR-RDY-013",
+        "FR-KIT-004"
+       ],
+       "relation": "realises",
+       "relation_note": "Reuse cannot be resolved by retrying, so FR-RDY-013 requires that no retry be offered and only the applicable resolution route be presented; a single non-dismissible Continue is exactly that.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-used-3",
+       "behaviour": "Continuing opens a guided conversation headed \"KIT ALREADY USED\" explaining the kit is single-use.",
+       "ios": "Routes into the used-kit troubleshooting conversation built from the same script as Android.",
+       "android": "Routes into the used-kit troubleshooting conversation built from the same script as iOS.",
+       "platforms": "same",
+       "requirements": [
+        "FR-SUP-003",
+        "FR-TXT-020"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-SUP-003 and FR-TXT-020 require support contact information to be presented when the user is blocked; ACR instead routes into a scripted troubleshooting conversation, which no requirement describes. FR-RDY-013's note is where the per-condition route is to be stated.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-used-4",
+       "behaviour": "The conversation's only offered action takes the user to customer support.",
+       "ios": "The single chat button triggers the go-to-support action.",
+       "android": "The single chat button triggers the go-to-support action.",
+       "platforms": "same",
+       "requirements": [
+        "FR-SUP-003",
+        "FR-SUP-002"
+       ],
+       "relation": "realises",
+       "relation_note": "The conversation's single action reaches customer support, satisfying FR-SUP-003's obligation to present the support route for a condition the user cannot resolve.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-used-5",
+       "behaviour": "The test is recorded as a failed test, so no result is produced for this kit.",
+       "ios": "Entering the used-kit conversation marks the test ended unsuccessfully and stamps the last-failed time.",
+       "android": "The used-kit outcome sets the order to used-kit, which stamps the failed-order timestamp.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-004",
+        "FR-KIT-003"
+       ],
+       "relation": "realises",
+       "relation_note": "The test is invalidated and no result is produced, which is FR-KIT-004 read together with FR-KIT-003's bar on returning a result.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      }
+     ]
+    },
+    {
+     "id": "kit-expired",
+     "title": "Kit expired - detected after the scan, and blocked before it where already known",
+     "lines": [
+      {
+       "id": "F03.2-expired-1",
+       "behaviour": "After the scan the user is told \"The kit has expired\" and that this kit is no longer valid for use.",
+       "ios": "Shows the expired-kit alert with body \"This test kit is no longer valid for use. If you already have a new kit, you can continue with that kit instead.\"",
+       "android": "Shows the same expired-kit alert with the identical title and body text.",
+       "platforms": "same",
+       "requirements": [],
+       "relation": "unlisted",
+       "relation_note": "Detecting and reporting an expired kit is deferred as BL-23 (formerly FR-KIT-005); no requirement in this version asks for it, though ACR distinguishes it from reuse in the answer to the same kit check.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-expired-2",
+       "behaviour": "The alert offers \"I HAVE A NEW KIT\" as the main action and \"SUPPORT\" as the alternative.",
+       "ios": "Main button is \"I HAVE A NEW KIT\", secondary is \"SUPPORT\".",
+       "android": "Primary button is \"I HAVE A NEW KIT\", secondary is \"SUPPORT\".",
+       "platforms": "same",
+       "requirements": [
+        "FR-RDY-013"
+       ],
+       "relation": "partly",
+       "relation_note": "Offering the one route that can resolve the condition — continuing with a new kit — plus support is FR-RDY-013's rule, but the condition itself is the deferred BL-23.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-expired-3",
+       "behaviour": "No guided troubleshooting conversation is offered for an expired kit, unlike an already-used kit.",
+       "ios": "The expired-kit branch ends the flow rather than opening a troubleshooting conversation.",
+       "android": "The expired-kit alert returns to the lobby rather than opening a troubleshooting conversation.",
+       "platforms": "same",
+       "requirements": [],
+       "relation": "unlisted",
+       "relation_note": "That an expired kit gets no guided troubleshooting conversation while an already-used kit does is a per-condition routing decision; FR-RDY-013's note requires such decisions to be stated for each blocking condition, and expiry is not among them because BL-23 is deferred.",
+       "pm_mark": "change",
+       "pm_comment": "qacr should have a troubleshooting flow"
+      },
+      {
+       "id": "F03.2-expired-4",
+       "behaviour": "Choosing \"SUPPORT\" takes the user into the support flow.",
+       "ios": "The secondary action dismisses the test as cancelled with support requested and opens support.",
+       "android": "The secondary action opens the support screen.",
+       "platforms": "same",
+       "requirements": [
+        "FR-SUP-003"
+       ],
+       "relation": "partly",
+       "relation_note": "Reaching support from the blocked state matches FR-SUP-003, but the blocking condition is not a requirement in this version.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-expired-5",
+       "behaviour": "Choosing \"I HAVE A NEW KIT\" ends the test and returns the user to the lobby.",
+       "ios": "The main action finishes the flow and returns to the lobby, without showing results.",
+       "android": "The primary action marks the order as awaiting a new kit and resets to the lobby.",
+       "platforms": "same",
+       "requirements": [],
+       "relation": "unlisted",
+       "relation_note": "Ending the test and returning to the lobby on \"I HAVE A NEW KIT\" is behaviour of the deferred BL-23 condition; no requirement covers it.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-expired-6",
+       "behaviour": "Where the backend already knows the kit expired, the user is blocked before scanning and told the kit has expired.",
+       "ios": "The start check surfaces the expired-kit alert from the pre-scan block flag before the test begins.",
+       "android": "The start check surfaces the expired-kit alert from the pre-scan block flag before the test begins.",
+       "platforms": "same",
+       "requirements": [],
+       "relation": "unlisted",
+       "relation_note": "A pre-scan block raised because the backend already knows the kit expired combines two deferred items, BL-23 and BL-35 (configured blocked state); nothing in this version requires the software to honour such a flag.",
+       "pm_mark": "unmarked",
+       "pm_comment": "im not familiar with a pre-scan block. expired kit is detected after the scan. if there is any expired kit before test start - it needs to be surfaced to the product manager"
+      },
+      {
+       "id": "F03.2-expired-7",
+       "behaviour": "That pre-scan block offers a single \"OK\" on Android but two buttons on iOS that only close the alert.",
+       "ios": "Reuses the two-button expired-kit alert (\"I HAVE A NEW KIT\" / \"SUPPORT\") with no action attached to either.",
+       "android": "Uses a separate one-button variant labelled \"OK\".",
+       "platforms": "differs",
+       "requirements": [
+        "FR-PLT-006"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-PLT-006 requires equivalent error handling across platforms; the pre-scan expired-kit block differs (one OK on Android, two inert buttons on iOS) — but the condition itself is deferred as BL-23, so there is no requirement the divergence breaches.",
+       "pm_mark": "unmarked",
+       "pm_comment": "im not familiar with a pre-scan block. expired kit is detected after the scan. if there is any expired kit before test start - it needs to be surfaced to the product manager"
+      }
+     ]
+    },
+    {
+     "id": "qr-unidentified",
+     "title": "QR unidentified - the kit identifier is not recognised",
+     "lines": [
+      {
+       "id": "F03.2-noqr-1",
+       "behaviour": "After the scan the user is told \"Something went wrong\" and that the kit is no longer valid for use.",
+       "ios": "Shows the no-QR alert with body \"We ran into an error validating the kit and it is no longer valid for use.\"",
+       "android": "Shows the same no-QR alert with the identical title and body text.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-004",
+        "FR-TXT-020"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-KIT-004 requires an unidentified QR code to invalidate the test with an explanatory error message; ACR does invalidate, but the message names no condition and states no corrective action, which FR-TXT-020 requires.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-noqr-2",
+       "behaviour": "A single \"Continue\" button leads into the general troubleshooting conversation, not a kit-specific one.",
+       "ios": "Deliberately routes to the general algorithm-error conversation, noted in code as a product decision.",
+       "android": "Routes to the same general algorithm-error conversation.",
+       "platforms": "same",
+       "requirements": [
+        "FR-SUP-003",
+        "FR-RDY-013"
+       ],
+       "relation": "partly",
+       "relation_note": "The single route offered is a general algorithm-error conversation rather than a kit-specific one — recorded in the code as a deliberate product decision. FR-RDY-013's note requires the applicable route to be stated per blocking condition, and this is one no requirement states.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-noqr-3",
+       "behaviour": "The test is recorded as a failed test and no result is produced.",
+       "ios": "Entering the general conversation marks the test ended unsuccessfully and stamps the last-failed time.",
+       "android": "The no-QR outcome sets the order to no-QR, which stamps the failed-order timestamp.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-004",
+        "FR-KIT-003"
+       ],
+       "relation": "realises",
+       "relation_note": "The test is recorded as failed and no result is produced, which is FR-KIT-004's invalidation together with FR-KIT-003's bar on returning a result without a valid code.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      }
+     ]
+    },
+    {
+     "id": "too-soon",
+     "title": "New test attempted too soon after the last one - the 24-hour gate",
+     "lines": [
+      {
+       "id": "F03.2-soon-1",
+       "behaviour": "Within 24 hours of a test completing, the user is warned when they tap to start another test.",
+       "ios": "The start check compares the last test's completion time against a configurable window, set to 24 hours for this product.",
+       "android": "The start check compares the last order's timestamp against a configurable window, set to 24 hours for this product.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-007"
+       ],
+       "relation": "realises",
+       "relation_note": "FR-KIT-007 requires the gate where a test is attempted within 24 hours of a previous one and holds the window as a configurable value; both clients implement exactly that, at 24 hours.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-soon-2",
+       "behaviour": "If the previous test failed the user sees \"This kit has been used\" with \"SUPPORT\" and \"I HAVE A NEW KIT\".",
+       "ios": "Body reads \"It looks like you used your kit already. The stick and the kit are designed for one use only. To perform a new test, please use a new kit.\"",
+       "android": "Identical title, body and button labels.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-007"
+       ],
+       "relation": "realises",
+       "relation_note": "The failed-previous-test branch states that a new kit is required and offers the confirmation FR-KIT-007 asks for, alongside a support route.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-soon-3",
+       "behaviour": "If the previous test succeeded the user sees \"Test Performed Recently\" asking whether they really want a new test.",
+       "ios": "Body points the user to the results section and asks \"Are you sure you want to start a new test?\", with \"No\" and \"Yes\".",
+       "android": "Identical title and body, with \"NO\" and \"YES\".",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-007",
+        "FR-PRT-001"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-KIT-007 requires one alert stating that a new kit is required whether the previous test produced a result or was invalidated; ACR's succeeded branch instead points the user to their existing result (FR-PRT-001) and never mentions a new kit.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-soon-4",
+       "behaviour": "Choosing to continue opens a full-screen \"A new kit is required\" notice before the test may start.",
+       "ios": "Presents the new-kit notice full-screen, explaining the stick is valid for only three minutes after dipping.",
+       "android": "Presents the same new-kit notice full-screen with the same wording.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-007"
+       ],
+       "relation": "realises",
+       "relation_note": "This is FR-KIT-007's new-kit notice; note its ACR wording explains a three-minute stick validity, which does not carry over to the QACR kit and would have to be rewritten under FR-TXT-004.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-soon-5",
+       "behaviour": "Dismissing that notice returns the user to the lobby; they must tap start again to begin the test.",
+       "ios": "The notice's \"OK\" simply closes it; the test is not started by the notice.",
+       "android": "The notice's \"OK\" resets to the lobby; the test is not started by the notice.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-007"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-KIT-007 requires the user to confirm they have a new kit before the test flow begins; ACR's notice is an acknowledgement that closes to the lobby, and the user then starts the test with a separate tap that asks nothing.",
+       "pm_mark": "change",
+       "pm_comment": "No need to tap start again. if the user chooses to continue from this notice, the chat can start. "
+      },
+      {
+       "id": "F03.2-soon-6",
+       "behaviour": "On the succeeded-recently warning, declining a new test shows results history on Android but only closes on iOS.",
+       "ios": "The detailed results screen is switched off for this product, so \"No\" only dismisses the warning.",
+       "android": "Lobby results are switched on for this product, so \"NO\" opens the results history screen.",
+       "platforms": "differs",
+       "requirements": [
+        "FR-PLT-006",
+        "FR-PRT-001"
+       ],
+       "relation": "partly",
+       "relation_note": "Declining a new test opens results history on Android and only closes on iOS, which FR-PLT-006 would forbid; the history screen itself is deferred as BL-42, so QACR has no equivalent destination.",
+       "pm_mark": "change",
+       "pm_comment": "\"No\" should dismiss the warning."
+      },
+      {
+       "id": "F03.2-soon-7",
+       "behaviour": "The warning is advisory: the user is never refused outright and can always proceed to a new test.",
+       "ios": "Every branch of the recency warning leads either to support or to the new-kit notice, after which the test is allowed.",
+       "android": "Same; the hard-block variant of the succeeded-recently alert exists in the app but is never reached for this product.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-007"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-KIT-007 requires the software to \"require the user to confirm\" before the flow begins; ACR asks and always allows through, and the hard-block alert variant present in both apps is never reached for this product, so the requirement's force is not realised.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-soon-8",
+       "behaviour": "No message ever states the length of the window; the user only ever reads the word \"recently\".",
+       "ios": "The 24-hour value is a build setting; no user-facing string mentions hours or a number of days.",
+       "android": "The 24-hour value is a build setting; no user-facing string mentions hours or a number of days.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-007",
+        "FR-TXT-020"
+       ],
+       "relation": "partly",
+       "relation_note": "Nothing requires the window's length to be disclosed, and ACR never states it; FR-TXT-020 requires a blocking message to name the condition detected, which \"recently\" arguably does not do.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      }
+     ]
+    },
+    {
+     "id": "kits-exceeded",
+     "title": "More tests attempted than kits ordered - a hard block from the backend",
+     "lines": [
+      {
+       "id": "F03.2-kits-1",
+       "behaviour": "When the backend reports the user has already used all their kits, they cannot start another test.",
+       "ios": "The start check stops at this block before any recency or device checks are considered.",
+       "android": "The start check stops at this block before the recency check is considered.",
+       "platforms": "same",
+       "requirements": [],
+       "relation": "unlisted",
+       "relation_note": "No requirement demands a pre-test block when the user has no unused kit left. FR-KIT-004's note names blockSubsequentTests.moreTestsThanKits as a realising configuration value, but its text covers only detection at the scan; BL-04 and BL-35 both defer the pre-test block.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-kits-2",
+       "behaviour": "Android first shows \"Your kit was used\" and then the switch-user screen; iOS goes straight to that screen.",
+       "ios": "Opens the full-screen switch-user screen immediately, with no preceding alert.",
+       "android": "Shows the \"Your kit was used\" alert first, and only opens the switch-user screen if the user picks \"SWITCH USER\".",
+       "platforms": "differs",
+       "requirements": [],
+       "relation": "unlisted",
+       "relation_note": "The presentation of the kits-exceeded block, and the platform divergence in it, follow from a condition no requirement covers; FR-PLT-006 would forbid the divergence if the condition were required.",
+       "pm_mark": "change",
+       "pm_comment": "should be like android"
+      },
+      {
+       "id": "F03.2-kits-3",
+       "behaviour": "Where only one person is registered on the phone, Android offers only customer support; iOS still shows the switch-user screen.",
+       "ios": "The single-person variant of the alert exists but is unreachable in the current lobby, so the switch-user screen is always shown.",
+       "android": "Shows \"Your kit was used\" with a single \"CONTACT SUPPORT\" button and no switch-user option.",
+       "platforms": "differs",
+       "requirements": [],
+       "relation": "unlisted",
+       "relation_note": "Behaviour when only one person is registered against the phone number depends on multi-user support, deferred as BL-21 and BL-22, so neither branch is required in this version.",
+       "pm_mark": "change",
+       "pm_comment": "should be like android"
+      },
+      {
+       "id": "F03.2-kits-4",
+       "behaviour": "The switch-user screen says another test needs the other person's sign-in and a new kit in hand.",
+       "ios": "Titled \"How to Switch User?\", with \"Switch User\" and \"Contact Support\" actions.",
+       "android": "Same screen title and body text, with \"SWITCH USER\" and \"CONTACT SUPPORT\" actions.",
+       "platforms": "same",
+       "requirements": [],
+       "relation": "unlisted",
+       "relation_note": "The switch-user screen realises the deferred BL-22 (and BL-04); FR-AUT-012 requires a Date of Birth confirmation at the start of every test but nothing requires a switch-user route, and BL-21 means household use on one phone number is not supported here.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      }
+     ]
+    },
+    {
+     "id": "backend-unreachable",
+     "title": "Backend unreachable while the kit is being checked",
+     "lines": [
+      {
+       "id": "F03.2-net-1",
+       "behaviour": "If the kit check cannot reach the backend, the analysing screen keeps waiting and the check is retried in the background.",
+       "ios": "A connection failure pauses the sending sequence at that step and leaves it to be resumed.",
+       "android": "A network or server error leaves the exam in the sync queue for a later retry with backoff.",
+       "platforms": "same",
+       "requirements": [
+        "FR-COM-006"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-COM-006 requires the software to notify the user, retain the data, retry automatically and resume; ACR does everything but notify at this point.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-net-2",
+       "behaviour": "After about 45 seconds without progress the user sees a \"Connectivity Issue\" notice with an \"OK\" button.",
+       "ios": "The analysing screen's progress threshold fires at 45 seconds and shows the first connectivity notice.",
+       "android": "The analysing screen's progress threshold fires at 45 seconds and shows the first connectivity notice.",
+       "platforms": "same",
+       "requirements": [
+        "FR-COM-006",
+        "FR-COM-011"
+       ],
+       "relation": "realises",
+       "relation_note": "The stall is reported to the user as FR-COM-006 requires; the 45-second threshold behind it is not a parameter registered under FR-LCM-006.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-net-3",
+       "behaviour": "If the device has no internet at all, the user is told there is no connection instead.",
+       "ios": "Checks reachability first and shows the no-network alert rather than the connectivity notice.",
+       "android": "Checks connectivity first and shows the no-network alert rather than the connectivity notice.",
+       "platforms": "same",
+       "requirements": [
+        "FR-COM-006",
+        "FR-RDY-005"
+       ],
+       "relation": "realises",
+       "relation_note": "Distinguishing no connectivity from a stalled exchange gives the user the corrective action that applies, which is FR-COM-006 with FR-TXT-020's content rule; FR-RDY-005 states the same check before a test starts.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-net-4",
+       "behaviour": "A further stall offers \"Retry\" or \"Support\" rather than repeating the first notice.",
+       "ios": "After the first notice has been shown once, the second stall offers retry or support.",
+       "android": "After the first notice has been shown once, the second stall offers retry or support.",
+       "platforms": "same",
+       "requirements": [
+        "FR-RDY-013",
+        "FR-SUP-003"
+       ],
+       "relation": "partly",
+       "relation_note": "Offering retry where retrying can resolve the condition, and support otherwise, is FR-RDY-013 and FR-SUP-003; the escalation from a first acknowledge-only notice to a second retry-or-support one is not required.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-net-5",
+       "behaviour": "Reuse is never judged on the device, so no kit verdict is shown while the backend is unreachable.",
+       "ios": "The used-kit and expired-kit outcomes come only from the backend's answer to the kit check.",
+       "android": "The used-kit and expired-kit outcomes come only from the backend's answer to the kit check.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-002"
+       ],
+       "relation": "realises",
+       "relation_note": "FR-KIT-002 puts the register of used identifiers on the backend; ACR judges reuse nowhere else, so an unreachable backend yields no verdict rather than a guess.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      }
+     ]
+    },
+    {
+     "id": "interruption-resume",
+     "title": "Interruption and resume",
+     "lines": [
+      {
+       "id": "F03.2-resume-1",
+       "behaviour": "Leaving or force-closing the app during the kit check does not lose the check; it continues on next launch.",
+       "ios": "The exam and its current step are written to disk at each step and the sending sequence is restarted on relaunch.",
+       "android": "The exam and its sync state are persisted and the sync queue restarts when the app starts.",
+       "platforms": "same",
+       "requirements": [
+        "FR-RDY-012",
+        "FR-STA-005"
+       ],
+       "relation": "realises",
+       "relation_note": "FR-RDY-012 requires start-up to detect untransmitted test data and retransmit it, and FR-STA-005 an interrupted upload to continue; the kit check is one step of that persisted sequence.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-resume-2",
+       "behaviour": "The check resumes from the step it had reached rather than repeating earlier steps.",
+       "ios": "The persisted current step decides which call runs next, so a completed kit check is not repeated.",
+       "android": "The persisted sync status decides which call runs next, so a completed kit check is not repeated.",
+       "platforms": "same",
+       "requirements": [
+        "FR-RDY-012",
+        "FR-STA-003"
+       ],
+       "relation": "realises",
+       "relation_note": "Resuming from the persisted step rather than repeating completed calls is the state retention FR-STA-003 requires, applied to the upload sequence of FR-RDY-012.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-resume-3",
+       "behaviour": "On relaunch the user lands in the lobby, not back in the analysing screen.",
+       "ios": "There is no launch path that restores the user into the analysing screen.",
+       "android": "There is no launch path that restores the user into the analysing screen.",
+       "platforms": "same",
+       "requirements": [
+        "FR-STA-006",
+        "FR-STA-007"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-STA-006 and FR-STA-007 require an incomplete test found after termination to be invalidated and the user told a new kit is needed; ACR instead lands the user in the lobby and silently finishes the post-capture pipeline, treating it as outside the active test.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-resume-4",
+       "behaviour": "A used-kit or expired-kit verdict that arrives while the user is away is not replayed as an alert later.",
+       "ios": "The verdict alert is only shown by the analysing screen while it is on display.",
+       "android": "The verdict alert is only shown by the analysing screen while it is on display.",
+       "platforms": "same",
+       "requirements": [],
+       "relation": "unlisted",
+       "relation_note": "Nothing requires an outcome that arrived while the user was away to be delivered when they return: the verdict alert exists only while the analysing screen is displayed, so a user can be left believing a test is still being analysed. FR-COM-011 covers only the waiting state while it is on screen.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-resume-5",
+       "behaviour": "After an already-used kit, the next start attempt within 24 hours warns that the kit has been used.",
+       "ios": "The used-kit outcome stamps the last-failed time, so the failed-recently warning fires on the next attempt.",
+       "android": "The used-kit outcome stamps the failed-order timestamp, so the failed-recently warning fires on the next attempt.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-007"
+       ],
+       "relation": "realises",
+       "relation_note": "FR-KIT-007 requires the gate after a previous test whether it produced a result or was invalidated; a used-kit invalidation stamps the completion time and the warning fires on the next attempt.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-resume-6",
+       "behaviour": "After an expired kit Android gives that same warning on the next attempt, but iOS starts the next test with no warning.",
+       "ios": "Ending the flow on expired kit records no failed-test time, so the recency gate does not fire.",
+       "android": "The expired-kit outcome stamps the failed-order timestamp and clears the acknowledgement, so the warning fires.",
+       "platforms": "differs",
+       "requirements": [
+        "FR-KIT-007",
+        "FR-PLT-006"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-KIT-007 covers a previous test that was invalidated, but iOS records no completion time for an expired kit so the gate does not fire, and the two platforms therefore differ, which FR-PLT-006 forbids; the underlying expiry condition is itself deferred as BL-23.",
+       "pm_mark": "change",
+       "pm_comment": "should be like android"
+      }
+     ]
+    },
+    {
+     "id": "boundary",
+     "title": "Boundary and edge cases",
+     "lines": [
+      {
+       "id": "F03.2-bound-1",
+       "behaviour": "At exactly 24 hours after the previous test, iOS starts the new test silently while Android still shows the warning.",
+       "ios": "The window is treated as strictly inside 24 hours, so the gate stops firing at the 24-hour mark.",
+       "android": "The window is treated as up to and including 24 hours, so the gate still fires at the 24-hour mark.",
+       "platforms": "differs",
+       "requirements": [
+        "FR-KIT-007",
+        "FR-PLT-006",
+        "FR-LCM-006"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-KIT-007 states a 24-hour window but not whether the bound is inclusive; the two clients resolve it differently, so FR-PLT-006 is breached and FR-LCM-006's demand for a defined value and range is unmet at the boundary.",
+       "pm_mark": "change",
+       "pm_comment": "should be like iOS"
+      },
+      {
+       "id": "F03.2-bound-2",
+       "behaviour": "Once the user has acknowledged the recency warning, a second start attempt in the same window is silent.",
+       "ios": "An acknowledgement flag suppresses the warning until the next test completes.",
+       "android": "An acknowledgement flag suppresses the warning until the next test or order event.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-007"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-KIT-007 requires the confirmation before the test flow begins, which reads as every attempt inside the window; ACR suppresses the warning once acknowledged until the next test completes, so the second attempt is silent.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-bound-3",
+       "behaviour": "Choosing support instead of \"I HAVE A NEW KIT\" leaves the warning to reappear on the next start attempt.",
+       "ios": "Only the new-kit branch sets the acknowledgement flag; the support branch does not.",
+       "android": "Only the new-kit branch sets the acknowledgement flag; the support branch does not.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-007"
+       ],
+       "relation": "partly",
+       "relation_note": "That only the new-kit branch sets the acknowledgement, so a support detour leaves the warning to reappear, is an implementation choice FR-KIT-007 neither requires nor forbids.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-bound-4",
+       "behaviour": "After choosing \"I HAVE A NEW KIT\" the user reads the new-kit notice, returns to the lobby, and must tap start again.",
+       "ios": "The notice is presented over the lobby and closing it returns there; nothing auto-starts the test.",
+       "android": "The notice resets to the lobby when closed; nothing auto-starts the test.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-007"
+       ],
+       "relation": "partly",
+       "relation_note": "As with F03.2-soon-5: the confirmation ends at the lobby and a separate start tap begins the test, so nothing is confirmed at the moment the flow begins.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-bound-5",
+       "behaviour": "Scanning the same already-used kit again gives the same message every time; there is no escalating lockout.",
+       "ios": "Each attempt is a fresh test whose kit check returns the same used-kit answer; no attempt counter exists.",
+       "android": "Each attempt is a fresh test whose kit check returns the same used-kit answer; no attempt counter exists.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-004"
+       ],
+       "relation": "realises",
+       "relation_note": "FR-KIT-004 requires each attempt with an already-used identifier to be detected and invalidated, which ACR does identically every time; no requirement asks for an attempt counter or lockout, unlike FR-AUT-005 for OTP entry.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-bound-6",
+       "behaviour": "A test that was invalidated counts as completed for the 24-hour warning, just as one that produced a result does.",
+       "ios": "Both the successful and the failed completion times feed the recency check, with different wording for each.",
+       "android": "Both the successful and the failed completion times feed the recency check, with different wording for each.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-007"
+       ],
+       "relation": "realises",
+       "relation_note": "FR-KIT-007 explicitly covers a previous test \"whether that test produced a result or was invalidated\"; both completion times feed ACR's recency check.",
+       "pm_mark": "correct",
+       "pm_comment": ""
+      },
+      {
+       "id": "F03.2-bound-7",
+       "behaviour": "The device's own clock decides the 24-hour window, so changing the clock changes whether the warning appears.",
+       "ios": "The comparison uses the device's current date with no server-time cross-check.",
+       "android": "The comparison uses the device's current time with no server-time cross-check.",
+       "platforms": "same",
+       "requirements": [
+        "FR-KIT-007"
+       ],
+       "relation": "partly",
+       "relation_note": "FR-KIT-007 does not state the time source for its window, and both clients use the device clock, so changing the clock defeats the gate; BL-24 defers a tamper-resistant time source and its note scopes the consequence to the section-12 timing windows, not to this one.",
+       "pm_mark": "change",
+       "pm_comment": "consider using a more precise clock that can't be changed by the user"
+      }
+     ]
+    }
+   ],
+   "not_knowable_from_code": [
+    {
+     "what": "Whether the backend also enforces a 24-hour rule independently of the app",
+     "why": "Only the two client repositories were in scope. Both clients compute the window locally from their own persisted timestamps; nothing in either client reads a server-supplied cooldown value."
+    },
+    {
+     "what": "What the backend uses to decide a kit is expired, and whether that date is ever shown to the user",
+     "why": "The expiry date arrives in the backend's answer to the kit check and is stored for analytics only. No user-facing string on either platform renders it."
+    },
+    {
+     "what": "Whether the used-kit troubleshooting conversation can end anywhere other than customer support",
+     "why": "The conversation script offers exactly one button, to support. Whether support can then unblock the user is a backend and operations question outside these repositories."
+    },
+    {
+     "what": "How often the 'more tests than kits' block is actually raised in production",
+     "why": "It is a flag delivered by the backend at start-up; the client only renders it. The rule behind it is not in either client."
+    }
+   ],
+   "requirement_asks_acr_does_not_do": [
+    {
+     "what": "A hard 24-hour block. FR-KIT-007 requires the software to 'require the user to confirm that they have one before the test flow begins'; ACR asks but does not require."
+    },
+    {
+     "what": "A recency warning that is scoped to the window rather than to the test. FR-KIT-007 implies the confirmation is required on each attempt inside the window."
+    },
+    {
+     "what": "Any user-facing statement of the length of the window."
+    },
+    {
+     "what": "A server-anchored clock for the window."
+    },
+    {
+     "what": "A single consistent message for the recency case. FR-KIT-007 asks for one alert 'stating that a new kit is required', whether the previous test produced a result or was invalidated."
+    }
+   ],
+   "expected_missing_but_present": [
+    {
+     "what": "NOT absent, contrary to the working hypothesis: the 24-hour gate itself."
+    },
+    {
+     "what": "NOT absent: kit-expiry validation. QACR deferred this to backlog BL-23, but ACR handles it today."
+    }
+   ],
+   "exact_user_wording": [
+    {
+     "where": "Used-kit alert, title (post-scan)",
+     "en": "This kit has been used"
+    },
+    {
+     "where": "Used-kit alert, body (post-scan)",
+     "en": "To ensure the accuracy of the results, each test kit can only be used once."
+    },
+    {
+     "where": "Used-kit alert, button (post-scan)",
+     "en": "iOS \"Continue\" / Android \"CONTINUE\""
+    },
+    {
+     "where": "Used-kit troubleshooting conversation, heading",
+     "en": "KIT ALREADY USED"
+    },
+    {
+     "where": "Used-kit troubleshooting conversation, first message",
+     "en": "The kit is designed for one use only. Unfortunately, you can’t use this kit to perform another test."
+    },
+    {
+     "where": "Used-kit troubleshooting conversation, second message",
+     "en": "In order to perform a new test, please contact customer support for further guidance."
+    },
+    {
+     "where": "Used-kit troubleshooting conversation, button",
+     "en": "TO CUSTOMER SUPPORT"
+    },
+    {
+     "where": "Expired-kit alert, title",
+     "en": "The kit has expired"
+    },
+    {
+     "where": "Expired-kit alert, body",
+     "en": "This test kit is no longer valid for use. If you already have a new kit, you can continue with that kit instead."
+    },
+    {
+     "where": "Expired-kit alert, main button",
+     "en": "I HAVE A NEW KIT"
+    },
+    {
+     "where": "Expired-kit alert, secondary button",
+     "en": "SUPPORT"
+    },
+    {
+     "where": "Expired-kit pre-scan block, single button (Android only)",
+     "en": "OK"
+    },
+    {
+     "where": "Unidentified-QR alert, title",
+     "en": "Something went wrong"
+    },
+    {
+     "where": "Unidentified-QR alert, body",
+     "en": "We ran into an error validating the kit and it is no longer valid for use."
+    },
+    {
+     "where": "Unidentified-QR alert, button",
+     "en": "iOS \"Continue\" / Android \"CONTINUE\""
+    },
+    {
+     "where": "Failed-test-within-24h alert, title",
+     "en": "This kit has been used"
+    },
+    {
+     "where": "Failed-test-within-24h alert, body",
+     "en": "It looks like you used your kit already. The stick and the kit are designed for one use only. To perform a new test, please use a new kit."
+    },
+    {
+     "where": "Failed-test-within-24h alert, main button",
+     "en": "iOS \"Support\" / Android \"SUPPORT\""
+    },
+    {
+     "where": "Failed-test-within-24h alert, secondary button",
+     "en": "iOS \"I Have A New Kit\" / Android \"I HAVE A NEW KIT\""
+    },
+    {
+     "where": "Succeeded-test-within-24h alert, title",
+     "en": "Test Performed Recently"
+    },
+    {
+     "where": "Succeeded-test-within-24h alert, body",
+     "en": "A successful test was performed recently, your results are available in the results section.\\n\\n*Are you sure you want to start a new test?*"
+    },
+    {
+     "where": "Succeeded-test-within-24h alert, buttons",
+     "en": "iOS \"No\" / \"Yes\"; Android \"NO\" / \"YES\""
+    },
+    {
+     "where": "Succeeded-test-within-24h hard-block variant, body (present in both apps but never reached for this product)",
+     "en": "A successful test was performed recently, your results are available in the results section.\\nIf you wish to perform a new test, please contact support."
+    },
+    {
+     "where": "New-kit notice, screen title",
+     "en": "New Test"
+    },
+    {
+     "where": "New-kit notice, first section heading",
+     "en": "A new kit is required"
+    },
+    {
+     "where": "New-kit notice, first section body",
+     "en": "The stick is only valid for 3 minutes after it was dipped. In case you decide to perform a new test you’ll have to use a new kit."
+    },
+    {
+     "where": "New-kit notice, second section heading",
+     "en": "Customer Support"
+    },
+    {
+     "where": "New-kit notice, second section body",
+     "en": "If you’re not sure you can use the kit you currently possess, please contact customer support for further assistance."
+    },
+    {
+     "where": "New-kit notice, button",
+     "en": "OK"
+    },
+    {
+     "where": "Kits-exceeded alert with switch user, title",
+     "en": "Your kit was used"
+    },
+    {
+     "where": "Kits-exceeded alert with switch user, body",
+     "en": "If you want to perform a test for another person please use the ‘SWITCH USER’ button below. Otherwise, please contact support for further help."
+    },
+    {
+     "where": "Kits-exceeded alert with switch user, buttons",
+     "en": "iOS \"Switch User\" / \"Support\"; Android \"SWITCH USER\" / \"SUPPORT\""
+    },
+    {
+     "where": "Kits-exceeded alert without switch user, body",
+     "en": "If you wish to perform another test please contact our customer support by clicking the button below."
+    },
+    {
+     "where": "Kits-exceeded alert without switch user, button",
+     "en": "iOS \"Contact Support\" / Android \"CONTACT SUPPORT\""
+    },
+    {
+     "where": "Switch-user screen, title",
+     "en": "How to Switch User?"
+    },
+    {
+     "where": "Switch-user screen, body",
+     "en": "In order to perform another test with this device, you’ll need to switch user and sign in using the other person’s date of birth. \\n\\nMake sure you have the new kit in hand."
+    },
+    {
+     "where": "Connectivity notice, first stall, title",
+     "en": "Connectivity Issue"
+    },
+    {
+     "where": "Connectivity notice, first stall, body",
+     "en": "There seems to be a problem uploading your test. Make sure you are connected to the internet."
+    },
+    {
+     "where": "Connectivity notice, second stall, body",
+     "en": "There seems to be a problem uploading your test. You can either keep retrying, or contact support."
+    },
+    {
+     "where": "Connectivity notice, second stall, buttons",
+     "en": "iOS \"Retry\" / \"Support\"; Android \"RETRY\" / \"SUPPORT\""
+    },
+    {
+     "where": "Analysing screen, section heading during the kit check",
+     "en": "ANALYZING"
+    },
+    {
+     "where": "Analysing screen, message during the kit check",
+     "en": "Fantastic. Please wait while we analyze your test results."
+    }
+   ]
+  }
+ ],
+ "candidate_new_requirements": [
+  {
+   "id": "CN-01",
+   "area": "KIT",
+   "statement": "The software shall verify, from the kit identifier, that the kit is within its valid use period, and where it is not shall invalidate the test, inform the user that the kit is no longer valid, and offer the user either to continue with a new kit or to contact support.",
+   "lines": [
+    "F03.1-expired-1",
+    "F03.1-expired-2",
+    "F03.1-expired-3",
+    "F03.1-expired-4",
+    "F03.1-expired-5",
+    "F03.1-expired-6",
+    "F03.1-edge-5",
+    "F03.2-expired-1",
+    "F03.2-expired-2",
+    "F03.2-expired-3",
+    "F03.2-expired-4",
+    "F03.2-expired-5",
+    "F03.2-expired-6",
+    "F03.2-expired-7",
+    "F03.2-resume-6"
+   ],
+   "why": "Fifteen behaviour lines describe a condition QACR has no requirement for: expiry was removed as FR-KIT-005 and deferred as BL-23. ACR treats it as a first-class kit outcome, distinct from reuse, with its own message and the only self-service resolution route any kit failure offers. A 'same as ACR' specification cannot be written without deciding whether BL-23 comes back.",
+   "note": "Promoting BL-23 rather than writing a new requirement is the cleaner route; BL-23's text already says this, minus the two-route resolution ACR implements."
+  },
+  {
+   "id": "CN-02",
+   "area": "KIT",
+   "statement": "The response to the kit-identifier check shall carry a reason category drawn from a defined enumeration, and where the software receives a rejection whose reason it does not recognise it shall invalidate the test and present a message that states the kit is not valid without asserting a specific reason.",
+   "lines": [
+    "F03.1-edge-3",
+    "F03.1-qrabsent-2",
+    "F03.1-qrabsent-3",
+    "F03.1-format-3"
+   ],
+   "why": "ACR falls back to \"This kit has been used\" for any kit rejection it cannot classify, telling the user something that may be false and sending them to the wrong troubleshooting route. FR-ALG-012 does precisely this job for invalid tests — a defined enumeration sufficient for the application to state the corrective action — and there is no kit-check equivalent.",
+   "note": "Pairs with FR-TXT-020, which requires the message to name the condition detected; a fallback that names the wrong condition defeats it."
+  },
+  {
+   "id": "CN-03",
+   "area": "KIT",
+   "statement": "Where a scanned kit identifier is well-formed but belongs to a product other than the test being performed, the software shall invalidate the test and inform the user that the kit is not the one for this test.",
+   "lines": [
+    "F03.1-mismatch-1",
+    "F03.1-mismatch-2"
+   ],
+   "why": "FR-KIT-003 covers only conformance to the kit-identifier template, so an identifier belonging to another Healthy.io kit passes it and reaches the backend. ACR handles the case explicitly — and Android's message for it is empty, which is what leaving a real condition unspecified costs.",
+   "note": "Only worth stating if QACR kits share an identifier format with another product in the field; that is a Product question."
+  },
+  {
+   "id": "CN-04",
+   "area": "KIT",
+   "statement": "Where the backend reports that the authenticated user has no unused kit remaining, the software shall prevent a test from being started, shall inform the user, and shall present the route to resolution that applies.",
+   "lines": [
+    "F03.2-kits-1",
+    "F03.2-kits-2",
+    "F03.2-kits-3",
+    "F03.2-kits-4"
+   ],
+   "why": "This is the one hard block ACR applies before a scan, and it is the control that stops a user burning through an entitlement. FR-KIT-004's note cites blockSubsequentTests.moreTestsThanKits as a realising configuration value, but no requirement text demands the block; BL-04 and BL-35 both defer it, so a QACR build has no defined behaviour for the condition.",
+   "note": "ACR's resolution route is a switch-user screen, which depends on the deferred BL-21 and BL-22. For QACR the route would have to be support only."
+  },
+  {
+   "id": "CN-05",
+   "area": "COM",
+   "statement": "Where a test is invalidated, or a result becomes available, while the application is not displaying the waiting state, the software shall inform the user of that outcome when the application is next brought to the foreground.",
+   "lines": [
+    "F03.2-resume-4",
+    "F03.2-resume-3",
+    "F03.1-resume-3"
+   ],
+   "why": "On ACR a used-kit or expired-kit verdict that arrives while the user is away is never replayed: the alert belongs to the analysing screen, and on relaunch the user lands in the lobby with no indication that their test was invalidated. FR-COM-011 requires a waiting state and FR-STA-007 covers a test interrupted mid-flow, but nothing carries a verdict across a backgrounding to the user it concerns.",
+   "why_matters": "A user who is never told the test failed will wait for a result that is not coming, and will not know to use a new kit."
+  },
+  {
+   "id": "CN-06",
+   "area": "KIT",
+   "statement": "The window of FR-KIT-007 shall be evaluated against a time source that is not affected by user modification of the device clock, and its boundary shall be stated as inclusive or exclusive of the stated interval.",
+   "lines": [
+    "F03.2-bound-7",
+    "F03.2-bound-1"
+   ],
+   "why": "Both ACR clients compare against the device clock, so moving the clock defeats the gate, and they disagree at exactly 24 hours — one warns, one does not. BL-24 defers a tamper-resistant time source but its note scopes the consequence to the section-12 timing windows, leaving the FR-KIT-007 window unaddressed. FR-LCM-006 requires every parameter to have a defined value and range before design verification.",
+   "note": "May be better handled as an amendment to FR-KIT-007 plus a widening of BL-24's stated scope than as a new requirement id."
+  },
+  {
+   "id": "CN-07",
+   "area": "KIT",
+   "statement": "The confirmation required by FR-KIT-007 shall be required on each attempt to start a test within the window, and the software shall not treat a single acknowledgement as standing for subsequent attempts.",
+   "lines": [
+    "F03.2-bound-2",
+    "F03.2-bound-3",
+    "F03.2-bound-4",
+    "F03.2-soon-5",
+    "F03.2-soon-7"
+   ],
+   "why": "ACR suppresses the warning once it has been acknowledged, until the next test completes, so a second start attempt inside the window is silent; and its confirmation closes to the lobby, after which a separate start tap asks nothing. FR-KIT-007 as written reads as a confirmation immediately before the flow begins, every time. Whether ACR's behaviour is acceptable is a Product decision, but it has to be one or the other.",
+   "note": "Also the place to settle whether the gate is advisory, as in ACR, or a bar; the hard-block variant exists in both ACR apps but is never reached for this product."
+  },
+  {
+   "id": "CN-08",
+   "area": "TXT",
+   "statement": "Where a test is attempted within the window of FR-KIT-007, the software shall present a message appropriate to the outcome of the previous test, distinguishing a test that produced a result from one that was invalidated, and each such message shall state that a new kit is required.",
+   "lines": [
+    "F03.2-soon-2",
+    "F03.2-soon-3",
+    "F03.2-soon-8",
+    "F03.2-soon-6"
+   ],
+   "why": "FR-KIT-007 asks for one alert stating a new kit is required. ACR splits it in two with different intents: the failed branch says the kit has been used and to get a new one; the succeeded branch says results are already available and asks whether the user is sure, never mentioning a new kit. Both are driven by the same 24-hour value. Neither states the window's length.",
+   "note": "Content itself belongs in the versioned set of FR-TXT-004; this requirement is about there being two cases rather than one."
+  },
+  {
+   "id": "CN-09",
+   "area": "COM",
+   "statement": "The software shall define the period after which a backend exchange that has made no progress is reported to the user, shall distinguish absence of connectivity from a stalled but connected exchange, and shall escalate a stall that persists to a message offering both retry and support.",
+   "lines": [
+    "F03.1-offline-1",
+    "F03.1-offline-3",
+    "F03.1-offline-4",
+    "F03.2-net-1",
+    "F03.2-net-2",
+    "F03.2-net-4"
+   ],
+   "why": "ACR's whole connectivity experience rests on an unregistered 45-second threshold and a two-stage escalation. FR-COM-006 requires the user to be notified when communication is lost but says nothing about when, and FR-LCM-006 requires every parameter to have a defined value, permitted range and rationale before design verification.",
+   "note": "The message content is already governed by FR-TXT-020 and the retry-or-not distinction by FR-RDY-013; what is missing is the threshold and the two stages."
+  },
+  {
+   "id": "CN-10",
+   "area": "TXT",
+   "statement": "The software shall present all user-facing content in each language declared as supported, and the text and recorded audio for every such language shall be held in the versioned content set required by FR-TXT-004.",
+   "lines": [
+    "F03.1-edge-7"
+   ],
+   "why": "ACR ships Spanish for every kit message, and the two platforms' Spanish differs (\"El kit ha caducado\" against \"Este kit ha expirado\"). FR-TXT-001's note presumes \"every supported language\" and FR-FLW-008's note observes that a further language means new recordings, but no requirement states the supported set or brings translations under configuration control — so nothing would have caught that divergence.",
+   "note": "The supported language set for QACR is a Product and regulatory decision, not a derivable one."
+  }
+ ],
+ "requirement_coverage": {
+  "FR-KIT-001": {
+   "lines": [
+    "F03.1-happy-1",
+    "F03.1-happy-2",
+    "F03.1-qrabsent-1",
+    "F03.1-qrabsent-2",
+    "F03.1-qrabsent-3",
+    "F03.1-qrabsent-4",
+    "F03.1-format-1",
+    "F03.1-format-3"
+   ],
+   "acr_satisfies": "partly",
+   "reasoning": "ACR reads the QR code but never treats its presence as a precondition: a scan with no readable code completes normally, is uploaded, and is rejected by the backend afterwards, which is the opposite of FR-KIT-001's requirement to prevent the user from completing a scan. The explanatory error exists but names no condition, and the instruction to contact support arrives one screen later in the troubleshooting conversation rather than in the message."
+  },
+  "FR-KIT-002": {
+   "lines": [
+    "F03.1-happy-1",
+    "F03.1-happy-3",
+    "F03.1-happy-4",
+    "F03.1-used-1",
+    "F03.1-edge-4",
+    "F03.2-happy-2",
+    "F03.2-happy-3",
+    "F03.2-net-5"
+   ],
+   "acr_satisfies": "fully",
+   "reasoning": "The identifier is captured and transmitted, and validity and prior use are decided solely by the backend against its own register, which is exactly what FR-KIT-002 requires; ACR never judges reuse on the device. Two caveats that do not breach the text: the check runs after the scan has been uploaded, and a scan that failed the on-device image checks never reaches it."
+  },
+  "FR-KIT-003": {
+   "lines": [
+    "F03.1-format-1",
+    "F03.1-format-2",
+    "F03.1-format-3",
+    "F03.1-qrabsent-4",
+    "F03.1-edge-2",
+    "F03.1-mismatch-2",
+    "F03.2-used-5"
+   ],
+   "acr_satisfies": "partly",
+   "reasoning": "The second half is fully met: no result is ever requested or shown for a scan without a valid kit identifier. The first half is not, because 'the defined kit-identifier template' is not one thing in ACR — iOS accepts six or seven characters after the marker, Android any length — so one client will accept a code the other rejects, and a well-formed identifier belonging to another product satisfies both."
+  },
+  "FR-KIT-004": {
+   "lines": [
+    "F03.1-used-1",
+    "F03.1-used-2",
+    "F03.1-used-3",
+    "F03.1-qrabsent-2",
+    "F03.1-format-3",
+    "F03.2-used-1",
+    "F03.2-used-2",
+    "F03.2-used-5",
+    "F03.2-noqr-1",
+    "F03.2-noqr-2",
+    "F03.2-noqr-3",
+    "F03.2-bound-5"
+   ],
+   "acr_satisfies": "fully",
+   "reasoning": "Both conditions the requirement names — an unidentified QR code and an already-used kit identifier — invalidate the test with a dedicated explanatory message, every time, with no result produced and no escalating lockout. Caveats: the invalidation lands after the scan has been uploaded rather than at the point of scanning, and an unrecognised rejection is reported as reuse whether or not it was (see CN-02)."
+  },
+  "FR-KIT-007": {
+   "lines": [
+    "F03.1-edge-6",
+    "F03.2-happy-1",
+    "F03.2-soon-1",
+    "F03.2-soon-2",
+    "F03.2-soon-3",
+    "F03.2-soon-4",
+    "F03.2-soon-5",
+    "F03.2-soon-6",
+    "F03.2-soon-7",
+    "F03.2-soon-8",
+    "F03.2-bound-1",
+    "F03.2-bound-2",
+    "F03.2-bound-3",
+    "F03.2-bound-4",
+    "F03.2-bound-6",
+    "F03.2-bound-7",
+    "F03.2-resume-5",
+    "F03.2-resume-6"
+   ],
+   "acr_satisfies": "partly",
+   "reasoning": "The mechanism exists and the window is 24 hours on both platforms, held as a build value, and an invalidated test counts as a completed one exactly as the requirement says. What is not satisfied is the requirement's force and its shape: the gate asks rather than requires, since every branch ends at support or at a new-kit notice after which the test is permitted; a single acknowledgement suppresses it for the rest of the window; it is split into two messages of which only the failed branch mentions a new kit; iOS records no completion for an expired kit so the gate does not fire; and the window is judged against the device clock, with the two platforms disagreeing at exactly 24 hours."
+  }
+ },
+ "review": {
+  "reviewed_lines": 84,
+  "total_lines": 86,
+  "complete": false,
+  "exported_at": "2026-08-18T11:41:49.571Z"
+ },
+ "needs_recheck": [
+  {
+   "id": "F03.1-qrabsent-2",
+   "behaviour": "The server then rejects the test, and after the analysis explanation the user sees \"Something went wrong\".",
+   "comment": "im not sure if the backend is the one rejecting it. i think that it is on the device. need to recheck"
+  },
+  {
+   "id": "F03.1-edge-5",
+   "behaviour": "The same expired-kit wording can also appear before any scan, when the server blocks the user from starting.",
+   "comment": "im not familiar with a pre-scan block. expired kit is detected after the scan. if there is any expired kit before test start - it needs to be surfaced to the product manager"
+  }
+ ],
+ "qacr_should_differ": [
+  {
+   "id": "F03.1-qrabsent-1",
+   "behaviour": "A missing or unreadable QR code does not interrupt or stop the scan; the scan finishes normally.",
+   "comment": "1. This depends on a feature flag from the backend (\"no-qr block\"). it should remain the same - depending on the feature flag\n2. there's a fallback mechanism to try and extract the QR code from the rectified image\n3. In Qacr- we should have another fallback mechanism, manual, that asks the user to scan the QR code in case that it was missing in the first two attempts. if succeeds, the process continues normally. if fail - the user gets an error and gets transfered to troubleshooting. ",
+   "requirements": [
+    "FR-KIT-001"
+   ]
+  },
+  {
+   "id": "F03.1-expired-3",
+   "behaviour": "This is the only kit failure offering two choices: \"I HAVE A NEW KIT\" and \"SUPPORT\".",
+   "comment": "This error should have a troubleshooting chat, same as the other errors",
+   "requirements": [
+    "FR-RDY-013"
+   ]
+  },
+  {
+   "id": "F03.1-format-2",
+   "behaviour": "The two apps disagree on what counts as a valid identifier, so one may accept a code the other rejects.",
+   "comment": "align platforms",
+   "requirements": [
+    "FR-KIT-003",
+    "FR-PLT-006"
+   ]
+  },
+  {
+   "id": "F03.1-mismatch-1",
+   "behaviour": "When the kit belongs to a different test, the two apps show the user completely different things.",
+   "comment": "should show something went wrong (general error alert)",
+   "requirements": []
+  },
+  {
+   "id": "F03.1-edge-3",
+   "behaviour": "If the server rejects the kit without saying why, the user is told the kit has already been used.",
+   "comment": "if there is no known reason for the mobile - a general error alert should be shown (something went wrong)",
+   "requirements": []
+  },
+  {
+   "id": "F03.1-edge-7",
+   "behaviour": "All of these kit messages are also available in Spanish, with slightly different wording between the two apps.",
+   "comment": "should align between platforms",
+   "requirements": [
+    "FR-TXT-001",
+    "FR-PLT-006",
+    "FR-TXT-004"
+   ]
+  },
+  {
+   "id": "F03.2-expired-3",
+   "behaviour": "No guided troubleshooting conversation is offered for an expired kit, unlike an already-used kit.",
+   "comment": "qacr should have a troubleshooting flow",
+   "requirements": []
+  },
+  {
+   "id": "F03.2-soon-5",
+   "behaviour": "Dismissing that notice returns the user to the lobby; they must tap start again to begin the test.",
+   "comment": "No need to tap start again. if the user chooses to continue from this notice, the chat can start. ",
+   "requirements": [
+    "FR-KIT-007"
+   ]
+  },
+  {
+   "id": "F03.2-soon-6",
+   "behaviour": "On the succeeded-recently warning, declining a new test shows results history on Android but only closes on iOS.",
+   "comment": "\"No\" should dismiss the warning.",
+   "requirements": [
+    "FR-PLT-006",
+    "FR-PRT-001"
+   ]
+  },
+  {
+   "id": "F03.2-kits-2",
+   "behaviour": "Android first shows \"Your kit was used\" and then the switch-user screen; iOS goes straight to that screen.",
+   "comment": "should be like android",
+   "requirements": []
+  },
+  {
+   "id": "F03.2-kits-3",
+   "behaviour": "Where only one person is registered on the phone, Android offers only customer support; iOS still shows the switch-user screen.",
+   "comment": "should be like android",
+   "requirements": []
+  },
+  {
+   "id": "F03.2-resume-6",
+   "behaviour": "After an expired kit Android gives that same warning on the next attempt, but iOS starts the next test with no warning.",
+   "comment": "should be like android",
+   "requirements": [
+    "FR-KIT-007",
+    "FR-PLT-006"
+   ]
+  },
+  {
+   "id": "F03.2-bound-1",
+   "behaviour": "At exactly 24 hours after the previous test, iOS starts the new test silently while Android still shows the warning.",
+   "comment": "should be like iOS",
+   "requirements": [
+    "FR-KIT-007",
+    "FR-PLT-006",
+    "FR-LCM-006"
+   ]
+  },
+  {
+   "id": "F03.2-bound-7",
+   "behaviour": "The device's own clock decides the 24-hour window, so changing the clock changes whether the warning appears.",
+   "comment": "consider using a more precise clock that can't be changed by the user",
+   "requirements": [
+    "FR-KIT-007"
+   ]
+  }
+ ],
+ "how_to_use": [
+  "Every behaviour line carries the requirement it corresponds to and a relation: realises, partly, or unlisted.",
+  "unlisted means no current QACR requirement covers that ACR behaviour — see candidate_new_requirements.",
+  "qacr_should_differ lists behaviours accurate for ACR that QACR must do differently: those features are NOT same-as-ACR.",
+  "needs_recheck lists descriptions marked wrong; they will be re-read against the code before you rely on them.",
+  "not_derivable lists behaviour not knowable from source — do not specify it from this document alone."
+ ]
+}
