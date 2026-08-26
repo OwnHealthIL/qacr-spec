@@ -21,7 +21,7 @@ const DOC = {
 //   ready   — reviewed by Guy and settled; build from it
 //   drafted — written, not yet reviewed
 // A document not named here has not been written.
-const STATE = { "SPEC-01": "ready", "SPEC-02": "ready", "SPEC-03": "ready", "SPEC-05": "drafted" };
+const STATE = { "SPEC-01": "ready", "SPEC-02": "ready", "SPEC-03": "ready", "SPEC-04": "drafted", "SPEC-05": "drafted" };
 const STATE_LABEL = { ready: "ready", drafted: "drafted, not yet reviewed" };
 
 // Features specified somewhere other than their own epic's document.
@@ -73,9 +73,18 @@ const S = {
   "F04.2": ["Changed", "We made small changes to the video UX in QACR, this can go in this spec.", "pm"],
   "F04.3": ["Unchanged", null, "pm"],
   "F04.4": ["Unchanged", null, "pm"],
-  "F04.5": ["Changed", "The cancellation cut-off is cup fill: free before the Urine Collection Cup is filled, and after it the kit is lost. QACR's committed-sample point differs from Minuteful's.", "derived"],
+  // Was Changed on a derived reading that QACR's committed-sample point differs from
+  // Minuteful's. Confirmed by Guy at the SPEC-04 draft, and re-sourced to him: his marks on
+  // the E04 behaviour review say the deciding step is the one confirming the cup was used,
+  // for the exit warning and for the absence reset alike. FR-STA-008 already places the
+  // cut-off at cup fill, so the requirement does not move; which step that is in the QACR
+  // flow does.
+  "F04.5": ["Changed", "The cancellation cut-off is cup fill. The committed-sample point is the step confirming the Urine Collection Cup was used, not the dipping step, and the exit warning and the absence reset both move with it.", "pm"],
   "F04.6": ["Changed", "the mechanism exists in minuteful, we want to add a control to jump somewhere in the flow, and not specifically to the end of it.", "pm"],
-  "F04.7": ["New", "New for QACR. No Minuteful equivalent.", "derived"],
+  // Was New on a derived note. Confirmed by Guy at the SPEC-04 draft: New stands, and the
+  // spec describes the practice framing only — the scanning interaction it reproduces is
+  // E06's and is not restated.
+  "F04.7": ["New", "New for QACR. No Minuteful equivalent. The spec describes the practice framing; the scanning interaction is E06's.", "pm"],
   "F04.8": ["New", "with 5.4", "pm"],
 
   // ---------------------------------------------------------------- E05
