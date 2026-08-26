@@ -1903,8 +1903,8 @@
        "relation": "partly",
        "coverage": "partly",
        "relation_note": "A test whose timeout was recorded before the application died ends in silence on both platforms, by different routes; FR-TIM-012 requires the reason for a timing invalidation to be given and FR-STA-007 requires the user to be told that a new kit is needed, and neither happens.",
-       "pm_mark": "unmarked",
-       "pm_comment": "i dont understand the behavior"
+       "pm_mark": "change",
+       "pm_comment": "i dont understand the behavior, but if a timeout was recorded when the app was live, the user should know about it. if it is displayed and the user kills the app and re-opens it, the user restarts at the lobby. if it wasn't displayed before getting killed - it should be shown when the app is restarted. "
       },
       {
        "id": "F04.4-boundary-2",
@@ -3116,11 +3116,11 @@
  },
  "prompt": "This JSON records how the current ACR application (Minuteful Kidney US) actually behaves today for E04 — Guided Test Flow Engine. It covers F04.1 Step sequencer and confirmation model, F04.3 State retention and interruption tolerance, F04.4 Termination detection and invalidation.\n\nIt was read from the shipping source at iosDip develop @ e0636af31, AndroidDip develop @ a50d8b0, android.shared-chat 0d5db76, ios-chat-services 4a4dbf4, and checked against Rev 1.20 · Epic Map Rev 1.14. Every coverage verdict below is relative to that revision — a newer revision may already have closed a gap this file reports.\n\nIt is a record of existing behaviour. It is not a specification, and it is not a design to copy: ACR is a different product with a different kit, so its behaviour is evidence about a problem already solved once, not a decision about what QACR should do.\n\nHow it is shaped:\n- `features[].scenarios[].lines[]` — 86 behaviours, each one sentence. Each carries what iOS does, what Android does, and `platforms`, which is `same` where they agree and `differs` where they do not.\n- `review_item` groups close behaviours together; Product's marks and comments are recorded per group, so several lines can share one comment.\n- `coverage` on every line is stated, never implied: `covered`, `partly`, `uncovered`, or `not-mapped`. Do not read an empty `requirements` array as meaning nothing covers it — read `coverage`.\n\nThe three things that need a decision:\n- **`requirements_needed.uncovered_behaviours`** (4) — ACR does these and no requirement describes them. `candidate_statements` proposes wording in the requirements document's own voice; adopt, reword or drop it as you see fit.\n- **`requirements_needed.partly_covered_behaviours`** (58) — a requirement exists but does not describe what ACR actually does.\n- **`not_knowable_from_code`** (22) — behaviour that cannot be established by reading source, because it is decided by the backend, sits inside a compiled component, or needs the app run to observe. **Do not specify any of these from this file.**\n\nWhere Product has reviewed the document, each line also carries `pm_mark` and `pm_comment`. `correct` means ACR does this and QACR should too; `wrong` means we mis-read the code and will re-check it; `change` means the description is accurate but QACR should behave differently — which means that feature is not a straight recreation.",
  "review": {
-  "reviewed_items": 85,
+  "reviewed_items": 86,
   "total_items": 30,
   "total_lines": 86,
   "complete": false,
-  "exported_at": "2026-08-26T14:32:56.537Z"
+  "exported_at": "2026-08-26T15:51:09.130Z"
  },
  "needs_recheck": [
   {
@@ -3534,6 +3534,15 @@
    "comment": "the content will be different in QACR",
    "requirements": [
     "FR-SUP-003"
+   ]
+  },
+  {
+   "id": "F04.4-boundary-1",
+   "behaviour": "If the timeout was already recorded before the app died, reopening the test screen shows the chat with no message at all.",
+   "comment": "i dont understand the behavior, but if a timeout was recorded when the app was live, the user should know about it. if it is displayed and the user kills the app and re-opens it, the user restarts at the lobby. if it wasn't displayed before getting killed - it should be shown when the app is restarted. ",
+   "requirements": [
+    "FR-STA-007",
+    "FR-TIM-012"
    ]
   }
  ],

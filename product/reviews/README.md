@@ -8,11 +8,44 @@ to what they sent.
 One export per epic, `acr-behaviour-review-E0n.json`, plus a disposition where one was
 written.
 
-## How to read one
+## Read it at the item level, not the line level
 
-Each line of the export is a behaviour statement about the shipped ACR product, with what
-iOS does, what Android does, and whether they agree. The product manager's verdict is
-`pm_mark` on each line:
+**This is the thing to get right before anything else.** From E04 onwards the team groups
+similar behaviours into **review items**, because reviewing 86 statements one at a time is
+worse than reviewing 30 groups. So:
+
+| | |
+|---|---|
+| a **behaviour** | one statement about the shipped product, with what iOS does and what Android does |
+| a **review item** | a group of related behaviours — E04 has 30 of them over 86 behaviours, from 1 to 5 each |
+| `pm_mark`, `pm_comment` | properties of the **item**, written once and propagated to every behaviour under it |
+
+**Counting marks per behaviour multiplies them by the group size and tells you nothing.**
+E04 read as 46 `change` marks that way; at item level it is 16 `change`, 13 `correct`,
+1 `wrong` — sixteen departures against E03's fourteen, which is comparable rather than
+three times worse. That misreading survived a whole round of analysis.
+
+**The unit of a departure is the comment, not the line.**
+
+### Which behaviour is a comment about
+
+The comment names or quotes the behaviour it concerns. The rule, from Guy:
+
+> The comment is per item, and it references the relevant behaviour. **Anything not
+> referenced is correct.**
+
+So a comment quoting one statement narrows to it — *"all is correct, except for the timer
+that runs out"* is one of that item's three — and a comment referencing nothing specific
+applies to the item as a whole.
+
+### `complete: false` is a field artefact
+
+`review.reviewed_items` counts behaviours while `total_items` counts items, so 86 against
+30 never reconciles and the flag never flips. **Check for `pm_mark: unmarked` instead.**
+
+## The marks
+
+`pm_mark` is per item:
 
 | | |
 |---|---|

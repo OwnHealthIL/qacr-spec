@@ -112,6 +112,7 @@ stopping condition and is what made SPEC-01 expensive.
 | `generator/id-manifest.json` | every identifier ever issued and its disposition |
 | `generator/m5-map.js` | where each former backlog item went |
 | `generator/configs.js` | the configuration register — flags, defaults, dispositions |
+| `reviews/acr-behaviour-review-E0n.json` | the team's behaviour export for this epic, with Guy's `pm_mark` per line. Read `reviews/README.md` first: `checked_against` is behind, `change` marks are departures, `wrong` marks are research, and `platforms: differs` is nobody's |
 | `local/Reference/Minuteful copy/` | which conditions and screens **exist**. Never for values |
 | `local/Source documents/` | Risk Analysis, both SRSs, the SPTA, UX studies |
 | `/mind` | topology: which services and clients, what talks to what |
