@@ -1,0 +1,17 @@
+{
+  "name": "qacr-user-app-docs",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Generator for the QACR user application requirement, epic and spec documents. The .js data modules in generator/ are the source of truth; the .docx and .html files under FR-01/ and EPIC-01/ are outputs and must never be edited by hand.",
+  "scripts": {
+    "build": "node generator/build-all.js",
+    "check": "python3 generator/check-all.py",
+    "all": "npm run build && npm run check"
+  },
+  "dependencies": {
+    "docx": "9.7.1"
+  },
+  "devDependencies": {
+    "jsdom": "^27.0.0"
+  }
+}
