@@ -58,8 +58,9 @@ Do this before any research and before writing a line. It is two minutes of work
 two wasted revisions of SPEC-01.
 
 ```bash
-cd Generator && node -e '
-const E=require("./epics.js"), spec=require("./spec-status.js"), D=require("./domains.js").DOMAIN;
+cd product && node -e '
+const E=require("./generator/epics.js"), spec=require("./generator/spec-status.js"),
+      D=require("./generator/domains.js").DOMAIN;
 const e=E.find(x=>x.code==="E0N");              // ← the epic
 console.log(e.title||e.name);
 e.features.forEach(f=>{ const r=spec(f[0], e.code, D[f[0]]);
@@ -70,6 +71,11 @@ console.log("\nepic open items:", e.open.join(" | "));'
 ```
 
 **The status chooses the document shape, so it has to be right before anything else.**
+
+Then read `features/` for every covered feature, if the development team has built the files
+yet. The **`silent` list** is a requirement the feature owns that its spec says nothing about —
+nobody can build it, not because it is hard but because nobody has said what it should do. It is
+the one input that tells you what the *last* revision missed, and it costs one `cat`.
 
 Then ask Guy, in one message, before proceeding:
 
@@ -113,6 +119,11 @@ stopping condition and is what made SPEC-01 expensive.
 | `generator/m5-map.js` | where each former backlog item went |
 | `generator/configs.js` | the configuration register — flags, defaults, dispositions |
 | `reviews/acr-behaviour-review-E0n.json` | the team's behaviour export for this epic, with Guy's `pm_mark` per line. Read `reviews/README.md` first: `checked_against` is behind, `change` marks are departures, `wrong` marks are research, and `platforms: differs` is nobody's |
+| `evidence/behaviour.tsv` | **what the code does today, cited, one claim per row.** Cheaper and more reliable than reading the clients yourself, and it is the sweep's best starting point. Convert to product behaviour; the `file:line` never travels |
+| `evidence/coverage.tsv` | whether anyone has looked at a requirement at all. `no-evidence-found` means **nobody extracted**, never that the code does nothing |
+| `evidence/context.tsv` | `CTX-nn` — what a developer knows that no requirement states. CTX-02, CTX-03 and CTX-04 all bear on what the QACR build can be assumed to have |
+| `features/*` — the `silent` list | a requirement a covered feature owns that its spec says nothing about. **Silence is not a decision and must never be read as as-is** |
+| `decisions/D-nn` | questions *they* raised against a spec. Answer verbatim into the register or the requirement |
 | `local/Reference/Minuteful copy/` | which conditions and screens **exist**. Never for values |
 | `local/Source documents/` | Risk Analysis, both SRSs, the SPTA, UX studies |
 | `/mind` | topology: which services and clients, what talks to what |
@@ -173,11 +184,11 @@ wanted while sitting at milestone 5. A promotion or a milestone move is a far ch
 for than a new requirement.
 
 ```bash
-cd Generator && node -e '
-const s=[...require("./reqs-part1.js"),...require("./reqs-part2.js")];
+cd product && node -e '
+const s=[...require("./generator/reqs-part1.js"),...require("./generator/reqs-part2.js")];
 const term=/configuration set.*test record/i;                       // ← what you would write
 s.forEach(x=>x.reqs.forEach(r=>{ if(term.test(r[1])) console.log(r[0],"M"+r[4],r[1]); }));
-const m=require("./id-manifest.json").issued;                        // retired ideas live here too
+const m=require("./generator/id-manifest.json").issued;                        // retired ideas live here too
 Object.entries(m).filter(([,v])=>!/in scope/.test(v)).slice(0,5).forEach(x=>console.log(x.join(" -> ")));'
 ```
 
@@ -235,6 +246,17 @@ Post in the conversation, not in the document:
 2. **The sweep table** with keep / change / exclude recommendations.
 3. **Requirements proposed**, each with a proposed milestone and its dependency check (Phase 4).
 4. **What was not swept**, so he knows the list's edges.
+5. **Any `decisions/D-nn` raised against this spec**, answered. Those are the development
+   team's questions and they cannot close them.
+
+**Give him a redline for anything past the first revision.** From SPEC-04 Rev 0.2 onwards the
+handover was a published page grouping every change by *the mark that caused it*, with a separate
+section for the changes he did not ask for. That second section is the point: it separates your
+judgement from his instruction, and it is what got both of the remaining calls answered in a
+single pass instead of three. He edits the file in place and adds comments in `<angle brackets>`,
+so expect the document back through an editor — straight quotes become curly, headings pick up
+`\.` escapes, and tables get respaced. **Normalise that away before reading, or the real edits
+are three in a diff of two hundred lines.**
 
 Then stop. Do not implement anything until he answers.
 
@@ -268,9 +290,20 @@ State the earliest legal milestone and the one where it is needed. If they diffe
    that closed them. Never leave an item asserting something the change just made false.
 4. `version.js` — bump `FR`, and `EPIC` with it. Both, always.
 5. `npm run build && npm run check`, from `product/`.
-6. **Then** refresh the specs: the revision bump invalidates every spec's cited revision, and a new
-   requirement makes its feature's spec owe a trace it does not have. Both fail the build. Expect
-   it rather than being surprised.
+6. **Then** refresh the specs — **all of them, and each one costs a revision.** The bump
+   invalidates every spec's cited revision, and a new requirement makes its feature's spec owe a
+   trace it does not have. Both fail the build.
+
+> **In the shared repository a published revision is immutable, so refreshing a spec's citation
+> is not an edit — it is a new revision of that spec.** At FR Rev 1.23 the live set was SPEC-01
+> Rev 1.3, SPEC-02 Rev 1.1, SPEC-03 Rev 1.0 and SPEC-05 Rev 0.7, and all four cite it. One FR bump
+> re-issues **every one of them**, ready documents included, because `layout-check.py` check 6
+> refuses an in-place edit to anything committed.
+>
+> This is the single largest cost the shared repository added, and it changes how you sequence
+> work: **batch requirement changes.** Landing two approvals now and three next week costs two
+> full re-issues of the whole spec set instead of one. Hold approvals until the epic's spec is
+> finished, then land them together.
 
 ### Verify — `CLAUDE.md` section 8, in full
 
@@ -290,14 +323,35 @@ one.
 
 1. Remove the **Requirements proposed** section. A ready document is what a developer builds from,
    and a list awaiting a product decision is not — and it dates the moment one is approved.
+   **Before deleting it, check every decision in it survives somewhere.** SPEC-04's section 5
+   held nine, and five lived nowhere else: when a test becomes active, that speech stops on
+   confirm, that the screen does not dim, the flow's pacing, and that the used-kit confirmation
+   closes the window. Deleting the section without landing them as requirements loses them
+   silently. That is the whole reason ready comes second.
 2. Fold answered questions into **Confirmed as-is**; keep only what is genuinely still open.
+   A draft may carry its own review history — a *closed at review* table, a *what changed*
+   note; a ready document carries neither.
 3. Refresh the cited FR and EPIC revisions, and the traceability table's milestones.
 4. Strip the archaeology. Notes about what earlier revisions got wrong belong in `CLAUDE.md`, not
-   in a delivery document.
+   in a delivery document. **This includes the revision's own changelog paragraph** — useful while
+   he is reviewing successive drafts, wrong the moment the document is delivered.
 5. Set the document's state to `ready` in `spec-status.js` — `STATE` — so the board shows it. That
    is what tells a developer the document is not still moving under them.
-6. Bump the spec revision to `1.0 — ready`, rebuild, run the checks.
-7. Report: what he approved, what landed where, and what remains open.
+6. **Rename the file and bump the header row together, in one commit**: `Rev0.n` becomes `Rev1.0`
+   in the filename *and* in the Revision row. The superseded draft stays beside it. Then rebuild
+   the board — `spec-status.js` is the only data module it reads, so neither `.docx` moves and
+   neither should be committed dirty.
+7. `npm run check`. **Checks 7 and 8 of `layout-check.py` are steps 1 and 5 of this list**, and
+   they are the only two a machine can make. They exist because this step was got backwards once.
+8. Report: what he approved, what landed where, and what remains open.
+
+> **Open items do not block ready.** SPEC-01 went ready carrying one. What blocks ready is a
+> requirement the document's own prescriptive half contradicts — SPEC-04's section 3 stated a
+> practice scan the user passes through while FR-IMG-022 said the software *shall allow* one to be
+> started, and its D9 let the demonstration controls cross a timing window FR-TIM-008 admits no
+> exemption from. **No guard catches that**: `spec-check.py` asks whether a traced identifier is
+> live, never whether the spec and the requirement agree. Read the requirements a departure or a
+> behaviour statement traces to, and check them by hand, before promoting.
 
 ---
 
@@ -312,7 +366,9 @@ one.
 | Over-specifying | Happened three times at descending altitudes — behaviour, then spec prose, then requirement text. Each time the fix was to state the rule and drop the mechanism. Assume you are doing it. |
 | Proposing what already exists | Search the requirements, the manifest and the milestone-5 map first. |
 | Leaving proposals in a ready document | They date immediately and nobody builds from them. |
-| Marking ready before the requirements land | The revision bump makes the ready document stale on the spot. |
+| Marking ready before the requirements land | The revision bump makes the ready document stale on the spot — and deleting the proposals section first loses every decision that lived only there. Five of SPEC-04's nine did. |
+| Not reading this file | It lives under `product/`, so the harness never lists it and nothing offers it. SPEC-04 was written and reviewed through four revisions from `CLAUDE.md` alone; section 5 carries the reasoning but not the sequence, so the promotion came out backwards. `CLAUDE.md`'s preamble now points here. |
+| Promoting a spec whose own content contradicts a live requirement | No guard asks whether a spec and its requirements agree, only whether the identifier is live. Check by hand. |
 
 Two of Guy's standing instructions that reach beyond specs, both easy to trip over:
 

@@ -24,6 +24,18 @@ else read. It exists now, and this is the guard for it. Five checks:
      directory sees, so it is the thing that has to be true
   5. one live revision per spec, and it is the highest. A tie or a gap means two files
      claim to be the same document
+  6. no already-committed spec revision has been edited in place
+  7. a spec whose state is `ready` is at revision 1.0 or higher, and a 0.x draft is not
+     marked ready. `ready` is what tells a developer the document has stopped moving
+  8. a spec whose state is `ready` carries no `Requirements proposed` section. A ready
+     document is what somebody builds from, and a list of requirements awaiting a product
+     decision is not something anyone can build from — it also dates the moment one is
+     approved
+
+Checks 7 and 8 are the machine half of Phase 5 of `.claude/skills/write-spec/SKILL.md`.
+Everything else in that checklist is judgement; these two are not, and both were about to
+be got wrong on SPEC-04 — promoted to ready ahead of the requirements pass, with nine
+product decisions still living only in its proposals section.
 """
 import io, json, os, re, subprocess, sys
 
@@ -135,6 +147,43 @@ if os.path.isdir(SPECDIR):
               f"not new text under the old one: {sorted(edited)}")
         if not edited:
             print(f"   {len(seen)} spec documents, no published revision edited in place")
+
+# 7 and 8 · a document marked `ready` is one a developer builds from
+#
+# `spec-status.js` STATE is what the board renders, so it is what tells a developer
+# whether a document is still moving under them. Two things have to be true of a spec it
+# calls `ready`, and neither is visible to a reader of the document alone.
+STATE = json.loads(subprocess.check_output(
+    ["node", "-e",
+     f"console.log(JSON.stringify(require({json.dumps(os.path.join(DIR,'spec-status.js'))}).STATE))"]
+).decode())
+
+PROPOSALS = re.compile(r"^#{1,3}\s*\d*\.?\s*Requirements proposed\s*$", re.M | re.I)
+
+for spec, revs in sorted(seen.items()):
+    top = max(revs)
+    # `seen` is keyed by the document stem, QACR-APP-SPEC-04; STATE is keyed SPEC-04.
+    # Keying these two together wrongly is what made the first version of this check
+    # pass against a deliberately injected defect: every lookup returned None and all
+    # three checks short-circuited into silence.
+    state = STATE.get(spec.replace("QACR-APP-", ""))
+    ready = state == "ready"
+    check(not (ready and top[0] < 1),
+          f"{spec}: spec-status.js calls it `ready` but the live document is "
+          f"Rev {top[0]}.{top[1]}. Ready is 1.0 or higher — promoting is a rename and a "
+          f"header bump together, and it comes after the requirements land, not before")
+    check(not (top[0] >= 1 and state is not None and not ready),
+          f"{spec}: the live document is Rev {top[0]}.{top[1]} but spec-status.js calls "
+          f"it `{state}`. A 1.x document is a delivered one")
+    if ready:
+        body = io.open(os.path.join(SPECDIR, top[2]), encoding="utf-8").read()
+        hit = PROPOSALS.search(body)
+        check(not hit,
+              f"specs/{top[2]} is `ready` and still carries a `Requirements proposed` "
+              f"section. A ready document is what a developer builds from; a list of "
+              f"requirements awaiting a product decision is not, and it is wrong the "
+              f"moment one is approved. Remove it and report the proposals in the "
+              f"conversation instead")
 
 print(f"\n{checks} layout checks, FR Rev {V['FR']}, epic map Rev {V['EPIC']}")
 if fails:

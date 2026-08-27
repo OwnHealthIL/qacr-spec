@@ -205,3 +205,10 @@ module.exports.READINESS = {   // declaration order is the order shown to a read
   other: "Not application code",
 };
 module.exports.COUNT = Object.keys(S).length;
+
+// Exported for layout-check.py checks 7 and 8, which are the machine half of the
+// promotion checklist in .claude/skills/write-spec/SKILL.md. Phase 5 of that skill has
+// two failure modes a reader of the document cannot see: a spec marked ready while it
+// is still a 0.x draft, and a ready document still carrying its Requirements proposed
+// section. Both were about to happen to SPEC-04. STATE is what makes them checkable.
+module.exports.STATE = STATE;

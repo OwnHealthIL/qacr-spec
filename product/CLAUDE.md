@@ -9,6 +9,15 @@ Class B**. Heading for **FDA submission**. Guy Raviv (Product) owns this documen
 > beside this one. **Read section 11 before touching anything outside `product/` — and
 > the short answer is that you do not touch anything outside `product/`.**
 
+> **Writing, revising or promoting a spec? Read `.claude/skills/write-spec/SKILL.md`
+> first, and follow its phases.** It is the procedure; this file is the law behind it.
+> The skill lives under `product/` and so does **not** appear in the harness's skill list —
+> nothing will offer it to you, and you have to go and open it. A whole spec was written
+> and four revisions reviewed without it once, and the promotion step was got backwards as
+> a result: **ready comes after the requirements land, not before.** `layout-check.py`
+> checks 7 and 8 are the machine half of that one step. Every other step is judgement, and
+> judgement is what the file carries.
+
 Because this is a regulated submission, **traceability is the product**. A requirement
 that loses its trace, or a document that disagrees with its sibling, is a finding.
 That is why so much of what follows is about guards rather than content.
@@ -186,6 +195,10 @@ dispositioned; two remain open (Q-39, FR-CAM-002).
 ---
 
 ## 5. Writing specs
+
+> **The procedure is `.claude/skills/write-spec/SKILL.md`** — six phases, Phase 0 blocking,
+> Phase 5 the promotion checklist. This section is the reasoning the skill assumes. Read
+> both; where they disagree, this file wins and the skill is wrong.
 
 The spec layer sits below the epic map. From the answered triage: **13 spec documents cover
 66 of 82 features.** E07 (content) and E15 (process) need no document at all.
