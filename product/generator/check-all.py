@@ -53,8 +53,14 @@ run("Traceability and milestone consistency across both documents and the board"
 if os.path.isdir(SPECS) and any(f.endswith(".md") for f in os.listdir(SPECS)):
     run("Spec coverage: every requirement of a covered feature is cited",
         [sys.executable, os.path.join(DIR, "spec-check.py"), SPECS])
+    # After coverage, because it asks a question about the same traces: a spec is allowed
+    # to cite a superseded FR revision, and only has to be re-issued if something it
+    # traces to actually moved. See the module docstring for why that replaced failing
+    # every lagging citation.
+    run("Spec impact: no lagging spec traces to a requirement that has moved",
+        [sys.executable, os.path.join(DIR, "spec-impact.py"), DIR, ROOT])
 else:
-    print("\nNo specs in specs/ yet — skipping the spec coverage check.")
+    print("\nNo specs in specs/ yet — skipping the spec coverage checks.")
 
 print(f"\n{'='*68}")
 if failed:

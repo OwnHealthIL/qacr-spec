@@ -295,15 +295,30 @@ State the earliest legal milestone and the one where it is needed. If they diffe
    trace it does not have. Both fail the build.
 
 > **In the shared repository a published revision is immutable, so refreshing a spec's citation
-> is not an edit — it is a new revision of that spec.** At FR Rev 1.23 the live set was SPEC-01
-> Rev 1.3, SPEC-02 Rev 1.1, SPEC-03 Rev 1.0 and SPEC-05 Rev 0.7, and all four cite it. One FR bump
-> re-issues **every one of them**, ready documents included, because `layout-check.py` check 6
-> refuses an in-place edit to anything committed.
+> is not an edit — it is a new revision of that spec.** That used to mean one FR bump re-issued
+> every live spec, ready documents included, because `layout-check.py` check 6 refuses an
+> in-place edit to anything committed.
 >
-> This is the single largest cost the shared repository added, and it changes how you sequence
-> work: **batch requirement changes.** Landing two approvals now and three next week costs two
-> full re-issues of the whole spec set instead of one. Hold approvals until the epic's spec is
-> finished, then land them together.
+> **`spec-impact.py` is what removed that cost, and it runs inside `npm run check` — every
+> time, on nothing but the files in the tree.** Nothing triggers it and nothing has to remember
+> it. A spec may now cite a superseded FR revision; what fails the build is a spec that lags
+> **and traces to a requirement that actually moved** — text, milestone, or gone. Anything else
+> prints the lag and passes.
+>
+> So the answer to "which specs does this bump re-issue" is a machine's, not a judgement:
+> re-issue what it names. When SPEC-04's pass amends nine requirements, it names SPEC-05 and
+> nothing else, because SPEC-01, SPEC-02 and SPEC-03 own none of them.
+>
+> Two consequences worth holding on to. **The citation now carries information** — allowed to
+> lag, it records what the document was last verified against, which is the thing a reader
+> actually wants and which a forced-current citation can never say. And **batching approvals
+> still helps**, just less: it is re-reading the affected specs that costs, not the numbering.
+
+Note the difference between *citing* a requirement and *tracing* to one, because the guard
+depends on it. A trace is a traceability-table row or a `*Traces:*` line and claims coverage;
+prose may mention any requirement it likes. SPEC-04 discusses FR-TIM-008 in a departure without
+tracing to it, so an amendment to FR-TIM-008 does not re-issue SPEC-04 — it re-issues SPEC-05,
+which owns it.
 
 ### Verify — `CLAUDE.md` section 8, in full
 

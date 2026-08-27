@@ -120,11 +120,22 @@ for path in SPECS:
     if not revs:
         fails.append(f"{name}: cites no document revision, so it makes no traceability claim to check")
         print("   NO REVISION CITED")
+    # A lagging citation is no longer a failure here. It used to be, and the effect was
+    # that every FR bump re-issued every spec — and since a published revision is
+    # immutable, a "re-issue" is a whole new revision of each document. At Rev 1.23 that
+    # was four specs re-cut to change a number in a header row while only one of them
+    # owned a requirement that had moved.
+    #
+    # It also made the citation say nothing. Forced to equal the current revision, it is
+    # current by construction and can never tell a reader whether the document has been
+    # checked against the requirements as they now stand.
+    #
+    # `spec-impact.py` asks the question that matters instead: of the requirements this
+    # spec traces to, did any change between the cited revision and the current one? That
+    # is what fails a build now. This check only reports the lag.
     stale = sorted({f"{d} Rev {r}" for d, r in revs if r != V[d]})
     if stale:
-        fails.append(f"{name}: cites superseded {', '.join(stale)} — current is "
-                     f"FR Rev {V['FR']}, EPIC Rev {V['EPIC']}")
-        print(f"   STALE REVISION   : {', '.join(stale)}")
+        print(f"   lags at          : {', '.join(stale)} — see spec-impact.py")
     elif revs:
         print(f"   traces to        : FR Rev {V['FR']}, EPIC Rev {V['EPIC']}")
     if missing:

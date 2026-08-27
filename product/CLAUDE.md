@@ -107,9 +107,12 @@ data that has since moved on fails; no artefact may name a `BL-nn` outside a `fo
 marker; and no artefact may refer to a backlog at all. Those two carry explicit allowlists for
 genuine history, in the same spirit as `id-manifest.json`. A fourth: no row may claim it was
 `formerly` its own identifier.
-`spec-check.py` — spec coverage, that every revision a
-spec cites is the current one, and that every identifier a spec **traces** to is a live
+`spec-check.py` — spec coverage, and that every identifier a spec **traces** to is a live
 requirement. A retired identifier may be discussed in prose; it may not be traced to.
+`spec-impact.py` — the question that replaced *cites the current revision*: a spec may lag,
+and only fails if a requirement **it traces to** moved between the revision it cites and the
+current one. Failing every lagging citation re-issued every spec on every bump, and made the
+citation say nothing, since it was current by construction.
 `check-all.py` — runs them all. `spec-triage.py`, `build-conflicts.py`, `build-m5-proposal.py`,
 `apply-m5.py`, `remap-bl.py` — one-off builders and migrations, kept because for a regulated
 document set how a bulk change was made is part of its record.
