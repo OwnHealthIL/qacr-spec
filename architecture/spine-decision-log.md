@@ -13,6 +13,103 @@ the verbatim answers and OZ comments, and where each of the fourteen answers lan
 
 ---
 
+## Legend · epistemic tags used throughout
+
+Every finding, decision and gap below carries one of these. They describe the *basis* for the
+claim, not the reader's confidence in it.
+
+| Tag | Asserts |
+|---|---|
+| `[OBSERVED]` | Read directly from a cited source — code, config, a document, a query result. Verifiable by re-reading the citation. |
+| `[ADOPTED]` | Settled by the user's own words, or by existing production reality this method treats as binding until changed. Not derived — decided. |
+| `[INFERRED]` | Derived by the method from `[OBSERVED]`/`[ADOPTED]` facts already on record. Follows from evidence already established, not asserted independently. |
+| `[UNKNOWN]` | A gap. Nobody has read the source, asked the question, or chosen a value yet. |
+| `[REPORTED]` | Stated by the user as fact, not independently verified against a source. |
+
+## Table of contents
+
+| Section | Date | Covers |
+|---|---|---|
+| [L0](#l0--framing-established-before-elicitation) · Framing established before elicitation | pre-2026-08-19 | Why the backend has no requirements document of its own; what the absorbed inputs and the compliance note carry |
+| [L1](#l1--adopted--settled-by-the-user-or-by-existing-reality-not-open-for-re-litigation) · Adopted — settled by the user or by existing reality | 2026-08-19 | The six answered open items, plus four facts about the live estate; none open for re-litigation |
+| [L2](#l2--contradictions-between-the-oz-comments-and-the-answered-questions) · Contradictions between the OZ comments and the answered questions | — | Four collisions surfaced, not resolved here (resolved later in L8) |
+| [L3](#l3--still-open-from-the-prior-investigation) · Still open from the prior investigation | — | Seven unresolved items carried forward (five later closed by L11) |
+| [L4](#l4--notifications--investigated-2026-08-23-in-response-to-why-not-copy-the-notification-worker) · Notifications | 2026-08-23 | Why consuming notifications-worker's store was wrong; the proposed thin-SMS alternative |
+| [L5](#l5--why-notifications-worker-is-complex-and-what-dropping-its-store-would-cost) · Why notifications-worker is complex | 2026-08-23 | What its 21 migrations actually buy; the attempt-record proposal that replaces L4's answer |
+| [L6](#l6--cross-cluster-consumption-of-um-and-notifications-worker--investigated-2026-08-23) · Cross-cluster consumption of UM and notifications-worker | 2026-08-23 | The OTP chain traced end to end; the one real mismatch (UM requires `fullName`/`email`, QACR collects neither) |
+| [L7](#l7--decision--consume-the-existing-services-defer-change-or-copy-to-a-dedicated-feature) · Decision — consume the existing services | 2026-08-23 | The user's decision on UM/notifications-worker; items not deferrable now; revisit conditions |
+| [L8](#l8--user-answers-2026-08-23) · User answers | 2026-08-23 | Verbatim answers to OZ-2 (PII), OZ-5 (extension points), OZ-1/6/7 (security, monitoring, management plane) |
+| [L9](#l9--stack-ratified-from-the-existing-repo--and-two-end-of-support-findings) · Stack, ratified from the existing repo | 2026-08-23 | Brownfield stack table; two end-of-support findings (PostgreSQL 14, RabbitMQ 3.11) |
+| [L10](#l10--finalize-pass-2026-08-23) · Finalize pass | 2026-08-23 | First `spine.md` write — 19 ADs, 10 open questions; checks run; two items left outstanding |
+| [L11](#l11--review-pass-2026-08-23--thirteen-items-raised-against-the-spine) · Review pass — thirteen items raised against the spine | 2026-08-23 | 13 `AQ-*` questions worked and landed one by one (`L11.1`–`L11.15`); adds AD-20–AD-27, OQ-11–OQ-17 |
+| [L12](#l12--absorbed-source-material-2026-08-26) · Absorbed source material | 2026-08-26 | Evidence base (`E-1`–`E-14`), corrections (`C-1`–`C-7`), gaps (`G-1`–`G-6`), verbatim inputs folded in and deleted |
+
+## Index · where each decision currently stands
+
+A decision is frequently amended in a later, non-adjacent section. This table is the shortcut: given
+an id, where it was landed and everywhere it was touched again. **Landed** is where the id first
+appears; **Amended / touched again in** lists every section that revises it or leans on it as a
+premise — not every passing citation. Read the current state from the section listed last.
+
+### Architecture decisions
+
+| # | Landed | Amended / touched again in | Status | Current state |
+|---|---|---|---|---|
+| AD-1 | L10 (Q5, Q7 — L12.8) | — | Decided | Modular monolith; module boundaries mechanically enforced in CI (L11.6d) |
+| AD-2 | L10 (Q6 — L12.8) | L11.1c | Decided | Single PostgreSQL + RLS is the only isolation mechanism, scoped to "per deployment" |
+| AD-3 | L10 | L11.4c | Decided | `idempotency_key` — Rule now states plainly it is not replay protection |
+| AD-4 | L10 (Q2 — L12.8) | — | Decided | Insert-only tables; binding `consent_ack` was considered, not taken (L11.13g) |
+| AD-5 | L10 (Q10 — L12.8) | — | Decided | Kit consumed in the same transaction as the exam write |
+| AD-6 | L10 (Q13 — L12.8); decision made L7 | L11.2i, L11.14a | Decided | UM owns auth; M1 static-token exception named (AD-21); session TTL is UM's value — open, **OQ-16** |
+| AD-7 | L10 (from L7 "AD candidates") | — | Decided | No notification capability in `qacr-backend` before M5 |
+| AD-8 | L10 (from L8.1) | L11.3g, L11.3h, L11.11 | Decided — amended more than any other AD in this log | Declared PII register, not segregation; outbound payloads carry only what the recipient exists to receive; no pseudonym mapping issued or held here |
+| AD-9 | L10 (Q11 + L12.5) | — | Decided | Transactional outbox for all event publishing |
+| AD-10 | L10 (Q8 — L12.8) | — | Decided | Per-partner adapter interface + null adapter |
+| AD-11 | L10 (Q3 — L12.8) | L11.3h | Decided | Production→research one-way feed; scope of what may cross tightened alongside AD-8 |
+| AD-12 | L10 (Q9 — L12.8) | L11.5c | Decided | Client polling, no server-driven progress; poll interval restated as advisory, not a control |
+| AD-13 | L10 | L11.7e | Decided | Exam configuration snapshot; AD-25's version-floor named as the one exemption |
+| AD-14 | L10 (Q14.3 + L12.5) | — | Decided | Digest pinning, SBOM, image signing — universal; underwrites AD-19's deferred freeze |
+| AD-15 | L10 (Q8 — L12.8) | — | Decided | Provider delivery detail, paired with AD-10 |
+| AD-16 | L10 (Q12 — L12.8) | — | Decided | No commercial implementation now; extension seams kept |
+| AD-17 | L10 | L11.4e, L11.4f | Decided | `worker-api` callback surface; gap closed by AD-23's single-use grant |
+| AD-18 | L10 (L12.5) | L11.2f, L11.9e | Decided | No patient data outside the production namespace; extended to cover M1; one named exception for restore rehearsal |
+| AD-19 | L10 (Q4 — L12.8) | L11.1 (whole section) | Decided, narrowed | "Own database" claim withdrawn as contradicting AD-2; frozen-study deployment is now a Deferred item gated on OQ-7 |
+| AD-20 | L11.2c, L11.2d (AQ-10) | — | Decided | Demonstration mode is a `partner` property; the gate is an absent outbox row |
+| AD-21 | L11.2f–i (AQ-10) | — | Decided | M1's protection is absence of patient data plus a credential with mandatory expiry |
+| AD-22 | L11.3b–d (AQ-02) | L11.9d | Decided | One region per deployment (`us-central1`); dual/multi-region permitted if every region is in-jurisdiction |
+| AD-23 | L11.4 (AQ-03) | L11.5, L11.6, L11.12, L11.14a, L11.14b | Decided — amended by multiple independent sessions; flagged at L11.15b as the exact pattern the method watches for | Ingest contract: integrity/authenticity/replay/idempotency separated; patient-entitlement check; single-use callback credential |
+| AD-24 | L11.6 (AQ-04) | — | Decided | States the release-gate set — KEV blocks, secret-scan blocks on any finding, suppressions named/owned/dated |
+| AD-25 | L11.7 (AQ-11) | L11.14d (absorbs Q-03, no new id) | Decided, but resting on an invariant no requirement obliges | Version-floor / rollback-block / live-read admission gate — **OQ-13** |
+| AD-26 | L11.9 (AQ-01) | — | Decided | Directional durability guarantee — DB never ahead of object storage; RPO/RTO figures open — **OQ-14** |
+| AD-27 | L11.10 (AQ-05) | — | Decided, invariant half only | Exactly one component normalises; *where* is genuinely undecided — **OQ-15** |
+| AD-28 | never created | L11.12a | — | Considered and explicitly rejected — the finding landed as an AD-23 amendment instead, to avoid one concern with two governing ADs |
+
+### Open questions and decisions/ files
+
+| # | Landed | Amended / touched again in | Status | Current state |
+|---|---|---|---|---|
+| OQ-1 | L10 (original spine) | L11.6f, L11.7h | Open | Independent penetration testing (procurement); fielded-version risk-assessment ownership |
+| OQ-2 | L10 (original spine) | content in L9 | Open | PostgreSQL 14 / RabbitMQ 3.11 end-of-support upgrade path |
+| OQ-3 | L10 (original spine; content L3.3) | L11.9c, L11.10f | Open | Retention period for frames/traces — blocked on L3.3 (ACR's retention never read) and on OQ-15 |
+| OQ-4 | L10 (original spine; content L8.3) | — | Open | Per-feature log schema — mandatory fields, PHI-exclusion checklist |
+| OQ-5 | — | — | — | Not referenced anywhere in this log — check `spine.md` directly rather than assume it here |
+| OQ-6 | L10 (original spine; content L3.1, L12.6 item 7) | — | Open, owner Product | `FR-KIT-005` kit valid-use period — withdrawn or deferred, never answered |
+| OQ-7 | L10 (original spine; content L3.4, L12.6 item 4) | L11.1f | Open | ACR's board→lot encoding never read; gates the kit-register import and study kit-lot partitioning |
+| OQ-8 | L7.3, L7.4 (findings); id assigned L10 | L8.1 (confirms L6.8 as a violation) | Open | The two inherited UM exposures — PII in logs; OTP-bypass; `decisions/` files not yet written |
+| OQ-9 | L10 (original spine; content G-1) | L11.10f | Open | Algorithm wall-clock latency / autoscaling targets; the workload itself depends on OQ-15 |
+| OQ-10 | L10 (original spine; content C-3, L3.5) | — | Open | `NEW_BACKEND_PLAN.md` on an unmerged branch, never read |
+| OQ-11 | L11.3f (AQ-02) | — | Open, owner QMS | Cross-border transfer basis for a second-market deployment |
+| OQ-12 | L11.3i (AQ-02) | L11.11e | Open, owner Product | Patient-level linkage in research; the two pseudonyms must never be the same value |
+| OQ-13 | L11.7a (AQ-11) | L11.14d (absorbs Q-03) | Open, owner Product + QMS | No requirement obliges a minimum admissible application build |
+| OQ-14 | L11.9f (AQ-01) | — | Open, owner Backend owner + DevOps | RPO/RTO figures and restore-rehearsal cadence; gates the `dr` Deferred row |
+| OQ-15 | L11.10a (AQ-05) | — | Open, owner Algorithm owner + Backend owner | Where image normalisation happens — device or backend |
+| OQ-16 | L11.14b, L11.14c (AQ-13) | — | Open, owner Backend owner + QMS | Session token TTL value — SRS's 24h flagged wrong, no replacement chosen |
+| OQ-17 | L11.14e, L11.14f (AQ-13) | — | Open, owner Product (via `decisions/D-02.md`) | Q-81: screenshot capture vs. results-PDF save/email |
+| D-01 | L11.12g, L11.12h (AQ-06) | — | Open, owner Product | Household/shared-handset results-centre visibility; `FR-PRT-001` left unspecified |
+| D-02 | L11.14e–g (AQ-13) | — | Open, owner Product | Q-81 contradiction between `FR-SEC-007` and `FR-SHR-015`/`FR-PRT-009` |
+
+---
+
 ## L0 · Framing established before elicitation
 
 | # | Finding | Tag | Consequence |
