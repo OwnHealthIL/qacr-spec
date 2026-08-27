@@ -21,7 +21,7 @@ const DOC = {
 //   ready   — reviewed by Guy and settled; build from it
 //   drafted — written, not yet reviewed
 // A document not named here has not been written.
-const STATE = { "SPEC-01": "ready", "SPEC-02": "ready", "SPEC-03": "ready", "SPEC-04": "drafted", "SPEC-05": "drafted" };
+const STATE = { "SPEC-01": "ready", "SPEC-02": "ready", "SPEC-03": "ready", "SPEC-04": "ready", "SPEC-05": "drafted" };
 const STATE_LABEL = { ready: "ready", drafted: "drafted, not yet reviewed" };
 
 // Features specified somewhere other than their own epic's document.

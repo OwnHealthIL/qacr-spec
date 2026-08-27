@@ -135,8 +135,15 @@ if os.path.isdir(SPECDIR):
     else:
         rel = subprocess.check_output(["git", "rev-parse", "--show-prefix"],
                                       cwd=SPECDIR).decode().strip()
+        # --diff-filter=M: modifications only. Without it a brand-new revision that has
+        # merely been `git add`ed shows as differing from HEAD — it is absent there — and
+        # gets accused of being an in-place edit of a published revision. That fires on
+        # every spec commit where the checks are run after staging, and it accuses you of
+        # precisely the thing this guard exists to prevent, which is the worst kind of
+        # false positive because it reads as authoritative. Caught while committing the
+        # four re-issues of the SPEC-04 requirements pass.
         changed = subprocess.run(
-            ["git", "diff", "HEAD", "--name-only", "--", "."],
+            ["git", "diff", "HEAD", "--name-only", "--diff-filter=M", "--", "."],
             cwd=SPECDIR, capture_output=True)
         touched = [os.path.basename(line) for line in
                    changed.stdout.decode().splitlines() if line.strip()]
