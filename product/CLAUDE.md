@@ -78,7 +78,7 @@ Homebrew Python, which is PEP 668 externally-managed, `pip install --user
 
 | Module | Holds |
 |---|---|
-| `version.js` | **The only place a document revision may be declared.** Bumping `FR` requires bumping `EPIC` too: the epic map and the board both cite the FR revision in their prose, so leaving `EPIC` alone would put two different documents into circulation under one revision number. |
+| `version.js` | **The only place a document revision may be declared.** Bumping `FR` requires bumping `EPIC` too: the epic map and the board both cite the FR revision in their prose, so leaving `EPIC` alone would put two different documents into circulation under one revision number. | **A spec-status change is the one exemption**: `spec-status.js` is read by the board and nothing else, and the epic map carries no status indication at all, so a spec moving from `drafted` to `ready` changes the board and changes nothing in the document the revision names. Rebuild the board, leave `EPIC` alone. Guy's decision. |
 | `reqs-part1.js`, `reqs-part2.js` | The 248 requirements. Row: `[id, requirement, source, notes, priority]`, where priority is the milestone. |
 | `epics.js` | 15 epics, 82 features. Row: `[featureId, name, [FR ids], [], intent, uxNote, split?]`. The fourth element held deferred items and is now always empty; it is kept only because removing it would shift the positions of `intent`, `uxNote` and `split` in fourteen readers, and a prose field rendering in the wrong place is a failure no guard here would catch. Removing it is its own change. |
 | `appendices.js` | `withdrawn` (Appendix D). `backlog` is now empty: it was dissolved into milestone 5 at Rev 1.18. |
