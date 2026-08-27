@@ -325,7 +325,9 @@ which owns it.
 `npm run check` is necessary and not sufficient. Also: validate the XML of every part of both
 `.docx`; extract with python-docx and confirm counts and distribution; **diff priorities against
 the previous revision and prove the drift is exactly what was intended**; render and read the
-cover pages; run the board in a DOM and confirm no script errors. Prove any new guard by running
+cover pages — `python3 generator/render-pages.py .`, which needs LibreOffice and poppler and is
+no longer a step to be skipped for want of a renderer; run the board in a DOM and confirm no
+script errors. Prove any new guard by running
 it against the artefact that carries the defect, before fixing it.
 
 ---
