@@ -26,6 +26,7 @@ exports.conflicts = [
 ];
 
 exports.scope = [
+  ["Q-107", "What does conformance to WCAG AA add beyond the accessibility requirements now written, and does ADA raise anything further?", "FR-TXT-022, FR-TXT-023", "Guy's direction is that the product should be accessible to WCAG AA. FR-TXT-022 and FR-TXT-023 cover text scaling and the screen reader; the rest of AA — contrast, focus order, target sizes, motion — is unscoped and is deliberately not claimed by either requirement. ADA is a separate question and is not yet assessed. To be scoped as its own piece of work"],
   ["Q-21", "Does doctor-to-patient engagement take place within the application?", "FR-SHR-011, priority undecided", "Product decision per partner. It determines whether the deferred chat and consultation entries apply at all"],
   ["Q-22", "Does the grade-6 reading level apply to mandated regulatory wording?", "FR-TXT-001 against FR-PRT-003", "Regulatory to confirm. Some required wording may not be reducible to grade 6"],
   ["Q-23", "What does the results center contain?", "FR-PRT-001", "Two questions: whether invalidated tests appear, and whether results belonging to another registered user on the same phone number are excluded. The second bears on RA 6.4"],
