@@ -245,9 +245,9 @@
         for keeping it. That is overridden: all QACR repositories build on GitHub Actions. Helm and helmfile
         stay; ArgoCD is not adopted. See 2.1.</li>
       <li data-rev="r18"><strong>Branching is gitflow, not trunk-based.</strong> The spine's Consistency Conventions record
-        "Trunk-based on <span class="m">main</span> with short-lived branches; production cuts from
+        "Trunk-based on <span class="m">master</span> with short-lived branches; production cuts from
         <span class="m">release/X.Y.x</span> using the estate's existing release tool". That is overridden:
-        <span class="m">develop</span> + <span class="m">main</span>, <span class="m">feature/*</span>,
+        <span class="m">develop</span> + <span class="m">master</span>, <span class="m">feature/*</span>,
         <span class="m">release/vX.Y</span>, <span class="m">hotfix/*</span>. See 2.3.</li>
     </ul>
     <p data-rev="r19">
@@ -1645,10 +1645,10 @@
     <h3 data-rev="r571"><span class="n">2.3</span> Branching strategy — gitflow <span class="tag t-acr">≈ ACR</span></h3>
     <p data-rev="r572" class="verdict">
       Two long-lived branches — <span class="m">develop</span> for integration,
-      <span class="m">main</span> for what is in production — with <span class="m">feature/*</span> off
+      <span class="m">master</span> for what is in production — with <span class="m">feature/*</span> off
       develop, <span class="m">release/vX.Y</span> cut from develop per version, and
-      <span class="m">hotfix/*</span> off main. <strong>One adaptation carries the regulatory weight: the
-      release branch is where the image is built.</strong> The tag on <span class="m">main</span> labels a
+      <span class="m">hotfix/*</span> off master. <strong>One adaptation carries the regulatory weight: the
+      release branch is where the image is built.</strong> The tag on <span class="m">master</span> labels a
       digest that already exists and has already passed release testing — it never triggers a build.
     </p>
 
@@ -1660,7 +1660,7 @@
             <td data-rev="r582" class="id">develop is integration</td>
             <td data-rev="r583">Branch protection on <span class="m">develop</span>: one approval, CODEOWNERS, required
               checks, squash merge for <span class="m">feature/*</span></td>
-            <td data-rev="r584">This is where gitflow puts work in progress. <span class="m">main</span> stops being the
+            <td data-rev="r584">This is where gitflow puts work in progress. <span class="m">master</span> stops being the
               integration branch and becomes the record of what is in production — which is nearer to what
               <span class="m">FR-LCM-010</span> inspects than a moving trunk is.</td>
           </tr>
@@ -1680,14 +1680,14 @@
               <span class="m">develop</span> keeps moving — which is the reason to want gitflow.</td>
           </tr>
           <tr data-rev="r593">
-            <td data-rev="r594" class="id">merge → main, then tag</td>
+            <td data-rev="r594" class="id">merge → master, then tag</td>
             <td data-rev="r595">A real merge commit, not a squash, tagged <span class="m">vX.Y.Z</span>; the tag is annotated
               with the digest that passed release testing</td>
             <td data-rev="r596"><strong>The tag must point at bytes that were already tested.</strong> Rebuilding from
-              <span class="m">main</span> after the merge — the obvious thing for CI to do — makes the shipped
+              <span class="m">master</span> after the merge — the obvious thing for CI to do — makes the shipped
               artefact a different object from the approved one, and <span class="m">FR-LCM-010</span> is
               precisely the check that would find it. <em>Linear history therefore cannot be required on
-              <span class="m">main</span>;</em> squash merge belongs on <span class="m">develop</span> only.</td>
+              <span class="m">master</span>;</em> squash merge belongs on <span class="m">develop</span> only.</td>
           </tr>
           <tr data-rev="r597">
             <td data-rev="r598" class="id">promote → production</td>
@@ -1698,8 +1698,8 @@
           </tr>
           <tr data-rev="r601">
             <td data-rev="r602" class="id">security patch</td>
-            <td data-rev="r603"><span class="m">hotfix/vX.Y.Z</span> from the tag on <span class="m">main</span>, built the
-              same way, merged to <span class="m">main</span> <em>and</em> back into
+            <td data-rev="r603"><span class="m">hotfix/vX.Y.Z</span> from the tag on <span class="m">master</span>, built the
+              same way, merged to <span class="m">master</span> <em>and</em> back into
               <span class="m">develop</span> — the back-merge enforced as a required check</td>
             <td data-rev="r604"><strong>This is AD-25's path expressed in gitflow.</strong> A security patch does not wait for
               the sprint boundary: it skips the release train and <strong>never</strong> an AD-24 blocking
@@ -1723,7 +1723,7 @@
       <div data-rev="r610" class="eyebrow">What gitflow costs here, chosen with open eyes</div>
       <p data-rev="r611">
         Two long-lived branches mean every fix that matters in production lands twice — once on
-        <span class="m">main</span>, once back on <span class="m">develop</span> — and the drift between them
+        <span class="m">master</span>, once back on <span class="m">develop</span> — and the drift between them
         stays invisible until a release goes wrong. Enforce the back-merge in CI, keep release branches
         short-lived, and delete them once tagged. Note also that the estate's newer backends
         (<span class="m">behealthy</span>, the commercial backend, <span class="m">qacr-research</span>) left
