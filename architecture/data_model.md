@@ -260,8 +260,10 @@ erDiagram
 `exam_frame`, `exam_trace`, `exam_result`, `provider_delivery_attempt`, `results_letter`,
 `device_install`, `audit_event`.
 
-No `order` table: §7.3 is answered — Order is out of scope this phase and, when it arrives, holds
-references outward to the exam and kit rather than being referenced by them.
+`order` is not a table yet: §7.3 is answered — Order is out of scope this phase and its shape is not
+designed. The ERD above carries `ORDER` only to mark the future direction of reference — when it
+arrives, it holds references outward to the exam and kit rather than being referenced by them, so it
+is not in the table list above or the milestone staging below.
 
 **The exam row** carries `id` (server-assigned UUID), `idempotency_key` (unique, from
 `clientCreatedAt` + `colorBoardId` + install reference), `client_exam_ref` (the device's own value,
@@ -412,7 +414,7 @@ Additive throughout; no restructuring between milestones.
 |---|---|---|
 | M1 — demo | `partner`, `config_set`, `exam`, `exam_event`, `exam_frame`, `exam_trace` | Result comes from a fixed demonstration payload (`FR-RES-006`), and the demonstration designation is server-side (`FR-CFG-004`). No patient, no session, no kit register. Per AD-20 the designation is a property of the `partner`, `exam.is_demonstration` is stamped from it at creation and never read from the request, and a demonstration exam writes **no outbox row** — so nothing it produces can leave the system. |
 | M2 — usability | `algorithm_version`, `algorithm_approval`, `exam_result` | `FR-ALG-004` version recording, and the validity plus reason-category contract (`FR-ALG-010`, `FR-ALG-012`). |
-| M3 — submission | `patient`, `order`, `auth_challenge`, `session`, `kit`, `content_set`, `provider_integration`, `provider_delivery_attempt`, `system_parameter` | Tenancy RLS switched on. `FR-CFG-003` and `FR-TXT-004` bindings become mandatory on the exam. |
+| M3 — submission | `patient`, `auth_challenge`, `session`, `kit`, `content_set`, `provider_integration`, `provider_delivery_attempt`, `system_parameter` | Tenancy RLS switched on. `FR-CFG-003` and `FR-TXT-004` bindings become mandatory on the exam. `order` is not staged here — its shape is undecided per §7.3. |
 | M4 — high priority | `pin_credential`, `results_centre_session`, `invite_code`, `audit_event` | `FR-SEC-013` audit channel, with a role that cannot read patient tables. |
 | M5 — future | `consent_ack`, `results_letter`, `device_install` | Plus relaxing `patient` to N-per-phone-number (`FR-AUT-011`), which is why the phone number should not be `patient`'s primary key at M3. Under AD-23 the phone number is not a query key on any read path either, so the relaxation is additive and no read changes with it. `consent_ack` stays M5 (§7.5) and gates nothing before then; when it is built it must be insert-only under AD-4 — an acknowledgement is a fact with a time, never a row to update. |
 

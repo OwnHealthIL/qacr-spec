@@ -1112,11 +1112,11 @@
             <td data-rev="r350" class="id">FR-PRT-001, 015 · FR-ACC-009 · FR-RES-001 · FR-COM-010</td></tr>
           <tr data-rev="r351">
             <td data-rev="r352" class="id">the provider</td>
-            <td data-rev="r353"><span class="m">testCompleted</span> is emitted with
-              <span class="m">healthy-partner-name</span> and <span class="m">healthy-entity-id</span>
-              headers — <span class="tag t-acr">≈ ACR</span> precisely the shape the estate's
-              <span class="m">send-results</span> already consumes, so the existing delivery estate stays
-              reachable later at no cost. <span class="m">partner-delivery-worker</span> resolves the adapter,
+            <td data-rev="r353"><span class="m">testCompleted</span> is emitted on QACR's own versioned
+              schema through the outbox — deliberately not ACR's <span class="m">healthy-partner-name</span> /
+              <span class="m">healthy-entity-id</span> header contract, per <span class="m">spine-decision-log.md</span>
+              L8.2. An adapter can translate if <span class="m">send-results</span> is ever wanted, rather than
+              QACR coupling to that wire contract directly. <span class="m">partner-delivery-worker</span> resolves the adapter,
               builds the payload, transmits, parses the acknowledgement. Credentials by secret name. Study
               sites resolve to the <strong>null adapter</strong>, so a clinical study needs no provider at all.</td>
             <td data-rev="r354"><span class="m">provider_delivery_attempt</span>, one append-only row per handshake,
