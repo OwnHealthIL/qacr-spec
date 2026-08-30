@@ -1,5 +1,21 @@
 [
  {
+  "ref": "Q-105",
+  "question": "No requirement demands that a test be prevented where the backend reports the user has no unused kit remaining",
+  "decision": "Settled at Rev 1.22. It needs no requirement of its own: it is one of the reasons the backend refuses a test, which FR-RDY-014 already covers. Guy asked instead that the list of those reasons exist and carry it, which is Appendix I",
+  "where_it_landed": "",
+  "closed_at": "",
+  "comments": ""
+ },
+ {
+  "ref": "Q-106",
+  "question": "Is a time source the user cannot alter needed for the 24-hour window between tests?",
+  "decision": "Settled at Rev 1.22. No. An alterable clock is accepted for that window and no requirement is wanted for it. Q-30 stays open for the timing windows inside a test, where RA 4.18 relies on the timers being enforceable",
+  "where_it_landed": "",
+  "closed_at": "",
+  "comments": ""
+ },
+ {
   "ref": "Q-101",
   "question": "The date-of-birth requirement says the user shall confirm, and configuration can suppress the step",
   "decision": "FR-AUT-012 stays as written. The suppression state is intended for demonstration partners, and the control is guarded by the product manager, who determines which state a partner receives — not by the software. Recorded because a reader who meets that state will ask how it squares with the requirement",

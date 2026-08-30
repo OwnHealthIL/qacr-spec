@@ -3,7 +3,9 @@
 One file per specified feature, written when a spec covering it arrives. It is what a developer
 opens at the start of a task.
 
-Currently: `E01`, eight features, from `QACR-APP-SPEC-01 Rev 1.2`.
+Currently: `E01` to `E04`, 25 features — from `QACR-APP-SPEC-01 Rev 1.2`, `SPEC-02 Rev 1.0`,
+`SPEC-03 Rev 1.1` and `SPEC-04 Rev 1.0`. Which brief each epic is built from is the `SPECS` table in
+`tools/build_feature_files.py`.
 
 ## How they are made
 
@@ -34,7 +36,9 @@ Only what the spec does not already say. It links to the spec; it never restates
 1. **Header** — feature id and title, epic, milestones, domains, and a link to the spec.
 2. **Spec disposition** — the brief's own line for this feature, verbatim.
 3. **Requirements owned** — by id, each with its milestone, its disposition from the spec
-   (departure with its `D-n` reference, as-is, open, or silent), and its evidence-row count.
+   (departure with its `D-n` reference, as-is, open, silent, or new — the brief specifies the
+   behaviour itself and there is no current behaviour to recreate, carried in the brief's own
+   words), and its evidence-row count.
    Never the requirement text; `product/` holds the current wording.
 4. **What the vault records about the code** — the rows from `evidence/behaviour.tsv`, grouped by
    product, each with its citation. A requirement with no rows reads `No rows recorded.`

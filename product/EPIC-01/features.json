@@ -141,7 +141,7 @@
   "title": "Run-time configuration",
   "epic": "E01",
   "milestones": [
-   "M1",
+   "M2",
    "M3",
    "M5"
   ],
@@ -151,9 +151,9 @@
    "Backend"
   ],
   "requirements": [
-   "FR-CFG-004",
    "FR-CFG-001",
    "FR-CFG-002",
+   "FR-CFG-004",
    "FR-CFG-003",
    "FR-CFG-006",
    "FR-CFG-008",
@@ -317,7 +317,8 @@
   "title": "QR capture and kit validation",
   "epic": "E03",
   "milestones": [
-   "M3"
+   "M3",
+   "M5"
   ],
   "domains": [
    "iOS",
@@ -327,7 +328,9 @@
   "requirements": [
    "FR-KIT-001",
    "FR-KIT-002",
-   "FR-KIT-003"
+   "FR-KIT-003",
+   "FR-KIT-008",
+   "FR-KIT-009"
   ]
  },
  {
@@ -346,7 +349,8 @@
   "requirements": [
    "FR-KIT-004",
    "FR-KIT-007",
-   "FR-KIT-005"
+   "FR-KIT-005",
+   "FR-KIT-010"
   ]
  },
  {
@@ -382,7 +386,8 @@
   "requirements": [
    "FR-FLW-002",
    "FR-FLW-003",
-   "FR-FLW-008"
+   "FR-FLW-008",
+   "FR-FLW-010"
   ]
  },
  {
@@ -399,7 +404,8 @@
   "requirements": [
    "FR-STA-002",
    "FR-STA-003",
-   "FR-STA-005"
+   "FR-STA-005",
+   "FR-STA-012"
   ]
  },
  {

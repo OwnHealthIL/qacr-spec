@@ -900,7 +900,7 @@
   "text": "The software shall retrieve its configuration set from the backend before a test may be started. The set comprises every server-supplied value that governs the behaviour of the application, including those resolved for the application and for the partner associated with the authenticated user. Where retrieval has not yet completed, the software shall indicate that it is not yet ready, and shall not present the condition as a failure.",
   "section_number": "24",
   "section_name": "Application Configuration",
-  "milestone": "3",
+  "milestone": "2",
   "source_refs": [
    "Config register"
   ],
@@ -914,7 +914,7 @@
   "text": "If the configuration set cannot be retrieved, or fails validation against the defined schema, the software shall prevent a test from being started and shall not substitute a configuration set embedded in the application build. Where a retrieved and valid set does not supply an individual value, the software shall apply the default defined in the application for that value.",
   "section_number": "24",
   "section_name": "Application Configuration",
-  "milestone": "3",
+  "milestone": "2",
   "source_refs": [
    "Config register",
    "derived from RA 4.18",
@@ -937,7 +937,7 @@
    "formerly BL-33",
    "restored to its original identifier"
   ],
-  "note": "Brought into scope at Guy's direction, formerly BL-33. A completed test carries the configuration it ran under, so a test's configuration can be reconstructed after the fact. This is the earliest milestone it can hold: it depends on the configuration set that FR-CFG-001 requires at milestone 3. Closes Q-32.",
+  "note": "Brought into scope at Guy's direction, formerly BL-33. A completed test carries the configuration it ran under, so a test's configuration can be reconstructed after the fact. It depends on the configuration set that FR-CFG-001 requires, which moved to milestone 2 at the SPEC-04 review; this stays at 3 because recording the set with the test record is a submission obligation rather than something the demonstration or the usability rehearsal needs. Closes Q-32.",
   "feature": "F01.9",
   "epic": "E01",
   "sha256": "cb4893f720e04e66fbd4d4bb699f28732fd105135d7a48f0d3884067691b4091"
@@ -947,7 +947,7 @@
   "text": "Demonstration and mock result behaviour shall be enforced server-side. The backend shall not return a demonstration or mock result for a partner that is not designated as a demonstration partner, irrespective of any value supplied by the application.",
   "section_number": "24",
   "section_name": "Application Configuration",
-  "milestone": "1",
+  "milestone": "2",
   "source_refs": [
    "Config register",
    "RA 4.21",
@@ -1325,7 +1325,7 @@
  },
  {
   "id": "FR-FLW-004",
-  "text": "The software shall display only the instruction applicable to the current step, and shall not present instructions for steps that are not yet permitted.",
+  "text": "The software shall display only the instruction applicable to the current step, and shall not present instructions for steps that are not yet permitted. The instructions of completed steps shall remain available to the user while the flow continues, and the view shall follow each element of the flow as it is presented.",
   "section_number": "9",
   "section_name": "Guided Test Flow — Structure and Behaviour",
   "milestone": "1",
@@ -1335,7 +1335,7 @@
   "note": "",
   "feature": "F04.1",
   "epic": "E04",
-  "sha256": "3ccba8143bb1c3cf512cbe4baeddc19f54c167f69e3ff98243c1868025e2960d"
+  "sha256": "7879c70f80d2a12155f3642f39eea77af549330890b83631ad327d65e462bc28"
  },
  {
   "id": "FR-FLW-005",
@@ -1369,31 +1369,32 @@
  },
  {
   "id": "FR-FLW-007",
-  "text": "Where the application is in demonstration mode, it shall provide a means of advancing directly to a chosen step of the guided flow. That means shall be reachable only by a deliberate gesture that a user would not perform in the course of taking a test, and shall not be reachable when the application is not in demonstration mode.",
+  "text": "Where the application is in demonstration mode, it shall provide a means of advancing directly to a chosen section of the guided flow, and a means of advancing to the end of the section in progress. Those means may advance past anything the flow presents, including confirmation steps and time-dependent stages, and shall be reachable only by a deliberate gesture that a user would not perform in the course of taking a test, and not at all when the application is not in demonstration mode.",
   "section_number": "9",
   "section_name": "Guided Test Flow — Structure and Behaviour",
   "milestone": "1",
   "source_refs": [
    "Review comment"
   ],
-  "note": "Added at review for the milestone-1 demonstration. The gesture is to be specified; a sustained press on the start control or a device shake were the two suggested. Demonstration mode is a state the backend returns before a test starts rather than a separate build, so the gate is a run-time check and not a compile-time one. Complements FR-RES-006, which governs what may be presented as a result in that mode",
+  "note": "Added at review for the milestone-1 demonstration. The gesture is to be specified; a sustained press on the start control or a device shake were the two suggested. At milestone 1 demonstration mode may be determined in the build; from milestone 2 it is determined by the configuration set of FR-CFG-001, which by then carries a real test partner as well. Complements FR-RES-006, which governs what may be presented as a result in that mode",
   "feature": "F04.6",
   "epic": "E04",
-  "sha256": "8cc5e1bea5df0c6ed33c044387f259902b73cb361e022090a773c62be49234e3"
+  "sha256": "5261fc04f9a0d9a139638a2e88c44c581d916285cd354060f4f0646190606106"
  },
  {
   "id": "FR-FLW-008",
-  "text": "The software shall present the content of the instructional flow in spoken form as well as on screen, using recorded audio rather than synthesised speech, and shall provide a control by which the user can silence and restore it.",
+  "text": "The software shall present the content of the instructional flow in spoken form as well as on screen, using recorded audio rather than synthesised speech, and shall provide a control by which the user can silence and restore it. Where the user silences it, the flow shall remain silent for the remainder of that test. The spoken flow and any demonstration in progress shall stop when the user confirms a step or the application ceases to be in the foreground, and neither shall resume without the user acting.",
   "section_number": "9",
   "section_name": "Guided Test Flow — Structure and Behaviour",
   "milestone": "1",
   "source_refs": [
-   "Review comment"
+   "Review comment",
+   "amended at the SPEC-04 review"
   ],
   "note": "The spoken voice is a persona; naming it is a content decision under FR-TXT-004. Because the audio is recorded rather than generated from the displayed text, the spoken and written wording are separate artefacts that have to be released together, which is why FR-TXT-004 covers both. A further language means new recordings, not only new text",
   "feature": "F04.2",
   "epic": "E04",
-  "sha256": "49bcc52c08eca7b2a94730b377836d56b22e13b05df225852f3079f0768d287b"
+  "sha256": "2ec05fb27f962c68e54a7cf58e087ad461b7a9b3ae7c2581dea84310671ba1df"
  },
  {
   "id": "FR-FLW-009",
@@ -1409,6 +1410,20 @@
   "feature": "F04.8",
   "epic": "E04",
   "sha256": "afea8d100f16f1e2cce8b8073e8cc73dd8be323dc05305c01900a986c51b8ec7"
+ },
+ {
+  "id": "FR-FLW-010",
+  "text": "Each element of the instructional flow shall be presented after a defined interval, and where an element is accompanied by recorded audio that interval shall be the duration of that audio. The intervals shall be the same on every platform.",
+  "section_number": "9",
+  "section_name": "Guided Test Flow — Structure and Behaviour",
+  "milestone": "1",
+  "source_refs": [
+   "SPEC-04 review"
+  ],
+  "note": "The pace of the flow is most of what a user experiences during a waiting stage, and nothing previously stated it, so each platform held whatever value it happened to hold. The interval belongs to the flow engine and applies whatever the content is, which is why it is stated here rather than deferred to the content set of FR-TXT-004. It is also what makes a permission prompt follow the explanation of it rather than a fixed delay",
+  "feature": "F04.2",
+  "epic": "E04",
+  "sha256": "f512c99997d63b666a34cd4f8bc0c1f504a1978e48484e0253cd04788f3987fd"
  },
  {
   "id": "FR-IMG-001",
@@ -1640,7 +1655,7 @@
  },
  {
   "id": "FR-IMG-022",
-  "text": "During a timed waiting period of the test flow the software shall allow the user to start a practice scan from the instructional flow. A practice scan shall behave as a scan of the Test Board does, including the QCR stage, the IVTS boundary detection, the QR-code validation and the guidance, shall not apply the scanning-window limit, shall end when the waiting period during which it was started ends, shall not register the kit identifier as used, and shall neither produce a result nor contribute any image to the test record.",
+  "text": "During a timed waiting period of the test flow the software shall present a practice scan as a step of the instructional flow, which the user passes through in order to continue. A practice scan shall behave as a scan of the Test Board does, including the QCR stage, the IVTS boundary detection, the QR-code validation and the guidance, shall not apply the scanning-window limit, shall end on a limit of its own rather than on the end of the waiting period in which it began, shall not register the kit identifier as used, and shall neither produce a result nor contribute any image to the test record.",
   "section_number": "13",
   "section_name": "Image Capture and Validation (IVTS)",
   "milestone": "1",
@@ -1651,7 +1666,7 @@
   "note": "It exists so that a user meets the scanning interaction, and any difficulty with it, while there is still time to resolve it rather than inside the scanning window. Offered during the first timed stage, where the waiting period is longest. The kit checks run read-only here, so a user who practises on the kit they are about to test with cannot spend it. Validation against the identifier template, FR-KIT-003, arrives at milestone 3. The used-kit check, FR-KIT-004, arrives at milestone 3 as well. Until then a practice scan exercises framing and guidance only",
   "feature": "F04.7",
   "epic": "E04",
-  "sha256": "d6426a914ccac98e5fc08d36f816a3789112f49c420e1fda87b1071372c35cbc"
+  "sha256": "4e42b31f9271ba1f03dd763af532d7f441529bd3947acb5f095137520d393750"
  },
  {
   "id": "FR-IMG-023",
@@ -1766,17 +1781,62 @@
  },
  {
   "id": "FR-KIT-007",
-  "text": "Where the user attempts to start a test within 24 hours after a previous test has completed, whether that test produced a result or was invalidated, the software shall present an alert stating that a new kit is required and shall require the user to confirm that they have one before the test flow begins.",
+  "text": "Where the user attempts to start a test within 24 hours after a previous test has completed, whether that test produced a result or was invalidated, the software shall present a message appropriate to the outcome of that previous test and shall require the user to confirm that they hold a new kit before the test flow begins. The message shall be presented on every such attempt until the user confirms it.",
   "section_number": "8",
   "section_name": "Kit Identification and Validation",
   "milestone": "3",
   "source_refs": [
    "RA 7.1"
   ],
-  "note": "Window confirmed at 24 hours and held as a configurable value. Complements FR-KIT-004, which detects reuse of an already-used kit only at the point of scanning",
+  "note": "Window confirmed at 24 hours and held as a configurable value. The window excludes its endpoint: an attempt at exactly 24 hours is not within it. Amended at the SPEC-04 review so that the message is presented on every attempt until it is confirmed rather than once. Guy also offered that the window may close on confirmation; that is deliberately not required here, because SPEC-03 settled that one acknowledgement stands until the next test completes, and the two end conditions differ with no observable difference to the user. Amended at the SPEC-03 review, which established that the product presents a different message according to whether the previous test produced a result or was invalidated, and that a single alert stating that a new kit is required does not describe it. Which cases exist is the product's, not this requirement's. Complements FR-KIT-004, which detects reuse of an already-used kit only at the point of scanning",
   "feature": "F03.2",
   "epic": "E03",
-  "sha256": "134fadbc302e9b031023928e48beb3eca5a81c51b5cbcb41f156d58e16b03297"
+  "sha256": "796f6a780a22000506fcdf7b2a24c83d5a2dbb0087d87ed5681a637e641a3523"
+ },
+ {
+  "id": "FR-KIT-008",
+  "text": "Where the kit-identifier check is refused for a reason the software cannot attribute to a condition it recognises, the software shall invalidate the test and shall present a message that does not state a specific reason.",
+  "section_number": "8",
+  "section_name": "Kit Identification and Validation",
+  "milestone": "3",
+  "source_refs": [
+   "Product requirement",
+   "SPEC-03"
+  ],
+  "note": "Added at the SPEC-03 review. FR-ALG-012 does this job for an invalid test and FR-RDY-014 for a refusal before a test starts; the kit-identifier check had no equivalent, and the product asserts an already-used kit for any refusal it cannot classify, which may be untrue and routes the user to the wrong support conversation. The reasons themselves are the backend contract and are not enumerated here",
+  "feature": "F03.1",
+  "epic": "E03",
+  "sha256": "121627788bcb19f8d6ad145da9038e683126a5e73933c3848d9c8de657ad4b5f"
+ },
+ {
+  "id": "FR-KIT-009",
+  "text": "Where the software cannot read the kit identifier automatically, it shall offer the user the means to present the QR code for reading, and shall invalidate the test only once that has also failed.",
+  "section_number": "8",
+  "section_name": "Kit Identification and Validation",
+  "milestone": "5",
+  "source_refs": [
+   "Product requirement",
+   "SPEC-03"
+  ],
+  "note": "Future development. Added at the SPEC-03 review as a requirement of its own so that the automatic reading of FR-KIT-001 stays at milestone 3 and the manual route does not. Until this is implemented the automatic reads are the only ones, and a test with no readable identifier is invalidated after the scan",
+  "feature": "F03.1",
+  "epic": "E03",
+  "sha256": "8a97c46ba9f4d890ff985e1e09729e9062891a8e9a2e8360eacfb5da3a79f117"
+ },
+ {
+  "id": "FR-KIT-010",
+  "text": "The backend shall be able to refuse a test attempted within a defined minimum interval of a previous test, and the software shall present the refusal.",
+  "section_number": "8",
+  "section_name": "Kit Identification and Validation",
+  "milestone": "5",
+  "source_refs": [
+   "Product requirement",
+   "SPEC-03"
+  ],
+  "note": "Future development. Distinct from FR-KIT-007, which asks the user to confirm and permits them to continue: this refuses outright. Added at the SPEC-03 review so that a capability the backend already has is in the record rather than reached by configuration alone",
+  "feature": "F03.2",
+  "epic": "E03",
+  "sha256": "d28b5adcbce6692e117b00fd11e693a5104bc5653e457c573b698c9bdd8156fa"
  },
  {
   "id": "FR-LCM-002",
@@ -1974,7 +2034,7 @@
  },
  {
   "id": "FR-LCM-018",
-  "text": "A change to any configuration value registered in Appendix H as realising a requirement shall be assessed under the established change-control and risk-management processes before it is applied to the production environment.",
+  "text": "A change to any configuration value recorded in the Application Configuration Register as realising a requirement shall be assessed under the established change-control and risk-management processes before it is applied to the production environment.",
   "section_number": "25",
   "section_name": "Software Lifecycle and Verification",
   "milestone": "5",
@@ -1985,7 +2045,7 @@
   "note": "Future development, formerly BL-15.",
   "feature": "F01.9",
   "epic": "E01",
-  "sha256": "038c6451cad0cb05c963ce3bab1d81238a85dadfdd6999fd110962cbac289907"
+  "sha256": "4d1fc2b7c571ca15337f0b69ea269bcbd8fe0bb7247c7252acd74ebd58bc0212"
  },
  {
   "id": "FR-PLT-001",
@@ -2511,7 +2571,7 @@
    "Review comment",
    "QACR-APP-SPEC-01"
   ],
-  "note": "Added at review. The backend answers the start-up exchange with at most one reason why this user may not test, and each reason needs its own message rather than a generic failure. The reasons themselves are the backend contract and are not enumerated here; SPEC-01 records the set currently returned. Complements FR-CFG-006, which requires a reason to be given without saying what the reasons are",
+  "note": "Added at review. The backend answers the start-up exchange with at most one reason why this user may not test, and each reason needs its own message rather than a generic failure. The reasons themselves are the backend contract and are not enumerated here; Appendix I records the set the current product raises. Complements FR-CFG-006, which requires a reason to be given without saying what the reasons are",
   "feature": "F01.5",
   "epic": "E01",
   "sha256": "85a6a9ace3222740c2c65766d5de5e8447fd9dded30980ff8874a4f4bbc2637d"
@@ -2541,7 +2601,7 @@
   "source_refs": [
    "RA 7.17"
   ],
-  "note": "Presentation is fixed: the ratio only, as a value and a category. Unlinked from resultsType and staticData.showAcrResultOnly at review. Presentation of the albumin and creatinine values is deferred; see Appendix E",
+  "note": "Presentation is fixed: the ratio only, as a value and a category. Unlinked from resultsType and staticData.showAcrResultOnly at review. Presentation of the albumin and creatinine values is future development; see FR-RES-007",
   "feature": "F09.1",
   "epic": "E09",
   "sha256": "314c065bffa104a48d807e26580d2b029a357364130cfc39c4c29133353cc057"
@@ -2593,7 +2653,7 @@
  },
  {
   "id": "FR-RES-006",
-  "text": "Where the backend has placed the application in demonstration mode for the test being performed, the software shall present a result drawn from a fixed demonstration payload rather than from an analysed test, shall not present that result as a clinical result, and shall make the demonstration state evident wherever that result is presented.",
+  "text": "Where the application is in demonstration mode for the test being performed, the software shall present a result drawn from a fixed demonstration payload rather than from an analysed test, shall not present that result as a clinical result, and shall make the demonstration state evident wherever that result is presented.",
   "section_number": "17",
   "section_name": "Result Presentation",
   "milestone": "1",
@@ -2604,7 +2664,7 @@
   "note": "Added at review so that milestone 1 can present a result before any of the analysis pipeline exists. Demonstration mode is a state the backend returns with the configuration before a test starts, not a separate build, so the same artefact that ships to patients can be placed in it — which is why the evidence of the state must be visible to the user and why FR-CFG-004, server-side enforcement of demonstration behaviour, matters more than its deferral suggests. In demonstration mode no algorithm version is exercised, which is why quantitation and the approved-version mapping are not needed at milestone 1",
   "feature": "F09.4",
   "epic": "E09",
-  "sha256": "15a25f6c6af5c3ed84feb2cc25fd38f4b32628aaabca76df07e5f10524dfe8e9"
+  "sha256": "51840f83d94eeafff5743442db7359552f80ac1d4e7391fdc9faf90daf42b920"
  },
  {
   "id": "FR-RES-007",
@@ -2950,7 +3010,7 @@
   "source_refs": [
    "Review item R-11"
   ],
-  "note": "Determines whether the deferred chat and consultation features in Appendix E are in scope for a given partner",
+  "note": "Determines whether the future-development chat and consultation features, FR-SHR-013 and FR-SHR-014, are in scope for a given partner",
   "feature": "F11.3",
   "epic": "E11",
   "sha256": "8aeee1a41f8b81ba2459c85a066da87a739b4f2a192a81f78c7a254937cdb644"
@@ -3071,7 +3131,7 @@
  },
  {
   "id": "FR-STA-002",
-  "text": "If the test flow is interrupted by a transient event such as an incoming call, message, notification or screen lock, the software shall remain active in the background without terminating.",
+  "text": "If the test flow is interrupted by a transient event such as an incoming call, message, notification or screen lock, the software shall remain active in the background without terminating. While the application is not in the foreground the software shall not deliver instructional flow content, and on return shall resume delivery from the point the user had reached.",
   "section_number": "11",
   "section_name": "Test State Retention, Interruption and Cancellation",
   "milestone": "1",
@@ -3082,11 +3142,11 @@
   "note": "",
   "feature": "F04.3",
   "epic": "E04",
-  "sha256": "e8610c8c6328857981967beda6a64c7ecb17970973c9998525dac8c6f9a314d3"
+  "sha256": "e7507ef10659459adfd526f5e84b145a805e42f95c31b0a036dda5328600f7be"
  },
  {
   "id": "FR-STA-003",
-  "text": "The software shall persistently retain the current test state throughout the test flow, including the completed steps and all recorded stage start times. If the user navigates away from the application without terminating it, the software shall permit the test flow to be resumed on return at the step that was active, shall make the applicable instructions and demonstration available for replay, and shall not apply any inactivity timeout while a test is active.",
+  "text": "The software shall persistently retain the current test state throughout the test flow, including the completed steps and all recorded stage start times. If the user navigates away from the application without terminating it, the software shall permit the test flow to be resumed on return at the step that was active, shall make the applicable instructions and demonstration available for replay, and shall not apply any inactivity timeout while a test is active. A test becomes active when the user activates the control that starts it. Where no test is active, the software shall return the user to the start-up state after the applicable period of inactivity, discarding any instructional flow not yet begun.",
   "section_number": "11",
   "section_name": "Test State Retention, Interruption and Cancellation",
   "milestone": "1",
@@ -3101,7 +3161,7 @@
   "note": "Covers what was previously stated separately in FR-STA-001 and FR-STA-004",
   "feature": "F04.3",
   "epic": "E04",
-  "sha256": "4d9bb8e2a5214713f4729da6ef74ec9614933ba3f86e60214da965256545fed0"
+  "sha256": "ede2ced62e03ceb26618a6538fc55155918dc1a13eba644c3d2e326e82a5fe6e"
  },
  {
   "id": "FR-STA-005",
@@ -3133,7 +3193,7 @@
  },
  {
   "id": "FR-STA-007",
-  "text": "When the application is reopened following termination during an active test, the software shall identify the incomplete test, invalidate it, and inform the user that a new test must be performed using a new kit.",
+  "text": "When the application is reopened following termination during an active test, the software shall identify the incomplete test, invalidate it, and inform the user that a new test must be performed using a new kit. A test whose capture completed and which awaits only transmission is not an incomplete test for this purpose.",
   "section_number": "11",
   "section_name": "Test State Retention, Interruption and Cancellation",
   "milestone": "1",
@@ -3143,7 +3203,7 @@
   "note": "",
   "feature": "F04.4",
   "epic": "E04",
-  "sha256": "cd99c7573a186129a43cdfeef7eaaf29c378e720aa195b73d4cc445131e51c66"
+  "sha256": "f1c28619a7160bde1f4dd070f14cf6809a9999564d88731f072564de5b576822"
  },
  {
   "id": "FR-STA-008",
@@ -3188,6 +3248,20 @@
   "feature": "F04.5",
   "epic": "E04",
   "sha256": "9291fc2e64bfe37852ebd1e42a0b2ba67a6b889b96545a87295211357d01bf54"
+ },
+ {
+  "id": "FR-STA-012",
+  "text": "The software shall prevent the device from dimming or locking the screen while the instructional flow is displayed.",
+  "section_number": "11",
+  "section_name": "Test State Retention, Interruption and Cancellation",
+  "milestone": "1",
+  "source_refs": [
+   "SPEC-04 review"
+  ],
+  "note": "Prevention rather than tolerance: FR-STA-002 covers surviving a lock the user causes, and nothing previously required the device to be kept awake. A screen that darkens in the middle of a timed stage is the interruption most likely to occur, and holding it awake is also part of what the battery threshold of FR-RDY-007 is measured against",
+  "feature": "F04.3",
+  "epic": "E04",
+  "sha256": "ee60e3ecad1b91c5972d1991b4380e7d459d2dee990b0aca535f1b9cc5ec517d"
  },
  {
   "id": "FR-SUP-001",
@@ -3363,7 +3437,7 @@
  },
  {
   "id": "FR-TIM-008",
-  "text": "The software shall prevent progression past any time-dependent stage before the applicable minimum time has elapsed, including preventing the Test Board from being scanned before the required colour-evolution period has elapsed.",
+  "text": "The software shall prevent progression past any time-dependent stage before the applicable minimum time has elapsed, including preventing the Test Board from being scanned before the required colour-evolution period has elapsed. This shall not apply where the application is in demonstration mode, which produces no result for a patient.",
   "section_number": "12",
   "section_name": "Timing Control",
   "milestone": "1",
@@ -3374,7 +3448,7 @@
   "note": "Also covers FR-TIM-010",
   "feature": "F05.4",
   "epic": "E05",
-  "sha256": "a87287de695f869a34bd8aa050668cd6efb3943a0078f2b313e866fb4a5803e6"
+  "sha256": "a8b8abd5b5ad5417c7a7eb54ebdd9754374a2e4bb1da6dfb933255eef9a16c41"
  },
  {
   "id": "FR-TIM-009",

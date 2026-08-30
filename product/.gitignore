@@ -1,0 +1,22 @@
+# Everything below stays on the product manager's disk and is never pushed.
+# Not tracked is not the same as not present: these directories sit right here in
+# the working directory, they are simply not the development team's business and
+# some of them are not for a public repository at all.
+
+node_modules
+node_modules/
+
+# The archive. build-all.js moves a superseded revision here on every rebuild, and
+# git history is the archive that ships — a Rev1.22 .docx beside Rev1.23 has no
+# answer to "which revision is this".
+Previous revisions/
+
+# Source material and reference: the Risk Analysis, both SRSs, the threat analysis,
+# the product glossary, the Minuteful copy set and screenshots, the content project,
+# the superseded spreadsheets.
+local/
+
+# Word and Excel lock files
+~$*
+
+.DS_Store

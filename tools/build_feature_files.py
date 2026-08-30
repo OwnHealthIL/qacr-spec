@@ -170,6 +170,111 @@ SPECS = {
             },
         },
     },
+    "SPEC-03": {
+        "id": "QACR-APP-SPEC-03",
+        "file": "QACR-APP-SPEC-03 Rev1.1.md",
+        "revision": "Rev 1.1",
+        "traces": {"FR-01": "1.24", "EPIC-01": "1.18"},
+        # §2 Departures, ten rows, keyed by the requirement each names as its
+        # driver. Three requirements drive more than one row — FR-KIT-005 D5 and
+        # D9, FR-KIT-007 D6, D9 and D10, FR-KIT-008 D3 and D4 — so a value may
+        # name several. Four rows also name five drivers no E03 feature owns —
+        # D2 FR-PLT-006, D7 FR-PRT-015, D8 FR-RDY-014 and FR-AUT-020, D10
+        # FR-LCM-006 — which therefore render nowhere here and are recorded only
+        # in this comment.
+        "departures": {
+            "FR-KIT-003": "departure D2",
+            "FR-KIT-005": "departure D5, D9",
+            "FR-KIT-007": "departure D6, D9, D10",
+            "FR-KIT-008": "departure D3, D4",
+            "FR-KIT-009": "departure D1",
+        },
+        # §5 Traceability. Each cell lists its M5 requirements after a "future
+        # development at M5:" run-in; they are covered all the same, so `covers`
+        # carries every id the cell names. U1 is the kit-identifier template
+        # (register Q-104), open at the feature level as the brief states it.
+        "features": {
+            "F03.1": {
+                "disposition": "as-is except D1 (M5), D2, D3, D4 · U1 open",
+                "covers": ["FR-KIT-001", "FR-KIT-002", "FR-KIT-003",
+                           "FR-KIT-008", "FR-KIT-009"],
+            },
+            "F03.2": {
+                "disposition": "as-is except D5 (M5), D6, D7, D8, D9 (M5), D10",
+                "covers": ["FR-KIT-004", "FR-KIT-007", "FR-KIT-005",
+                           "FR-KIT-010"],
+            },
+        },
+    },
+    "SPEC-04": {
+        "id": "QACR-APP-SPEC-04",
+        "file": "QACR-APP-SPEC-04 Rev1.0.md",
+        "revision": "Rev 1.0",
+        "traces": {"FR-01": "1.24", "EPIC-01": "1.18"},
+        # §2 Departures, twelve rows, keyed by the requirement each names as its
+        # driver. Three requirements drive more than one row — FR-FLW-007 D9 and
+        # D11, FR-STA-003 D4 and D7, FR-STA-008 D4 and D5 — and D1 names two
+        # drivers, FR-FLW-001 and FR-FLW-005. Two rows name a driver no E04
+        # feature owns — D2 FR-RDY-009, D8 FR-TIM-012 — which render nowhere
+        # here and are recorded only in this comment.
+        #
+        # F04.7 is the one feature with no predecessor, and §6 gives its single
+        # requirement the disposition "New — section 3" rather than any of the
+        # four this table normally carries. Left to the default it would read
+        # as-is, asserting a current behaviour the brief says does not exist,
+        # so the brief's own wording is carried through the per-requirement map.
+        "departures": {
+            "FR-FLW-001": "departure D1",
+            "FR-FLW-002": "departure D10",
+            "FR-FLW-004": "departure D3",
+            "FR-FLW-005": "departure D1",
+            "FR-FLW-007": "departure D9, D11",
+            "FR-FLW-008": "departure D12",
+            "FR-STA-003": "departure D4, D7",
+            "FR-STA-005": "departure D6",
+            "FR-STA-007": "departure D8",
+            "FR-STA-008": "departure D4, D5",
+            "FR-IMG-022": "New — section 3",
+        },
+        # §6 Traceability. F04.8 is named in the header as not covered — it is
+        # SPEC-05's — so it has no entry here and gets no file from this brief.
+        # The "(M3)" the cells append to some ids is the milestone, which the
+        # file takes from requirements.json; the emphasis on departure ids is
+        # table formatting. Neither is carried.
+        "features": {
+            "F04.1": {
+                "disposition": "as-is except D1, D2, D3, D5 · U3 open",
+                "covers": ["FR-FLW-001", "FR-FLW-004", "FR-FLW-005",
+                           "FR-FLW-006"],
+            },
+            "F04.2": {
+                "disposition": "as-is except D3, D10, D12",
+                "covers": ["FR-FLW-002", "FR-FLW-003", "FR-FLW-008",
+                           "FR-FLW-010"],
+            },
+            "F04.3": {
+                "disposition": "as-is except D4, D6, D7 · U2 open",
+                "covers": ["FR-STA-002", "FR-STA-003", "FR-STA-005",
+                           "FR-STA-012"],
+            },
+            "F04.4": {
+                "disposition": "as-is except D8",
+                "covers": ["FR-STA-006", "FR-STA-007"],
+            },
+            "F04.5": {
+                "disposition": "as-is except D4, D5",
+                "covers": ["FR-STA-008", "FR-STA-009", "FR-STA-010"],
+            },
+            "F04.6": {
+                "disposition": "as-is except D9",
+                "covers": ["FR-FLW-007"],
+            },
+            "F04.7": {
+                "disposition": "New — section 3 · U1 open",
+                "covers": ["FR-IMG-022"],
+            },
+        },
+    },
 }
 
 # The §5 cells read "as-is except **D1** · U1 open" and "as-is except **D2**".
