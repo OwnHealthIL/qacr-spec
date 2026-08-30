@@ -96,7 +96,8 @@ product/FR-01/requirements.json      the body
 product/FR-01/decisions.json         Appendix G, the Decision Log — closed Q-nn
 product/FR-01/register.json          the Review Register — open Q-nn, in six groups
 product/FR-01/appendices.json        Appendix D.1–D.4, configurations, parameters,
-                                     and the Priority Summary as data
+                                     the Priority Summary as data, and since Rev 1.23
+                                     Appendix I's conditions that refuse a test, as `refusals`
 product/EPIC-01/features.json        the epic map
 product/EPIC-01/roadmap.json         the section 3 milestone roadmap, persisted so a
                                      change to it can be reported and not just checked

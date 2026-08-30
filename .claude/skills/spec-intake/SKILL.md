@@ -34,7 +34,7 @@ From its header and traceability table, take: the features it covers, and for ea
 those features, the disposition the spec gives it. Copy the disposition wording from the spec —
 do not restate it.
 
-Four dispositions only:
+Five dispositions only:
 
 | | |
 |---|---|
@@ -42,6 +42,7 @@ Four dispositions only:
 | `departure D-n` | the spec states QACR differs. Use the spec's own reference |
 | `open` | the spec names an undecided value or question |
 | `silent` | the spec says nothing about this requirement |
+| `new` | the spec specifies the behaviour itself; there is no current behaviour to recreate. Carried in the brief's own words — SPEC-04 gives F04.7 `New — section 3` — through the entry's per-requirement map, so the cell never defaults to `as-is` |
 
 `silent` is assigned by set difference, not by judgement: the requirement is in `features.json`
 for a covered feature and does not appear in the spec.
@@ -156,7 +157,7 @@ parentheses, as `FR-01 Rev 1.19 (brief cites 1.20)`.
 | requirement list and its order | `features.json`, in its own order |
 | milestone per requirement | `requirements.json`, rendered `M<n>` — the file stores `1`, the column shows `M1` |
 | feature-level spec disposition | the `SPECS` entry, verbatim from the brief. The line is omitted when the brief gives none |
-| disposition | the `SPECS` entry: its `departures` map, else `as-is`, else `silent` by set difference |
+| disposition | the `SPECS` entry: its `departures` map (which also carries a `new` wording where the brief gives one), else `as-is`, else `silent` by set difference |
 | header link | the `SPECS` entry |
 | provenance line | the `SPECS` entry for the brief's id and revision; the `Rev<n>.docx` filenames in `product/FR-01` and `product/EPIC-01` for the revision actually rendered |
 | *Named by this spec, absent from `product/`* | the `SPECS` entry's `pending` map; the section is omitted where it declares none |

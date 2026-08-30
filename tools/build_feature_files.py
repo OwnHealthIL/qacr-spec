@@ -178,8 +178,8 @@ SPECS = {
         # §2 Departures, ten rows, keyed by the requirement each names as its
         # driver. Three requirements drive more than one row — FR-KIT-005 D5 and
         # D9, FR-KIT-007 D6, D9 and D10, FR-KIT-008 D3 and D4 — so a value may
-        # name several. Five rows also name a driver no E03 feature owns — D2
-        # FR-PLT-006, D7 FR-PRT-015, D8 FR-RDY-014 and FR-AUT-020, D10
+        # name several. Four rows also name five drivers no E03 feature owns —
+        # D2 FR-PLT-006, D7 FR-PRT-015, D8 FR-RDY-014 and FR-AUT-020, D10
         # FR-LCM-006 — which therefore render nowhere here and are recorded only
         # in this comment.
         "departures": {

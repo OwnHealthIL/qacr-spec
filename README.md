@@ -23,7 +23,7 @@ qacr-spec/
 │   │                         decisions.json, register.json, appendices.json
 │   ├── EPIC-01/              QACR-APP-EPIC-01 Rev1.18.docx + Board.html + features.json
 │   └── specs/                QACR-APP-SPEC-nn briefs, as the PM writes them
-├── features/                 one file per specified feature — E01 and E02
+├── features/                 one file per specified feature — E01 to E04
 ├── evidence/                 what the code does today, cited — 2,855 rows over 83 requirements
 ├── decisions/                questions THIS repository raises against a spec — empty
 ├── tools/                    the parser, the revision differ, the citation checker,
@@ -34,8 +34,8 @@ qacr-spec/
 
 `evidence/behaviour.tsv` covers 83 of 250 requirements — the ones the vault carries evidence for.
 `evidence/coverage.tsv` records the other 167 as `no-evidence-found`, which means the vault has
-none, not that the code does nothing. SPEC-01 and SPEC-02 have been published, so `features/` holds
-E01 and E02.
+none, not that the code does nothing. SPEC-01 to SPEC-04 have been published, so `features/` holds
+E01 to E04 — 25 feature files.
 
 `decisions/` is empty because ingesting a spec has not yet raised a question — which is **not** the
 same as Product having none. The FR document carries its own Decision Log (62 closed) and Review
