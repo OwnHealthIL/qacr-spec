@@ -170,6 +170,42 @@ SPECS = {
             },
         },
     },
+    "SPEC-03": {
+        "id": "QACR-APP-SPEC-03",
+        "file": "QACR-APP-SPEC-03 Rev1.1.md",
+        "revision": "Rev 1.1",
+        "traces": {"FR-01": "1.24", "EPIC-01": "1.18"},
+        # §2 Departures, ten rows, keyed by the requirement each names as its
+        # driver. Three requirements drive more than one row — FR-KIT-005 D5 and
+        # D9, FR-KIT-007 D6, D9 and D10, FR-KIT-008 D3 and D4 — so a value may
+        # name several. Five rows also name a driver no E03 feature owns — D2
+        # FR-PLT-006, D7 FR-PRT-015, D8 FR-RDY-014 and FR-AUT-020, D10
+        # FR-LCM-006 — which therefore render nowhere here and are recorded only
+        # in this comment.
+        "departures": {
+            "FR-KIT-003": "departure D2",
+            "FR-KIT-005": "departure D5, D9",
+            "FR-KIT-007": "departure D6, D9, D10",
+            "FR-KIT-008": "departure D3, D4",
+            "FR-KIT-009": "departure D1",
+        },
+        # §5 Traceability. Each cell lists its M5 requirements after a "future
+        # development at M5:" run-in; they are covered all the same, so `covers`
+        # carries every id the cell names. U1 is the kit-identifier template
+        # (register Q-104), open at the feature level as the brief states it.
+        "features": {
+            "F03.1": {
+                "disposition": "as-is except D1 (M5), D2, D3, D4 · U1 open",
+                "covers": ["FR-KIT-001", "FR-KIT-002", "FR-KIT-003",
+                           "FR-KIT-008", "FR-KIT-009"],
+            },
+            "F03.2": {
+                "disposition": "as-is except D5 (M5), D6, D7, D8, D9 (M5), D10",
+                "covers": ["FR-KIT-004", "FR-KIT-007", "FR-KIT-005",
+                           "FR-KIT-010"],
+            },
+        },
+    },
 }
 
 # The §5 cells read "as-is except **D1** · U1 open" and "as-is except **D2**".
