@@ -19,9 +19,9 @@ It does **not** hold reasoning. The analysis behind all of this lives in the Obs
 ```
 qacr-spec/
 ├── product/                  the PM's documents. READ-ONLY.
-│   ├── FR-01/                QACR-APP-FR-01 Rev1.20.docx + requirements.json,
+│   ├── FR-01/                QACR-APP-FR-01 Rev1.24.docx + requirements.json,
 │   │                         decisions.json, register.json, appendices.json
-│   ├── EPIC-01/              QACR-APP-EPIC-01 Rev1.14.docx + Board.html + features.json
+│   ├── EPIC-01/              QACR-APP-EPIC-01 Rev1.18.docx + Board.html + features.json
 │   └── specs/                QACR-APP-SPEC-nn briefs, as the PM writes them
 ├── features/                 one file per specified feature — E01 and E02
 ├── evidence/                 what the code does today, cited — 2,855 rows over 83 requirements
@@ -32,23 +32,23 @@ qacr-spec/
 └── .claude/skills/           spec-intake, revision-intake, and the reading skills
 ```
 
-`evidence/behaviour.tsv` covers 83 of 245 requirements — the ones the vault carries evidence for.
-`evidence/coverage.tsv` records the other 162 as `no-evidence-found`, which means the vault has
+`evidence/behaviour.tsv` covers 83 of 250 requirements — the ones the vault carries evidence for.
+`evidence/coverage.tsv` records the other 167 as `no-evidence-found`, which means the vault has
 none, not that the code does nothing. SPEC-01 and SPEC-02 have been published, so `features/` holds
 E01 and E02.
 
 `decisions/` is empty because ingesting a spec has not yet raised a question — which is **not** the
-same as Product having none. The FR document carries its own Decision Log (60 closed) and Review
-Register (46 open), and those are parsed to `product/FR-01/` rather than copied here. See
+same as Product having none. The FR document carries its own Decision Log (62 closed) and Review
+Register (48 open), and those are parsed to `product/FR-01/` rather than copied here. See
 `decisions/README.md`.
 
 ### `product/`
 
-`QACR-APP-FR-01 Rev1.20.docx` — 245 requirements across 22 functional areas.
-`QACR-APP-EPIC-01 Rev1.14.docx` — the same 245 requirements rearranged into 15 epics and 82
-features, the way a team would build them. `Board.html` is that map as a filterable page — supplied
-by the PM rather than built here, and currently at **Rev 1.13**, because no Rev 1.14 export has
-arrived.
+`QACR-APP-FR-01 Rev1.24.docx` — 250 requirements across 22 functional areas.
+`QACR-APP-EPIC-01 Rev1.18.docx` — the same 250 requirements rearranged into 15 epics and 82
+features, the way a team would build them. `Board.html` is that map as a filterable page, built by
+the PM's generator beside the map (`product/generator/build-board.js`) and landed in the same commit,
+so it is at **Rev 1.18**. Its filename carries no revision; the page's own header states it.
 
 The `.json` files beside them are parsed from the `.docx`, validated against the counts the
 documents state about themselves, and regenerated rather than edited.

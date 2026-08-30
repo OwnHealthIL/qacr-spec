@@ -30,10 +30,18 @@
   "req_id": "FR-SHR-011",
   "requirement": "The configuration shall state, for each partner, whether doctor-to-patient engagement takes place within the application or outside it, and the software shall present the corresponding post-…",
   "section": "20. Result Routing and Provider Communication",
-  "note": "Determines whether the deferred chat and consultation features in Appendix E are in scope for a given partner",
+  "note": "Determines whether the future-development chat and consultation features, FR-SHR-013 and FR-SHR-014, are in scope for a given partner",
   "comments": "",
   "ref": "FR-SHR-011",
   "group": "R.1"
+ },
+ {
+  "ref": "Q-104",
+  "parameter": "The kit-identifier template: what constitutes a well-formed identifier",
+  "where": "FR-KIT-003",
+  "what_is_needed": "FR-KIT-003 presumes one defined template. The two current clients enforce different rules, so a code one accepts the other rejects, and SPEC-03 D2 requires one rule on both. The value itself needs kit manufacturing",
+  "comments": "",
+  "group": "R.2"
  },
  {
   "ref": "Q-01",
@@ -98,6 +106,14 @@
   "what_is_needed": "New with FR-COM-011. The requirement holds a waiting state until a result arrives; the point at which it stops waiting and explains instead needs a value",
   "comments": "",
   "group": "R.2"
+ },
+ {
+  "ref": "Q-103",
+  "conflict": "FR-KIT-001 requires the software to prevent the user from completing a scan where the QR code is missing or damaged",
+  "where": "FR-KIT-001 against the product",
+  "what_is_needed": "Nothing does this and nothing can: the identifier is printed on the Test Board and is read during the scan, so a scan with no readable code completes and the test is refused afterwards. Raised at the SPEC-03 review; the requirement was left as written at Guy's direction, and the manual route was taken out into FR-KIT-009 at milestone 5 rather than folded in here",
+  "comments": "",
+  "group": "R.3"
  },
  {
   "ref": "Q-15",
@@ -189,9 +205,9 @@
  },
  {
   "ref": "Q-66",
-  "question": "Which gesture reveals the demonstration skip-to-step control?",
+  "question": "Which gesture reveals the demonstration navigation controls?",
   "where": "FR-FLW-007",
-  "what_is_needed": "A sustained press on the start control and a device shake were both suggested. It has to be something a user cannot reach accidentally",
+  "what_is_needed": "A sustained press on the start control and a device shake were both suggested. It has to be something a user cannot reach accidentally. Widened at the SPEC-04 review: there are two controls, a section navigator and a fast-forward to the end of the current section, so the question is whether one gesture reveals both or each has its own",
   "comments": "",
   "group": "R.4"
  },
@@ -303,7 +319,7 @@
   "ref": "Q-30",
   "consequence": "Elapsed time can be derived from a source the user can alter",
   "deferred_item": "FR-TIM-004, milestone 5",
-  "what_is_affected": "Until implemented, the timing windows in section 12 can be defeated by changing the device clock. RA 4.18 assumes the timers are enforceable, and those windows are the only remaining software control on RA 3.9 and 3.10",
+  "what_is_affected": "Until implemented, the timing windows in section 12 can be defeated by changing the device clock. RA 4.18 assumes the timers are enforceable, and those windows are the only remaining software control on RA 3.9 and 3.10. The FR-KIT-007 window between tests is judged against the same alterable clock. Settled at the SPEC-03 review: an alterable clock is accepted there and no requirement is wanted for it, so FR-TIM-004 stays scoped to elapsed time within a test, which is what RA 4.18 relies on",
   "comments": "",
   "group": "R.6"
  },

@@ -49,6 +49,10 @@ Structural notes carried over from there:
 - appendix table columns are read from each table's own header row rather than
   assumed by position: D.1-D.3 share a schema, D.4 does not, and the three
   configuration sub-parts have three different ones
+- Rev 1.23 added an appendix, Conditions That Refuse a Test — three positional
+  sub-parts sharing one schema, Condition | Where it is established | Outcome |
+  Requirement | Comments. It is emitted as `refusals`; the parse that first met
+  it failed exactly as designed, on a title matching no role
 - the Epic and Feature Map is a separate document
 """
 import re
@@ -198,6 +202,9 @@ APPENDIX_ROLES = {
     "threat analysis": "threat",
     "decision log": "decisions",
     "priority summary": "priority",
+    # Arrived at Rev 1.23: the block / notify / configured-off register. It
+    # states no requirement; it enumerates the cases behind FR-RDY-011's rule.
+    "conditions that refuse a test": "refusals",
 }
 
 # Which Appendix D sub-part is which, by POSITION. The sub-heading letters are
@@ -209,7 +216,7 @@ D_PARTS = {"1": "excluded", "2": "superseded", "3": "consolidated",
 # not reported as unknown, and their row counts are noted, so that nothing in
 # the document is invisible to a reader of the parse.
 LIST_ROLES = ("excluded", "superseded", "consolidated", "unaccounted",
-              "configs", "params", "decisions", "backlog")
+              "configs", "params", "decisions", "backlog", "refusals")
 
 
 def appendix_role(title):
@@ -417,7 +424,7 @@ def parse_fr(path):
             priority_rows.append([norm(c) for c in cells])
             continue
 
-        if role in ("configs", "params", "backlog"):
+        if role in ("configs", "params", "backlog", "refusals"):
             row["part"] = part
             lists[role].append(row)
             continue
@@ -850,6 +857,7 @@ def main():
         "configs": lists["configs"],
         "params": lists["params"],
         "backlog": lists["backlog"],
+        "refusals": lists["refusals"],
         "priority_summary": priority_summary(meta["priority_header"],
                                              meta["priority_rows"]),
     })
@@ -864,6 +872,8 @@ def main():
           f"{len(lists['superseded'])} superseded, "
           f"{len(lists['consolidated'])} consolidated, "
           f"{len(lists['unaccounted'])} unaccounted")
+    print(f"      {len(lists['refusals'])} conditions that refuse a test, "
+          f"in {len({r['part'] for r in lists['refusals']})} sub-parts")
     return 1 if problems else 0
 
 

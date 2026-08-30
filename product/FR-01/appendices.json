@@ -1,5 +1,5 @@
 {
- "revision": "1.20",
+ "revision": "1.24",
  "part_titles": {
   "terminology.1": "Superseded Component Names",
   "terminology.2": "Names for User-Operated Parts",
@@ -12,7 +12,10 @@
   "configs.3": "Configurations Outside the Scope of This Document",
   "threat.1": "Threats With an Application Control",
   "threat.2": "Threats Controlled Outside the Application",
-  "threat.3": "Observations"
+  "threat.3": "Observations",
+  "refusals.1": "Refused by the Backend When a Test Is Requested",
+  "refusals.2": "Established on the Device Before a Test Starts",
+  "refusals.3": "Established at or After the Scan"
  },
  "excluded": [
   {
@@ -686,6 +689,224 @@
   }
  ],
  "backlog": [],
+ "refusals": [
+  {
+   "condition": "The order for this kit cannot be found",
+   "where_it_is_established": "Backend, when the application asks whether a test may start",
+   "outcome": "Blocks",
+   "requirement": "FR-RDY-014",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "condition": "The order has already been used",
+   "where_it_is_established": "Backend, same exchange",
+   "outcome": "Blocks",
+   "requirement": "FR-RDY-014",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "condition": "The order has expired",
+   "where_it_is_established": "Backend, same exchange",
+   "outcome": "Blocks",
+   "requirement": "FR-RDY-014",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "condition": "The user is not authorised to test",
+   "where_it_is_established": "Backend, same exchange",
+   "outcome": "Blocks",
+   "requirement": "FR-RDY-014",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "condition": "The service has ended for this user",
+   "where_it_is_established": "Backend, same exchange",
+   "outcome": "Blocks",
+   "requirement": "FR-RDY-014",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "condition": "No unused kit remains for this user",
+   "where_it_is_established": "Backend, from the kits sent against the tests already performed",
+   "outcome": "Blocks where the check is switched on for the partner",
+   "requirement": "FR-RDY-014, FR-KIT-004",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "condition": "A previous test falls within a defined minimum interval",
+   "where_it_is_established": "Backend",
+   "outcome": "Blocks where switched on. Future development",
+   "requirement": "FR-KIT-010",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "condition": "The configuration places the application in a blocked state",
+   "where_it_is_established": "Configuration. The reason may be an ended service, a scheduled period of unavailability, a partner-defined condition, or an expired kit",
+   "outcome": "Blocks",
+   "requirement": "FR-CFG-006",
+   "comments": "",
+   "part": "1"
+  },
+  {
+   "condition": "Device integrity is compromised",
+   "where_it_is_established": "On the device, at start-up",
+   "outcome": "Blocks",
+   "requirement": "FR-RDY-001",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "condition": "Hardware is below the minimum specification",
+   "where_it_is_established": "On the device",
+   "outcome": "Blocks",
+   "requirement": "FR-RDY-002, FR-PLT-005",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "condition": "The operating-system version is outside the supported range",
+   "where_it_is_established": "On the device",
+   "outcome": "Blocks",
+   "requirement": "FR-RDY-003, FR-PLT-005",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "condition": "The application version is unsupported",
+   "where_it_is_established": "Against the backend",
+   "outcome": "Blocks or notifies. Configuration decides which",
+   "requirement": "FR-RDY-004",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "condition": "There is no internet connection",
+   "where_it_is_established": "On the device",
+   "outcome": "Blocks",
+   "requirement": "FR-RDY-005",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "condition": "The backend cannot be reached",
+   "where_it_is_established": "On the device",
+   "outcome": "Blocks",
+   "requirement": "FR-RDY-006",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "condition": "The battery is below the minimum threshold",
+   "where_it_is_established": "On the device",
+   "outcome": "Blocks, whether or not the device is charging",
+   "requirement": "FR-RDY-007",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "condition": "The battery level cannot be read at all",
+   "where_it_is_established": "On the device",
+   "outcome": "Neither. The test proceeds",
+   "requirement": "FR-RDY-007",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "condition": "Available storage is below the minimum threshold",
+   "where_it_is_established": "On the device",
+   "outcome": "Blocks",
+   "requirement": "FR-RDY-008",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "condition": "The camera is absent, or cannot be started",
+   "where_it_is_established": "On the device, and again where the flow requires it",
+   "outcome": "Blocks",
+   "requirement": "FR-RDY-009",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "condition": "The session is no longer valid, or the backend holds no identity for the user",
+   "where_it_is_established": "On a request to the backend",
+   "outcome": "Blocks. The user verifies again",
+   "requirement": "FR-AUT-013, FR-AUT-022",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "condition": "A test was performed within the preceding 24 hours",
+   "where_it_is_established": "On the device",
+   "outcome": "Notifies, once per window",
+   "requirement": "FR-KIT-007",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "condition": "Demonstration behaviour is in force",
+   "where_it_is_established": "Configuration, enforced by the backend",
+   "outcome": "Notifies",
+   "requirement": "FR-CFG-004",
+   "comments": "",
+   "part": "2"
+  },
+  {
+   "condition": "No kit identifier was read",
+   "where_it_is_established": "During the scan",
+   "outcome": "Refuses a result where the check is switched on for the partner",
+   "requirement": "FR-KIT-001",
+   "comments": "",
+   "part": "3"
+  },
+  {
+   "condition": "The kit identifier does not match the defined template",
+   "where_it_is_established": "During the scan",
+   "outcome": "Refuses a result",
+   "requirement": "FR-KIT-003",
+   "comments": "",
+   "part": "3"
+  },
+  {
+   "condition": "The kit identifier has already been used",
+   "where_it_is_established": "Backend, after the scan",
+   "outcome": "Refuses a result where the check is switched on for the partner",
+   "requirement": "FR-KIT-004",
+   "comments": "",
+   "part": "3"
+  },
+  {
+   "condition": "The kit has expired",
+   "where_it_is_established": "After the scan",
+   "outcome": "Refuses a result where switched on. Future development",
+   "requirement": "FR-KIT-005",
+   "comments": "",
+   "part": "3"
+  },
+  {
+   "condition": "The refusal cannot be attributed to a condition the software recognises",
+   "where_it_is_established": "After the scan",
+   "outcome": "Refuses a result, without stating a reason",
+   "requirement": "FR-KIT-008",
+   "comments": "",
+   "part": "3"
+  },
+  {
+   "condition": "The user was asked to present the identifier and could not",
+   "where_it_is_established": "During the scan",
+   "outcome": "Refuses a result. Future development",
+   "requirement": "FR-KIT-009",
+   "comments": "",
+   "part": "3"
+  }
+ ],
  "priority_summary": {
   "milestones": [
    "1",
@@ -753,25 +974,25 @@
     "counts": {
      "1": 0,
      "2": 0,
-     "3": 5,
+     "3": 6,
      "4": 0,
-     "5": 1,
+     "5": 3,
      "TBD": 0
     },
-    "total": 6,
+    "total": 9,
     "unreadable": false
    },
    {
     "area": "9. Guided Test Flow — Structure and Behaviour",
     "counts": {
-     "1": 8,
+     "1": 9,
      "2": 0,
      "3": 1,
      "4": 0,
      "5": 0,
      "TBD": 0
     },
-    "total": 9,
+    "total": 10,
     "unreadable": false
    },
    {
@@ -790,14 +1011,14 @@
    {
     "area": "11. Test State Retention, Interruption and Cancellation",
     "counts": {
-     "1": 5,
+     "1": 6,
      "2": 0,
      "3": 3,
      "4": 0,
      "5": 0,
      "TBD": 0
     },
-    "total": 8,
+    "total": 9,
     "unreadable": false
    },
    {
@@ -959,9 +1180,9 @@
    {
     "area": "24. Application Configuration",
     "counts": {
-     "1": 1,
-     "2": 0,
-     "3": 4,
+     "1": 0,
+     "2": 3,
+     "3": 2,
      "4": 0,
      "5": 1,
      "TBD": 0
@@ -986,14 +1207,14 @@
   "all_areas": {
    "area": "All areas",
    "counts": {
-    "1": 69,
-    "2": 10,
-    "3": 102,
+    "1": 70,
+    "2": 13,
+    "3": 101,
     "4": 21,
-    "5": 39,
+    "5": 41,
     "TBD": 4
    },
-   "total": 245,
+   "total": 250,
    "unreadable": false
   }
  }

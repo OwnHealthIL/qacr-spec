@@ -316,3 +316,15 @@ Then confirm:
   that the document's appendix sub-numbering is itself stale — Appendix E numbers its parts F.1–F.3 —
   so sub-parts are read by position, and that the Board export has no revision in its filename and so
   goes stale invisibly.
+- **Rev 1.24, 2026-08-30 — the documents landed two revisions ahead of the parse, and one field
+  showed it.** On `poc/pm-working-directory` the PM's half placed Rev 1.23 and then Rev 1.24 without
+  this skill running after either. `git status` was clean, every top-level file looked current, and
+  the only thing saying otherwise was `appendices.json`'s `revision: 1.20` sitting under a
+  `Rev1.24.docx` — the file swap without the rest, exactly as the one rule warns. Ingested 1.20→1.24
+  in one step, because HEAD already held 1.24: a 1.23 intermediate commit would have paired 1.23 data
+  with a 1.24 document, which is the inconsistency the guards exist to catch. Two more things. The
+  first new appendix since the parser was written, `I — Conditions That Refuse a Test`, announced
+  itself exactly as designed — a title matching no role, one MISMATCH, every count still agreeing —
+  and is now emitted as `refusals`. And "only the provenance footer moved" is the rule for an epic the
+  manifest did not name: E01's F01.9 legitimately changed with the three CFG milestone moves it owns,
+  while E02, untouched, moved in exactly that one line per file.

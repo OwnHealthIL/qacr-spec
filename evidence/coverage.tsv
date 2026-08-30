@@ -90,6 +90,7 @@ FR-FLW-006	F04.1	E04	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
 FR-FLW-007	F04.6	E04	QACR-APP-FR-01 Rev1.19	83	evidenced
 FR-FLW-008	F04.2	E04	QACR-APP-FR-01 Rev1.19	40	evidenced
 FR-FLW-009	F04.8	E04	QACR-APP-FR-01 Rev1.19	18	evidenced
+FR-FLW-010	F04.2	E04	QACR-APP-FR-01 Rev1.24	0	no-evidence-found
 FR-IMG-001	F06.2	E06	QACR-APP-FR-01 Rev1.19	22	evidenced
 FR-IMG-002	F06.2	E06	QACR-APP-FR-01 Rev1.19	13	evidenced
 FR-IMG-004	F06.3	E06	QACR-APP-FR-01 Rev1.19	10	evidenced
@@ -114,6 +115,9 @@ FR-KIT-003	F03.1	E03	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
 FR-KIT-004	F03.2	E03	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
 FR-KIT-005	F03.2	E03	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
 FR-KIT-007	F03.2	E03	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-KIT-008	F03.1	E03	QACR-APP-FR-01 Rev1.24	0	no-evidence-found
+FR-KIT-009	F03.1	E03	QACR-APP-FR-01 Rev1.24	0	no-evidence-found
+FR-KIT-010	F03.2	E03	QACR-APP-FR-01 Rev1.24	0	no-evidence-found
 FR-LCM-002	F15.4	E15	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
 FR-LCM-003	F15.4	E15	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
 FR-LCM-004	F15.4	E15	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
@@ -208,6 +212,7 @@ FR-STA-007	F04.4	E04	QACR-APP-FR-01 Rev1.19	20	evidenced
 FR-STA-008	F04.5	E04	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
 FR-STA-009	F04.5	E04	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
 FR-STA-010	F04.5	E04	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
+FR-STA-012	F04.3	E04	QACR-APP-FR-01 Rev1.24	0	no-evidence-found
 FR-SUP-001	F10.4	E10	QACR-APP-FR-01 Rev1.19	0	no-evidence-found
 FR-SUP-002	F10.5	E10	QACR-APP-FR-01 Rev1.19	33	evidenced
 FR-SUP-003	F01.5	E01	QACR-APP-FR-01 Rev1.19	6	evidenced
