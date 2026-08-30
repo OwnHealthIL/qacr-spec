@@ -12,7 +12,7 @@ inherits_from: 'be-infra user-management (binding); backend.q-acr research (boun
 sources:
   - architecture/spine-decision-log.md
   - architecture/data_model.md
-  - compliance/QACR-Software-Cybersecurity-Considerations.md
+  - architecture/QACR-Software-Cybersecurity-Considerations.md
   - product/FR-01/requirements.json
 ---
 
@@ -642,14 +642,14 @@ inventory and the milestone table are in `architecture/data_model.md`.
 | OQ-14 | The RPO and RTO figures for the clinical record, binding Cloud SQL and every record-bearing bucket together, plus the restore-rehearsal cadence. AD-26 fixes the shape and the direction; no figure is invented here. The tolerance input is sharp: AD-5 consumes the kit in the same transaction as the exam write, so data lost after commit is a spent kit plus a record AD-4 forbids repairing — the patient needs a new physical kit, and the result cannot be reconstructed for `FR-ALG-004` | [UNKNOWN] | Backend owner + DevOps | A stated tolerance per figure. The RTO figure also gates the deferred `dr` decision |
 | OQ-15 | Where the `FR-IMG-016` Color Print normalisation runs — device or backend — and whether a raw or raw-equivalent representation crosses the algorithm port. `FR-IMG-016`'s own note records both as undecided (review register Q-24), so this is an IVTS and algorithm decision rather than an architecture one; AD-27 binds the invariant either way and only the placement is open. What architecture needs back is two answers, not a preference: which artefacts cross the port, and which of them are retained | [UNKNOWN] | Algorithm owner + backend owner | An IVTS specification revision stating the representation and where the transform runs. Two items wait on it: OQ-3 cannot size frame storage, and OQ-9's percentiles measure a different workload depending on the answer |
 | OQ-16 | The session token lifetime. `FR-AUT-013` requires expiry and re-verification; the backend SRS's 24 hours was **flagged at review as incorrect for this application** and no replacement was ever chosen. Under AD-6 the value is set per tenant in user-management's `partnerTokenExpirations.json`, so choosing it is a configuration change in a repository QACR does not own rather than a code change here. It is load-bearing rather than cosmetic: AD-23 deliberately declined a nonce on the frame and trace paths on the ground that what a captured request is worth is bounded by token lifetime (L11.4d) | [OBSERVED] `product/FR-01/requirements.json`, `FR-AUT-013` note; log L11.14a | Backend owner + QMS | A number, and a named owner for the user-management configuration change. Closes L3.7's Q-63 |
-| OQ-17 | `FR-SEC-007` (M3) requires that no screen containing personal, health or result information can be screenshotted, and its note records it as **the sole control for SPTA 4.14 at gross score 12**. `FR-SHR-015` and `FR-PRT-009` (M5) require the results letter to be savable to the phone and shareable by email. The two contradict outright and one has to change. The control is device-side and out of this spine's scope, but the letter is **generated backend-side** at M5, so if it resolves toward saving, QACR owns generation and transport and `FR-SEC-007`'s control has to be restated rather than silently narrowed | [OBSERVED] `product/FR-01/requirements.json`; `compliance/QACR-Software-Cybersecurity-Considerations.md:192-194` | Product (+ QMS for the risk file) | Product choosing which of the two requirements changes — `decisions/D-02.md`. Closes L3.7's Q-81 |
+| OQ-17 | `FR-SEC-007` (M3) requires that no screen containing personal, health or result information can be screenshotted, and its note records it as **the sole control for SPTA 4.14 at gross score 12**. `FR-SHR-015` and `FR-PRT-009` (M5) require the results letter to be savable to the phone and shareable by email. The two contradict outright and one has to change. The control is device-side and out of this spine's scope, but the letter is **generated backend-side** at M5, so if it resolves toward saving, QACR owns generation and transport and `FR-SEC-007`'s control has to be restated rather than silently narrowed | [OBSERVED] `product/FR-01/requirements.json`; `architecture/QACR-Software-Cybersecurity-Considerations.md:192-194` | Product (+ QMS for the risk file) | Product choosing which of the two requirements changes. Closes L3.7's Q-81 |
 
-Thirteen further items were raised against this document by a review pass on 2026-08-23 and are
-tracked in `architecture/questions/` (`AQ-01`–`AQ-13`), one file each. They are not listed here
-because each lands as an `AD`, an amendment, a Deferred row or an `OQ` as it settles, at which point
-the spine carries it directly. **All thirteen have landed** — see `spine-decision-log.md` L11.1 to
-L11.14. The three that needed Product (`AQ-06`, `AQ-07`, `AQ-13`) landed as amendments plus two
-`decisions/` files and two `OQ`s, because the parts only Product can close are not answered here. The
+Thirteen further items (`AQ-01`–`AQ-13`) were raised against this document by a review pass on
+2026-08-23. They are not listed here because each lands as an `AD`, an amendment, a Deferred row or
+an `OQ` as it settles, at which point the spine carries it directly. **All thirteen have landed** —
+see `spine-decision-log.md` L11.1 to L11.14. The three that needed Product (`AQ-06`, `AQ-07`,
+`AQ-13`) landed as amendments plus two `OQ`s, because the parts only Product can close are not
+answered here. The
 finalize checklist is now due against this document: the review pass, the input reconciliation and the
 `[ASSUMPTION]` sweep.
 
