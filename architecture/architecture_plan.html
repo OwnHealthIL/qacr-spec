@@ -1753,22 +1753,26 @@
   <section data-rev="r616">
     <h3 data-rev="r617"><span class="n">2.4</span> Required dependencies and versions</h3>
     <p data-rev="r618" class="verdict">
-      Ratified from <span class="m">qacr-research</span> rather than chosen fresh, verified by read-only reads
-      at repository HEAD on 2026-08-23. <strong>Two components are outside support and that is recorded, not
-      accepted.</strong>
+      Pinned fresh, not ratified from <span class="m">qacr-research</span>. QACR production is greenfield —
+      there is no existing instance to migrate and no legacy consumer forcing an old runtime, so there is
+      nothing to gain by copying the research repository's development versions forward.
+      <strong>Every version below is the current stable release as of kickoff (2026-08-27)</strong>; DevOps
+      confirms the exact release the managed service actually offers (Cloud SQL, GKE) before the first
+      production deploy, locks it, and lets the SCA/dependency-scan gate in 2.1 — not a periodic re-chase —
+      carry it forward from there.
     </p>
 
     <div data-rev="r619" class="tablewrap">
       <table data-rev="r620">
         <thead data-rev="r621"><tr data-rev="r622"><th data-rev="r623">Component</th><th data-rev="r624">Version</th><th data-rev="r625">Status</th><th data-rev="r626">Verified</th></tr></thead>
         <tbody data-rev="r627">
-          <tr data-rev="r628"><td data-rev="r629" class="id">TypeScript</td><td data-rev="r630">6.0.3</td><td data-rev="r631">current</td><td data-rev="r632"><span class="m">package.json</span></td></tr>
-          <tr data-rev="r633"><td data-rev="r634" class="id">Node.js</td><td data-rev="r635">22</td><td data-rev="r636">current LTS</td><td data-rev="r637"><span class="m">@tsconfig/node22</span>, <span class="m">@types/node</span> 22.19.21; base image version supplied as a build argument</td></tr>
-          <tr data-rev="r638"><td data-rev="r639" class="id">Prisma</td><td data-rev="r640">7.9.0</td><td data-rev="r641">current</td><td data-rev="r642"><span class="m">package.json</span></td></tr>
-          <tr data-rev="r643"><td data-rev="r644" class="id">PostgreSQL</td><td data-rev="r645">14</td><td data-rev="r646"><strong>end of life 12 November 2026</strong></td><td data-rev="r647"><span class="m">docker-compose.yaml</span>; EOL per postgresql.org versioning policy. <strong>Production version unverified</strong> — Cloud SQL is configured outside the repository</td></tr>
-          <tr data-rev="r648"><td data-rev="r649" class="id">RabbitMQ</td><td data-rev="r650">3.11</td><td data-rev="r651"><strong>already outside community support</strong> — the current series is 4.3.x</td><td data-rev="r652"><span class="m">docker-compose.yaml</span>. <strong>Production version unverified</strong> — cluster-hosted</td></tr>
-          <tr data-rev="r653"><td data-rev="r654" class="id">Algorithm runtime</td><td data-rev="r655"><span class="m">algo-base:5.0</span></td><td data-rev="r656">Python and native, separate image</td><td data-rev="r657"><span class="m">Dockerfile.algo-worker</span></td></tr>
-          <tr data-rev="r658"><td data-rev="r659" class="id">Orchestration</td><td data-rev="r660">GKE · Helm · helmfile · KEDA</td><td data-rev="r661">estate standard <span class="tag t-acr">≈ ACR</span></td><td data-rev="r662"><span class="m">helm-charts</span></td></tr>
+          <tr data-rev="r628"><td data-rev="r629" class="id">TypeScript</td><td data-rev="r630">6.0.3</td><td data-rev="r631">current — reconfirm at kickoff</td><td data-rev="r632"><span class="m">package.json</span></td></tr>
+          <tr data-rev="r633"><td data-rev="r634" class="id">Node.js</td><td data-rev="r635">24</td><td data-rev="r636"><strong>current Active LTS</strong> — 22 moved to maintenance mode</td><td data-rev="r637"><span class="m">@tsconfig/node24</span>, <span class="m">@types/node</span> pinned to the matching major; base image version supplied as a build argument</td></tr>
+          <tr data-rev="r638"><td data-rev="r639" class="id">Prisma</td><td data-rev="r640">7.9.0</td><td data-rev="r641">current — reconfirm at kickoff</td><td data-rev="r642"><span class="m">package.json</span></td></tr>
+          <tr data-rev="r643"><td data-rev="r644" class="id">PostgreSQL</td><td data-rev="r645"><strong>latest Cloud SQL-supported major</strong> (17 or 18-class)</td><td data-rev="r646">current — no EOL exposure by design</td><td data-rev="r647">No instance to migrate from. <strong>Chosen fresh</strong> for the new Cloud SQL instance — DevOps confirms the exact major against Cloud SQL's current supported-version list (2.1) and records it here</td></tr>
+          <tr data-rev="r648"><td data-rev="r649" class="id">RabbitMQ</td><td data-rev="r650"><strong>4.3.x</strong> (current stable series)</td><td data-rev="r651">current, in community support</td><td data-rev="r652">No broker to migrate from. <strong>Chosen fresh</strong> for the new cluster-hosted instance — confirm latest 4.3 patch at kickoff</td></tr>
+          <tr data-rev="r653"><td data-rev="r654" class="id">Algorithm runtime</td><td data-rev="r655"><span class="m">algo-base:5.0</span></td><td data-rev="r656">Python and native, separate image. <strong>Exception to this table's "pin latest" rule</strong> — tied to the validated approved algorithm; a runtime bump needs algorithm-owner revalidation, not a version chase</td><td data-rev="r657"><span class="m">Dockerfile.algo-worker</span></td></tr>
+          <tr data-rev="r658"><td data-rev="r659" class="id">Orchestration</td><td data-rev="r660">GKE · Helm · helmfile · KEDA</td><td data-rev="r661">estate standard <span class="tag t-acr">≈ ACR</span> — use each tool's current stable release channel, no legacy-pinned minor</td><td data-rev="r662"><span class="m">helm-charts</span></td></tr>
           <tr data-rev="r663"><td data-rev="r664" class="id">CI</td><td data-rev="r665">GitHub Actions</td><td data-rev="r666"><span class="tag t-nacr">≠ ACR</span> replaces Jenkins for QACR</td><td data-rev="r667">this document, 2.1</td></tr>
           <tr data-rev="r668"><td data-rev="r669" class="id">Observability</td><td data-rev="r670">Datadog, metrics under <span class="m">healthy.qacr</span></td><td data-rev="r671">estate standard, but see <span class="oqid">PQ-5</span> <span class="tag t-acr">≈ ACR</span></td><td data-rev="r672"><span class="m">@ownhealthil/healthy-utils</span> wraps every consumer</td></tr>
         </tbody>
@@ -1776,23 +1780,24 @@
     </div>
 
     <p data-rev="r673">
-      The two end-of-support entries matter beyond ops hygiene. <span class="m">FR-LCM-004</span> and
-      <span class="m">FR-LCM-005</span> require a controlled component inventory and monitored supplier
-      notifications, and <strong>a cyber device must state each component's maintenance status and
-      end-of-support date</strong> in the submission. Shipping a device whose database reaches end of life six
-      weeks after the stated production date is a submission finding, not a backlog item. Two things follow:
-      the machine-readable SBOM emitted per build (2.1) has to carry maintenance status and end-of-support
-      per component, and the upgrade needs a target version before the first production deploy.
+      The end-of-support problem this table used to record doesn't apply once nothing is inherited — there is
+      no development version already six weeks from EOL to ship by accident. What still applies,
+      unconditionally, is <span class="m">FR-LCM-004</span> and <span class="m">FR-LCM-005</span>: a controlled
+      component inventory, monitored supplier notifications, and <strong>a cyber device must state each
+      component's maintenance status and end-of-support date</strong> in the submission, regardless of how
+      current the component is today. The machine-readable SBOM emitted per build (2.1) carries that per
+      component, and DevOps records the exact pinned version for PostgreSQL, RabbitMQ and Node.js here once
+      each is confirmed against the managed service at kickoff.
     </p>
 
     <div data-rev="r674" class="oq">
       <div data-rev="r675" class="eyebrow">Open questions this section depends on</div>
       <ul data-rev="r676">
-        <li data-rev="r677"><span class="oqid">OQ-2</span> — <strong>the PostgreSQL 14 and RabbitMQ 3.11 upgrade.</strong>
-          PostgreSQL 14 is end of life on 12 November 2026 and RabbitMQ 3.11 is already outside community
-          support. Unblocked by verifying the <em>production</em> versions first — both are configured outside
-          the repository, so the numbers above are the development ones — then a target version per
-          component. <em>Owner: backend owner + DevOps.</em></li>
+        <li data-rev="r677"><span class="oqid">OQ-2</span> — <strong>resolved 2026-08-27.</strong> Originally:
+          whether to upgrade from <span class="m">qacr-research</span>'s PostgreSQL 14 (end of life 12 November
+          2026) and RabbitMQ 3.11 (already outside community support). Moot for a greenfield build — there is
+          nothing to upgrade <em>from</em>. DevOps pins the current stable major of each (table above) before
+          the first production deploy and records the exact confirmed version here. <em>Owner: DevOps.</em></li>
         <li data-rev="r678"><span class="oqid">PQ-5</span> — <strong>observability platform:</strong> reuse Datadog, where
           on-call already lives, or take Cloud Monitoring, which comes free with the runtime. Not blocking,
           but pick before the first dashboard is built twice. <em>Owner: DevOps.</em></li>
@@ -2441,8 +2446,9 @@
           <tr data-rev="r920">
             <td data-rev="r921" class="id">Machine-readable SBOM per build</td>
             <td data-rev="r922">Emitted by the build job and stored with the release. <strong>Must carry, per component, who
-              maintains it, whether it is still maintained, and its end-of-support date</strong> — which is
-              where PostgreSQL 14 and RabbitMQ 3.11 surface (2.4). Required by statute for a cyber device.</td>
+              maintains it, whether it is still maintained, and its end-of-support date</strong> — true for
+              every pinned component regardless of how current it is at kickoff (2.4). Required by statute for
+              a cyber device.</td>
             <td data-rev="r923">CI</td>
             <td data-rev="r924"><span class="m">FR-LCM-004</span></td>
           </tr>
@@ -2701,7 +2707,7 @@
         <thead data-rev="r1050"><tr data-rev="r1051"><th data-rev="r1052">#</th><th data-rev="r1053">Question, in one line</th><th data-rev="r1054">Section</th><th data-rev="r1055">Owner</th></tr></thead>
         <tbody data-rev="r1056">
           <tr data-rev="r1057"><td data-rev="r1058" class="id">OQ-1</td><td data-rev="r1059">SIEM, log retention, vulnerability-disclosure owner, penetration testing, threat-model owner</td><td data-rev="r1060">4 · 5</td><td data-rev="r1061">Backend owner + QMS</td></tr>
-          <tr data-rev="r1062"><td data-rev="r1063" class="id">OQ-2</td><td data-rev="r1064">PostgreSQL 14 and RabbitMQ 3.11 upgrade — verify production versions first</td><td data-rev="r1065">2.4</td><td data-rev="r1066">Backend owner + DevOps</td></tr>
+          <tr data-rev="r1062"><td data-rev="r1063" class="id">OQ-2</td><td data-rev="r1064"><strong>Resolved 2026-08-27</strong> — greenfield build pins current PostgreSQL/RabbitMQ majors at kickoff instead of inheriting qacr-research's dev versions</td><td data-rev="r1065">2.4</td><td data-rev="r1066">DevOps</td></tr>
           <tr data-rev="r1067"><td data-rev="r1068" class="id">OQ-3</td><td data-rev="r1069">Backend retention of frames, traces and exam records — "same as ACR" is not yet buildable</td><td data-rev="r1070">3.1</td><td data-rev="r1071">Backend owner + QMS</td></tr>
           <tr data-rev="r1072"><td data-rev="r1073" class="id">OQ-4</td><td data-rev="r1074">The per-feature monitoring guideline</td><td data-rev="r1075">4</td><td data-rev="r1076">Backend owner</td></tr>
           <tr data-rev="r1077"><td data-rev="r1078" class="id">OQ-5</td><td data-rev="r1079">Management-plane access mechanism and break-glass procedure</td><td data-rev="r1080">1.2 · 1.5 · 2.1</td><td data-rev="r1081">Backend owner + DevOps</td></tr>
