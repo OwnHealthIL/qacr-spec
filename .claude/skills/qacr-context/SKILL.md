@@ -200,6 +200,33 @@ chosen as though it were a narrowing.
 other and selects the features that carry it. It is never silently folded into another milestone, and
 never treated as "no milestone".
 
+### Choosing the milestone
+
+Option 2 names the milestones but does not resolve one, so the milestone itself has to be settled.
+Two routes, and both must work:
+
+1. **Named in the first answer** — `M4`, or `milestone M4`. There is then **no follow-up**: the
+   mode and the milestone arrived together, so asking again is asking a question already answered.
+2. **Option 2 chosen without a milestone** — ask **one** follow-up, and only one.
+
+**The follow-up is a plain question, not a structured choice.** A structured choice takes at most
+four options and the milestone count exceeds that: SPEC-01 and SPEC-05 each span five, and a `TBD`
+in the set makes six. A shape that fits some briefs and silently breaks on others is worse than one
+that always holds, so this is always a plain question — never a picker that happens to fit today.
+
+**It restates the milestones with their feature counts.** The caller chose a mode a moment ago and
+should not have to scroll back to read the numbers they are choosing between:
+
+> Which milestone? M1 (1 feature), M2 (1), M3 (8), M4 (1), M5 (1)
+
+**No default and no most-likely pick.** Not the milestone with the most features, not the earliest,
+not the one a previous run used. An unanswered follow-up is unanswered — this is the same refusal as
+the mode prompt, one level down.
+
+**Then the resolved list is confirmed as below.** So the milestone route is at most three exchanges
+— mode, milestone, confirm — and two when the milestone is named up front. Do not add a fourth by
+re-asking anything already given.
+
 **A milestone or `all` selection is confirmed before the reading begins**, with the resolved list
 shown as ids and a count. A caller who typed `M3` expecting two features and getting eight should
 find that out before the expensive part, not after:
@@ -745,6 +772,8 @@ does not ask them again. Dropping them here reintroduces the questions one layer
   features — in that order, with every milestone present in the selection named and counted, no
   feature promoted into an option, no invented subset, no `(Recommended)` marking, and no fourth
   mode added to fill the spare slot a four-option picker leaves
+- a milestone named in the first answer triggered no follow-up; a milestone left unnamed triggered
+  exactly one, as a plain question restating every milestone and its count, with no default offered
 - the brief revision was resolved by rule — named exactly as given, or the numerically highest
   where none was given — and the resolved revision is stated in the run's own output
 - the resolved revision's readiness was read from its `| Revision |` row: a draft reached by
@@ -831,7 +860,11 @@ does not ask them again. Dropping them here reintroduces the questions one layer
   best place to start. That is a recommendation wearing the clothes of a menu.
 - **A separate option for a single feature.** One feature is a selection of size one under
   `feature`.
-- **Offering one milestone when the selection contains several**, or offering milestone counts.
+- **Offering one milestone when the selection contains several**, or omitting the feature counts.
+- **Re-asking for a milestone the caller already named** in their answer to the mode prompt.
+- **Offering the milestone follow-up as a four-option picker**, which fits SPEC-03 and breaks on
+  SPEC-01's five.
+- **Defaulting to the milestone with the most features** because it looked like the obvious one.
 - **Describing an option by what it costs** — contracts written, extractions run, which producer
   version is deployed. None of that is the caller's decision criterion.
 - **Widening a selection** because the other features were "nearly free" once the shared read was
