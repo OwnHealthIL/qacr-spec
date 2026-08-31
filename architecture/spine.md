@@ -7,7 +7,7 @@ paradigm: 'modular monolith with ports-and-adapters at the edges'
 scope: 'The new QACR production backend, and the app-facing contract as a governed boundary. Excludes the two mobile applications'' internals, which QACR-APP-FR-01 specifies directly.'
 status: draft
 created: '2026-08-23'
-updated: '2026-08-26'
+updated: '2026-08-30'
 inherits_from: 'be-infra user-management (binding); backend.q-acr research (boundary)'
 sources:
   - architecture/spine-decision-log.md
