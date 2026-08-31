@@ -157,6 +157,21 @@ picking, done in a way that looks like presenting.
 written, how many extractions run, and which producer version is deployed are this skill's
 concerns, not the caller's decision criteria.
 
+**Never mark an option `(Recommended)`, and never order the options by preference.** This is an
+explicit override, because the general convention for presenting a structured choice is the
+opposite one: mark the option you recommend and put it first. That convention is right for a
+question whose answer is a judgement the asker is better placed to make. It is wrong here — which
+features to specify is the caller's scope decision, and this skill's one refusal is that it does not
+make the caller's decisions. A `(Recommended)` tag on option 1, or a description calling a feature
+the best pilot, is that refusal being quietly dropped. The three options carry equal weight and
+appear in the fixed order above.
+
+**Three options is the target because the surrounding interface adds its own.** A structured choice
+takes at most four options, and the interface appends a free-text row and a way to keep talking
+whatever the options are. Those rows are not modes and not this skill's to remove — do not count
+them, do not try to suppress them, and do not add a fourth mode to fill the spare slot. Three
+prescribed modes plus the interface's own escape is the whole prompt.
+
 **The feature inventory belongs above the question, not inside the options** — id, title and
 milestones, one line each, so the ids under option 3 can be typed without going to look them up:
 
@@ -728,7 +743,8 @@ does not ask them again. Dropping them here reintroduces the questions one layer
 
 - the selection prompt offered exactly three options — all / a specific milestone / specific
   features — in that order, with every milestone present in the selection named and counted, no
-  feature promoted into an option, and no fourth option
+  feature promoted into an option, no invented subset, no `(Recommended)` marking, and no fourth
+  mode added to fill the spare slot a four-option picker leaves
 - the brief revision was resolved by rule — named exactly as given, or the numerically highest
   where none was given — and the resolved revision is stated in the run's own output
 - the resolved revision's readiness was read from its `| Revision |` row: a draft reached by
@@ -805,8 +821,12 @@ does not ask them again. Dropping them here reintroduces the questions one layer
 - **Building from a draft revision nobody named**, because it happened to be the highest.
 - **Substituting a lower `ready` revision** for a draft the caller resolved to. Recommend it; do
   not take it.
-- **Offering more or fewer than the three modes.** Not four, not five — and no "type something"
-  escape hatch bolted on beside them.
+- **Offering more or fewer than the three modes.** Not four, not five.
+- **Marking an option `(Recommended)`.** See the override below — the surrounding convention
+  invites it and this prompt forbids it.
+- **Inventing a curated subset** — "F01.3 + F01.6 (smallest)", "the two cheapest", a suggested
+  pilot pair. A subset the caller did not ask for is not a mode; it is a recommendation with a
+  numbered key next to it.
 - **Promoting a named feature into an option**, or describing one as the richest, most relevant or
   best place to start. That is a recommendation wearing the clothes of a menu.
 - **A separate option for a single feature.** One feature is a selection of size one under
