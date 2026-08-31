@@ -1,9 +1,9 @@
 ---
 name: qacr-context
-description: Gather everything this repository records about one QACR feature — the brief's disposition for each requirement it owns, the departures and open items behind those dispositions, ACR's behaviour where the feature recreates it, and the architectural guidelines for its domains — and emit it as one contract a spec writer can work from. Use when a QACR spec or feature is named, when /spec is run on a QACR-APP-SPEC id, or when asked what a QACR feature needs before it can be specified. Produces context, never a specification.
+description: Gather everything this repository records about one or more QACR features — the brief's disposition for each requirement it owns, the departures and open items behind those dispositions, ACR's behaviour where the feature recreates it, and the architectural guidelines for its domains — and emit one contract per feature for a spec writer to work from. Selection is one feature, every feature of a milestone, or every feature the brief covers; a batch reads the shared record once and emits a contract per feature, never one spanning features. Use when a QACR spec or feature is named, when /spec is run on a QACR-APP-SPEC id, or when asked what a QACR feature needs before it can be specified. Produces context, never a specification.
 ---
 
-# Everything known about one QACR feature, in one object
+# Everything known about a QACR feature, in one object per feature
 
 **The output is context. It is not a specification, and it does not say how to build anything.**
 
@@ -13,6 +13,14 @@ feature recreates it, and which architectural rules apply. This skill assembles 
 
 `spec-skill` consumes what it emits. Nothing here writes a spec, slices a task, or opens the QACR
 application — those come after.
+
+**One contract describes exactly one feature — that never changes.** A run may be asked for several
+features at once, and then it emits several contracts, one per feature, each shaped exactly as a
+single-feature run would shape it. What a batch shares is the *reading*: the brief, the epic map,
+the requirements export and the architecture guidelines are read once for the whole selection
+instead of once per feature. What it never shares is the output. A single contract spanning eight
+features is still the thing this skill must not produce — a spec writer handed one cannot tell whose
+requirement is whose, and every consumer downstream is built around one feature per spec.
 
 ## What this skill is, and is not
 
@@ -28,13 +36,19 @@ classification here. It gets recorded as a stop, and the spec is written without
 
 ## Inputs — the only files read
 
-| | |
-|---|---|
-| `features/<epic>/<feature>.md` | the feature file — read whole, section by section; see step 2 |
-| `product/specs/QACR-APP-SPEC-nn Rev x.y.md` | the brief — departure text, open items, confirmed-as-is answers |
-| `product/EPIC-01/features.json` | which features a brief covers, and what each owns |
-| `product/FR-01/requirements.json` | requirement text, milestone, and the `note` field |
-| `architecture/<domain>.md` | the guidelines, where they exist |
+| | | Read |
+|---|---|---|
+| `features/<epic>/<feature>.md` | the feature file — read whole, section by section; see step 2 | once per **feature** |
+| `product/specs/QACR-APP-SPEC-nn Rev x.y.md` | the brief — departure text, open items, confirmed-as-is answers | once per **run** |
+| `product/EPIC-01/features.json` | which features a brief covers, and what each owns | once per **run** |
+| `product/FR-01/requirements.json` | requirement text, milestone, and the `note` field | once per **run** |
+| `architecture/<domain>.md` | the guidelines, where they exist | once per **run**, per distinct domain |
+
+**The `Read` column is binding on a batch.** Only the feature file is per-feature; everything else
+is one read for the whole selection, no matter how many features it covers. Re-reading the brief for
+each of eight features is the waste this mode exists to remove, and it is also a correctness
+problem: two reads of the same file in one run can be summarised differently, and then two contracts
+disagree about a departure that never changed.
 
 **Not `evidence/`.** `behaviour.tsv` is the analysis phase's secondhand index, mined from vault
 prose. ACR behaviour comes fresh from source through `acr-behaviour-reference`. Do not read it, and
@@ -50,24 +64,116 @@ do not fall back to it when a lookup is thin.
 current repository's parent. If it is not there, **ask once** and use the answer — do not search the
 filesystem, and do not proceed without it.
 
-## Step 1 — Resolve the target feature
+## Step 1 — Resolve the target features
 
 The caller gives a spec id (`QACR-APP-SPEC-01 Rev1.2`) or a feature id (`F01.4`).
 
-**A feature is the unit of work.** A brief covers eight of them; a spec written across all eight is
-not a spec anyone can build or review. So given a spec id, read its *Features covered* row, present
-them as a numbered list with titles, and **wait for a choice**. Do not pick one, even if only one is
-covered.
+**A feature is the unit of a contract, and of a spec.** That is what stays fixed. What a caller may
+choose is how many features this run covers, because the reading behind them is largely the same
+reading and doing it once per feature wastes most of it.
+
+Given a feature id, resolve its brief from the feature file's header link and go straight on — a
+single named feature needs no menu.
+
+Given a spec id, read its *Features covered* row and present the selection. **Never pick for the
+caller, even when the brief covers only one feature**, and never widen a selection because the extra
+features looked cheap.
+
+**The menu names each feature's milestones**, because milestone is what one of the three selection
+modes keys on and a caller cannot choose it blind:
 
 > QACR-APP-SPEC-01 Rev 1.2 covers eight features:
->   1. F01.1 — Store distribution and install-time compatibility
->   2. F01.2 — Supported-device policy and run-time eligibility
+>   1. F01.1 — Store distribution and install-time compatibility   · M3, M4
+>   2. F01.2 — Supported-device policy and run-time eligibility    · M3
+>   3. F01.3 — Device integrity check                              · M3
 >   ...
-> Which one are you specifying?
+>   8. F01.9 — Run-time configuration                              · M2, M3, M5
+>
+> Milestones across these features: M1 (1), M2 (1), M3 (8), M4 (1), M5 (1)
+>
+> Select: feature numbers or ids · a milestone (`M3`) · `all`
 
-Given a feature id, resolve its brief from the feature file's header link and go straight on.
+### The three selection modes
 
-## Step 2 — Read the record
+| Mode | What it selects |
+|---|---|
+| **feature** | the features named, by number or id — one or several |
+| **milestone** | every feature the brief covers that has **any** requirement in that milestone |
+| **all** | every feature the brief covers |
+
+**Milestone selects whole features, never part of one.** A feature's requirements can sit in
+different milestones — F01.1 owns three M3 requirements and one M4 — so the milestone that selected
+a feature is a *reason for working on it now*, not a filter on what the contract carries. The
+contract for a milestone-selected feature holds **every requirement the feature owns**, exactly as a
+feature-selected run would. Slicing a feature down to one milestone's requirements would emit a
+contract whose missing requirements look stopped rather than out-of-scope, and would make the next
+milestone's run an update of the same spec rather than a new one.
+
+Record what drove the selection so the spec can state it — `selection.selected_by` per feature,
+carried into each contract's `feature.selected_by`.
+
+**Milestone counts are lopsided, and the menu says so.** On SPEC-01, `M3` selects all eight features
+while `M4` and `M5` select one each. Showing the count beside each milestone is what stops `M3` being
+chosen as though it were a narrowing.
+
+**`TBD` is a milestone value that occurs** (F06.1 carries it). It is offered in the menu like any
+other and selects the features that carry it. It is never silently folded into another milestone, and
+never treated as "no milestone".
+
+**A milestone or `all` selection is confirmed before the reading begins**, with the resolved list
+shown as ids and a count. A caller who typed `M3` expecting two features and getting eight should
+find that out before the expensive part, not after:
+
+> M3 selects 8 of the 8 features SPEC-01 covers:
+>   F01.1, F01.2, F01.3, F01.4, F01.5, F01.6, F01.8, F01.9
+> Proceed?
+
+### The selection slug
+
+The consumer names its batch working copy after the selection, so the selection has to have a name.
+Build it from the brief token — the brief id with `QACR-APP-` and the revision dropped — and the mode:
+
+| Selection | Slug |
+|---|---|
+| one or more features, up to three | `SPEC-01-F01.1` · `SPEC-01-F01.1,F01.4` |
+| more than three features, named individually | `SPEC-01-F01.1+4-more` (first id ascending, then the count of the rest) |
+| a milestone | `SPEC-01-M3` |
+| every feature the brief covers | `SPEC-01-all-features` |
+
+Ids appear in ascending order so the same selection always produces the same slug. Carry it as
+`selection.slug` in the manifest; the consumer uses it verbatim and does not invent its own.
+
+## Step 1b — Read the shared record once
+
+Everything except the feature files is shared across the selection. Read it now, once, and hold it
+for the whole run:
+
+1. **The brief** — departures table, open items, confirmed-as-is answers. One read serves every
+   feature; the departure rows a given feature needs are selected from what was read, not re-read.
+2. **`product/EPIC-01/features.json`** — already read to build the menu. Do not read it again.
+3. **`product/FR-01/requirements.json`** — every requirement's text, milestone and `note`. One read.
+4. **`architecture/<domain>.md` for the union of domains across the selected features.** Take the
+   union first, then read. On SPEC-01 all eight features are `iOS` + `Android`, so this is two files
+   for the batch rather than sixteen reads of the same two.
+
+**Take the domain union before reading, not per feature as you go.** A run that reads guidelines
+inside the per-feature loop and relies on remembering it has already read them will re-read them, and
+this is the largest duplicated read in the batch after the brief.
+
+**A single-feature run does this step too.** The shape is identical with a selection of one, and one
+code path that always runs is worth more than a special case that only a batch exercises.
+
+**Where a shared read fails, the whole run stops.** A missing brief or an unreadable
+`requirements.json` is not a per-feature problem to be reported in one contract and skipped in the
+rest — every contract in the selection would stand on it. Say which file and stop, before any
+feature is assembled.
+
+## Step 2 — Read the record, per feature
+
+**Steps 2 through 5 run once per selected feature**, reading that feature's own file and drawing
+everything else from the shared record of step 1b. Features are independent at this point: nothing
+one feature's assembly discovers changes another's, so they may be assembled in parallel — see
+[Assembling a batch](#assembling-a-batch).
 
 From the **feature file**: title, epic, milestones, domains, the requirements owned in their own
 order, and the disposition against each. This file is generated and deterministic — it is the
@@ -275,6 +381,12 @@ without it, and the stops travel in the contract so the spec can say what it lef
 named in plain words; give it the feature's title and boundary, and pass the requirement ids as
 scope.
 
+**Once per feature stays once per feature in a batch — this is the one read a batch does not
+share.** Each call is scoped to one feature's title, boundary and requirement ids, and a call scoped
+to eight features at once would return prior art nobody could attribute back to a requirement. So a
+batch of eight features that all recreate makes eight calls. They are independent, and they are the
+slowest thing in the run, so they are the first thing to run in parallel.
+
 If every requirement stopped, or the feature is entirely new capability, **do not call it.** There is
 no prior art to read, and running it produces a document about a feature ACR does not have.
 
@@ -283,7 +395,9 @@ don't copy, never specify a `not_derivable`, never carry over a `do_not_copy` �
 
 ## Step 5 — Architectural guidelines, by domain
 
-The feature file names its domains. For each, read `architecture/<domain>.md`.
+The feature file names its domains. For each, take the guidelines **from the shared read in step
+1b** — the union was read there precisely so this step does no file access in a batch. A
+single-feature run reads its domains the same way, from a union of one feature's domains.
 
 **Report what is there. Do not infer, and do not write anything back.** This skill produces no
 design, so it has no guideline to infer — inference happens when the spec is written, and it belongs
@@ -305,11 +419,56 @@ different architecture is the failure to prevent, so the consumer that infers a 
 
 `decisions/` is then the only thing this skill writes into `qacr-spec`.
 
-## Step 6 — Emit the contract
+## Assembling a batch
+
+A selection of one is assembled directly. Beyond that, **steps 2–5 are fanned out one sub-agent per
+feature**, because they are the long part of the run and they do not interact.
+
+**What each sub-agent is given.** A sub-agent starts with none of this run's context, so it is handed
+all of it explicitly:
+
+1. the **shared record** from step 1b — the brief's departures, open items and confirmed-as-is
+   answers, the requirements export, and the guidelines for its domains
+2. its **one feature id**, and the `selected_by` that put it in the selection
+3. the **`rules_for_the_consumer` list, verbatim**, and steps 2–5 of this document as its instructions
+
+**The consumer rules must travel verbatim into every sub-agent.** Rules bind whoever reads them, and
+a sub-agent that never received them is not bound by them — it will restate a requirement, or read a
+silence as `as-is`, and the contract it returns will look well-formed. Summarising them is the same
+failure as omitting them.
+
+**A sub-agent cannot ask a human, so it never decides to.** Every stop, flag and unclassifiable
+disposition is *returned as data* and the orchestrator collects it. A sub-agent that resolves an
+ambiguity in order to finish has produced exactly the invented context this skill exists to refuse.
+Where a sub-agent cannot proceed, its result says so and names the feature; it does not guess, and it
+does not silently emit a thinner contract.
+
+**Only the orchestrator writes.** Sub-agents return their contract content; the orchestrator writes
+the files. Two reasons: `decisions/` is the one path this skill writes into `qacr-spec` and
+concurrent writers there can collide on the same question, and a sub-agent that fails midway leaves
+no half-written contract behind.
+
+**Parallel assembly is safe here because nothing in the contract is derived from order.** A flag's
+`ref` comes from its content, not from the sequence it was found in, and requirements keep the
+feature file's own order. So the same selection produces the same set of contracts whatever order the
+sub-agents finish in. Keep it that way: nothing introduced for batching may number anything by
+completion order.
+
+**One feature failing does not fail the batch.** The other contracts are emitted, and the manifest
+records the failure against that feature with the reason. A batch that discards seven good contracts
+because the eighth stopped has converted a partial success into a wasted run. The one exception is a
+failed *shared* read, which invalidates the whole selection — that stops everything, per step 1b.
+
+## Step 6 — Emit the contracts
 
 Written to the **application repository**, not here — `.claude/qacr-context/<FEATURE>-context.json`,
-regenerated fresh every run and not committed anywhere. This repository stays deterministic; a
-per-run artifact in it would end that.
+one file per feature, regenerated fresh every run and not committed anywhere. This repository stays
+deterministic; a per-run artifact in it would end that.
+
+**A batch emits one contract per feature and nothing else that a spec is written from.** The file
+name and the schema are exactly what a single-feature run produces, so a consumer reading one
+contract cannot tell whether it came from a batch — which is the point. The only additional artifact
+is the manifest below, and no spec is written from a manifest.
 
 ```jsonc
 {
@@ -350,7 +509,12 @@ per-run artifact in it would end that.
   "feature": {
     "id": "F01.4", "title": "...", "epic": "E01",
     "milestones": ["M1", "M3"], "domains": ["iOS", "Android"],
-    "spec_disposition": "as-is except D1 · U1 open"
+    "spec_disposition": "as-is except D1 · U1 open",
+    // What put this feature in the run: "feature", "milestone M3", or "all". The spec states it,
+    // because "specified because M3 was selected" and "specified because it was asked for" are
+    // different provenance. A milestone here never means the contract was filtered by it — every
+    // requirement the feature owns is present either way.
+    "selected_by": "milestone M3"
   },
 
   "requirements": [{
@@ -411,6 +575,60 @@ per-run artifact in it would end that.
   "excluded_deliberately": { "<what was not carried>": "<why>" }
 }
 ```
+
+### The manifest
+
+One per run, written beside the contracts as
+`.claude/qacr-context/<SLUG>-manifest.json`. **A single-feature run writes one too**, with a
+selection of one — the consumer then has one entry point in every case, and no branch that only a
+batch exercises.
+
+```jsonc
+{
+  "_manifest": {
+    "produced_by": "qacr-context",
+    "what_this_is": "Which features one selection resolved to, and where each contract landed.",
+    "what_this_is_not": "Context. No spec is written from this file — specs are written from the contracts it points at.",
+    "gathered": "<ISO date>"
+  },
+  "selection": {
+    "brief": "QACR-APP-SPEC-01 Rev 1.2",
+    "mode": "feature|milestone|all",
+    "milestone": "M3",              // present only when mode is milestone
+    "slug": "SPEC-01-M3",           // the consumer names its working copy this, verbatim
+    "features": ["F01.1", "F01.2"], // ascending, the resolved list the caller confirmed
+    "count": 2,
+    "covered_by_brief": 8           // so a reader can see a selection was a narrowing, or was not
+  },
+  // The step 1b reads, recorded once. Every contract in this run stands on these, which is why
+  // they are stated here rather than compared across eight contracts to check they agree.
+  "shared_read": {
+    "brief": "QACR-APP-SPEC-01 Rev 1.2",
+    "requirements": { "read": "QACR-APP-FR-01 Rev 1.20", "brief_cites": "1.19", "diverges": true },
+    "epic_map": { "read": "QACR-APP-EPIC-01 Rev 1.14", "brief_cites": "1.13", "diverges": true },
+    "provenance_line": "<verbatim>",
+    "divergence_direction": "none|product-behind-brief|product-ahead-of-brief|mixed",
+    "domains_read": ["iOS", "Android"],
+    "qacr_spec_commit": "<sha>"
+  },
+  "contracts": [{
+    "feature": "F01.1",
+    "selected_by": "milestone M3",
+    "path": ".claude/qacr-context/F01.1-context.json",
+    "state": "emitted",
+    "acr_called": true
+  }],
+  // A feature whose assembly could not complete. The rest of the batch still emitted.
+  "failed": [{ "feature": "F01.8", "why": "<what stopped it>" }]
+}
+```
+
+**`failed` being non-empty is not a failed run.** It names which features have no contract, so the
+consumer specifies the ones that do and reports the rest — rather than discovering a missing file
+later and reading it as a feature nobody selected.
+
+**`state` is `emitted` or absent from `contracts` entirely.** There is no partial contract state: a
+contract is written whole or its feature is in `failed`.
 
 **`stops` and `flags` are not the same thing.** A stop removes a requirement from the spec. A flag
 leaves it in and names something a human or a later step must resolve. Collapsing them loses the
@@ -474,6 +692,24 @@ does not ask them again. Dropping them here reintroduces the questions one layer
 - nothing was written into `qacr-spec` except `decisions/`
 - the contract was written to the application repository, not here
 
+**Per run, additionally — these hold for a selection of one as much as for a batch:**
+
+- every feature in `selection.features` has either a contract in `contracts` or an entry in
+  `failed` — none silently absent from both
+- no contract describes more than one feature
+- each contract carries `feature.selected_by`, and where the mode was `milestone` that contract
+  still holds **every** requirement its feature owns — a contract short of one is a filtered
+  contract, which this mode does not produce
+- `selection.slug` matches the derivation table in step 1, with ids ascending
+- the shared inputs were read once: one brief read, one `requirements.json` read, one read per
+  distinct domain across the selection
+- `shared_read` is consistent with every contract's `_contract.sources` — they came from the same
+  reads, so a disagreement means something was re-read
+- `acr_behaviour.called` is true in exactly those contracts whose feature has a recreating
+  requirement, and `acr-behaviour-reference` was called once per such feature — never once for the
+  selection, never once per requirement
+- nothing in any contract is numbered or ordered by the order sub-agents finished
+
 ## Do not
 
 1. **Do not read `evidence/`.** It is the analysis phase's index. ACR behaviour comes from source.
@@ -488,8 +724,21 @@ does not ask them again. Dropping them here reintroduces the questions one layer
 
 ## Anti-patterns
 
-- **Returning context for all eight features of a brief.** The unit is one feature.
+- **One contract covering several features.** A selection of eight emits eight contracts. The unit
+  of a contract is one feature, whatever the unit of the *run* is.
 - **Auto-picking a feature** because only one looked relevant. Ask.
+- **Widening a selection** because the other features were "nearly free" once the shared read was
+  done. The caller chose the scope; cheapness is not consent.
+- **Filtering a milestone-selected feature down to that milestone's requirements.** Milestone
+  selects features, never parts of them.
+- **Re-reading the brief, the requirements export or a domain guideline per feature.** One read per
+  run, per step 1b.
+- **Calling `acr-behaviour-reference` once for a whole selection.** Its scope is one feature's
+  boundary and requirement ids; a selection-wide call returns prior art nobody can attribute.
+- **A sub-agent resolving an ambiguity so it can finish.** It returns the stop; the orchestrator
+  collects it.
+- **Handing a sub-agent a summary of the consumer rules** instead of the list verbatim.
+- **Failing a whole batch because one feature stopped.** Emit the rest; record the failure.
 - **Flattening the ACR contract**, which drops its consumer rules and lets its evidence read as
   requirement.
 - **Calling `acr-behaviour-reference` per requirement.** Once per feature.
@@ -652,3 +901,24 @@ Append what each run corrected, so the next feature is cheaper.
   Open: `requirement_vs_acr` needs a real home in the schema. And the 26 vault evidence rows are
   still embedded in the feature file and still refused on every run; deleting that section from
   `build_feature_files.py` would remove the temptation instead of policing it.
+
+- **Batch selection added 2026-08-31, not yet run.** The unit of a contract stayed one feature; the
+  unit of a *run* became a selection. Written after measuring what a per-feature loop over SPEC-01's
+  eight features would re-read: the brief eight times, `features.json` and `requirements.json` eight
+  times each, and the same two `architecture/` files eight times, because all eight features are
+  `iOS` + `Android`. Only the feature file is genuinely per-feature, which is what step 1b now
+  encodes. Decisions worth revisiting after the first batch run: (i) **milestone selects whole
+  features, not a milestone's requirements** — features straddle milestones (F01.1 owns three M3
+  requirements and one M4), so filtering would emit contracts whose absent requirements read as
+  stopped, and would turn the next milestone into an update of the same spec rather than a new one.
+  The milestone is carried as `selected_by` provenance instead. (ii) **`acr-behaviour-reference`
+  stays once per feature** and is the one read a batch cannot share, its scope being one feature's
+  boundary; eight recreating features still make eight calls, run in parallel. (iii) **A manifest is
+  emitted even for a selection of one**, so the consumer has no batch-only code path. (iv) **One
+  feature's failure does not fail the batch**, but a failed *shared* read stops everything, since
+  every contract would stand on it. (v) Parallel assembly was judged safe because nothing in the
+  contract is order-derived — flag `ref`s come from content, requirements keep the feature file's
+  order — a property the second run's flag-stability fix happens to have provided. Worth confirming
+  under real concurrency rather than assumed. Also refines the first entry's (i): a spec id still
+  lists and asks rather than returning everything, but the answer may now name several features, and
+  the menu carries milestones because one selection mode keys on them.
