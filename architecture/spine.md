@@ -467,6 +467,20 @@ runtime role depends on another runtime role in-process. Enforced mechanically �
   but is **not an ingest**, so AD-23's client-supplied-digest rule does not apply to it. Which
   component normalises is OQ-15; this rule binds either way
 
+### AD-29 — One message broker; a boundary AMQP cannot cross is bridged by HTTP, not a second broker
+
+- **Binds:** every asynchronous internal message `qacr-backend` publishes or consumes, and any future
+  partner or cross-project integration
+- **Prevents:** the two-broker sprawl found in the incumbent estate — RabbitMQ and GCP Pub/Sub doing
+  overlapping jobs in `behealthy` with no requirement driving the split — being re-introduced here,
+  along with the second client library, second retry/DLQ model and second on-call surface that comes
+  with it
+- **Rule:** RabbitMQ (Stack) is the only message broker `qacr-backend` runs or depends on. A boundary
+  AMQP cannot cross — a different GCP project, a different broker, or a network-isolated compliance
+  boundary such as NHS HSCN — is bridged by authenticated HTTP behind the same per-partner adapter port
+  (AD-10), exactly as AD-7 already resolved for the M5 `notifications-worker` push. GCP Pub/Sub is not
+  introduced as a second broker for any partner or integration
+
 
 ## Consistency Conventions
 

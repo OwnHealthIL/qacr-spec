@@ -43,6 +43,7 @@ claim, not the reader's confidence in it.
 | [L10](#l10--finalize-pass-2026-08-23) · Finalize pass | 2026-08-23 | First `spine.md` write — 19 ADs, 10 open questions; checks run; two items left outstanding |
 | [L11](#l11--review-pass-2026-08-23--thirteen-items-raised-against-the-spine) · Review pass — thirteen items raised against the spine | 2026-08-23 | 13 `AQ-*` questions worked and landed one by one (`L11.1`–`L11.15`); adds AD-20–AD-27, OQ-11–OQ-17 |
 | [L12](#l12--absorbed-source-material-2026-08-26) · Absorbed source material | 2026-08-26 | Evidence base (`E-1`–`E-14`), corrections (`C-1`–`C-7`), gaps (`G-1`–`G-6`), verbatim inputs folded in and deleted |
+| [L13](#l13--message-broker-choice-for-qacr-backend-one-broker-not-two) · Message broker choice | 2026-08-30 | Why `behealthy` runs RabbitMQ and GCP Pub/Sub side by side; lands AD-29, one broker for `qacr-backend` |
 
 ## Index · where each decision currently stands
 
@@ -83,6 +84,7 @@ premise — not every passing citation. Read the current state from the section 
 | AD-26 | L11.9 (AQ-01) | — | Decided | Directional durability guarantee — DB never ahead of object storage; RPO/RTO figures open — **OQ-14** |
 | AD-27 | L11.10 (AQ-05) | — | Decided, invariant half only | Exactly one component normalises; *where* is genuinely undecided — **OQ-15** |
 | AD-28 | never created | L11.12a | — | Considered and explicitly rejected — the finding landed as an AD-23 amendment instead, to avoid one concern with two governing ADs |
+| AD-29 | L13 | — | Decided | One message broker (RabbitMQ); a boundary AMQP cannot cross is bridged by HTTP behind AD-10's port, not by adding GCP Pub/Sub |
 
 ### Open questions and decisions/ files
 
@@ -928,3 +930,60 @@ not listed was tuning value or build task — deliberately not architecture (L10
 | L12.9c | Q13's `FR-COM-010` row — the whole requirement inherited from user-management | Corrected. Token half only; the patient-entitlement half is AD-23 (L11.12c) |
 | L12.9d | Q9's "fire `notifications-worker.create-notification` with `type: pushNotification` on terminal transitions" | Dropped. Push is `FR-COM-013` at M5 (L4.5), and AD-7 bars a notification capability before then |
 | L12.9e | The three named sources — the ACR artifacts, the `mind` map, `data_model.md` | Only `data_model.md` is part of this folder's contract. The ACR artifacts (`hadas_acr_artifacts/`) are evidence about the incumbent product, never a QACR decision per `SDLC.md`, and every claim this log took from them is restated as an `E` row with its own path citation — so the artifacts are no longer load-bearing for anything above. The `mind` map is a tool, qualified by L12.2 |
+
+## L13 · Message broker choice for `qacr-backend` — one broker, not two
+
+Raised as a direct question, not an `AQ` file: why does the incumbent estate run RabbitMQ and GCP
+Pub/Sub side by side, and should `qacr-backend` do the same. Worked from the `mind` map plus source
+reads of `behealthy` and `helm-charts`; landed as **AD-29**.
+
+### L13.1 — What the incumbent split actually is, and why it exists
+
+`behealthy` runs both brokers, but not by deliberate two-broker design:
+
+- **Pub/Sub came first**, as one topic per worker type — algorithm, partners, ETL, health-check —
+  with a single global subscription per type (`infra/bepubsub/src/pubsub.js`). Every partner's
+  result-delivery message went through the one `partners` topic
+- **RabbitMQ was added later, purpose-built for one integration.** Commit `75ebfc4b0`, "Change mesh
+  to use new PW" (2021-06-30), introduced the `startResultDeliveryMethodType` per-partner flag and the
+  RabbitMQ branch in `infra/bepubsub/src/partners/startResultDeliveryFlow.js`, then `8a4809bb5`
+  (2021-08-01) extended it to other partners. The reason: `mesh-adapter` — the component that sends
+  ACR results to NHS GP systems (EMIS/Vision/System1) as EDIFACT over NHS **MESH** — runs in a
+  network-isolated AWS cluster wired to the NHS's private **HSCN** network
+  (`helm-charts/values/aws-healthyio-prod/production_behealthy-production-hscn.yaml`: every other
+  `behealthy` workload is `enabled: false` there; `ALLOW_SEND_TO_HSCN: true`; ingress locked to a
+  hand-picked IP allowlist). GCP Pub/Sub is a Google-Cloud-bound API with no path into that boundary.
+  A self-hosted RabbitMQ cluster does, because Healthy.io controls where it's network-placed
+- **The split is per-partner and config-driven** (`partnerConfig.startResultDeliveryMethod`,
+  `infra/bepubsub/src/partners/startResultDeliveryFlow.js:45`), not an architectural boundary anyone
+  drew on purpose — it is a migration switch between an old delivery generation (Pub/Sub) and a new
+  one (RabbitMQ) that never finished converging. **E-14** already recorded the cost: a
+  `switch (partner)` gatekeeper where an unrecognised partner silently drops the message, and
+  `partners-worker` never nacks — a 590 s timer force-acks and every failure path acks and drops
+
+[OBSERVED] `behealthy/infra/bepubsub/{lib/messenger.js,src/pubsub.js,src/partners/startResultDeliveryFlow.js}`,
+`behealthy` git history (`75ebfc4b0`, `8a4809bb5`), `helm-charts/values/aws-healthyio-prod/production_behealthy-production-hscn.yaml`,
+`behealthy/projects/mesh-adapter/src/helpers/meshService.js`
+
+### L13.2 — Why `qacr-backend` does not need the same split
+
+`qacr-backend` has no NHS/HSCN-style network boundary today. **AD-22** fixes one region
+(`us-central1`); the only place a message needs to leave the deployment's own broker is **AD-7**'s M5
+`notifications-worker` push, and AD-7 already resolved that case with authenticated HTTP, not a
+second broker — "a different project means a different broker, so the M5 push path cannot use AMQP."
+RabbitMQ is already the ratified broker in **Stack** (L9). Nothing in `product/FR-01/requirements.json`
+calls for Pub/Sub specifically, and introducing it now would buy a second client library, a second
+retry/DLQ model and a second on-call surface with no requirement behind it — exactly the kind of
+unrequired infrastructure OZ-5 asks to avoid ("do not prepare infra for extension or implement what is
+not required").
+
+### L13.3 — Decision
+
+**AD-29**, landed in `spine.md`: one broker (RabbitMQ) for every internal async message. If a future
+partner or integration needs to cross a boundary AMQP cannot reach — a different GCP project, a
+different broker, or a compliance-isolated network like HSCN — the bridge is authenticated HTTP
+behind the same per-partner adapter port **AD-10** already defines, generalising AD-7's M5 pattern
+rather than adding a second broker technology. This is a call taken from the evidence above, not from
+a `requirements.json` line; if a concrete future partner needs Pub/Sub specifically (for example, a
+Google-native integration that only speaks Pub/Sub), that is a new case to raise against this AD, not
+a reason to keep both brokers open by default now.
