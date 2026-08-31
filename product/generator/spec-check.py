@@ -133,6 +133,23 @@ for path in SPECS:
     # `spec-impact.py` asks the question that matters instead: of the requirements this
     # spec traces to, did any change between the cited revision and the current one? That
     # is what fails a build now. This check only reports the lag.
+    # A document may lag. It may not disagree with ITSELF: two different revisions of the
+    # same document cited in one spec means one of them was updated and the other was
+    # missed. SPEC-05 carried a closing "Generated against ... Rev 1.23" line that stayed
+    # frozen through two re-issues while its header row moved to 1.25, and nothing caught
+    # it — relaxing the stale check above turned a hard failure into a printed note, and a
+    # printed note is something you can stop reading. This is the half that stays hard.
+    by_doc = {}
+    for d, r in revs:
+        by_doc.setdefault(d, set()).add(r)
+    split = sorted(f"{d} Rev {' and Rev '.join(sorted(v))}"
+                   for d, v in by_doc.items() if len(v) > 1)
+    if split:
+        fails.append(f"{name}: cites more than one revision of the same document — "
+                     f"{'; '.join(split)}. A spec may lag, but every citation in it has to "
+                     f"name the same revision, or one of them was missed when the other moved")
+        print(f"   SELF-DISAGREEMENT: {'; '.join(split)}")
+
     stale = sorted({f"{d} Rev {r}" for d, r in revs if r != V[d]})
     if stale:
         print(f"   lags at          : {', '.join(stale)} — see spec-impact.py")
