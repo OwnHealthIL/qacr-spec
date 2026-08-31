@@ -206,7 +206,7 @@
     <p data-rev="r5" class="lede">
       One document covering the backend shape, the app-facing contract surface, DevOps, the data model,
       monitoring and the FDA cybersecurity obligations. Decisions are the spine's — <span class="m">architecture/spine.md</span>
-      AD-1 to AD-27 — consolidated here with the material from the prior investigation, now absorbed
+      AD-1 to AD-29 — consolidated here with the material from the prior investigation, now absorbed
       into <span class="m">architecture/spine-decision-log.md</span> L12, plus
       <span class="m">architecture/data_model.md</span> and
       <span class="m">architecture/QACR-Software-Cybersecurity-Considerations.md</span>. Nothing here
@@ -214,7 +214,7 @@
     </p>
     <div data-rev="r6" class="masthead-meta">
       <span>2026-08-24</span>
-      <span>aligned with: spine.md AD-1…AD-27</span>
+      <span>aligned with: spine.md AD-1…AD-29</span>
       <span>shape: modular monolith · ports-and-adapters · one Postgres · RLS on partner_id · outbox</span>
       <span>CI: GitHub Actions · Helm + helmfile · no ArgoCD · gitflow</span>
     </div>
@@ -251,11 +251,11 @@
         <span class="m">release/vX.Y</span>, <span class="m">hotfix/*</span>. See 2.3.</li>
     </ul>
     <p data-rev="r19">
-      Both are choices the regulations are indifferent to, and neither disturbs an AD. What they do disturb is
+      Both are choices the regulations are indifferent to, and neither disturbs an AD. What they did disturb was
       three lines of spine text — the Stack row, the Branching convention, and AD-25's phrase
-      "promoted through the release tool's hotfix path" — which should be amended to match rather than left
-      in contradiction. <strong>AD-24's gate set is unaffected:</strong> the gates are the same gates,
-      expressed as GitHub Actions jobs.
+      "promoted through the release tool's hotfix path" — and those have since been amended to match, so the
+      two documents no longer contradict each other. <strong>AD-24's gate set is unaffected:</strong> the gates
+      are the same gates, expressed as GitHub Actions jobs.
     </p>
     <p data-rev="r20">
       A third divergence is resolved rather than created: <span class="m">devops_plan.html</span> proposed
@@ -762,6 +762,29 @@
       </table>
     </div>
 
+    <div data-rev="r210a" class="callout">
+      <div class="eyebrow">One broker, not two — AD-29</div>
+      <p>
+        <span class="m">RabbitMQ</span> is the only message broker <span class="m">qacr-backend</span> runs or
+        depends on. The incumbent estate runs RabbitMQ and GCP Pub/Sub side by side in
+        <span class="m">behealthy</span>, but that split was never an architectural boundary drawn on purpose —
+        it is a per-partner migration switch between an old delivery generation and a new one that never
+        finished converging, and log <span class="m">E-14</span> already recorded its cost: a partner
+        gatekeeper that silently drops an unrecognised partner, and <span class="m">partners-worker</span>
+        never nacks. <span class="m">qacr-backend</span> has no NHS/HSCN-style network-isolated boundary today,
+        so it does not inherit that split, and nothing in <span class="m">product/FR-01/requirements.json</span>
+        calls for Pub/Sub specifically.
+      </p>
+      <p>
+        A boundary AMQP cannot cross — a different GCP project, a different broker, or a network-isolated
+        compliance boundary such as HSCN — is bridged by authenticated HTTP behind the same per-partner
+        adapter port (AD-10), generalising the pattern the <span class="m">notifications-worker</span> push
+        above already uses under AD-7. GCP Pub/Sub is not introduced as a second broker for any future
+        partner or integration; a concrete future need for it is a new case against AD-29, not a reason to
+        keep both brokers open by default now.
+      </p>
+    </div>
+
     <div data-rev="r211" class="callout">
       <div data-rev="r212" class="eyebrow">The management plane — "backdoors to maintain the product without external exposure"</div>
       <p data-rev="r213">
@@ -1205,7 +1228,7 @@
           <tr data-rev="r1274"><td data-rev="r1275">Results centre read</td>
             <td data-rev="r1276" class="step">M4</td>
             <td data-rev="r1277">app, session token <strong>+ <span class="m">secure</span> PIN claim</strong></td>
-            <td data-rev="r1278">AD-23 — scoped by the resolved patient identifier, <strong>never by phone number</strong>, which is not a scope, a query key or a lookup path. What the centre may list across is Product's half: <span class="m">decisions/D-01.md</span>. <span class="id">FR-PRT-001 · FR-ACC-001, 002, 009</span></td></tr>
+            <td data-rev="r1278">AD-23 — scoped by the resolved patient identifier, <strong>never by phone number</strong>, which is not a scope, a query key or a lookup path. What the centre may list across is Product's half: <span class="oqid">OQ-18</span>. <span class="id">FR-PRT-001 · FR-ACC-001, 002, 009</span></td></tr>
           <tr data-rev="r1279"><td data-rev="r1280">Results letter</td>
             <td data-rev="r1281" class="step">M5</td>
             <td data-rev="r1282">app, session token + <span class="m">secure</span></td>
@@ -1300,7 +1323,7 @@
         <li data-rev="r1340"><strong>Identity operations</strong> — not in this document and not QACR's to
           specify: user-management, per AD-6 and the spine's Inherited Invariants.</li>
         <li data-rev="r1341"><strong>The scope questions still open</strong> —
-          <span class="m">decisions/D-01.md</span> (what the results centre may list),
+          <span class="oqid">OQ-18</span> (what the results centre may list),
           <span class="oqid">OQ-17</span> (the letter against <span class="m">FR-SEC-007</span>),
           <span class="oqid">OQ-15</span> (which artefacts cross the algorithm port).</li>
       </ul>
@@ -2659,11 +2682,16 @@
           shareable by email. The control is device-side and outside this plan's scope, but
           <strong>the letter is generated backend-side at M5</strong> — so if it resolves toward saving, QACR
           owns generation and transport and <span class="m">FR-SEC-007</span>'s control has to be restated
-          rather than silently narrowed. <em>Owner: Product, plus QMS for the risk file. Tracked in
-          <span class="m">decisions/D-02.md</span>.</em></li>
+          rather than silently narrowed. <em>Owner: Product, plus QMS for the risk file.</em></li>
         <li data-rev="r1034"><span class="oqid">OQ-16</span> — the session token lifetime (repeated from 1.3). AD-23 declined a
           nonce on the frame and trace paths on the ground that a captured request is worth only what token
           lifetime allows, so this number is a security parameter, not a convenience setting.</li>
+        <li data-rev="r1034a"><span class="oqid">OQ-18</span> — <strong>what the results centre contains.</strong>
+          <span class="m">FR-PRT-001</span>'s own note says whether invalidated tests appear and whether a
+          household is intended to see one another's results are both "to be specified". AD-23 fixes the safe
+          default meanwhile — strict per-user scoping by the resolved patient identifier; household visibility
+          would be a new rule with an explicit partner-configured opt-in, never a relaxation of AD-23.
+          <em>Owner: Product.</em></li>
         <li data-rev="r1035"><span class="oqid">OQ-13</span> — no requirement obliges a minimum admissible application build
           (repeated from 2.1). The guidance requires the capability; the requirements document does not yet
           name it, so it is not verified under <span class="m">FR-LCM-017</span>.</li>
@@ -2757,10 +2785,10 @@
 
   <footer data-rev="r1216">
     <div data-rev="r1217">QACR · architecture plan · rev 1 · 2026-08-24</div>
-    <div data-rev="r1218">decisions are architecture/spine.md AD-1…AD-27; rationale is architecture/spine-decision-log.md, keyed by L-number</div>
+    <div data-rev="r1218">decisions are architecture/spine.md AD-1…AD-29; rationale is architecture/spine-decision-log.md, keyed by L-number</div>
     <div data-rev="r1219">consolidates the prior investigation's Q1–Q14 and open items (absorbed into architecture/spine-decision-log.md L12), the superseded backend_architecture.html and devops_plan.html (the parts that survive the Kubernetes choice), architecture/data_model.md (Alternative A) and architecture/QACR-Software-Cybersecurity-Considerations.md</div>
     <div data-rev="r1220">requirement ids are references only — product/FR-01 governs their wording</div>
-    <div data-rev="r1221">departs from spine.md in two places, both at the user's direction 2026-08-24: GitHub Actions rather than Jenkins (2.1), and gitflow rather than trunk-based (2.3). The spine's Stack row, Branching convention and AD-25 hotfix phrasing need amending to match.</div>
+    <div data-rev="r1221">departed from spine.md in two places, both at the user's direction 2026-08-24: GitHub Actions rather than Jenkins (2.1), and gitflow rather than trunk-based (2.3). The spine's Stack row, Branching convention and AD-25 hotfix phrasing have since been amended to match; both documents now agree.</div>
   </footer>
 
 </div>

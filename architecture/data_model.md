@@ -477,7 +477,7 @@ user's answers verbatim. They are 1, 3 and 9 below, annotated in place. The othe
    query key or a lookup path**. So the query is scoped by patient, and it stays that way when
    `FR-AUT-011` lands at M5. What remains Product's is what the screen *contains* — whether
    invalidated tests appear, and whether a household is intended to see one another's results — and
-   that is now `decisions/D-01.md`.
+   that is now `spine.md` **OQ-18**.
 5. **Consent recording timing** (register item Q-11). `FR-CNS-007` is M5; the backend SRS wants
    consent recorded before a test starts. If the SRS position holds, `consent_ack` moves to M3 and
    becomes a precondition of exam creation.
