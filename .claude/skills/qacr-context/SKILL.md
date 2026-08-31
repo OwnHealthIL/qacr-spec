@@ -68,6 +68,44 @@ filesystem, and do not proceed without it.
 
 The caller gives a spec id (`QACR-APP-SPEC-01 Rev1.2`) or a feature id (`F01.4`).
 
+### Resolving the brief revision
+
+**A spec id may arrive without a revision — `QACR-APP-SPEC-03` — and that must resolve by rule,
+not by whatever the glob happened to return first.** Several revisions of a brief sit side by side
+in `product/specs/` and are all kept deliberately, so this is the common case, not an edge one.
+
+1. **A revision named explicitly is used exactly as named.** If no such file exists, stop and list
+   the revisions that do. Do not fall back to a neighbouring one — a caller who typed `Rev1.0`
+   and silently got `Rev1.1` has been handed a different document than the one they asked for.
+2. **A spec id with no revision resolves to the highest revision on disk**, per the convention
+   `product/specs/README.md` states: every revision built against is kept, and the highest is the
+   live one.
+3. **Compare revisions numerically, major then minor — never as strings.** Minors reach double
+   digits in this repository (FR-01 is at Rev 1.24, EPIC-01 at Rev 1.18), and a string sort puts
+   `Rev1.10` below `Rev1.9`, which silently resolves to a superseded brief while looking correct.
+4. **State the revision that was resolved, always.** It appears in the menu header, so the caller
+   sees which document they are selecting features from before they choose — the same
+   confirm-before-the-expensive-work rule the selection modes follow.
+
+**Readiness is checked, never assumed.** The brief's `| Revision |` row carries its status, and a
+revision being highest does not make it reviewed:
+
+- **The resolved revision is marked `ready`** — proceed.
+- **The resolved revision is a draft, and the caller named no revision** — **stop.** Say which
+  revision is highest, that it is a draft, and quote its status. A spec built from an unreviewed
+  brief is built from requirements nobody has settled, and resolving *to* one by omission is not a
+  choice anybody made. Where a lower revision is `ready`, name it as the one the caller probably
+  wants; that is a recommendation, not a substitution — do not take it unasked.
+- **The caller named a draft revision explicitly** — proceed, but say plainly that the brief is a
+  draft and quote its status, so it reaches the spec's provenance rather than surfacing later.
+
+The distinction is deliberate: naming `Rev0.8` is a deliberate act, and landing on it because no
+revision was typed is not. Today `QACR-APP-SPEC-05` has **no** ready revision at all — Rev 0.7 and
+Rev 0.8 are both unreviewed drafts — so a bare `QACR-APP-SPEC-05` stops here, and that is correct.
+
+**A feature id needs none of this.** Its brief and revision come from the feature file's own header
+link, which pins one file — a record, not a resolution.
+
 **A feature is the unit of a contract, and of a spec.** That is what stays fixed. What a caller may
 choose is how many features this run covers, because the reading behind them is largely the same
 reading and doing it once per feature wastes most of it.
@@ -661,6 +699,11 @@ does not ask them again. Dropping them here reintroduces the questions one layer
 
 ## Step 7 — Verify before handing over
 
+- the brief revision was resolved by rule — named exactly as given, or the numerically highest
+  where none was given — and the resolved revision is stated in the run's own output
+- the resolved revision's readiness was read from its `| Revision |` row: a draft reached by
+  resolution stopped the run; a draft named explicitly by the caller was carried with its status
+  quoted
 - every requirement in the `## Requirements owned` table appears exactly once, either with a
   `build` or in `stops`
 - no disposition was assigned that the feature file does not state
@@ -727,6 +770,11 @@ does not ask them again. Dropping them here reintroduces the questions one layer
 - **One contract covering several features.** A selection of eight emits eight contracts. The unit
   of a contract is one feature, whatever the unit of the *run* is.
 - **Auto-picking a feature** because only one looked relevant. Ask.
+- **Resolving a bare spec id by whatever the directory listing returned first**, or by sorting
+  revisions as strings so `Rev1.10` loses to `Rev1.9`.
+- **Building from a draft revision nobody named**, because it happened to be the highest.
+- **Substituting a lower `ready` revision** for a draft the caller resolved to. Recommend it; do
+  not take it.
 - **Widening a selection** because the other features were "nearly free" once the shared read was
   done. The caller chose the scope; cheapness is not consent.
 - **Filtering a milestone-selected feature down to that milestone's requirements.** Milestone
