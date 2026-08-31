@@ -117,27 +117,54 @@ Given a spec id, read its *Features covered* row and present the selection. **Ne
 caller, even when the brief covers only one feature**, and never widen a selection because the extra
 features looked cheap.
 
-**The menu names each feature's milestones**, because milestone is what one of the three selection
-modes keys on and a caller cannot choose it blind:
-
-> QACR-APP-SPEC-01 Rev 1.2 covers eight features:
->   1. F01.1 — Store distribution and install-time compatibility   · M3, M4
->   2. F01.2 — Supported-device policy and run-time eligibility    · M3
->   3. F01.3 — Device integrity check                              · M3
->   ...
->   8. F01.9 — Run-time configuration                              · M2, M3, M5
->
-> Milestones across these features: M1 (1), M2 (1), M3 (8), M4 (1), M5 (1)
->
-> Select: feature numbers or ids · a milestone (`M3`) · `all`
-
 ### The three selection modes
 
 | Mode | What it selects |
 |---|---|
-| **feature** | the features named, by number or id — one or several |
-| **milestone** | every feature the brief covers that has **any** requirement in that milestone |
 | **all** | every feature the brief covers |
+| **milestone** | every feature the brief covers that has **any** requirement in that milestone |
+| **feature** | the features named, by id or number — one or several |
+
+### The selection prompt — exactly these three options, in this order
+
+**The offered choices are the three modes and nothing else.** One option per mode, always all
+three, always in the order above. The prompt is a mode chooser, not a menu of candidate features:
+
+> Which features of QACR-APP-SPEC-01 Rev 1.4 are you specifying?
+> *(One spec per feature either way.)*
+>
+> **1. All features** — all 8: F01.1, F01.2, F01.3, F01.4, F01.5, F01.6, F01.8, F01.9
+> **2. A specific milestone** — M1 (1 feature), M2 (1), M3 (8), M4 (1), M5 (1) · say which
+> **3. Specific features** — say which, by id or number · one or several
+
+**Every milestone present in the selection is offered, with the count of features it selects.** A
+prompt naming one milestone hides the rest and reads as though it were the only one available. The
+counts are what stop a milestone being chosen as though it narrowed something — on SPEC-01, `M3`
+selects all eight.
+
+**Option 3 covers one feature as well as several, so there is no fourth option for a single one.**
+"One feature" is a selection of size one, not a separate mode. Splitting it out is what turns three
+options into five.
+
+**Never promote a particular feature into an option, and never rank them.** No option names a
+feature as *the* one to pick, and no description calls a feature the richest, the most relevant, the
+best starting point, or the one a previous run covered. Any of those is a recommendation, and this
+step does not recommend — a caller who wanted that feature will say so under option 3. This is the
+same refusal as "never pick for the caller": promoting one candidate to the top of the list is
+picking, done in a way that looks like presenting.
+
+**Each option says what it selects, not what it costs or what it needs.** How many contracts get
+written, how many extractions run, and which producer version is deployed are this skill's
+concerns, not the caller's decision criteria.
+
+**The feature inventory belongs above the question, not inside the options** — id, title and
+milestones, one line each, so the ids under option 3 can be typed without going to look them up:
+
+> QACR-APP-SPEC-01 Rev 1.4 covers 8 features:
+>   F01.1 — Store distribution and install-time compatibility · M3, M4
+>   F01.2 — Supported-device policy and run-time eligibility  · M3
+>   …
+>   F01.9 — Run-time configuration                            · M2, M3, M5
 
 **Milestone selects whole features, never part of one.** A feature's requirements can sit in
 different milestones — F01.1 owns three M3 requirements and one M4 — so the milestone that selected
@@ -699,6 +726,9 @@ does not ask them again. Dropping them here reintroduces the questions one layer
 
 ## Step 7 — Verify before handing over
 
+- the selection prompt offered exactly three options — all / a specific milestone / specific
+  features — in that order, with every milestone present in the selection named and counted, no
+  feature promoted into an option, and no fourth option
 - the brief revision was resolved by rule — named exactly as given, or the numerically highest
   where none was given — and the resolved revision is stated in the run's own output
 - the resolved revision's readiness was read from its `| Revision |` row: a draft reached by
@@ -775,6 +805,15 @@ does not ask them again. Dropping them here reintroduces the questions one layer
 - **Building from a draft revision nobody named**, because it happened to be the highest.
 - **Substituting a lower `ready` revision** for a draft the caller resolved to. Recommend it; do
   not take it.
+- **Offering more or fewer than the three modes.** Not four, not five — and no "type something"
+  escape hatch bolted on beside them.
+- **Promoting a named feature into an option**, or describing one as the richest, most relevant or
+  best place to start. That is a recommendation wearing the clothes of a menu.
+- **A separate option for a single feature.** One feature is a selection of size one under
+  `feature`.
+- **Offering one milestone when the selection contains several**, or offering milestone counts.
+- **Describing an option by what it costs** — contracts written, extractions run, which producer
+  version is deployed. None of that is the caller's decision criterion.
 - **Widening a selection** because the other features were "nearly free" once the shared read was
   done. The caller chose the scope; cheapness is not consent.
 - **Filtering a milestone-selected feature down to that milestone's requirements.** Milestone
