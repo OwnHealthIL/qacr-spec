@@ -123,7 +123,7 @@ stopping condition and is what made SPEC-01 expensive.
 | `evidence/coverage.tsv` | whether anyone has looked at a requirement at all. `no-evidence-found` means **nobody extracted**, never that the code does nothing |
 | `evidence/context.tsv` | `CTX-nn` — what a developer knows that no requirement states. CTX-02, CTX-03 and CTX-04 all bear on what the QACR build can be assumed to have |
 | `features/*` — the `silent` list | a requirement a covered feature owns that its spec says nothing about. **Silence is not a decision and must never be read as as-is** |
-| `decisions/D-nn` | questions *they* raised against a spec. Answer verbatim into the register or the requirement |
+| `decisions/PQ-nn` | questions *they* raised against a spec. Answer verbatim into the register or the requirement |
 | `local/Reference/Minuteful copy/` | which conditions and screens **exist**. Never for values |
 | `local/Source documents/` | Risk Analysis, both SRSs, the SPTA, UX studies |
 | `/mind` | topology: which services and clients, what talks to what |
@@ -246,7 +246,7 @@ Post in the conversation, not in the document:
 2. **The sweep table** with keep / change / exclude recommendations.
 3. **Requirements proposed**, each with a proposed milestone and its dependency check (Phase 4).
 4. **What was not swept**, so he knows the list's edges.
-5. **Any `decisions/D-nn` raised against this spec**, answered. Those are the development
+5. **Any `decisions/PQ-nn` raised against this spec**, answered. Those are the development
    team's questions and they cannot close them.
 
 **Give him a redline for anything past the first revision.** From SPEC-04 Rev 0.2 onwards the

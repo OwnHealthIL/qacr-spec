@@ -1,15 +1,16 @@
 ---
 name: qacr-context
-description: Gather everything this repository records about one or more QACR features — the brief's disposition for each requirement it owns, the departures and open items behind those dispositions, ACR's behaviour where the feature recreates it, and the architectural guidelines for its domains — and emit one contract per feature for a spec writer to work from. Selection is one feature, every feature of a milestone, or every feature the brief covers; a batch reads the shared record once and emits a contract per feature, never one spanning features. Use when a QACR spec or feature is named, when /spec is run on a QACR-APP-SPEC id, or when asked what a QACR feature needs before it can be specified. Produces context, never a specification.
+description: Gather everything this repository records about one or more QACR features — the brief's disposition for each requirement it owns, the departures and open items behind those dispositions, the answers already recorded in the decision log, ACR's behaviour where the feature recreates it, and the architectural guidelines for its domains — and emit one contract per feature for a spec writer to work from. Selection is one feature, every feature of a milestone, or every feature the brief covers; a batch reads the shared record once and emits a contract per feature, never one spanning features. Use when a QACR spec or feature is named, when /spec is run on a QACR-APP-SPEC id, or when asked what a QACR feature needs before it can be specified. Produces context, never a specification.
 ---
 
 # Everything known about a QACR feature, in one object per feature
 
 **The output is context. It is not a specification, and it does not say how to build anything.**
 
-A spec writer arriving at a QACR feature needs four things this repository holds and one it does
-not: what the PM decided for each requirement, what those decisions rest on, what ACR does where the
-feature recreates it, and which architectural rules apply. This skill assembles them and stops.
+A spec writer arriving at a QACR feature needs five things this repository holds and one it does
+not: what the PM decided for each requirement, what those decisions rest on, which of its questions
+were already asked and answered, what ACR does where the feature recreates it, and which
+architectural rules apply. This skill assembles them and stops.
 
 `spec-skill` consumes what it emits. Nothing here writes a spec, slices a task, or opens the QACR
 application — those come after.
@@ -25,9 +26,9 @@ requirement is whose, and every consumer downstream is built around one feature 
 ## What this skill is, and is not
 
 It does **not**: decide a disposition, fill in a requirement the brief is silent on, resolve an open
-value, judge whether the PM is right, or read `evidence/`. Producing a confident answer to any of
-those is the way this fails, because the consumer is an agent that will specify whatever it is
-handed.
+value, answer a question the decision log has not, judge whether the PM is right, or read
+`evidence/`. Producing a confident answer to any of those is the way this fails, because the
+consumer is an agent that will specify whatever it is handed.
 
 **Its one refusal is the important part.** A requirement the brief does not classify does not get a
 classification here. It gets recorded as a stop, and the spec is written without it.
@@ -42,6 +43,7 @@ classification here. It gets recorded as a stop, and the spec is written without
 | `product/specs/QACR-APP-SPEC-nn Rev<major>.<minor>.md` | the brief — departure text, open items, confirmed-as-is answers | once per **run** |
 | `product/EPIC-01/features.json` | which features a brief covers, and what each owns | once per **run** |
 | `product/FR-01/requirements.json` | requirement text, milestone, and the `note` field | once per **run** |
+| `decisions/adr/DECISIONS.md` | answers already recorded for these features' questions; an absent file is no answers, not an error — see step 3.5 | once per **run** |
 | `architecture/<domain>.md` | the guidelines, where they exist | once per **run**, per distinct domain |
 
 **One space before `Rev`, none after it** — `QACR-APP-SPEC-03 Rev1.1.md`. The revision *inside* a
@@ -178,6 +180,21 @@ whatever the options are. Those rows are not modes and not this skill's to remov
 them, do not try to suppress them, and do not add a fourth mode to fill the spare slot. Three
 prescribed modes plus the interface's own escape is the whole prompt.
 
+**The inventory leads with whatever changes the recommendation.** Say which covered features
+already have a spec, and — the part that actually decides it — which of those have **recorded
+answers their spec has not consumed yet**. A feature whose spec is waiting on answers that have
+since arrived is a bounded update, cheap and immediately valuable; a feature with no spec is a full
+extraction. Bury that under a flat list of eight and the inventory reads as though no work has been
+done yet, which is how a caller starts from scratch beside a spec that already exists.
+
+> F01.1 already has a spec (round 2, approval pending) and **four recorded answers it has not
+> taken up** — that one is a bounded update. The other seven have no spec yet.
+
+**That is state, not a recommendation, and it goes above the question — never into an option.** The
+distinction is the whole reason the options are fixed: telling the caller F01.1 is cheap is
+information they need; making "F01.1 only" the first option, or tagging it `(Recommended)`, is
+deciding their scope for them. State the state, then offer the same three modes.
+
 **The feature inventory belongs above the question, not inside the options** — id, title and
 milestones, one line each, so the ids under option 3 can be typed without going to look them up:
 
@@ -272,10 +289,19 @@ for the whole run:
 3. **`product/FR-01/requirements.json`** — every requirement's text, milestone and `note`. One read.
 4. **`architecture/<domain>.md` for the union of domains across the selected features.** Take the
    union first, then read. On SPEC-01 all eight features are `iOS` + `Android`, so this is two files
-   for the batch rather than sixteen reads of the same two — *where the directory exists at all.*
-   It does not today, so every domain currently resolves to `no-directory` (step 5) and this
-   particular saving is notional. Take the union anyway: the rule has to be right for when the
+   for the batch rather than sixteen reads of the same two. `architecture/` exists, but holds no
+   `ios.md` or `android.md` yet, so a mobile domain resolves to `absent` rather than
+   `no-directory` — see step 5. Take the union anyway: the rule has to be right for when the
    guidelines land, and a union taken only once the files appear is a rule nobody has exercised.
+5. **`decisions/adr/DECISIONS.md`** — the decision log, **one file for the whole product**, so one
+   read serves every feature in the selection no matter how many. Each feature's entries are then
+   selected from what was read, by the scoping rule in step 3.5. An absent file is no answers yet,
+   not an error.
+
+**The decision log is the clearest case for reading once.** It is a single append-only file covering
+every feature of the product, so a per-feature loop would read the same document eight times and,
+worse, could summarise it eight ways — and this is the one input where a disagreement between two
+reads means two contracts differ about whether a question is already answered.
 
 **Take the domain union before reading, not per feature as you go.** A run that reads guidelines
 inside the per-feature loop and relies on remembering it has already read them will re-read them, and
@@ -291,7 +317,7 @@ feature is assembled.
 
 ## Step 2 — Read the record, per feature
 
-**Steps 2 through 5 run once per selected feature**, reading that feature's own file and drawing
+**Steps 2 through 5 run once per selected feature — step 3.5 included**, reading that feature's own file and drawing
 everything else from the shared record of step 1b. Features are independent at this point: nothing
 one feature's assembly discovers changes another's, so they may be assembled in parallel — see
 [Assembling a batch](#assembling-a-batch).
@@ -486,7 +512,7 @@ back. He has not answered it yet.
 **On `silent`.** Silence is not a decision and must never be read as `as-is`. Today the set is
 empty — every requirement of every covered feature appears in SPEC-01 — so a silent requirement
 means something slipped, and it goes back to the PM. Write it to `decisions/`, one file per
-question, and record the stop.
+question (`PQ-nn`, per `decisions/README.md`), and record the stop.
 
 **On the unclassifiable.** A requirement QACR needs that ACR never had has no disposition in the
 brief's vocabulary yet. When one appears, stop. Do not read it as a departure, and do not invent a
@@ -494,6 +520,65 @@ label.
 
 A stop removes that requirement from the spec. It does not stop the feature — the rest is specified
 without it, and the stops travel in the contract so the spec can say what it left out and why.
+
+## Step 3.5 — Recorded answers, from the decision log
+
+**A question somebody already answered never reaches the spec as open.** Answers live in
+`decisions/adr/DECISIONS.md` — append-only, one `## <id> — <question>` heading per entry, a yaml
+block carrying every field (`n/a` when not applicable), prose after. Entries are never edited; an
+entry is superseded exactly when a later entry names its id in `supersedes`. **An absent file is no
+answers yet, not an error** — record the state and move on.
+
+**Scope the log to this feature:** entries whose `feature` matches, or whose `affects` intersects
+the ids in the `## Requirements owned` table. Nothing else is read into this contract.
+
+For each in-scope entry, the first rule that applies wins:
+
+1. **Superseded** → ignore it. Only the superseding entry is considered.
+2. **`status: deferred`** → not an answer, and not this skill's to re-triage. It travels in
+   `open_items` beside the brief's U-n items, carrying **every field that array requires** — an
+   open item short of one is an invalid contract, per step 7, and a deferred entry is the common
+   case rather than the rare one:
+
+   | field | from the entry |
+   |---|---|
+   | `ref` | the entry id |
+   | `question` | the entry's `question`, verbatim |
+   | `owner` | the entry's `owner` field |
+   | `blocks` | its `affects` |
+   | `blocks_inferred` | `false` — the log attaches its own ids, so that join is a record, not a reading |
+   | `blocks_what` | the entry's `reopens_when` field — what the deferral waits on *is* what it withholds |
+   | `brief_verbatim` | `n/a` — this item came from the log, not the brief, and the brief has no wording for it |
+
+   **Every one of those is a field, not a sentence to interpret.** `owner` and `reopens_when` are
+   columns on every entry (`n/a` when accepted), so this mapping is a copy. Do not parse them out of
+   `answer` or the Decision prose even when they also appear there: the prose is for the human
+   reading the log, the fields are what the parse contract guarantees, and a consumer that regexes
+   `Owner:` out of free text breaks the first time somebody words a deferral differently.
+
+   **`brief_verbatim` is `n/a`, never reconstructed.** The field means *the brief's own words*, and
+   a log-sourced item has none; writing the entry's prose there would present this repository's
+   text as the PM's. The spec writer lists the item with its owner, and nobody triages it again
+   from scratch.
+3. **Stale** — `decided_against` names a revision that has since moved (compare against the
+   revisions step 2 read off the Provenance line) → do **not** fold. Raise a `stale-decision`
+   flag: `needs re-confirmation: decided against <old>, current is <new>`. A stale decision must
+   never silently steer a new spec — but this is a flag, not a stop; the requirement still
+   specifies.
+4. **`status: accepted` and `decided_against` still current** → fold it into `confirmed_as_is`,
+   whose semantics already fit: recorded so nobody re-asks. Carry the entry id, the answer,
+   `decided_by` / `decided_on`, and what it `resolves` and `unblocks` — each read from its own
+   field, never from prose. **Do not invent a new
+   top-level field for it** — `spec-skill`'s disposal table has no destination for one, and an
+   unknown field surfaces downstream as uncarried.
+
+Record the log in `_contract.sources` — path, `read` or `absent`, and the in-scope entry ids — so
+provenance names what the folds stand on.
+
+**The refusal at the top of this document holds here unchanged.** This skill answers nothing; it
+carries answers someone recorded. An entry missing any of its mandatory fields is malformed —
+report it in `excluded_deliberately` with the fields it lacks, and do not fold it. A malformed
+record is a defect in the log, not a license to reconstruct what it probably meant.
 
 ## Step 4 — ACR behaviour, when the feature recreates anything
 
@@ -526,7 +611,13 @@ to whoever writes it.
 
 For each domain record `found` with the rules read, or `absent`. Distinguish `absent` (no file for
 this domain) from `no-directory` (`architecture/` does not exist at all); the first is a gap in the
-guidelines, the second is a gap in the repository, and only the second is true today.
+guidelines, the second is a gap in the repository.
+
+**`absent` is the state today, not `no-directory`.** `architecture/` exists and holds the backend
+spine, its decision log, the data model and the cybersecurity note — but no `ios.md` and no
+`android.md`, so a mobile domain resolves to `absent`. Reporting `no-directory` now would say the
+repository has no architecture layer, which is no longer true and would send the consumer looking
+for the wrong gap.
 
 **The write-back obligation travels in the contract instead.** Eighty-two features each inventing a
 different architecture is the failure to prevent, so the consumer that infers a rule records it in
@@ -538,7 +629,9 @@ different architecture is the failure to prevent, so the consumer that infers a 
 ...
 ```
 
-`decisions/` is then the only thing this skill writes into `qacr-spec`.
+`decisions/` is then the only thing this skill writes into `qacr-spec`. It also *reads*
+`decisions/adr/DECISIONS.md` (step 3.5), but the log is written elsewhere, never here — the
+boundary above is about writes, and it has not moved.
 
 ## Assembling a batch
 
@@ -605,7 +698,10 @@ is the manifest below, and no spec is written from a manifest.
       "Never choose a value for an open item, and never treat a silent requirement as as-is.",
       "ACR behaviour is evidence about a solved problem, not a requirement. Derive, do not copy.",
       "Every acceptance criterion names the requirement it proves; every derived test carries that id.",
-      "Where the QACR application contradicts a requirement: present both and stop for a human. The requirement wins by default. Record it either way, and when it does not win, write the question to qacr-spec/decisions/.",
+      "Where the QACR application contradicts a requirement: present both and stop for a human. The requirement wins by default. Record it either way, and when it does not win, write the question to qacr-spec/decisions/ as a PQ-nn file.",
+      "Questions the spec itself raises use the spec's own id spaces: Decisions-needed rows are SD-n, Open-Questions items are SQ-x, scoped to that spec — never bare D-n or Q-n, which collide with the PM's ids (SPEC-nn's Dn departures, the Q-nn register) and read as claims about the PM's records.",
+      "Answers to this spec's open questions are recorded per <qacr-spec>/.claude/skills/adr-conventions/SKILL.md, and the spec's Decisions-needed section says so. The pointer travels into every spec, so an answer found later has somewhere to land.",
+      "A criterion unblocked by a recorded answer cites the entry id. The entry names what it unblocks; the criterion names what unblocked it — traceability both ways.",
       "In a repository serving more than one product: additive only. Existing behaviour and existing consumers are untouched, and blast radius is checked with /mind. If the requirement cannot be met additively, that is a stop.",
       "A proposed guideline is unreviewed. Follow it for consistency, and flag in the spec that it is unapproved.",
       "Where a domain has no guideline and you infer one while specifying, write it to qacr-spec/architecture/<domain>.md marked proposed, with the feature and date. Inferring without recording is how eighty-two features acquire eighty-two architectures."
@@ -622,6 +718,9 @@ is the manifest below, and no spec is written from a manifest.
       "epic_map": { "read": "QACR-APP-EPIC-01 Rev 1.14", "brief_cites": "1.13", "diverges": true },
       "provenance_line": "<the feature file's Provenance line, verbatim>",
       "divergence_direction": "none|product-behind-brief|product-ahead-of-brief|mixed",
+      // The decision log this run read (step 3.5). `absent` means no answers yet, not an error.
+      "decision_log": { "path": "decisions/adr/DECISIONS.md", "state": "read|absent",
+                        "in_scope": ["<entry ids>"] },
       "qacr_spec_commit": "<sha>"
     },
     "gathered": "<ISO date>"
@@ -657,17 +756,26 @@ is the manifest below, and no spec is written from a manifest.
                          "why": "<the section's reason paragraph, verbatim>" }],
 
   "departures": [{ "ref": "D1", "what_changes": "<verbatim from the brief>", "driven_by": "FR-RDY-007" }],
+  // Two sources land here: the brief's U-n items, and deferred decision-log entries (step 3.5).
+  // For a log-sourced item, ref is the entry id, blocks comes from its `affects` with
+  // blocks_inferred false, blocks_what is what the deferral withholds, and brief_verbatim is
+  // "n/a" — the brief has no wording for an item the log raised.
   "open_items": [{ "ref": "U1", "question": "<verbatim>", "owner": "...",
                    "blocks": ["FR-RDY-007"], "blocks_inferred": true,
                    "blocks_what": "<what is withheld — values, verification>",
                    "brief_verbatim": "<the brief's own words on what waits on it>" }],
-  "confirmed_as_is": [{ "question": "<verbatim>", "answer": "<verbatim>" }],
+  // Recorded so nobody re-asks — the brief's answers, and the decision log's accepted entries
+  // (step 3.5), which also carry their entry id and trail.
+  "confirmed_as_is": [{ "question": "<verbatim>", "answer": "<verbatim>" },
+                      { "question": "<verbatim>", "answer": "<verbatim>",
+                        "decision": "<log entry id>", "decided_by": "...", "decided_on": "<ISO date>",
+                        "resolves": ["<spec question ids>"], "unblocks": ["<criterion ids>"] }],
 
   "stops": [{
     "requirement": "FR-XXX-nnn",
     "kind": "silent|unclassifiable|note-contradiction",
     "why": "...",
-    "action": "raised in decisions/<file>.md | awaiting the PM"
+    "action": "raised in decisions/PQ-nn.md | awaiting the PM"
   }],
 
   "note_pass": [{ "requirement": "FR-XXX-nnn",
@@ -676,10 +784,10 @@ is the manifest below, and no spec is written from a manifest.
 
   "flags": [{
     "ref": "note/FR-RDY-008",
-    "kind": "note-vs-brief|requirement-vs-requirement|needs-acr-behaviour|skill-behaviour",
+    "kind": "note-vs-brief|requirement-vs-requirement|needs-acr-behaviour|skill-behaviour|stale-decision",
     "requirements": ["FR-XXX-nnn"],
     "what": "...",
-    "resolves_with": "step 4|the PM|the skill author"
+    "resolves_with": "step 4|the PM|the decider|the skill author"
   }],
 
   "acr_behaviour": {
@@ -725,6 +833,8 @@ batch exercises.
   // they are stated here rather than compared across eight contracts to check they agree.
   "shared_read": {
     "brief": "QACR-APP-SPEC-01 Rev 1.2",
+    // The decision log, read once for the selection. "absent" is no answers yet, not an error.
+    "decision_log": { "path": "decisions/adr/DECISIONS.md", "state": "read|absent" },
     "requirements": { "read": "QACR-APP-FR-01 Rev 1.20", "brief_cites": "1.19", "diverges": true },
     "epic_map": { "read": "QACR-APP-EPIC-01 Rev 1.14", "brief_cites": "1.13", "diverges": true },
     "provenance_line": "<verbatim>",
@@ -765,6 +875,7 @@ from what the flag is about:
 | `requirement-vs-requirement` | `xref/<requirement>+<requirement>`, ids ascending |
 | `needs-acr-behaviour` | `acr/<feature>` |
 | `skill-behaviour` | `skill/step-<n>` |
+| `stale-decision` | `decision/<log entry id>` |
 
 Two runs that find the same thing then give it the same name, which is what makes flags comparable
 across runs at all.
@@ -778,7 +889,9 @@ omission from an oversight. The feature file embeds the vault's evidence rows; t
 every run, and saying so is cheaper than the reader wondering.
 
 `confirmed_as_is` is carried because the brief records those answers precisely so the next reader
-does not ask them again. Dropping them here reintroduces the questions one layer down.
+does not ask them again. Dropping them here reintroduces the questions one layer down. The decision
+log's accepted entries join it for the same reason — one field, one meaning, and the entry id keeps
+the two sources distinguishable.
 
 ## Step 7 — Verify before handing over
 
@@ -800,7 +913,7 @@ does not ask them again. Dropping them here reintroduces the questions one layer
 - `acr_behaviour.called` is true if and only if at least one requirement recreates
 - every departure referenced by a requirement has its row, verbatim
 - every open item names what it blocks
-- every silent requirement has a file in `decisions/`
+- every silent requirement has a `PQ-nn` file in `decisions/`
 - `_contract.incomplete` is true whenever any step was skipped, with the reason recorded
 - every open-item link carries `blocks`, `blocks_inferred` and `blocks_what` — a link missing any
   of the three is an invalid contract, not a stylistic lapse
@@ -821,6 +934,16 @@ does not ask them again. Dropping them here reintroduces the questions one layer
   a defect, not a coincidence
 - `sources.divergence_direction` is present on every run and is exactly one of the four listed
   values, `none` included — it is never omitted, and never replaced by prose of the run's own
+- every in-scope `accepted` entry from the decision log was folded into `confirmed_as_is` or
+  explicitly refused with its reason recorded — never silently dropped
+- no `deferred` entry was treated as an answer — each travels in `open_items` with its named owner
+  and deferral reason
+- no stale entry — one whose `decided_against` revision has moved — was folded; each carries its
+  `stale-decision` flag naming the old and current revisions
+- no question the log already answers is carried as open — an answered question reaching the spec
+  as open is the failure step 3.5 exists to prevent
+- `_contract.sources.decision_log` is present with its state, `read` or `absent` — absent meaning
+  no answers yet, never an error
 - nothing was written into `qacr-spec` except `decisions/`
 - the contract was written to the application repository, not here
 
@@ -833,8 +956,12 @@ does not ask them again. Dropping them here reintroduces the questions one layer
   still holds **every** requirement its feature owns — a contract short of one is a filtered
   contract, which this mode does not produce
 - `selection.slug` matches the derivation table in step 1, with ids ascending
-- the shared inputs were read once: one brief read, one `requirements.json` read, one read per
-  distinct domain across the selection
+- the shared inputs were read once: one brief read, one `requirements.json` read, one read of
+  `decisions/adr/DECISIONS.md`, and one read per distinct domain across the selection
+- step 3.5 ran for every feature in the selection, scoping the **one** log read to that feature —
+  never re-reading the log per feature, and never folding one feature's answers into another's
+  contract
+- `shared_read.decision_log.state` is recorded on every run, `absent` included
 - `shared_read` is consistent with every contract's `_contract.sources` — they came from the same
   reads, so a disagreement means something was re-read
 - `acr_behaviour.called` is true in exactly those contracts whose feature has a recreating
@@ -853,6 +980,9 @@ does not ask them again. Dropping them here reintroduces the questions one layer
    verification where it is expensive.
 5. **Do not write a feature file.** `spec-intake` owns `features/`.
 6. **Do not edit `product/`.** It is read-only. A requirement changes by the document changing.
+7. **Do not write to `decisions/adr/DECISIONS.md`.** The log is append-only and recorded
+   elsewhere, per `adr-conventions`. This skill carries answers; it never records one. Its only
+   writes into `decisions/` remain the `PQ-nn` question files.
 
 ## Anti-patterns
 
@@ -885,8 +1015,11 @@ does not ask them again. Dropping them here reintroduces the questions one layer
   done. The caller chose the scope; cheapness is not consent.
 - **Filtering a milestone-selected feature down to that milestone's requirements.** Milestone
   selects features, never parts of them.
-- **Re-reading the brief, the requirements export or a domain guideline per feature.** One read per
-  run, per step 1b.
+- **Re-reading the brief, the requirements export, the decision log or a domain guideline per
+  feature.** One read per run, per step 1b — and the log is the worst one to re-read, being a single
+  product-wide file whose two readings could disagree about whether a question is already answered.
+- **Folding one feature's recorded answers into another feature's contract.** One log read, scoped
+  per feature by step 3.5's rule.
 - **Calling `acr-behaviour-reference` once for a whole selection.** Its scope is one feature's
   boundary and requirement ids; a selection-wide call returns prior art nobody can attribute.
 - **A sub-agent resolving an ambiguity so it can finish.** It returns the stop; the orchestrator
@@ -913,6 +1046,12 @@ does not ask them again. Dropping them here reintroduces the questions one layer
   The leading number is what was read.
 - **Narrating a divergence in an invented field** instead of recording `divergence_direction`. A
   field one run adds and the next omits is not a record of anything.
+- **Folding a deferred entry because its prose sketches an answer.** Deferred is not decided. It
+  travels as an open question with its named owner.
+- **Folding a stale decision silently.** `decided_against` names what the decision was true
+  against; once that moves, the answer needs re-confirmation, not reuse.
+- **Treating an absent decision log as an error.** No file means nobody has answered anything
+  yet, which is a state, not a failure.
 - **Inferring a guideline here.** This skill reports what exists; the spec writer infers, and the
   contract tells it to record what it inferred.
 - **Scanning the notes instead of enumerating them.** A note pass that looks for conflicts misses
