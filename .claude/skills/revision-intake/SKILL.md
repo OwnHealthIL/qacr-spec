@@ -265,7 +265,7 @@ These are hard stops, not judgement calls.
 2. **Do not edit a document in `product/`.** This skill is the one thing that *replaces* them, which
    is why the filename is the provenance. Nothing here rewords, annotates or fixes a document.
 3. **Do not write to `decisions/`.** That folder holds questions *this repository* raises against a
-   spec, `D-nn`. The FR document's own Decision Log and Review Register are `Q-nn`, they are
+   spec, `PQ-nn`. The FR document's own Decision Log and Review Register are `Q-nn`, they are
    Product's, and they are parsed to `product/FR-01/` and regenerated every revision. Copying a row
    into `decisions/` forks it, collides two id spaces, and confuses who is waiting on whom — see
    `decisions/README.md`.
