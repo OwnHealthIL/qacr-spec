@@ -107,6 +107,9 @@ A question that gets answered by picking the more likely reading is not answered
 and it surfaces during verification when it is expensive. Record the question, what makes it a
 question, and what happens if nobody answers. When the answer arrives, record it **verbatim**.
 
+Answers to the questions a spec itself raises — its Decisions-needed and Open-Questions rows — are
+recorded in `decisions/adr/DECISIONS.md`; `.claude/skills/adr-conventions/` says how.
+
 ## The things that are never done
 
 - Filling in a QACR intent by inference from what ACR does. Different product, different kit,
