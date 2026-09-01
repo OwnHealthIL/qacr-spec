@@ -43,8 +43,14 @@ def colour_runs(xml_fragment):
     """Add a red colour to every run in this fragment."""
     def fix(m):
         run=m.group(0)
+        if RED in run:
+            return run
         if '<w:rPr>' in run:
-            return run.replace('<w:rPr>', '<w:rPr>'+RED, 1)
+            # At the END of rPr, not the start. OOXML fixes the order of rPr's children —
+            # rStyle, rFonts, b, i, ... then color — and a colour placed before <w:b/> is
+            # out of schema order. Word renders it anyway; LibreOffice silently ignores it,
+            # so the run is red in the XML and black on the page. Only caught by rendering.
+            return run.replace('</w:rPr>', RED+'</w:rPr>', 1)
         return run.replace('<w:r>', '<w:r><w:rPr>'+RED+'</w:rPr>', 1)
     return re.sub(r'<w:r>.*?</w:r>', fix, xml_fragment, flags=re.S)
 
