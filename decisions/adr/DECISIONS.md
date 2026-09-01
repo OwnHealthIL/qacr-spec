@@ -123,14 +123,14 @@ product: QACR
 spec: QACR-APP-SPEC-01 Rev1.2
 feature: F01.1
 affects: [FR-PLT-004]
-resolves: [Q-B]
+resolves: [SQ-B]
 unblocks: [AC-8, AC-9]
 decided_against: { SPEC-01: Rev1.2, FR-01: Rev1.20, EPIC-01: Rev1.14, iosDip: e0636af3, AndroidDip: a50d8b03, ios-camera: b59561e7, ios-foundations: 35dac5a5 }
 record_status: n/a
 supersedes: n/a
 ```
 
-**Context** — The spec raised this as open question `Q-B` because the algorithm ships as a compiled
+**Context** — The spec raised this as open question `SQ-B` because the algorithm ships as a compiled
 framework, so `acr-behaviour-reference` recorded it `not_derivable: binary`, and both `AC-8` ("declare
 exactly the hardware a test depends on") and `AC-9` ("no capability declared that the app does not
 use") were unclosable without it. It also decides whether ACR's iOS `gyroscope` requirement should be
@@ -186,7 +186,7 @@ product: QACR
 spec: QACR-APP-SPEC-01 Rev1.2
 feature: F01.1
 affects: [FR-PLT-002, FR-PLT-003]
-resolves: [D-1]
+resolves: [SD-1]
 unblocks: [AC-5, AC-6, AC-7]
 decided_against: { SPEC-01: Rev1.2, FR-01: Rev1.20, EPIC-01: Rev1.14, iosDip: e0636af3, AndroidDip: a50d8b03 }
 record_status: pending-revision
@@ -248,7 +248,7 @@ product: QACR
 spec: QACR-APP-SPEC-01 Rev1.2
 feature: F01.1
 affects: [FR-PLT-004]
-resolves: [D-2]
+resolves: [SD-2]
 unblocks: n/a
 decided_against: { SPEC-01: Rev1.2, FR-01: Rev1.20, EPIC-01: Rev1.14, iosDip: e0636af3, AndroidDip: a50d8b03 }
 record_status: pending-revision
@@ -295,7 +295,7 @@ product: QACR
 spec: QACR-APP-SPEC-01 Rev1.2
 feature: F01.1
 affects: [FR-PLT-004]
-resolves: [D-4]
+resolves: [SD-4]
 unblocks: n/a
 decided_against: { SPEC-01: Rev1.2, FR-01: Rev1.20, EPIC-01: Rev1.14, iosDip: e0636af3, AndroidDip: a50d8b03 }
 record_status: pending-revision
@@ -333,7 +333,7 @@ product: QACR
 spec: QACR-APP-SPEC-01 Rev1.2
 feature: F01.1
 affects: [FR-PLT-001]
-resolves: [D-3]
+resolves: [SD-3]
 unblocks: n/a
 decided_against: { SPEC-01: Rev1.2, FR-01: Rev1.20, EPIC-01: Rev1.14, iosDip: e0636af3, AndroidDip: a50d8b03 }
 record_status: pending-revision
@@ -390,7 +390,7 @@ product: QACR
 spec: QACR-APP-SPEC-01 Rev1.2
 feature: F01.1
 affects: [FR-PLT-002]
-resolves: [Q-E]
+resolves: [SQ-E]
 unblocks: n/a
 decided_against: { SPEC-01: Rev1.2, FR-01: Rev1.20, EPIC-01: Rev1.14, Server: unpinned, urine.com.ios-qacr-app: 6814fb64 }
 record_status: pending-revision
@@ -441,7 +441,7 @@ product: QACR
 spec: QACR-APP-SPEC-01 Rev1.2
 feature: F01.1
 affects: [FR-PLT-004]
-resolves: [Q-G]
+resolves: [SQ-G]
 unblocks: n/a
 decided_against: { SPEC-01: Rev1.2, FR-01: Rev1.20, EPIC-01: Rev1.14 }
 record_status: n/a
