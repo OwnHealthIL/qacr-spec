@@ -23,6 +23,20 @@ A log entry's id is a question-derived slug (`FR-PLT-002-min-os-mechanism`) and 
 | `SPEC-nn/Dn` | departures — **per-brief** ids, always qualified with their brief: `SPEC-01/D1` and `SPEC-02/D1` are different decisions | PM's | the brief |
 | `PQ-nn` | questions this repository raises for Product | this repo | `decisions/*.md` |
 | `SD-n` / `SQ-x` | a spec's own Decisions-needed / Open-Questions rows, scoped to that spec | the spec | the spec |
+| `AD-nn`, `Ln`, `E-n`, `C-n`, `G-n`, `OZ-n` | backend-architecture decisions, and the layers, evidence, corrections, gaps and review comments behind them | the architecture spine | `architecture/spine-decision-log.md` |
+
+**There are two append-only logs in this repository, and they are not interchangeable.** This one
+answers questions a *feature specification* raised — per requirement, per feature, keyed to a brief.
+`architecture/spine-decision-log.md` records decisions about the *backend architecture spine*, and
+`architecture/spine.md` is distilled from it. A decision belongs to whichever log owns its subject;
+recording it in both makes two records that will disagree, and recording it in neither is how it
+gets decided twice.
+
+**A mobile `architectural` decision has no settled home yet.** The side-write below names
+`architecture/ios.md` / `architecture/android.md`, and neither file exists — while
+`architecture/spine-decision-log.md` does, and is scoped to the backend. Do not resolve this by
+writing a mobile decision into the spine log. Record it here, and raise the destination as a
+question rather than choosing one.
 
 ## Entry rules
 

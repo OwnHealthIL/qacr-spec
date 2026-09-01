@@ -343,7 +343,13 @@ to whoever writes it.
 
 For each domain record `found` with the rules read, or `absent`. Distinguish `absent` (no file for
 this domain) from `no-directory` (`architecture/` does not exist at all); the first is a gap in the
-guidelines, the second is a gap in the repository, and only the second is true today.
+guidelines, the second is a gap in the repository.
+
+**`absent` is the state today, not `no-directory`.** `architecture/` exists and holds the backend
+spine, its decision log, the data model and the cybersecurity note — but no `ios.md` and no
+`android.md`, so a mobile domain resolves to `absent`. Reporting `no-directory` now would say the
+repository has no architecture layer, which is no longer true and would send the consumer looking
+for the wrong gap.
 
 **The write-back obligation travels in the contract instead.** Eighty-two features each inventing a
 different architecture is the failure to prevent, so the consumer that infers a rule records it in
