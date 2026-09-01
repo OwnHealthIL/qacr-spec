@@ -40,7 +40,9 @@ and the log would carry the same decision twice, silently.
 | `status` | `accepted` \| `deferred` — deferred is a legitimate answer (reason, owner, what reopens it) and counts as resolved for gating |
 | `question` | one sentence, answerable |
 | `answer` | what was decided — verbatim where it was given verbatim |
-| `decided_by` | who answered |
+| `decided_by` | who answered — the person who took *this* decision, including the decision to defer |
+| `owner` | who owns resolving a deferral; `n/a` on an accepted entry. Not the same as `decided_by`: one settled the deferral, the other has to end it |
+| `reopens_when` | the condition that reopens a deferral; `n/a` on an accepted entry. A deferral with no stated reopen condition is a question quietly dropped |
 | `decided_on` | the date of the answer |
 | `how` | `face-to-face` \| `meeting` \| `chat` \| `review` \| ... |
 | `recorded_by` | who wrote the entry |
@@ -74,6 +76,8 @@ status: accepted                  # accepted | deferred
 question: <one sentence, answerable>
 answer: <what was decided — verbatim where it was given verbatim>
 decided_by: <who answered>
+owner: <who owns resolving it, n/a when accepted>
+reopens_when: <what reopens it, n/a when accepted>
 decided_on: 2026-08-27
 how: face-to-face                 # face-to-face | meeting | chat | review | ...
 recorded_by: <who wrote the entry>
@@ -116,6 +120,8 @@ status: accepted
 question: Does the algorithm receive or depend on motion-sensor data?
 answer: No. No inertial or motion sensor data reaches the algorithm on either platform at any point. It receives camera frames plus camera metadata only — exposure, ISO, white-balance gains, tone mapping, flash, edge enhancement, noise reduction, focal length.
 decided_by: Omry Dabush
+owner: n/a
+reopens_when: n/a
 decided_on: 2026-08-27
 how: review
 recorded_by: Claude Code (agent session), for Omry Dabush
@@ -179,6 +185,8 @@ status: accepted
 question: What mechanism enforces the minimum supported OS?
 answer: The install-time build setting alone — the iOS deployment target and the Android minSdk. The backend-served iosMinOsVersion / androidMinOsVersion are a separate run-time gate belonging to F01.2, and are not the mechanism FR-PLT-002 and FR-PLT-003 speak to.
 decided_by: Omry Dabush
+owner: n/a
+reopens_when: n/a
 decided_on: 2026-08-27
 how: review
 recorded_by: Claude Code (agent session), for Omry Dabush
@@ -241,6 +249,8 @@ status: deferred
 question: What hardware must a device have for the app to be installable?
 answer: Deferred pending U1/Q-04, the minimum hardware specification owed by the IVTS device qualification. Reopened when Q-04 lands. Interim floor, already evidenced: camera, autofocus and flash, and no motion sensor.
 decided_by: Omry Dabush
+owner: Guy · IVTS device qualification
+reopens_when: U1/Q-04 lands — the minimum hardware specification owed by the IVTS device qualification
 decided_on: 2026-08-27
 how: review
 recorded_by: Claude Code (agent session), for Omry Dabush
@@ -288,6 +298,8 @@ status: deferred
 question: Does the Android app exclude tablets, or serve them as the current product does?
 answer: Deferred pending U1/Q-04, the minimum hardware specification owed by the IVTS device qualification. Reopened when Q-04 lands.
 decided_by: Omry Dabush
+owner: Guy · IVTS device qualification
+reopens_when: U1/Q-04 lands — the device family follows from the qualified hardware specification
 decided_on: 2026-08-27
 how: review
 recorded_by: Claude Code (agent session), for Omry Dabush
@@ -326,6 +338,8 @@ status: deferred
 question: Does "exclusively" in FR-PLT-001 cover internal pre-release distribution, or only the product build reaching users?
 answer: Deferred pending a PM ruling on the scope of "exclusively". Owner: PM. Reopened when the PM rules. The interim reading the spec already applies is the narrow one — the stores' own tester channels (TestFlight, Play tester tracks) count as "through the store" — and no non-store channel is permitted for the product build under either reading.
 decided_by: Omry Dabush
+owner: PM
+reopens_when: the PM rules on the scope of "exclusively"
 decided_on: 2026-08-27
 how: review
 recorded_by: Claude Code (agent session), for Omry Dabush
@@ -383,6 +397,8 @@ status: deferred
 question: Which feature owns the backend-served iosMaxOsVersion and iosMinAppVersion gates?
 answer: Deferred pending a Product ruling on feature ownership. Owner: Product. Reopened when Product rules, or when F01.2 is specified, whichever comes first. The evidenced reading, which this entry does not overturn, is that both are run-time gates of the same family as iosMinOsVersion and therefore belong to F01.2 rather than F01.1. No app reads either key today.
 decided_by: Omry Dabush
+owner: Product
+reopens_when: Product rules on feature ownership, or F01.2 is specified, whichever comes first
 decided_on: 2026-08-27
 how: review
 recorded_by: Claude Code (agent session), for Omry Dabush
@@ -434,6 +450,8 @@ status: deferred
 question: What are the ACR US listing's published compatibility settings in the store consoles?
 answer: Deferred pending observation by someone with console access. Owner: PM. Reopened when the availability and device-catalogue settings for the ACR US listing are read in App Store Connect and the Play Console. No value is recorded here — the settings are external state, and guessing one would create a baseline that reads as observed.
 decided_by: Omry Dabush
+owner: PM
+reopens_when: the availability and device-catalogue settings for the ACR US listing are read in App Store Connect and the Play Console
 decided_on: 2026-08-27
 how: review
 recorded_by: Claude Code (agent session), for Omry Dabush

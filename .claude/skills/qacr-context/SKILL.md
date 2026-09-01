@@ -305,11 +305,17 @@ For each in-scope entry, the first rule that applies wins:
    |---|---|
    | `ref` | the entry id |
    | `question` | the entry's `question`, verbatim |
-   | `owner` | the owner the deferral names |
+   | `owner` | the entry's `owner` field |
    | `blocks` | its `affects` |
    | `blocks_inferred` | `false` — the log attaches its own ids, so that join is a record, not a reading |
-   | `blocks_what` | what the deferral actually withholds, in the entry's own words — its `answer` states what is being waited on |
+   | `blocks_what` | the entry's `reopens_when` field — what the deferral waits on *is* what it withholds |
    | `brief_verbatim` | `n/a` — this item came from the log, not the brief, and the brief has no wording for it |
+
+   **Every one of those is a field, not a sentence to interpret.** `owner` and `reopens_when` are
+   columns on every entry (`n/a` when accepted), so this mapping is a copy. Do not parse them out of
+   `answer` or the Decision prose even when they also appear there: the prose is for the human
+   reading the log, the fields are what the parse contract guarantees, and a consumer that regexes
+   `Owner:` out of free text breaks the first time somebody words a deferral differently.
 
    **`brief_verbatim` is `n/a`, never reconstructed.** The field means *the brief's own words*, and
    a log-sourced item has none; writing the entry's prose there would present this repository's
@@ -322,7 +328,8 @@ For each in-scope entry, the first rule that applies wins:
    specifies.
 4. **`status: accepted` and `decided_against` still current** → fold it into `confirmed_as_is`,
    whose semantics already fit: recorded so nobody re-asks. Carry the entry id, the answer,
-   `decided_by` / `decided_on`, and what it `resolves` and `unblocks`. **Do not invent a new
+   `decided_by` / `decided_on`, and what it `resolves` and `unblocks` — each read from its own
+   field, never from prose. **Do not invent a new
    top-level field for it** — `spec-skill`'s disposal table has no destination for one, and an
    unknown field surfaces downstream as uncarried.
 
