@@ -41,7 +41,7 @@ files it unblocks.
 The `adr/` subdirectory holds the answer log — one file, `decisions/adr/DECISIONS.md`, for the
 whole product. The split: a question **this repository asks Product** is a `PQ-nn` file here; an
 answer to a question **a spec raised** (its Decisions-needed / Open-Questions rows) is an entry in
-the log. How to write one is `.claude/skills/adr-conventions/`.
+the log. How to write one is `.claude/skills/adr-conventions/SKILL.md`.
 
 ## The two that already exist elsewhere
 

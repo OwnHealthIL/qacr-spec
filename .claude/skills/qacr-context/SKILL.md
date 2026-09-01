@@ -297,10 +297,24 @@ For each in-scope entry, the first rule that applies wins:
 
 1. **Superseded** → ignore it. Only the superseding entry is considered.
 2. **`status: deferred`** → not an answer, and not this skill's to re-triage. It travels in
-   `open_items` beside the brief's U-n items: `ref` is the entry id, the question verbatim, the
-   entry's named owner, and the deferral reason. `blocks` comes from `affects` with
-   `blocks_inferred` false — the log attaches its own ids, so that join is a record, not a
-   reading. The spec writer lists it with its owner, and nobody triages it again from scratch.
+   `open_items` beside the brief's U-n items, carrying **every field that array requires** — an
+   open item short of one is an invalid contract, per step 7, and a deferred entry is the common
+   case rather than the rare one:
+
+   | field | from the entry |
+   |---|---|
+   | `ref` | the entry id |
+   | `question` | the entry's `question`, verbatim |
+   | `owner` | the owner the deferral names |
+   | `blocks` | its `affects` |
+   | `blocks_inferred` | `false` — the log attaches its own ids, so that join is a record, not a reading |
+   | `blocks_what` | what the deferral actually withholds, in the entry's own words — its `answer` states what is being waited on |
+   | `brief_verbatim` | `n/a` — this item came from the log, not the brief, and the brief has no wording for it |
+
+   **`brief_verbatim` is `n/a`, never reconstructed.** The field means *the brief's own words*, and
+   a log-sourced item has none; writing the entry's prose there would present this repository's
+   text as the PM's. The spec writer lists the item with its owner, and nobody triages it again
+   from scratch.
 3. **Stale** — `decided_against` names a revision that has since moved (compare against the
    revisions step 2 read off the Provenance line) → do **not** fold. Raise a `stale-decision`
    flag: `needs re-confirmation: decided against <old>, current is <new>`. A stale decision must
@@ -438,8 +452,10 @@ per-run artifact in it would end that.
                          "why": "<the section's reason paragraph, verbatim>" }],
 
   "departures": [{ "ref": "D1", "what_changes": "<verbatim from the brief>", "driven_by": "FR-RDY-007" }],
-  // Deferred decision-log entries ride here too (step 3.5): ref is the entry id, owner and
-  // deferral reason from the entry, blocks from its `affects` with blocks_inferred false.
+  // Two sources land here: the brief's U-n items, and deferred decision-log entries (step 3.5).
+  // For a log-sourced item, ref is the entry id, blocks comes from its `affects` with
+  // blocks_inferred false, blocks_what is what the deferral withholds, and brief_verbatim is
+  // "n/a" — the brief has no wording for an item the log raised.
   "open_items": [{ "ref": "U1", "question": "<verbatim>", "owner": "...",
                    "blocks": ["FR-RDY-007"], "blocks_inferred": true,
                    "blocks_what": "<what is withheld — values, verification>",

@@ -6,7 +6,7 @@ per-feature file and no per-platform file; a decision recorded anywhere else is 
 not know about, and the question it answered gets asked again.
 
 Written by a developer recording an answer, through the toolkit's `documentation` skill following
-`.claude/skills/adr-conventions/`. Read by `qacr-context`, which folds live answers into feature
+`.claude/skills/adr-conventions/SKILL.md`. Read by `qacr-context`, which folds live answers into feature
 contracts so an answered question is never re-asked.
 
 ## The parse contract
