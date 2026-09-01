@@ -39,10 +39,16 @@ classification here. It gets recorded as a stop, and the spec is written without
 | | | Read |
 |---|---|---|
 | `features/<epic>/<feature>.md` | the feature file — read whole, section by section; see step 2 | once per **feature** |
-| `product/specs/QACR-APP-SPEC-nn Rev x.y.md` | the brief — departure text, open items, confirmed-as-is answers | once per **run** |
+| `product/specs/QACR-APP-SPEC-nn Rev<major>.<minor>.md` | the brief — departure text, open items, confirmed-as-is answers | once per **run** |
 | `product/EPIC-01/features.json` | which features a brief covers, and what each owns | once per **run** |
 | `product/FR-01/requirements.json` | requirement text, milestone, and the `note` field | once per **run** |
 | `architecture/<domain>.md` | the guidelines, where they exist | once per **run**, per distinct domain |
+
+**One space before `Rev`, none after it** — `QACR-APP-SPEC-03 Rev1.1.md`. The revision *inside* a
+document's prose is written `Rev 1.1` with a space, and the two are not interchangeable: a filename
+built with the prose spacing does not exist. This matters more than a formatting note because
+resolving a bare spec id means matching and ordering these names — see
+[Resolving the brief revision](#resolving-the-brief-revision).
 
 **The `Read` column is binding on a batch.** Only the feature file is per-feature; everything else
 is one read for the whole selection, no matter how many features it covers. Re-reading the brief for
@@ -189,8 +195,13 @@ feature-selected run would. Slicing a feature down to one milestone's requiremen
 contract whose missing requirements look stopped rather than out-of-scope, and would make the next
 milestone's run an update of the same spec rather than a new one.
 
-Record what drove the selection so the spec can state it — `selection.selected_by` per feature,
-carried into each contract's `feature.selected_by`.
+Record what drove the selection so the spec can state it, in the two places that hold it:
+`contracts[].selected_by` in the manifest, and `feature.selected_by` inside each contract.
+
+**The `selection` object carries no per-feature field.** It describes the run — one mode, one
+milestone where there is one, one slug — and a run has a single mode by definition. What varies per
+feature is what that mode put *it* there for, which is why it is recorded per contract and not
+inside `selection`.
 
 **Milestone counts are lopsided, and the menu says so.** On SPEC-01, `M3` selects all eight features
 while `M4` and `M5` select one each. Showing the count beside each milestone is what stops `M3` being
@@ -261,7 +272,10 @@ for the whole run:
 3. **`product/FR-01/requirements.json`** — every requirement's text, milestone and `note`. One read.
 4. **`architecture/<domain>.md` for the union of domains across the selected features.** Take the
    union first, then read. On SPEC-01 all eight features are `iOS` + `Android`, so this is two files
-   for the batch rather than sixteen reads of the same two.
+   for the batch rather than sixteen reads of the same two — *where the directory exists at all.*
+   It does not today, so every domain currently resolves to `no-directory` (step 5) and this
+   particular saving is notional. Take the union anyway: the rule has to be right for when the
+   guidelines land, and a union taken only once the files appear is a rule nobody has exercised.
 
 **Take the domain union before reading, not per feature as you go.** A run that reads guidelines
 inside the per-feature loop and relies on remembering it has already read them will re-read them, and
