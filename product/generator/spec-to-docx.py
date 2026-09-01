@@ -11,11 +11,21 @@ finds it first, and `layout-check.py` exists because that already happened once.
 
 **Comments made in the .docx do not flow back.** The .md is edited and the .docx is
 regenerated. Treat the Word file as read-and-mark-up, never as a source.
+
+    spec-to-docx.py <spec.md> [outdir] [--since <previous spec.md>]
+
+With --since, every block that differs from the previous revision is coloured red in
+the .docx. Most of a revision is usually unchanged and a reviewer should not have to
+read it again to find out which part is not.
 """
 import os, shutil, subprocess, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__))))
 
-src = sys.argv[1]
-outdir = sys.argv[2] if len(sys.argv) > 2 else os.path.join("local", "review")
+pos = [a for a in sys.argv[1:] if not a.startswith("--")]
+if "--since" in sys.argv:
+    pos = [a for a in pos if a != sys.argv[sys.argv.index("--since") + 1]]
+src = pos[0]
+outdir = pos[1] if len(pos) > 1 else os.path.join("local", "review")
 if not os.path.isfile(src):
     sys.exit(f"no such spec: {src}")
 if shutil.which("pandoc") is None:
@@ -37,6 +47,23 @@ if os.path.exists(ref):
     cmd += ["--reference-doc", ref]
 subprocess.run(cmd, check=True)
 
-print(f"wrote {out}  ({os.path.getsize(out):,} bytes)")
+# --since <previous spec.md>: colour every block that changed red, so a reviewer
+# reads what moved rather than the whole document again. Guy asked for this after
+# Rev 0.11, where most of the text was unchanged and none of it was marked.
+prev = None
+if "--since" in sys.argv:
+    prev = sys.argv[sys.argv.index("--since") + 1]
+if prev:
+    if not os.path.isfile(prev):
+        sys.exit(f"no such previous revision: {prev}")
+    import redline
+    units = redline.changed_units(open(prev, encoding="utf-8").read(),
+                                  open(src, encoding="utf-8").read())
+    rows, paras = redline.patch(out, units)
+    print(f"wrote {out}  ({os.path.getsize(out):,} bytes)")
+    print(f"marked red against {os.path.basename(prev)}: "
+          f"{paras} paragraph(s), {rows} table row(s), from {len(units)} changed block(s)")
+else:
+    print(f"wrote {out}  ({os.path.getsize(out):,} bytes)")
 print("\nspecs/*.md is the artefact of record; this is a review copy. Mark it up freely,")
 print("but the edits come back into the .md — nothing flows out of the .docx.")
