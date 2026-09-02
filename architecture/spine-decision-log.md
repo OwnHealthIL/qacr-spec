@@ -44,7 +44,7 @@ claim, not the reader's confidence in it.
 | [L11](#l11--review-pass-2026-08-23--thirteen-items-raised-against-the-spine) · Review pass — thirteen items raised against the spine | 2026-08-23 | 13 `AQ-*` questions worked and landed one by one (`L11.1`–`L11.15`); adds AD-20–AD-27, OQ-11–OQ-17 |
 | [L12](#l12--absorbed-source-material-2026-08-26) · Absorbed source material | 2026-08-26 | Evidence base (`E-1`–`E-14`), corrections (`C-1`–`C-7`), gaps (`G-1`–`G-6`), verbatim inputs folded in and deleted |
 | [L13](#l13--message-broker-choice-for-qacr-backend-one-broker-not-two) · Message broker choice | 2026-08-30 | Why `behealthy` runs RabbitMQ and GCP Pub/Sub side by side; lands AD-29, one broker for `qacr-backend` |
-| [L14](#l14--the-algorithm-execution-runtime-one-artefact-two-deployments) · The algorithm execution runtime | 2026-09-02 | The algorithm is fetched at runtime, not baked into the worker image (C-8), so who builds the image was never settled; proposes AD-30 plus OQ-19/OQ-20, unadopted |
+| [L14](#l14--the-algorithm-execution-runtime-one-artefact-two-deployments) · The algorithm execution runtime | 2026-09-02 | Baking the algorithm into the production image forks the runner from research's; proposes AD-30 plus OQ-19/OQ-20, unadopted |
 
 ## Index · where each decision currently stands
 
@@ -86,7 +86,7 @@ premise — not every passing citation. Read the current state from the section 
 | AD-27 | L11.10 (AQ-05) | — | Decided, invariant half only | Exactly one component normalises; *where* is genuinely undecided — **OQ-15** |
 | AD-28 | never created | L11.12a | — | Considered and explicitly rejected — the finding landed as an AD-23 amendment instead, to avoid one concern with two governing ADs |
 | AD-29 | L13 | — | Decided | One message broker (RabbitMQ); a boundary AMQP cannot cross is bridged by HTTP behind AD-10's port, not by adding GCP Pub/Sub |
-| AD-30 | L14 | — | **Proposed — awaiting review** | Algorithm execution runtime promoted as one digest-pinned image research → production; `worker-api` stays per-deployment. Not in `spine.md`; L14.6 holds the text |
+| AD-30 | L14 | — | **Proposed — awaiting review** | Algorithm runner built once and shared research → production; `worker-api` stays per-deployment. Chooses against the plan's bake-the-algorithm-into-the-image design — see L14.4/L14.5. Not in `spine.md`; L14.7 holds the text |
 
 ### Open questions and decisions/ files
 
@@ -829,7 +829,6 @@ Recorded so no later session chases them again.
 | C-5 | **Observed but unexplained:** `dev-stg_qacr-develop.yaml` deploys to the `dev-stg` cluster while its ingress hostnames still name `be-staging-uk`. Cause not determined | [UNKNOWN] |
 | C-6 | **`USE_QUORUM_QUEUES` is read in code but set in neither values file**, while every queue is named `*_quorum`. Verify against the live broker before designing on it | [OBSERVED] `backend.q-acr`, `helm-charts` values |
 | C-7 | **Treat "android-qacr → behealthy" in the `mind` map with suspicion.** `ENDPOINT_CLIENT_API` is a `qacr-*` host serving `backend.q-acr`'s `user-app`; the map resolved the edge to `behealthy` | [OBSERVED] `AndroidQacr` build config |
-| C-8 | **The approved algorithm is not baked into the `algo-worker` image.** `architecture_plan.html` states it twice — "separate image (algo-base) · approved algorithm baked in" and "`algo-worker` runs the algorithm baked into its image". The worker instead fetches the algorithm as a **tarball from `ALGORITHMS_BUCKET` by blob key at runtime**, extracts it and caches it in an LRU, then spawns `./Classifier/run_classifier.py` inside `algo-base:5.0`. The image carries the runtime, not the algorithm. The spine's own boundary row is correct ("tarball in the production algorithms bucket plus an `algorithm_version` row"); the plan's rendering of it is not. Consequence carried into L14 | [OBSERVED] `backend.q-acr` `21b8cf9` `common/services/algo-worker/src/lib/{algorithmCache,algorithmExecution}.ts`; `architecture_plan.html` |
 
 ### L12.4 — Deliberately not established (`G-1`–`G-6`), and which row owns each now
 
@@ -998,27 +997,23 @@ Raised while planning the production backend's algorithm path, once `user/servic
 `backend.q-acr` was confirmed as a stub to be replaced rather than extended, and separate databases
 and separate deployments were settled. Worked from source reads of `backend.q-acr` and `helm-charts`.
 
-**The plan placed the runner on the wrong premise, and the record inherited the omission.** It has
-`algo-worker` as production's own image with the approved algorithm baked into it. The algorithm is
-not baked in — it is fetched as a versioned tarball at runtime (**C-8**) — so the image is a generic
-runner, and who builds it is a question the plan never had to ask and the spine therefore never
-answers. AD-30 answers it.
+**The plan settles how the algorithm reaches the worker and, in doing so, forks the worker.** It
+bakes the approved algorithm into production's image, for two stated reasons. Research's worker
+fetches the algorithm at runtime instead. Two mechanisms means two runners, and a runner that differs
+between validation and production is what `FR-LCM-009` cannot carry. AD-30 proposes the other
+mechanism, so that one runner serves both — a choice **against** the plan, argued below rather than
+assumed.
 
-**Proposed as AD-30 with OQ-19 and OQ-20; not adopted.** The evidence below is `[OBSERVED]`; the
-decision is `[INFERRED]` from it and awaits the backend owner. `spine.md` is deliberately left
-unamended — L14.6 carries the paste-ready text for when it is accepted, so nothing unadopted becomes
-binding by being merged.
+### L14.1 — What the estate does today
 
-### L14.1 — What the estate already does
-
-The worker is closer to a shared artefact than the spine assumes:
+The worker is closer to a shared artefact than the production design assumes:
 
 - **It is already built as its own image**, in a dedicated parallel Jenkins stage with
-  `-f Dockerfile.algo-worker`, and pushed to
-  `us.gcr.io/smiling-diode-638/backend.q-acr-algo-worker` alongside the main image
+  `-f Dockerfile.algo-worker`, pushed to `us.gcr.io/smiling-diode-638/backend.q-acr-algo-worker`
+  alongside the main image
 - **It holds no database client.** Its only `@prisma/client` use is two enum values —
-  `ProductNames` and `MaterialType`, declared in `schema/shared/enums.shared.prisma` — consumed as
-  runtime values in a zod schema and one comparison. No Prisma client, no repository, no query
+  `ProductNames` and `MaterialType`, from `schema/shared/enums.shared.prisma` — used in a zod schema
+  and one comparison. No client, no repository, no query
 - **Every piece of infrastructure is environment-supplied**, with no literals:
   `ALGORITHMS_BUCKET`, `RE_EXAM_SAMPLES_BUCKET`, `AW_QUEUE_NAME`, `AW_ROUTING_PATTERN`,
   `QACR_EXCHANGE_NAME`, `WORKER_API_URL`, `RABBIT_PREFETCH_COUNT`, `ALGORITHM_CACHE_SIZE`,
@@ -1026,22 +1021,20 @@ The worker is closer to a shared artefact than the spine assumes:
 - **The same image already runs twice**, as `algo-worker` on `qacr.aw.batchAlgorithm` and
   `algo-worker-short` on `qacr.aw.shortBatchAlgorithm` — separate Helm releases, separate quorum
   queues, separate KEDA scalers, one image tag
-- **Nothing imports it.** It is a leaf service triggered by a published message, not a library;
-  research fires it through `AlgoWorkerRoutingKeys.SHORT_BATCH_ALGORITHM`
-- **The algorithm itself is already an artefact**, not code in any repository: fetched as a tarball
-  by blob key from `ALGORITHMS_BUCKET`, LRU-cached and extracted, after which
-  `./Classifier/run_classifier.py` is spawned inside the `algo-base:5.0` base image
+- **Nothing imports it.** It is a leaf service triggered by a published message, not a library
+- **The algorithm arrives at runtime**: fetched as a tarball from `ALGORITHMS_BUCKET` by blob key,
+  extracted, held in an LRU cache behind a per-key mutex, after which
+  `./Classifier/run_classifier.py` is spawned inside `algo-base:5.0`
 
 So the worker's in-repo coupling is `@qacr/core` (170 lines) and `@qacr/rabbit` (145), both compiled
 into the image at build time. Neither needs publishing for another deployment to run the image.
 
-[OBSERVED] Read 2026-09-02 against `backend.q-acr` `origin/main` at **`21b8cf9`** and
-`helm-charts` `origin/master` at **`1ed2669`**. Neither repository is in `evidence/pins.yaml`, which
-scopes to the four application repositories `behaviour.tsv` cites; the commits are recorded here
-instead, as L13 records `behealthy`'s.
+[OBSERVED] Read 2026-09-02 against `backend.q-acr` `origin/main` at **`21b8cf9`** and `helm-charts`
+`origin/master` at **`1ed2669`**. Neither repository is in `evidence/pins.yaml`, which scopes to the
+four application repositories `behaviour.tsv` cites; the commits are recorded here instead, as L13
+records `behealthy`'s.
 
-`backend.q-acr/Jenkinsfile` (Build and Publish stages),
-`backend.q-acr/Dockerfile.algo-worker:7,12,13,33`,
+`backend.q-acr/Jenkinsfile` (Build and Publish stages), `backend.q-acr/Dockerfile.algo-worker:7,12,13,33`,
 `backend.q-acr/common/services/algo-worker/{package.json,src/lib/{algorithmCache,algorithmExecution,utils}.ts,src/types/triggerAlgorithm.dto.ts}`,
 `backend.q-acr/common/prisma/schema/shared/enums.shared.prisma`,
 `backend.q-acr/research/services/research-app/src/services/triggerAlgo.service.ts:79`,
@@ -1049,10 +1042,10 @@ instead, as L13 records `behealthy`'s.
 
 All eight `backend.q-acr` files cited are byte-identical to `origin/main`, so nothing here rests on
 the feature branch they were read from. The helm values file differs from `origin/master` only in
-`global.image.tag` — `main-352` locally against `main-355` on master — which is the Jenkins
-auto-bump described in L14.4 rather than a discrepancy in the rows cited.
+`global.image.tag` — `main-352` against `main-355` — which is the Jenkins auto-bump, not a
+discrepancy in the rows cited.
 
-### L14.2 — Why a second copy is not acceptable
+### L14.2 — Why a forked runner is a validation problem
 
 `FR-LCM-009` requires each algorithm version, and each approved combination of mobile and backend
 algorithm versions, to undergo verification and validation before release. `FR-ALG-004` requires the
@@ -1060,11 +1053,11 @@ exam to record the versions that produced its result. **AD-27** requires exactly
 apply the `FR-IMG-016` normalisation, with the artefacts crossing the algorithm port enumerated in a
 contract and carrying a version.
 
-Together those make duplication a validation problem rather than a maintenance one: if research
+Together those make a second runner a validation problem rather than a maintenance one: if research
 validates algorithm version X through one orchestration path and production runs the same version
-through a copy of that path, the validation does not transfer, and the version recorded against a
-production exam names a binary that was exercised somewhere else. Sharing the runtime is therefore
-what makes one verification cover both executions — not a convenience.
+through a different one, the validation does not transfer, and the version recorded against a
+production exam names a binary exercised somewhere else. One runner is what makes one verification
+cover both executions.
 
 ### L14.3 — Why the result writer is not part of it
 
@@ -1075,113 +1068,120 @@ Production's must write insert-only `exam_result` (**AD-4**) under row-level sec
 must accept a callback only against the single-use credential minted at job dispatch and bound to
 that exam and that algorithm run (**AD-23**) — because first-writer-wins against one row per exam is
 what makes an unauthenticated callback sufficient to become the clinical result. Research's has none
-of that and needs none of it. So the compute is shared and the writer is per-deployment.
+of that and needs none of it. So the compute is shared and the writer is per-deployment, under either
+mechanism below.
 
 `common/algorithm` — `algoInputUtils`, `algoUtils`, `sampleAlgoErrorUtils` — sits with the trigger
-side and the result side, both of which are per-deployment services, so it is copied rather than
-shared. What must not drift is **what enters the algorithm and how its raw output is read**; what
-each side does afterwards legitimately differs, production mapping onward to the `FR-ALG-012`
-enumeration while research retains the raw output.
+side and the result side, both per-deployment services, so it is copied rather than shared. What must
+not drift is what enters the algorithm and how its raw output is read; what each side does afterwards
+legitimately differs, production mapping onward to the `FR-ALG-012` enumeration while research retains
+the raw output.
 
-[OBSERVED] `backend.q-acr` at `21b8cf9` — `common/services/worker-api/src`,
-`common/algorithm/src`, the latter imported by `worker-api/src/services/updateResults.service.ts`
-and by four research services (`research-app/src/services/{triggerAlgo,sampleUploadCompletion}.service.ts`,
+[OBSERVED] `backend.q-acr` at `21b8cf9` — `common/services/worker-api/src`, `common/algorithm/src`,
+the latter imported by `worker-api/src/services/updateResults.service.ts` and by four research
+services (`research-app/src/services/{triggerAlgo,sampleUploadCompletion}.service.ts`,
 `research-backoffice/src/services/{publishExams.service,runAlgosOnExam.helpers}.ts`)
 
-### L14.4 — What the plan assumed, and what follows from it being wrong
+### L14.4 — What the plan decided, and the consequence it did not examine
 
-The runner was not overlooked. The plan places it, and treats it as production's own:
+The runner was not overlooked, and the plan is not describing the estate inaccurately. It is
+**prescribing a change**, with a rationale:
 
 - `architecture_plan.html` lists `algo-worker/` in the production repository tree as a
-  "separate image (algo-base) · **approved algorithm baked in**", and again later:
-  "`algo-worker` runs the algorithm **baked into its image**"
-- It states that "every box is the same repository and the same image except `algo-worker`", and
-  gives it two Helm aliases — interactive and bulk — over that one image
-- `spine.md` follows: **Runtime roles** lists `algo-worker` as a production role, "queue consumer ·
-  algorithm execution, separate image"
+  "separate image (algo-base) · **approved algorithm baked in**"
+- and states the mechanism and its reasons directly: "`algo-worker` runs the algorithm baked into
+  its image, reads frames from GCS, writes artefacts back. **No tarball download in the hot path,
+  which also makes the deployed algorithm part of the verified artefact.**"
+- `spine.md` follows only as far as **Runtime roles** — `algo-worker`, "queue consumer · algorithm
+  execution, separate image"
 
-**The premise is wrong** — see **C-8**. Nothing is baked in. The worker fetches the algorithm as a
-tarball from `ALGORITHMS_BUCKET` by blob key at runtime, extracts and caches it, then spawns the
-classifier inside `algo-base:5.0`. It holds no database client either. What the image contains is a
-generic runner; what makes a run specific is the tarball and the message.
+Both reasons are real. A cold pod under KEDA scale-up pays a download before its first run, and
+`AD-14`'s "what is deployed equals what was approved" is at its simplest when one digest is the whole
+answer.
 
-That is what the plan skipped rather than decided. If the algorithm is baked into the image, the
-image is necessarily production's own — built from production's repository, pinned to the algorithm
-version it carries — and there is no question to ask. Once the algorithm is a runtime-fetched
-artefact, the runner is a generic component, and **who builds it becomes a live question the record
-does not answer.** `spine.md`'s boundary row promotes the algorithm *tarball* research → production
-and is correct as written; it says nothing about the *runner*, because under the plan's premise there
-was nothing to say.
+**The consequence not examined is that baking forks the runner.** Research's worker fetches, caches
+and extracts; a production worker with the algorithm already present does not, and the fetch path is
+the part `FR-LCM-009` validation exercises. The plan's own second reason — making the deployed
+algorithm part of the verified artefact — is a verification argument, and forking the runner works
+against it: the artefact becomes verified, and the code path that runs it becomes the one research
+never validated.
 
-Both readings of that silence are consistent with the spine, and they produce different systems —
-one of them the duplicated execution path L14.2 rules out.
+`spine.md`'s Boundary row is silent on this and remains correct either way: "Tarball in the
+production algorithms bucket plus an `algorithm_version` row. Promoted artefact, never a live
+dependency" describes how the algorithm *travels*, not how the worker *consumes* it. A tarball
+promoted into production's bucket can be baked in at image build or fetched at run time. The spine
+does not choose; the plan does, and the choice is unrecorded as a decision.
 
-One related defect is already recorded rather than new: **AD-22** names both QACR environments
-pointing `ALGORITHMS_BUCKET` at `be-staging-algorithms` as a violation to correct before production.
-Production needs its own algorithms bucket in its own region whichever way this decision goes.
+[OBSERVED] `architecture/architecture_plan.html`, production repository tree and the F03 completion
+walkthrough. The plan states of itself that it is "a reading copy, not the source of truth", which is
+why the choice belongs in this log rather than being left only there.
 
-### L14.5 — Proposed decision
+### L14.5 — The two mechanisms, fairly
+
+| | Bake into the image (the plan) | Promote the tarball, share the runner |
+|---|---|---|
+| Verified artefact | One digest is the whole answer | Digest + a versioned bucket object + the `algorithm_version` row. `AD-14` already pins "the algorithm artefact and the configuration set" alongside the image, and `AD-26` already requires object versioning on record-bearing buckets, `algorithms` named among them |
+| Hot path | No download | Download on a cold pod only; the LRU cache and per-key mutex already exist. Cost unquantified — `OQ-9` records that algorithm wall-clock latency is unmeasured |
+| Runner | Production's forks from research's | One runner, one build, identical execution path in validation and production |
+| Promoting an algorithm | Image build plus redeploy | Bucket copy plus an `algorithm_version` row |
+| Image count | Runner versions × algorithm versions | Runner versions |
+
+A third shape exists and keeps most of both: **share the runner unchanged and pre-warm its cache**
+from a pinned object at image build or pod start, so the code path is identical to research's and no
+cold pod downloads. It is not developed here; it is named so the choice is not read as binary.
+
+### L14.6 — Proposed decision
 
 [INFERRED] **AD-30 — The algorithm execution runtime is one promoted artefact; the result writer is
 not shared.**
 
 - **Binds:** algorithm execution, the research boundary, promotion
 - **Prevents:** research validating an algorithm version through one orchestration path while
-  production runs that version through a copy, which makes `FR-LCM-009`'s verification and
+  production runs that version through a different one, which makes `FR-LCM-009`'s verification and
   `FR-ALG-004`'s recorded version non-transferable — and, in the other direction, production
   acquiring a standing credential into the research project in order to run it
 - **Rule:** `algo-worker` is built **once**, in the repository that owns the algorithm, and
   production runs a **promoted, digest-pinned copy of that image** rather than building or
-  maintaining its own. The image carries no database client and no research schema, so what
-  production runs is the worker's own dependency closure and nothing else. It is configured entirely
-  by environment against production's own broker, queues, buckets and `worker-api`. **`worker-api` is
-  not shared** — each deployment implements its own, because it writes its own schema and
-  production's carries AD-23's single-use credential and AD-4's insert-only result row under AD-2's
-  row-level security. The **trigger message and output contract is versioned and additive-only**;
-  drift in it is a defect, because that contract is what makes one verification cover both
-  executions. Promotion of the image follows the same terms as promotion of an algorithm artefact: an
+  maintaining its own. The algorithm reaches it as a promoted tarball in production's own algorithms
+  bucket, exactly as the Boundary already provides, so the runner is identical on both sides. The
+  image carries no database client and no research schema. It is configured entirely by environment
+  against production's own broker, queues, buckets and `worker-api`. **`worker-api` is not shared** —
+  each deployment implements its own, because it writes its own schema and production's carries
+  AD-23's single-use credential and AD-4's insert-only result row under AD-2's row-level security.
+  The **trigger message and output contract is versioned and additive-only**; drift in it is a
+  defect. Promotion of the image follows the same terms as promotion of an algorithm artefact: an
   explicit act with a recorded approval, into production's own registry, with **no shared registry
   credential across the boundary**
 
-Two questions this raises that the rule does not answer, proposed as **OQ-19** and **OQ-20** in
-L14.6.
+**This overrides `architecture_plan.html`'s bake-in design.** If the reviewer prefers to keep it, the
+cold-start cost should be measured first — `OQ-9` says it never has been — and `FR-LCM-009` then
+needs an answer for how a validation performed on research's runner transfers to a production runner
+that does not share its fetch path.
 
-### L14.6 — What `spine.md` must say if AD-30 is adopted
+Two questions the rule does not answer are proposed as **OQ-19** and **OQ-20** in L14.7.
 
-Paste-ready. Not applied here.
+### L14.7 — What `spine.md` must say if AD-30 is adopted
 
-**One row added to Boundary With backend.q-acr**, after the algorithm-artefacts row:
+Paste-ready, single-line table rows. Not applied here.
 
-> | Algorithm execution runtime, research → production | Research produces | Container image
-> promoted by digest into the production registry and configured by environment against production's
-> own broker, buckets and `worker-api`. No source dependency, no shared registry credential, and no
-> database client in the image | Promotion is an explicit act with a recorded approval. The trigger
-> and output contract is versioned and additive-only; a breaking change is a new version with both
-> accepted during migration |
+One row added to **Boundary With backend.q-acr**, after the algorithm-artefacts row:
 
-**AD-30**, after AD-29, with the Binds / Prevents / Rule text of L14.5 verbatim.
+```markdown
+| Algorithm execution runtime, research → production | Research produces | Container image promoted by digest into the production registry and configured by environment against production's own broker, buckets and `worker-api`. The algorithm reaches it as a promoted tarball in production's own bucket, so the runner is identical on both sides. No source dependency, no shared registry credential, no database client in the image | Promotion is an explicit act with a recorded approval. The trigger and output contract is versioned and additive-only; a breaking change is a new version with both accepted during migration |
+```
 
-**Two rows added to Open Questions:**
+Two rows added to **Open Questions**:
 
-> | OQ-19 | Who owns promoting the `algo-worker` image into production and where the approval is
-> recorded. AD-30 requires promotion to be an explicit, approved act on the same terms as an
-> algorithm artefact, and AD-14 requires the digest to be pinned; neither names a person or a place
-> to write it down, and an approval with no recorded owner is not one | [UNKNOWN] | Backend owner +
-> QMS | A named owner and a location for the record |
+```markdown
+| OQ-19 | Who owns promoting the `algo-worker` image into production and where the approval is recorded. AD-30 requires promotion to be an explicit, approved act on the same terms as an algorithm artefact, and AD-14 requires the digest to be pinned; neither names a person or a place to write it down, and an approval with no recorded owner is not one | [UNKNOWN] | Backend owner + QMS | A named owner and a location for the record |
+| OQ-20 | Whether production needs the batch routing path or only the short one. Research runs both `qacr.aw.batchAlgorithm` and `qacr.aw.shortBatchAlgorithm` because it re-runs algorithms over many exams; production analyses one exam at a time, so the batch queue may have no production consumer. Inheriting both would build a queue, a scaler and a release nothing publishes to | [OBSERVED] `helm-charts/values/smiling-diode-638/research-us_qacr-research.yaml:74,110` | Backend owner | Confirming whether any production path publishes a batch trigger |
+```
 
-> | OQ-20 | Whether production needs the batch routing path or only the short one. Research runs both
-> `qacr.aw.batchAlgorithm` and `qacr.aw.shortBatchAlgorithm` because it re-runs algorithms over many
-> exams; production analyses one exam at a time, so the batch queue may have no production consumer.
-> Inheriting both would build a queue, a scaler and a release nothing publishes to | [OBSERVED]
-> `helm-charts/values/smiling-diode-638/research-us_qacr-research.yaml:74,110` | Backend owner | Confirming
-> whether any production path publishes a batch trigger |
+**AD-30** itself, after AD-29, with the Binds / Prevents / Rule text of L14.6 verbatim.
 
-**One entry added to Deferred**, if the reviewer prefers to keep the option open rather than settle
-where the runtime lives long-term:
+One entry added to **Deferred**, if the reviewer prefers to keep the long-term home open rather than
+settle it now:
 
-> | Extracting the algorithm execution runtime into its own repository | AD-30 already gives one
-> image, one build and a promoted digest, which is the property that matters. The remaining
-> objection is only that a device component's source sits in the research repository, which is a
-> submission-scope argument rather than a code one | The submission's component inventory is
-> assembled under `FR-LCM-004`, or the research repository's release cadence starts to hold up an
-> algorithm promotion |
+```markdown
+| Extracting the algorithm execution runtime into its own repository | AD-30 already gives one image, one build and a promoted digest, which is the property that matters. The remaining objection is only that a device component's source sits in the research repository, which is a submission-scope argument rather than a code one | The submission's component inventory is assembled under `FR-LCM-004`, or the research repository's release cadence starts to hold up an algorithm promotion |
+```
