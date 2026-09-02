@@ -44,7 +44,7 @@ claim, not the reader's confidence in it.
 | [L11](#l11--review-pass-2026-08-23--thirteen-items-raised-against-the-spine) · Review pass — thirteen items raised against the spine | 2026-08-23 | 13 `AQ-*` questions worked and landed one by one (`L11.1`–`L11.15`); adds AD-20–AD-27, OQ-11–OQ-17 |
 | [L12](#l12--absorbed-source-material-2026-08-26) · Absorbed source material | 2026-08-26 | Evidence base (`E-1`–`E-14`), corrections (`C-1`–`C-7`), gaps (`G-1`–`G-6`), verbatim inputs folded in and deleted |
 | [L13](#l13--message-broker-choice-for-qacr-backend-one-broker-not-two) · Message broker choice | 2026-08-30 | Why `behealthy` runs RabbitMQ and GCP Pub/Sub side by side; lands AD-29, one broker for `qacr-backend` |
-| [L14](#l14--the-algorithm-execution-runtime-one-artefact-two-deployments) · The algorithm execution runtime | 2026-09-02 | Whether production builds, copies or promotes `algo-worker`; proposes AD-30 plus OQ-19/OQ-20, unadopted |
+| [L14](#l14--the-algorithm-execution-runtime-one-artefact-two-deployments) · The algorithm execution runtime | 2026-09-02 | The algorithm is fetched at runtime, not baked into the worker image (C-8), so who builds the image was never settled; proposes AD-30 plus OQ-19/OQ-20, unadopted |
 
 ## Index · where each decision currently stands
 
@@ -829,6 +829,7 @@ Recorded so no later session chases them again.
 | C-5 | **Observed but unexplained:** `dev-stg_qacr-develop.yaml` deploys to the `dev-stg` cluster while its ingress hostnames still name `be-staging-uk`. Cause not determined | [UNKNOWN] |
 | C-6 | **`USE_QUORUM_QUEUES` is read in code but set in neither values file**, while every queue is named `*_quorum`. Verify against the live broker before designing on it | [OBSERVED] `backend.q-acr`, `helm-charts` values |
 | C-7 | **Treat "android-qacr → behealthy" in the `mind` map with suspicion.** `ENDPOINT_CLIENT_API` is a `qacr-*` host serving `backend.q-acr`'s `user-app`; the map resolved the edge to `behealthy` | [OBSERVED] `AndroidQacr` build config |
+| C-8 | **The approved algorithm is not baked into the `algo-worker` image.** `architecture_plan.html` states it twice — "separate image (algo-base) · approved algorithm baked in" and "`algo-worker` runs the algorithm baked into its image". The worker instead fetches the algorithm as a **tarball from `ALGORITHMS_BUCKET` by blob key at runtime**, extracts it and caches it in an LRU, then spawns `./Classifier/run_classifier.py` inside `algo-base:5.0`. The image carries the runtime, not the algorithm. The spine's own boundary row is correct ("tarball in the production algorithms bucket plus an `algorithm_version` row"); the plan's rendering of it is not. Consequence carried into L14 | [OBSERVED] `backend.q-acr` `21b8cf9` `common/services/algo-worker/src/lib/{algorithmCache,algorithmExecution}.ts`; `architecture_plan.html` |
 
 ### L12.4 — Deliberately not established (`G-1`–`G-6`), and which row owns each now
 
@@ -995,9 +996,13 @@ a reason to keep both brokers open by default now.
 
 Raised while planning the production backend's algorithm path, once `user/services/user-app` in
 `backend.q-acr` was confirmed as a stub to be replaced rather than extended, and separate databases
-and separate deployments were settled. The question left: when production runs the algorithm, does it
-build its own worker, copy research's, or run research's. Worked from source reads of
-`backend.q-acr` and `helm-charts`.
+and separate deployments were settled. Worked from source reads of `backend.q-acr` and `helm-charts`.
+
+**The plan placed the runner on the wrong premise, and the record inherited the omission.** It has
+`algo-worker` as production's own image with the approved algorithm baked into it. The algorithm is
+not baked in — it is fetched as a versioned tarball at runtime (**C-8**) — so the image is a generic
+runner, and who builds it is a question the plan never had to ask and the spine therefore never
+answers. AD-30 answers it.
 
 **Proposed as AD-30 with OQ-19 and OQ-20; not adopted.** The evidence below is `[OBSERVED]`; the
 decision is `[INFERRED]` from it and awaits the backend owner. `spine.md` is deliberately left
@@ -1083,19 +1088,33 @@ enumeration while research retains the raw output.
 and by four research services (`research-app/src/services/{triggerAlgo,sampleUploadCompletion}.service.ts`,
 `research-backoffice/src/services/{publishExams.service,runAlgosOnExam.helpers}.ts`)
 
-### L14.4 — The gap this closes in the spine
+### L14.4 — What the plan assumed, and what follows from it being wrong
 
-Two statements in `spine.md` are each true and, read together, leave the question open:
+The runner was not overlooked. The plan places it, and treats it as production's own:
 
-- **Runtime roles** lists `algo-worker` as a production role — "queue consumer · algorithm
-  execution, separate image" — so production is expected to run one
-- **Boundary With backend.q-acr** promotes only *artefacts* research → production: "Tarball in the
-  production algorithms bucket plus an `algorithm_version` row. Promoted artefact, never a live
-  dependency"
+- `architecture_plan.html` lists `algo-worker/` in the production repository tree as a
+  "separate image (algo-base) · **approved algorithm baked in**", and again later:
+  "`algo-worker` runs the algorithm **baked into its image**"
+- It states that "every box is the same repository and the same image except `algo-worker`", and
+  gives it two Helm aliases — interactive and bulk — over that one image
+- `spine.md` follows: **Runtime roles** lists `algo-worker` as a production role, "queue consumer ·
+  algorithm execution, separate image"
 
-Nothing states whether production's `algo-worker` **image** is built by production or promoted from
-research. Both readings are consistent with the spine as written, and they produce different systems
-— one of them the duplicated execution path L14.2 rules out. That silence is the gap.
+**The premise is wrong** — see **C-8**. Nothing is baked in. The worker fetches the algorithm as a
+tarball from `ALGORITHMS_BUCKET` by blob key at runtime, extracts and caches it, then spawns the
+classifier inside `algo-base:5.0`. It holds no database client either. What the image contains is a
+generic runner; what makes a run specific is the tarball and the message.
+
+That is what the plan skipped rather than decided. If the algorithm is baked into the image, the
+image is necessarily production's own — built from production's repository, pinned to the algorithm
+version it carries — and there is no question to ask. Once the algorithm is a runtime-fetched
+artefact, the runner is a generic component, and **who builds it becomes a live question the record
+does not answer.** `spine.md`'s boundary row promotes the algorithm *tarball* research → production
+and is correct as written; it says nothing about the *runner*, because under the plan's premise there
+was nothing to say.
+
+Both readings of that silence are consistent with the spine, and they produce different systems —
+one of them the duplicated execution path L14.2 rules out.
 
 One related defect is already recorded rather than new: **AD-22** names both QACR environments
 pointing `ALGORITHMS_BUCKET` at `be-staging-algorithms` as a violation to correct before production.
