@@ -784,7 +784,7 @@ design and it is not a courtesy.
 | `product/` | this document set. Read-only to them. To change a requirement, change the data and rebuild |
 | `features/` | one generated file per specified feature: the spec's disposition, the requirements it owns, the evidence rows, and the requirements the spec is **silent** on |
 | `evidence/` | what the code does **today**, one cited claim per row, `file:line`, against the commits pinned in `evidence/pins.yaml` |
-| `decisions/` | `D-nn` — questions **they** raise against a spec, for you to answer |
+| `decisions/` | `PQ-nn` — questions **they** raise against a spec, for you to answer |
 | `tools/` | their parser, revision differ, citation checker and feature-file builder |
 
 ### What you never do
@@ -804,7 +804,7 @@ These are hard stops, in the same spirit as the ones in section 8.
    branch and stops without opening a pull request, because a revision is reviewed
    separately. Running it for them removes their review.
 4. **Do not copy a `Q-nn` into `decisions/`.** Your review register is yours and is parsed
-   out of the document every revision. A `D-nn` is a question they raised against a spec and
+   out of the document every revision. A `PQ-nn` is a question they raised against a spec and
    moves under them. Merging the two id spaces loses which is which, and with it who is
    waiting on whom. `decisions/README.md` says this at length and it is right.
 5. **Nothing under `local/` is ever committed.** It is in `product/.gitignore`, and the
@@ -887,7 +887,7 @@ Three things the shared repository tells you that this document set has no way t
 | | |
 |---|---|
 | the **`silent`** list, in every feature file | a requirement a covered feature owns that its spec says nothing about. Nobody can build it — not because it is hard but because nobody has said what it should do. **Silence is not a decision and must never be read as as-is** |
-| `decisions/D-nn` | a question they raised and cannot close. Answer it **verbatim** into the register or the requirement, not by picking the more likely reading |
+| `decisions/PQ-nn` | a question they raised and cannot close. Answer it **verbatim** into the register or the requirement, not by picking the more likely reading |
 | `evidence/context.tsv` | eleven `CTX-nn` rows: what a developer knows that no requirement states. CTX-03 records that result generation and fetching **do not exist**, on mobile or backend. CTX-04 that QACR's timing is a different shape, not ACR's with different numbers. CTX-02 that the QACR application was built for a usability study, not to ship. Read these before SPEC-05's review |
 
 `evidence/behaviour.tsv` is also the honest answer to the recreation problem section 5

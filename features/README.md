@@ -39,6 +39,8 @@ Only what the spec does not already say. It links to the spec; it never restates
    (departure with its `D-n` reference, as-is, open, silent, or new — the brief specifies the
    behaviour itself and there is no current behaviour to recreate, carried in the brief's own
    words), and its evidence-row count.
+   A departure id is per-brief — the full name is `SPEC-nn/Dn`, and `SPEC-01/D1` and `SPEC-02/D1`
+   are different decisions — so read it with the brief the header links to.
    Never the requirement text; `product/` holds the current wording.
 4. **What the vault records about the code** — the rows from `evidence/behaviour.tsv`, grouped by
    product, each with its citation. A requirement with no rows reads `No rows recorded.`
