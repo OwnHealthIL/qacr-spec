@@ -1125,6 +1125,18 @@ why the choice belongs in this log rather than being left only there.
 | Runner | Production's forks from research's | One runner, one build, identical execution path in validation and production |
 | Promoting an algorithm | Image build plus redeploy | Bucket copy plus an `algorithm_version` row |
 | Image count | Runner versions × algorithm versions | Runner versions |
+| Choosing the algorithm | Fixed at image build. Selecting a different one means a different image | Per run: the message carries `algorithm: { algoId, blob, bucket? }`, so the publisher chooses each time, and the two sides choose independently |
+
+That last row is a capability rather than a cost. Research already depends on it — the plan's own
+F03 walkthrough notes that "N algorithm versions can run against one exam" for a back-office re-run,
+which is only possible because the worker is generic and the caller names the algorithm. Baking
+would remove it, and `algorithm.blob` in the message contract would stop meaning anything. What keeps
+production from running an unapproved algorithm is not the worker but `FR-ALG-002` and `FR-ALG-003`,
+the approved-combination mapping: the worker runs what it is told, and the approval data decides what
+production may tell it.
+
+[OBSERVED] `backend.q-acr` at `21b8cf9` `common/services/algo-worker/src/types/triggerAlgorithm.dto.ts`
+(`AlgorithmSchema`), `src/lib/algorithmCache.ts` (`getAlgorithm({ blob })`)
 
 A third shape exists and keeps most of both: **share the runner unchanged and pre-warm its cache**
 from a pinned object at image build or pod start, so the code path is identical to research's and no
