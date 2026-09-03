@@ -44,7 +44,7 @@ claim, not the reader's confidence in it.
 | [L11](#l11--review-pass-2026-08-23--thirteen-items-raised-against-the-spine) · Review pass — thirteen items raised against the spine | 2026-08-23 | 13 `AQ-*` questions worked and landed one by one (`L11.1`–`L11.15`); adds AD-20–AD-27, OQ-11–OQ-17 |
 | [L12](#l12--absorbed-source-material-2026-08-26) · Absorbed source material | 2026-08-26 | Evidence base (`E-1`–`E-14`), corrections (`C-1`–`C-7`), gaps (`G-1`–`G-6`), verbatim inputs folded in and deleted |
 | [L13](#l13--message-broker-choice-for-qacr-backend-one-broker-not-two) · Message broker choice | 2026-08-30 | Why `behealthy` runs RabbitMQ and GCP Pub/Sub side by side; lands AD-29, one broker for `qacr-backend` |
-| [L14](#l14--the-algorithm-execution-runtime-one-artefact-two-deployments) · The algorithm execution runtime | 2026-09-02 | Baking the algorithm into the production image forks the runner from research's; proposes AD-30 plus OQ-19/OQ-20, unadopted. `L14.8` adds the ACR precedent — two separate workers holding one identical relation, and the database-reading worker that could never be shared |
+| [L14](#l14--the-algorithm-execution-runtime--one-artefact-two-deployments) · The algorithm execution runtime | 2026-09-02 | Baking the algorithm into the production image forks the runner from research's; proposes AD-30 plus OQ-19/OQ-20, unadopted. `L14.8` adds the ACR precedent — two separate workers holding one identical relation, and the database-reading worker that could never be shared |
 
 ## Index · where each decision currently stands
 
@@ -110,6 +110,8 @@ premise — not every passing citation. Read the current state from the section 
 | OQ-16 | L11.14b, L11.14c (AQ-13) | — | Open, owner Backend owner + QMS | Session token TTL value — SRS's 24h flagged wrong, no replacement chosen |
 | OQ-17 | L11.14e, L11.14f (AQ-13) | — | Open, owner Product | Q-81: screenshot capture vs. results-PDF save/email |
 | OQ-18 | L11.12g, L11.12h (AQ-06) | — | Open, owner Product | Results-centre content: invalidated tests, household visibility |
+| OQ-19 | L14.7 (proposed with AD-30) | — | **Proposed — awaiting review**, owner Backend owner + QMS | Who owns promoting the `algo-worker` image into production and where the approval is recorded. Sharpened rather than answered by AD-30's image mechanism: once the repositories separate, the production artefact is built by the research repository's CI. Not in `spine.md`; L14.7 holds the row |
+| OQ-20 | L14.7 (proposed with AD-30) | — | **Proposed — awaiting review**, owner Backend owner | Whether production needs the batch routing path or only the short one. Research runs both because it re-runs algorithms over many exams; production analyses one exam at a time, so the batch queue may have no production consumer. Not in `spine.md`; L14.7 holds the row |
 | D-01 | L11.12g, L11.12h (AQ-06) | — | Open, owner Product | Household/shared-handset results-centre visibility; `FR-PRT-001` left unspecified |
 | D-02 | L11.14e–g (AQ-13) | — | Open, owner Product | Q-81 contradiction between `FR-SEC-007` and `FR-SHR-015`/`FR-PRT-009` |
 
@@ -1000,7 +1002,7 @@ and — for the precedent recorded in **L14.8** — of `behealthy`, `rehealthy-c
 
 **The plan settles how the algorithm reaches the worker and, in doing so, forks the worker.** It
 bakes the approved algorithm into production's image, for two stated reasons. Research's worker
-fetches the algorithm at runtime instead. Two mechanisms means two runners, and a runner that differs
+fetches the algorithm at runtime instead. Two mechanisms mean two runners, and a runner that differs
 between validation and production is what `FR-LCM-009` cannot carry. AD-30 proposes the other
 mechanism, so that one runner serves both — a choice **against** the plan, argued below rather than
 assumed.
@@ -1175,8 +1177,8 @@ not shared.**
   against production's own broker, queues, buckets and `worker-api`. **`worker-api` is not shared** —
   each deployment implements its own, because it writes its own schema and production's carries
   AD-23's single-use credential and AD-4's insert-only result row under AD-2's row-level security.
-  The **trigger message and output contract is versioned and additive-only**; drift in it is a
-  defect. Promotion of the image follows the same terms as promotion of an algorithm artefact: an
+  The contract between the two sides — **the trigger message together with the worker's output — is
+  versioned and additive-only**; drift in it is a defect. Promotion of the image follows the same terms as promotion of an algorithm artefact: an
   explicit act with a recorded approval, into production's own registry, with **no shared registry
   credential across the boundary**
 - **Mechanism — the sharing is by published image, never by source.** Production adds a deployment
