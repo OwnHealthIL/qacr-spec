@@ -1,7 +1,7 @@
 # decisions/
 
 Questions **this repository** raises that only Product can close. **Two open**, both raised against
-SPEC-02 Rev 1.1. That is not the same as Product's own open questions — see below.
+SPEC-02 Rev 1.2. That is not the same as Product's own open questions — see below.
 
 | | | |
 |---|---|---|
