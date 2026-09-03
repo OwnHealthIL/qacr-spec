@@ -1178,9 +1178,9 @@ not shared.**
   each deployment implements its own, because it writes its own schema and production's carries
   AD-23's single-use credential and AD-4's insert-only result row under AD-2's row-level security.
   The contract between the two sides — **the trigger message together with the worker's output — is
-  versioned and additive-only**; drift in it is a defect. Promotion of the image follows the same terms as promotion of an algorithm artefact: an
-  explicit act with a recorded approval, into production's own registry, with **no shared registry
-  credential across the boundary**
+  versioned and additive-only**; drift in it is a defect. Promotion of the image follows the same
+  terms as promotion of an algorithm artefact: an explicit act with a recorded approval, into
+  production's own registry, with **no shared registry credential across the boundary**
 - **Mechanism — the sharing is by published image, never by source.** Production adds a deployment
   pointing at the digest of the image the owning repository already builds and publishes; it does not
   compile the worker, consume it as a package, or depend on a library extracted from it. Nothing is
@@ -1234,7 +1234,7 @@ Paste-ready, single-line table rows. Not applied here.
 One row added to **Boundary With backend.q-acr**, after the algorithm-artefacts row:
 
 ```markdown
-| Algorithm execution runtime, research → production | Research produces | Shared **as a published container image, never as source or a package**: promoted by digest into the production registry and configured by environment against production's own broker, buckets and `worker-api`. The algorithm reaches it as a promoted tarball in production's own bucket, so the runner is identical on both sides. **The runner reads and writes no database** — that invariant is what allows one image to serve two deployments, and a database import inside it is a defect, enforced by lint. The image carries the worker and its runtime dependencies only: no generated client, no repositories, no second service. No source dependency and no shared registry credential | Promotion is an explicit act with a recorded approval. The trigger and output contract is versioned and additive-only; a breaking change is a new version with both accepted during migration |
+| Algorithm execution runtime, research → production | Research produces | Shared **as a published container image, never as source or a package**: promoted by digest into the production registry and configured by environment against production's own broker, buckets and `worker-api`. The algorithm reaches it as a promoted tarball in production's own bucket, so the runner is identical on both sides. **The runner reads and writes no database** — that invariant is what allows one image to serve two deployments, and a database import inside it is a defect, enforced by lint. The image carries the worker and its runtime dependencies only: no generated client, no repositories, no second service. No source dependency and no shared registry credential | Promotion is an explicit act with a recorded approval. The contract between the two sides — the trigger message together with the worker's output — is versioned and additive-only; a breaking change is a new version with both accepted during migration |
 ```
 
 Two rows added to **Open Questions**:
