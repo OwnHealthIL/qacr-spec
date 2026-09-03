@@ -113,7 +113,20 @@ requirement. A retired identifier may be discussed in prose; it may not be trace
 and only fails if a requirement **it traces to** moved between the revision it cites and the
 current one. Failing every lagging citation re-issued every spec on every bump, and made the
 citation say nothing, since it was current by construction.
-`check-all.py` — runs them all. `spec-triage.py`, `build-conflicts.py`, `build-m5-proposal.py`,
+`ready-check.py` — **not part of `npm run check`**. It runs by hand on one spec, after the
+cleaning that promotion does and before the rename to 1.0, and asks what subtraction breaks: a
+reference to an open item or departure the document no longer defines, a pointer to a
+renumbered section, a count in prose the table has outgrown, a departure missing from its own
+traceability row, a milestone row that stopped being exhaustive, and the two things a delivered
+document may never lose — the authority table and the precedence rule. Every promotion before it
+existed was followed within days by corrections that were damage the cleaning did.
+`render-pages.py` — converts both documents and writes page images, so section 8.5 can be run.
+`spec-to-docx.py` and `redline.py` — a Word review copy of a spec, with `--since` colouring
+everything that changed from a named revision red. Output goes to `local/review/`, never to
+`specs/`: a second copy of a document where the first one lives is read as current by whoever
+finds it first.
+`retired-citation-probe.py` — finds live prose citing withdrawn identifiers.
+`check-all.py` — runs them all except `ready-check.py`. `spec-triage.py`, `build-conflicts.py`, `build-m5-proposal.py`,
 `apply-m5.py`, `remap-bl.py` — one-off builders and migrations, kept because for a regulated
 document set how a bulk change was made is part of its record.
 
@@ -373,6 +386,19 @@ question for Guy, and it is a cheap question — one line, answered in a sentenc
 cost of describing a working product and then unpicking it. SPEC-01 ended with **eight
 features, two departures and no behaviour statements at all**, which is what an all-recreation
 brief should look like.
+
+### Promotion is subtraction, so check what it broke
+
+**Run `generator/ready-check.py` after the cleaning and before the rename.** Promoting a spec
+removes the proposals, folds the answered questions away and strips the changelog, and every
+promotion before that check existed was followed within days by two or three corrections. They
+were not disagreements about content — Guy had reviewed that. They were the cleaning's own
+damage: a dangling `U4` left by a renumbered list, a count of ten over a table of twelve, a
+departure missing from its own traceability row, and a line saying what kind of document it was
+removed as archaeology.
+
+**Archaeology is what earlier revisions got wrong. It is not what the document is, or how to
+read it.** The authority table and the precedence rule always stay.
 
 ### A ready spec carries no proposals
 
