@@ -364,6 +364,21 @@ Two properties do the work, and neither is optional:
 and the brief never enumerates behaviour, so it cannot be read as exhaustive. A wrong line
 in a brief cannot cost a capability.
 
+**A departure row states what it departs from.** The table is `# | feature | Today | In QACR
+| driven by`, and `Today` is Minuteful Kidney's behaviour. A departure *is* a difference from
+something, so no row legitimately leaves that cell empty and `ready-check.py` fails one that
+does. Where the platforms differ, `Today` states both sides — *one does X, the other does Y* —
+so the reader can see what is being chosen between; which platform does which is implementation
+detail and stays out, while naming the platform QACR follows is a product decision and stays in.
+
+This is a column rather than a convention because prose did not hold. SPEC-04 Rev 1.2 shipped
+eight rows of twelve that named only the new behaviour, and D7 — *"the absence window applies
+again from that moment. It does not stop applying for the rest of the run"* — negated something
+the reader was never told existed. **All eight came from the behaviour export.** When a `change`
+mark sits directly under the line stating the current behaviour, the antecedent is so present to
+the writer that recording it feels redundant; the four SPEC-04 rows that kept it were the four
+that came from somewhere else. Expect the same pull on every epic that has an export.
+
 **The departures come from the triage, not from research.** `spec-status.js` already holds
 "what changes" per feature. That *is* the departures table — an `Unchanged` feature with no
 note has none, and the seven `derived` notes are exactly where one is uncertain and needs
@@ -736,8 +751,8 @@ Every one of these exists because something got through without it.
 
 | | |
 |---|---|
-| **WHERE WE ARE** | **Three of thirteen specs are ready: SPEC-01, SPEC-02, SPEC-03**, all recreation briefs. FR is at **Rev 1.23**, epic map **Rev 1.17**, 1,815 checks. **SPEC-04 is now drafted at Rev 0.1** — seven features, nine departures, seven behaviour statements, all guards green — and it is where the Changed/New shape was settled: **a departure gets a table row, and a behaviour section only where a departure cannot be stated in one.** SPEC-04 has exactly one, F04.7. Next: Guy's review of SPEC-04, and **SPEC-05 Rev 0.7, whose 38 statements are now something to reconcile against that shape rather than the standing proposal for it.** |
-| **WHERE WE ARE, on the repository** | The document set now lives in `product/` of the shared **`qacr-spec`** repository, on branch **`poc/pm-working-directory`**. `npm run all` is green there: 1,815 guards plus 30 new layout checks. Nothing outside `product/` was touched. **This is a POC and is not merged** — the open items below are what merging waits on. See section 11. |
+| **WHERE WE ARE** | **Five of thirteen specs are ready: SPEC-01 Rev 1.6, SPEC-02 Rev 1.3, SPEC-03 Rev 1.3, SPEC-04 Rev 1.3, SPEC-05 Rev 1.3.** FR is at **Rev 1.27**, epic map **Rev 1.21**, 1,864 checks plus 133 layout checks. Two structural decisions since the last batch, both retrofitted across every live document: **authority is per feature, not per document** (section 5), and **a departure row states what it departs from** in a `Today` column of its own. The Changed/New shape settled at SPEC-04 still holds — a departure gets a table row, and a behaviour section only where a departure cannot be stated in one; SPEC-04 has one such feature, F04.7, and SPEC-05 is seven of them. Next: E06. |
+| **WHERE WE ARE, on the repository** | The document set now lives in `product/` of the shared **`qacr-spec`** repository, on branch **`poc/pm-working-directory`**, with spec work done on `spec/SPEC-nn` branches off it. `npm run all` is green there: 1,864 guards plus 133 layout checks. Nothing outside `product/` was touched. **This is a POC and is not merged** — the open items below are what merging waits on. See section 11. |
 | **The team needs one line before their half runs** | `tools/parse_product_docs.py` fails on Rev 1.23 with *appendix title matches no known role: ['I — Conditions That Refuse a Test']*. `APPENDIX_ROLES` matches on title and fails loudly on an unknown one, by design — it is how a re-lettering announces itself instead of arriving as silence. Adding `"conditions that refuse a test"` runs the whole chain green, verified. Appendix I is the block / notify / configured-off register, so it is probably worth **emitting as data** rather than only recognising: it is the one place that distinction exists. **Theirs to fix, not ours.** |
 | **Their `SPECS` table is three specs behind** | `tools/build_feature_files.py` cites SPEC-01 Rev1.2 and SPEC-02 Rev1.0, and has **no SPEC-03 entry at all** — so E03 has no feature files while FR-KIT-008, FR-KIT-009 and FR-KIT-010 are already in the corpus. Their `spec-intake` closes this. Do not do it for them. |
 | **SPEC-02 was forked at one revision number, now Rev 1.1** | Their repository held Rev 1.0 and this one held different text, also Rev 1.0: the `unauthorized` refusal was rewritten in prose at the Rev 1.23 pass, correctly, because a value read out of the backend is not something a brief may carry. Fixed by bumping to **Rev 1.1**; their Rev 1.0 stays in `specs/` because their feature files were built against it. The guard is in `layout-check.py`. See the mistake in section 8. |

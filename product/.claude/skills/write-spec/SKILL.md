@@ -119,6 +119,13 @@ stopping condition and is what made SPEC-01 expensive.
 | `generator/m5-map.js` | where each former backlog item went |
 | `generator/configs.js` | the configuration register — flags, defaults, dispositions |
 | `reviews/acr-behaviour-review-E0n.json` | the team's behaviour export for this epic, with Guy's `pm_mark` per line. Read `reviews/README.md` first: `checked_against` is behind, `change` marks are departures, `wrong` marks are research, and `platforms: differs` is nobody's |
+
+> **The export makes departures worse unless you fight it.** A `change` mark sits on the line
+> that states the current behaviour, so while you are writing, the antecedent is right there and
+> writing it down feels redundant. It is not — the reader has no export. Eight of SPEC-04 Rev
+> 1.2's twelve departures stated only the new behaviour, and every one of the eight came from
+> this file; the four that named what they changed from were the four that did not. **Copy the
+> behaviour line into the `Today` cell as you write the row**, before you write the decision.
 | `evidence/behaviour.tsv` | **what the code does today, cited, one claim per row.** Cheaper and more reliable than reading the clients yourself, and it is the sweep's best starting point. Convert to product behaviour; the `file:line` never travels |
 | `evidence/coverage.tsv` | whether anyone has looked at a requirement at all. `no-evidence-found` means **nobody extracted**, never that the code does nothing |
 | `evidence/context.tsv` | `CTX-nn` — what a developer knows that no requirement states. CTX-02, CTX-03 and CTX-04 all bear on what the QACR build can be assumed to have |
@@ -218,7 +225,16 @@ How to read this   all features are recreations; the current product is their sp
                    > departures table, the current product is right. Raise it rather than
                    > implementing the brief.
 1. Scope           in scope / out of scope, by feature
-2. Departures      the only prescriptive section. Table: # | feature | what changes | driven by
+2. Departures      the only prescriptive section.
+                   Table: # | feature | TODAY | IN QACR | driven by
+                   TODAY is Minuteful Kidney's behaviour — the thing the row departs from.
+                   A departure IS a difference from something, so there is no row that
+                   legitimately has an empty Today cell. ready-check.py fails one.
+                   Where the platforms differ, Today states BOTH sides — "one does X, the
+                   other does Y" — because the reader has to see what is being chosen
+                   between. Do not name which platform does which; that is implementation
+                   detail. Naming the platform QACR follows is a product decision and is
+                   fine.
                    "No departures" is a complete and valid answer
 3. Still undecided # | question | owner
 4. Confirmed as-is question | answer — every question asked whose answer was "as today"

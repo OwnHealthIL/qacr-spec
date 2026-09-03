@@ -25,7 +25,10 @@ finds gets fixed in the same pass rather than in a revision nobody asked for.
 """
 import io, json, os, re, subprocess, sys
 
-SPEC, DIR = sys.argv[1], sys.argv[2]
+# abspath: DIR is interpolated into a `node -e` require(), and a bare relative path like
+# `generator` resolves against node's cwd, not ours — MODULE_NOT_FOUND with a stack trace
+# instead of a check result.
+SPEC, DIR = sys.argv[1], os.path.abspath(sys.argv[2])
 txt = io.open(SPEC, encoding="utf-8").read()
 name = os.path.basename(SPEC)
 fails, notes = [], []
@@ -149,6 +152,42 @@ if dep_feats and trace_deps:
                       f"{name}: section 2 gives {d} to {f}, but {f}'s traceability row "
                       f"lists {sorted(trace_deps[f]) or 'no departures'}. The feature file "
                       f"copies that row, so the two halves disagree downstream")
+
+# 8 · a departure that does not say what it departs from
+#
+# A departure IS a difference from something, so a row that states only the new behaviour is
+# incomplete — the reader cannot tell what is being changed. SPEC-04 Rev 1.2 shipped eight such
+# rows out of twelve, and D7 was the one that surfaced it: "Once a timeout has been presented and
+# dismissed, the absence window applies again from that moment. It does not stop applying for the
+# rest of the run" negates a behaviour the reader was never told existed.
+#
+# The cause is worth recording, because it will recur. Those eight rows were derived from the E04
+# behaviour review, where each behaviour sat on the line above the mark — so the antecedent was so
+# present to the writer that writing it down felt redundant. The four rows that kept it, D1 and
+# D10 to D12, are the four that came from somewhere other than the export. Having the review made
+# the departures worse.
+#
+# So the table carries the antecedent in a column of its own, where an omission is visible rather
+# than a matter of prose style.
+dep_rows = [l for l in txt.splitlines() if re.match(r"\|\s*\*\*D\d+\*\*\s*\|", l)]
+if dep_rows:
+    hdr = next((l for l in txt.splitlines()
+                if l.lstrip().startswith("|") and "Today" in l and "In QACR" in l), None)
+    check(hdr is not None,
+          f"{name}: has a departures table with no 'Today' / 'In QACR' columns. A departure is a "
+          f"difference from something, and a row that states only the new behaviour cannot be "
+          f"read without the behaviour review it was written against")
+    if hdr:
+        cells = [c.strip() for c in hdr.strip().strip("|").split("|")]
+        i = cells.index("Today")
+        blank = []
+        for row in dep_rows:
+            rc = [c.strip() for c in row.strip().strip("|").split("|")]
+            if i >= len(rc) or not rc[i]:
+                blank.append(re.sub(r"[|*\s]", "", row.split("|")[1]))
+        check(not blank,
+              f"{name}: departure(s) {', '.join(blank)} leave the 'Today' cell empty. Say what "
+              f"Minuteful Kidney does now, or the row reads as a decision with no subject")
 
 print(f"Ready-check: {name}")
 print(f"   statements {len(defined_s)}  departures {len(defined_d)}  open items {len(defined_u)}")
