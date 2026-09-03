@@ -44,6 +44,7 @@ claim, not the reader's confidence in it.
 | [L11](#l11--review-pass-2026-08-23--thirteen-items-raised-against-the-spine) · Review pass — thirteen items raised against the spine | 2026-08-23 | 13 `AQ-*` questions worked and landed one by one (`L11.1`–`L11.15`); adds AD-20–AD-27, OQ-11–OQ-17 |
 | [L12](#l12--absorbed-source-material-2026-08-26) · Absorbed source material | 2026-08-26 | Evidence base (`E-1`–`E-14`), corrections (`C-1`–`C-7`), gaps (`G-1`–`G-6`), verbatim inputs folded in and deleted |
 | [L13](#l13--message-broker-choice-for-qacr-backend-one-broker-not-two) · Message broker choice | 2026-08-30 | Why `behealthy` runs RabbitMQ and GCP Pub/Sub side by side; lands AD-29, one broker for `qacr-backend` |
+| [L14](#l14--the-algorithm-execution-runtime--one-artefact-two-deployments) · The algorithm execution runtime | 2026-09-02 | Baking the algorithm into the production image forks the runner from research's; proposes AD-30 plus OQ-19/OQ-20, unadopted. `L14.8` adds the ACR precedent — two separate workers holding one identical relation, and the database-reading worker that could never be shared |
 
 ## Index · where each decision currently stands
 
@@ -85,6 +86,7 @@ premise — not every passing citation. Read the current state from the section 
 | AD-27 | L11.10 (AQ-05) | — | Decided, invariant half only | Exactly one component normalises; *where* is genuinely undecided — **OQ-15** |
 | AD-28 | never created | L11.12a | — | Considered and explicitly rejected — the finding landed as an AD-23 amendment instead, to avoid one concern with two governing ADs |
 | AD-29 | L13 | — | Decided | One message broker (RabbitMQ); a boundary AMQP cannot cross is bridged by HTTP behind AD-10's port, not by adding GCP Pub/Sub |
+| AD-30 | L14 | — | **Proposed — awaiting review** | Algorithm runner built once and shared research → production **as a published image, never as source**; the runner reads and writes no database; `worker-api` stays per-deployment. Chooses against the plan's bake-the-algorithm-into-the-image design — see L14.4/L14.5, with the ACR precedent at L14.8. Not in `spine.md`; L14.7 holds the text |
 
 ### Open questions and decisions/ files
 
@@ -108,6 +110,8 @@ premise — not every passing citation. Read the current state from the section 
 | OQ-16 | L11.14b, L11.14c (AQ-13) | — | Open, owner Backend owner + QMS | Session token TTL value — SRS's 24h flagged wrong, no replacement chosen |
 | OQ-17 | L11.14e, L11.14f (AQ-13) | — | Open, owner Product | Q-81: screenshot capture vs. results-PDF save/email |
 | OQ-18 | L11.12g, L11.12h (AQ-06) | — | Open, owner Product | Results-centre content: invalidated tests, household visibility |
+| OQ-19 | L14.7 (proposed with AD-30) | — | **Proposed — awaiting review**, owner Backend owner + QMS | Who owns promoting the `algo-worker` image into production and where the approval is recorded. Sharpened rather than answered by AD-30's image mechanism: once the repositories separate, the production artefact is built by the research repository's CI. Not in `spine.md`; L14.7 holds the row |
+| OQ-20 | L14.7 (proposed with AD-30) | — | **Proposed — awaiting review**, owner Backend owner | Whether production needs the batch routing path or only the short one. Research runs both because it re-runs algorithms over many exams; production analyses one exam at a time, so the batch queue may have no production consumer. Not in `spine.md`; L14.7 holds the row |
 | D-01 | L11.12g, L11.12h (AQ-06) | — | Open, owner Product | Household/shared-handset results-centre visibility; `FR-PRT-001` left unspecified |
 | D-02 | L11.14e–g (AQ-13) | — | Open, owner Product | Q-81 contradiction between `FR-SEC-007` and `FR-SHR-015`/`FR-PRT-009` |
 
@@ -988,3 +992,353 @@ rather than adding a second broker technology. This is a call taken from the evi
 a `requirements.json` line; if a concrete future partner needs Pub/Sub specifically (for example, a
 Google-native integration that only speaks Pub/Sub), that is a new case to raise against this AD, not
 a reason to keep both brokers open by default now.
+
+## L14 · The algorithm execution runtime — one artefact, two deployments
+
+Raised while planning the production backend's algorithm path, once `user/services/user-app` in
+`backend.q-acr` was confirmed as a stub to be replaced rather than extended, and separate databases
+and separate deployments were settled. Worked from source reads of `backend.q-acr` and `helm-charts`,
+and — for the precedent recorded in **L14.8** — of `behealthy`, `rehealthy-core` and both their charts.
+
+**The plan settles how the algorithm reaches the worker and, in doing so, forks the worker.** It
+bakes the approved algorithm into production's image, for two stated reasons. Research's worker
+fetches the algorithm at runtime instead. Two mechanisms mean two runners, and a runner that differs
+between validation and production is what `FR-LCM-009` cannot carry. AD-30 proposes the other
+mechanism, so that one runner serves both — a choice **against** the plan, argued below rather than
+assumed.
+
+### L14.1 — What the estate does today
+
+The worker is closer to a shared artefact than the production design assumes:
+
+- **It is already built as its own image**, in a dedicated parallel Jenkins stage with
+  `-f Dockerfile.algo-worker`, pushed to `us.gcr.io/smiling-diode-638/backend.q-acr-algo-worker`
+  alongside the main image
+- **It holds no database client.** Its only `@prisma/client` use is two enum values —
+  `ProductNames` and `MaterialType`, from `schema/shared/enums.shared.prisma` — used in a zod schema
+  and one comparison. No client, no repository, no query
+- **Every piece of infrastructure is environment-supplied**, with no literals:
+  `ALGORITHMS_BUCKET`, `RE_EXAM_SAMPLES_BUCKET`, `AW_QUEUE_NAME`, `AW_ROUTING_PATTERN`,
+  `QACR_EXCHANGE_NAME`, `WORKER_API_URL`, `RABBIT_PREFETCH_COUNT`, `ALGORITHM_CACHE_SIZE`,
+  `ALGORITHM_TIMEOUT`
+- **The same image already runs twice**, as `algo-worker` on `qacr.aw.batchAlgorithm` and
+  `algo-worker-short` on `qacr.aw.shortBatchAlgorithm` — separate Helm releases, separate quorum
+  queues, separate KEDA scalers, one image tag
+- **Nothing imports it.** It is a leaf service triggered by a published message, not a library
+- **The algorithm arrives at runtime**: fetched as a tarball from `ALGORITHMS_BUCKET` by blob key,
+  extracted, held in an LRU cache behind a per-key mutex, after which
+  `./Classifier/run_classifier.py` is spawned inside `algo-base:5.0`
+
+So the worker's in-repo coupling is `@qacr/core` (170 lines) and `@qacr/rabbit` (145), both compiled
+into the image at build time. Neither needs publishing for another deployment to run the image.
+
+[OBSERVED] Read 2026-09-02 against `backend.q-acr` `origin/main` at **`21b8cf9`** and `helm-charts`
+`origin/master` at **`1ed2669`**. Neither repository is in `evidence/pins.yaml`, which scopes to the
+four application repositories `behaviour.tsv` cites; the commits are recorded here instead, as L13
+records `behealthy`'s.
+
+`backend.q-acr/Jenkinsfile` (Build and Publish stages), `backend.q-acr/Dockerfile.algo-worker:7,12,13,33`,
+`backend.q-acr/common/services/algo-worker/{package.json,src/lib/{algorithmCache,algorithmExecution,utils}.ts,src/types/triggerAlgorithm.dto.ts}`,
+`backend.q-acr/common/prisma/schema/shared/enums.shared.prisma`,
+`backend.q-acr/research/services/research-app/src/services/triggerAlgo.service.ts:79`,
+`helm-charts/values/smiling-diode-638/research-us_qacr-research.yaml:12,74,110`
+
+All eight `backend.q-acr` files cited are byte-identical to `origin/main`, so nothing here rests on
+the feature branch they were read from. The helm values file differs from `origin/master` only in
+`global.image.tag` — `main-352` against `main-355` — which is the Jenkins auto-bump, not a
+discrepancy in the rows cited.
+
+### L14.2 — Why a forked runner is a validation problem
+
+`FR-LCM-009` requires each algorithm version, and each approved combination of mobile and backend
+algorithm versions, to undergo verification and validation before release. `FR-ALG-004` requires the
+exam to record the versions that produced its result. **AD-27** requires exactly one component to
+apply the `FR-IMG-016` normalisation, with the artefacts crossing the algorithm port enumerated in a
+contract and carrying a version.
+
+Together those make a second runner a validation problem rather than a maintenance one: if research
+validates algorithm version X through one orchestration path and production runs the same version
+through a different one, the validation does not transfer, and the version recorded against a
+production exam names a binary exercised somewhere else. One runner is what makes one verification
+cover both executions.
+
+### L14.3 — Why the result writer is not part of it
+
+`worker-api` is the opposite shape. It imports `@qacr/prisma` five times plus `@qacr/repositories`
+and `@qacr/algorithm`: it is the half that writes the database.
+
+Production's must write insert-only `exam_result` (**AD-4**) under row-level security (**AD-2**), and
+must accept a callback only against the single-use credential minted at job dispatch and bound to
+that exam and that algorithm run (**AD-23**) — because first-writer-wins against one row per exam is
+what makes an unauthenticated callback sufficient to become the clinical result. Research's has none
+of that and needs none of it. So the compute is shared and the writer is per-deployment, under either
+mechanism below.
+
+`common/algorithm` — `algoInputUtils`, `algoUtils`, `sampleAlgoErrorUtils` — sits with the trigger
+side and the result side, both per-deployment services, so it is copied rather than shared. What must
+not drift is what enters the algorithm and how its raw output is read; what each side does afterwards
+legitimately differs, production mapping onward to the `FR-ALG-012` enumeration while research retains
+the raw output.
+
+[OBSERVED] `backend.q-acr` at `21b8cf9` — `common/services/worker-api/src`, `common/algorithm/src`,
+the latter imported by `worker-api/src/services/updateResults.service.ts` and by four research
+services (`research-app/src/services/{triggerAlgo,sampleUploadCompletion}.service.ts`,
+`research-backoffice/src/services/{publishExams.service,runAlgosOnExam.helpers}.ts`)
+
+Sharing the writer has already been attempted in this repository and did not hold. `backend.q-acr#238`
+(July 2025, a POC, unmerged) proposed keeping one `worker-api` and unioning the two clients' result
+types — `type SharedResult = Result | UserResult`. Reading through a union does correctly restrict
+the caller to common fields, but only the *return* types were unioned: the
+`Prisma.ResultUpdateInput` and `WhereUniqueInput` arguments still came from one client, the runtime
+still hardcoded `getPrismaClient()`, and it required two schemas held in lockstep by hand. It stalled,
+and the TODO it was written to remove is still at the top of
+`common/services/worker-api/src/repositories/result.repository.ts`. The lesson is the one AD-30 turns
+into a rule: a service that writes a database is the wrong unit of sharing, so AD-30 shares the runner
+and never the writer.
+
+[OBSERVED] `backend.q-acr#238`; `backend.q-acr` at `21b8cf9`
+`common/services/worker-api/src/repositories/result.repository.ts` (leading TODO)
+
+### L14.4 — What the plan decided, and the consequence it did not examine
+
+The runner was not overlooked, and the plan is not describing the estate inaccurately. It is
+**prescribing a change**, with a rationale:
+
+- `architecture_plan.html` lists `algo-worker/` in the production repository tree as a
+  "separate image (algo-base) · **approved algorithm baked in**"
+- and states the mechanism and its reasons directly: "`algo-worker` runs the algorithm baked into
+  its image, reads frames from GCS, writes artefacts back. **No tarball download in the hot path,
+  which also makes the deployed algorithm part of the verified artefact.**"
+- `spine.md` follows only as far as **Runtime roles** — `algo-worker`, "queue consumer · algorithm
+  execution, separate image"
+
+Both reasons are real. A cold pod under KEDA scale-up pays a download before its first run, and
+`AD-14`'s "what is deployed equals what was approved" is at its simplest when one digest is the whole
+answer.
+
+**The consequence not examined is that baking forks the runner.** Research's worker fetches, caches
+and extracts; a production worker with the algorithm already present does not, and the fetch path is
+the part `FR-LCM-009` validation exercises. The plan's own second reason — making the deployed
+algorithm part of the verified artefact — is a verification argument, and forking the runner works
+against it: the artefact becomes verified, and the code path that runs it becomes the one research
+never validated.
+
+`spine.md`'s Boundary row is silent on this and remains correct either way: "Tarball in the
+production algorithms bucket plus an `algorithm_version` row. Promoted artefact, never a live
+dependency" describes how the algorithm *travels*, not how the worker *consumes* it. A tarball
+promoted into production's bucket can be baked in at image build or fetched at run time. The spine
+does not choose; the plan does, and the choice is unrecorded as a decision.
+
+[OBSERVED] `architecture/architecture_plan.html`, production repository tree and the F03 completion
+walkthrough. The plan states of itself that it is "a reading copy, not the source of truth", which is
+why the choice belongs in this log rather than being left only there.
+
+### L14.5 — The two mechanisms, fairly
+
+| | Bake into the image (the plan) | Promote the tarball, share the runner |
+|---|---|---|
+| Verified artefact | One digest is the whole answer | Digest + a versioned bucket object + the `algorithm_version` row. `AD-14` already pins "the algorithm artefact and the configuration set" alongside the image, and `AD-26` already requires object versioning on record-bearing buckets, `algorithms` named among them |
+| Hot path | No download | Download on a cold pod only; the LRU cache and per-key mutex already exist. Cost unquantified — `OQ-9` records that algorithm wall-clock latency is unmeasured |
+| Runner | Production's forks from research's | One runner, one build, identical execution path in validation and production |
+| Promoting an algorithm | Image build plus redeploy | Bucket copy plus an `algorithm_version` row |
+| Image count | Runner versions × algorithm versions | Runner versions |
+| Choosing the algorithm | Fixed at image build. Selecting a different one means a different image | Per run: the message carries `algorithm: { algoId, blob, bucket? }`, so the publisher chooses each time, and the two sides choose independently |
+
+That last row is a capability rather than a cost. Research already depends on it — the plan's own
+F03 walkthrough notes that "N algorithm versions can run against one exam" for a back-office re-run,
+which is only possible because the worker is generic and the caller names the algorithm. Baking
+would remove it, and `algorithm.blob` in the message contract would stop meaning anything. What keeps
+production from running an unapproved algorithm is not the worker but `FR-ALG-002` and `FR-ALG-003`,
+the approved-combination mapping: the worker runs what it is told, and the approval data decides what
+production may tell it.
+
+[OBSERVED] `backend.q-acr` at `21b8cf9` `common/services/algo-worker/src/types/triggerAlgorithm.dto.ts`
+(`AlgorithmSchema`), `src/lib/algorithmCache.ts` (`getAlgorithm({ blob })`)
+
+A third shape exists and keeps most of both: **share the runner unchanged and pre-warm its cache**
+from a pinned object at image build or pod start, so the code path is identical to research's and no
+cold pod downloads. It is not developed here; it is named so the choice is not read as binary.
+
+### L14.6 — Proposed decision
+
+[INFERRED] **AD-30 — The algorithm execution runtime is one promoted artefact; the result writer is
+not shared.**
+
+- **Binds:** algorithm execution, the research boundary, promotion
+- **Prevents:** research validating an algorithm version through one orchestration path while
+  production runs that version through a different one, which makes `FR-LCM-009`'s verification and
+  `FR-ALG-004`'s recorded version non-transferable — and, in the other direction, production
+  acquiring a standing credential into the research project in order to run it
+- **Rule:** `algo-worker` is built **once**, in the repository that owns the algorithm, and
+  production runs a **promoted, digest-pinned copy of that image** rather than building or
+  maintaining its own. The algorithm reaches it as a promoted tarball in production's own algorithms
+  bucket, exactly as the Boundary already provides, so the runner is identical on both sides. The
+  image carries no database client and no research schema. It is configured entirely by environment
+  against production's own broker, queues, buckets and `worker-api`. **`worker-api` is not shared** —
+  each deployment implements its own, because it writes its own schema and production's carries
+  AD-23's single-use credential and AD-4's insert-only result row under AD-2's row-level security.
+  The contract between the two sides — **the trigger message together with the worker's output — is
+  versioned and additive-only**; drift in it is a defect. Promotion of the image follows the same
+  terms as promotion of an algorithm artefact: an explicit act with a recorded approval, into
+  production's own registry, with **no shared registry credential across the boundary**
+- **Mechanism — the sharing is by published image, never by source.** Production adds a deployment
+  pointing at the digest of the image the owning repository already builds and publishes; it does not
+  compile the worker, consume it as a package, or depend on a library extracted from it. Nothing is
+  extracted and nothing is split. This clause is what makes the worker's *build-time* coupling
+  irrelevant to the consuming deployment: the worker's `@qacr/rabbit` → `@qacr/types` →
+  `@prisma/client` chain is real and must be resolved before the worker can compile, but it is
+  resolved once, in the repository that owns the schema and already runs `prisma generate`. A
+  deployment that receives a built image never resolves `@qacr/types`, so the chain never reaches it.
+  It is also the difference between AD-30 and `backend.q-acr#238` (L14.3), which tried to share a
+  service as source and needed two schemas held in lockstep by hand
+- **Invariant, normative — the algorithm runner must read and write no database.** This is the single
+  property the whole decision rests on: a component that touches a database belongs to that database
+  and cannot serve two deployments. It is the precondition for sharing, not hygiene alongside it.
+  `rehealthy`'s Go worker violated it, which is exactly why it was never shareable — the
+  counter-example is recorded in L14.8. Enforcement in `backend.q-acr` is `backend.q-acr#509`: the
+  worker's two shared enums are declared locally rather than imported from the generated client, and
+  a `no-restricted-imports` rule scoped to `common/services/algo-worker/**` blocks `@prisma/*` and
+  `@qacr/prisma` including type-only imports, so the dependency cannot return unnoticed. The lint rule
+  is the mechanism that keeps the invariant true, not a tidiness measure
+- **Packaging, normative — the shared image contains the worker and its runtime dependencies only.**
+  `Dockerfile.algo-worker` does not satisfy this today: the build stage does `COPY . ${APP_HOME}` and
+  the final stage copies the entire build tree back out, so the published image carries research's
+  generated Prisma client, `worker-api`, `common/repositories` and the back-office services alongside
+  the worker. For a research deployment that is a size question; for a submission artefact it is a
+  *what is in the device software* question, and it must be fixed before production deploys the image.
+  It is cheap to fix, because `@qacr/types` emits **no runtime `@prisma/client` import** — all four
+  source files that name the client use it only in type positions, so TypeScript erases every one of
+  them and no emitted JavaScript file requires `@prisma/client` at all. The generated client is
+  therefore a build-time artefact and never has to leave the build stage
+
+[OBSERVED] `backend.q-acr` at `21b8cf9` — `Dockerfile.algo-worker:7,33`;
+`common/types/src/{database/prisma-types.ts:2,types/exam.type.ts:1,types/preparedSample.type.ts:1,types/sampleAlgoError.type.ts:2}`
+(three are `import type`/`export type`; the fourth imports `Sides` in value position but uses it only
+as a type at `sampleAlgoError.type.ts:27`, so it is elided too). Verified by building `@qacr/types`
+and reading `dist/`: `dist/types/sampleAlgoError.type.js` requires only `zod`,
+`dist/database/prisma-types.js` is empty, and no emitted `.js` names `@prisma/client`. The
+build-time coupling was verified in the other direction by moving the generated client aside, after
+which typechecking fails with `TS2305: Module '"@prisma/client"' has no exported member 'Prisma'`.
+
+**This overrides `architecture_plan.html`'s bake-in design.** If the reviewer prefers to keep it, the
+cold-start cost should be measured first — `OQ-9` says it never has been — and `FR-LCM-009` then
+needs an answer for how a validation performed on research's runner transfers to a production runner
+that does not share its fetch path.
+
+Two questions the rule does not answer are proposed as **OQ-19** and **OQ-20** in L14.7.
+
+### L14.7 — What `spine.md` must say if AD-30 is adopted
+
+Paste-ready, single-line table rows. Not applied here.
+
+One row added to **Boundary With backend.q-acr**, after the algorithm-artefacts row:
+
+```markdown
+| Algorithm execution runtime, research → production | Research produces | Shared **as a published container image, never as source or a package**: promoted by digest into the production registry and configured by environment against production's own broker, buckets and `worker-api`. The algorithm reaches it as a promoted tarball in production's own bucket, so the runner is identical on both sides. **The runner reads and writes no database** — that invariant is what allows one image to serve two deployments, and a database import inside it is a defect, enforced by lint. The image carries the worker and its runtime dependencies only: no generated client, no repositories, no second service. No source dependency and no shared registry credential | Promotion is an explicit act with a recorded approval. The contract between the two sides — the trigger message together with the worker's output — is versioned and additive-only; a breaking change is a new version with both accepted during migration |
+```
+
+Two rows added to **Open Questions**:
+
+```markdown
+| OQ-19 | Who owns promoting the `algo-worker` image into production and where the approval is recorded. AD-30 requires promotion to be an explicit, approved act on the same terms as an algorithm artefact, and AD-14 requires the digest to be pinned; neither names a person or a place to write it down, and an approval with no recorded owner is not one. The image mechanism sharpens this rather than answering it: once the repositories separate, a production artefact is built by the research repository's CI, so the team that owns the deployment does not own the build that produces it. That is an ownership question, not a technical one, and AD-30 leaves it open deliberately | [UNKNOWN] | Backend owner + QMS | A named owner and a location for the record |
+| OQ-20 | Whether production needs the batch routing path or only the short one. Research runs both `qacr.aw.batchAlgorithm` and `qacr.aw.shortBatchAlgorithm` because it re-runs algorithms over many exams; production analyses one exam at a time, so the batch queue may have no production consumer. Inheriting both would build a queue, a scaler and a release nothing publishes to | [OBSERVED] `helm-charts/values/smiling-diode-638/research-us_qacr-research.yaml:74,110` | Backend owner | Confirming whether any production path publishes a batch trigger |
+```
+
+**AD-30** itself, after AD-29, with the Binds / Prevents / Rule text of L14.6 verbatim.
+
+One entry added to **Deferred**, if the reviewer prefers to keep the long-term home open rather than
+settle it now:
+
+```markdown
+| Extracting the algorithm execution runtime into its own repository | AD-30 already gives one image, one build and a promoted digest, which is the property that matters. The remaining objection is only that a device component's source sits in the research repository, which is a submission-scope argument rather than a code one | The submission's component inventory is assembled under `FR-LCM-004`, or the research repository's release cadence starts to hold up an algorithm promotion |
+```
+
+### L14.8 — The ACR precedent: two workers, one relation
+
+AD-30's strongest support is that ACR already ran this shape in production for years — and that the
+one worker which could *not* be shared failed on precisely the invariant L14.6 makes normative. This
+was read a day after the rest of L14, and it is the reason the mechanism is now stated explicitly as
+*published image* rather than left implicit.
+
+The premise that the two ACR backends shared a worker is half right. They ran **two separate
+workers** — different source, different registry, different language, different entrypoint:
+
+| Deployment | Image | Command | DB secret mounted |
+|---|---|---|---|
+| `behealthy` (commercial) | `us.gcr.io/smiling-diode-638/algorithm-worker` | `./algorithm` | none |
+| `rehealthy` (research) | `eu.gcr.io/smiling-diode-638/rehealthy/algorithm-worker` | `./algorithm-worker` | `db_uri.enc` |
+
+`rehealthy-core`'s Jenkins publishes every module under `${REGISTRY}/rehealthy/<module>`;
+`behealthy`'s image carries no `rehealthy/` segment, so it is definitively a different build, and it
+is not produced by either repository read here.
+
+**What was identical is the relation — and it is AD-30's relation.** Four properties, held by both:
+
+1. **The producer maps its own database to plain JSON.** `behealthy`'s `algoPayload` reads its
+   Sequelize exam and returns
+   `{ product, examId, color_board, stick_type, algorithm: { bucket, blob }, payload }`, where
+   `payload` is the exam's own inputs tarred and gzipped — not a handle for the worker to resolve
+   against a database. `rehealthy` builds `cloud.AlgorithmExecutionMessage`, whose fields are
+   `Product string`, `Material string`, `ColorBoard string`, `StickType string` and
+   `Algorithm *Algorithm`. No ORM type crosses the wire in either direction
+2. **The worker's vocabulary is deployment configuration, not schema.** `behealthy`'s chart tells the
+   worker what it handles through the environment — `HANDLED_PRODUCTS: "dip,acr"`,
+   `HANDLED_STICK_TYPES: "ACON_10,ACON_2"` — rather than through a type imported from the database.
+   This is the same call `backend.q-acr#509` makes for q-acr by declaring the two shared enums locally
+   instead of importing them from the generated client
+3. **The worker writes nothing itself.** It POSTs results to a host supplied by environment:
+   `RE_WORKER_SERVICE_HOST` → `results/{resultId}/output`, `/error`, `/normalizedSamples`,
+   `/imageArtifacts`. q-acr's `WORKER_API_URL` → `/results/:id/output` is a direct port of this, which
+   is why the seam already exists in the TypeScript worker (L14.1)
+4. **Each backend owns its own result writer.** `behealthy` exposes `POST /algo_output/:examId` from a
+   project named `worker-api`; `rehealthy` runs a separate `worker-service`. Same job, different
+   schema, never shared. L14.3 reached that split from production's AD-2/AD-4/AD-23 obligations and
+   then found ACR had already settled it the same way
+
+**One image serving two deployments was also already routine.** `rehealthy` runs `algorithm-worker`
+and `algorithm-short-batch-worker` from one image, differing only in release and configuration, and
+`behealthy`'s `algorithm-worker` image is deployed a second time from a different chart with different
+environment and no database secret at all. This is the pattern q-acr's `algo-worker` /
+`algo-worker-short` pair already uses (L14.1); AD-30 extends it across a deployment boundary rather
+than introducing it.
+
+#### Why `rehealthy`'s worker could never have been shared
+
+It held all four properties and still could not be shared, and that is the part worth keeping.
+Property 3's evidence above is in fact its own callback — it posts every result to
+`worker-service` and writes nothing itself. What disqualified it is not in that list at all:
+`services/algorithm-worker/main.go:86` calls `persistence.GetDB(decrypter)`, `materials.go` imports
+`gorm` at `:10`, takes the handle at `:28`, and at `:87` queries `algo_version` directly
+(`.Where("name = ? and metadata->>'rawPipelineConfig' is not null", …).First(…)`). It writes its
+results through the callback like a well-behaved worker, and reads its inputs straight out of the
+database behind it — which is why that deployment mounts `db_uri.enc` and `behealthy`'s equivalent
+does not.
+
+A worker that reads a database belongs to that database and cannot be handed to another one. This is
+why L14.6 states the no-database invariant as a separate normative clause rather than leaving it to
+be inferred from the relation: the four properties describe how a backend talks to its worker, and
+holding all four is **not sufficient** to make that worker shareable. Not touching a database is an
+additional precondition, and it is the one that decides the question.
+
+[OBSERVED] Read 2026-09-03. `behealthy` `origin/main` at **`0f8b0bd3d`**; `rehealthy-core`
+`origin/develop` at **`52b87a0`**; `helm-charts` `origin/master` at **`1ed2669`**, the same commit
+L14.1 cites. As in L14.1, none of these repositories is in `evidence/pins.yaml`, which scopes to the
+four application repositories `behaviour.tsv` cites, so the commits are recorded here instead.
+
+`rehealthy-core` is cited against **`develop`, not `master`**, and the distinction is load-bearing:
+`master`'s most recent commit is 2022-06-15, `develop` is 66 commits ahead of it and is the
+repository's default branch, and the database access above exists only on `develop` — introduced
+2022-07-10 in `a7cea50`, which is not an ancestor of `master`. Reading `master` would show an
+algorithm worker with no database access at all and would invert the counter-example.
+
+`behealthy/infra/bepubsub/src/algo/algoPayload.js` (module return value),
+`behealthy/projects/worker-api/src/app.js:49`,
+`rehealthy-core/pkg/cloud/messages.go:35` (`Product` at `:36`, `Material` at `:39`),
+`rehealthy-core/services/algorithm-worker/main.go:86,325,635,651,667,676,686`,
+`rehealthy-core/services/algorithm-worker/materials.go:10,28,87`,
+`helm-charts/charts/behealthy/values.yaml:76,81,84,85` (mounted secrets `:89`–`:92`, no database
+secret among them), `helm-charts/charts/rehealthy/values.yaml:35,39,42,49,59,63,73`,
+`helm-charts/charts/workers/values.yaml:15,20`
+
+Both `helm-charts` values files are byte-identical to `origin/master`, and `behealthy`'s worktree is
+at `origin/main`, so nothing here rests on the branch it was read from.
