@@ -1304,12 +1304,21 @@ than introducing it.
 
 #### Why `rehealthy`'s worker could never have been shared
 
-It broke property 3. `services/algorithm-worker/main.go:86` calls `persistence.GetDB(decrypter)`, and
-`materials.go` imports `gorm` at `:10` and reads `ctx.Value(DatabaseContextKey).(*gorm.DB)` at `:28`
-— which is why that deployment mounts `db_uri.enc` and `behealthy`'s equivalent does not. A worker
-that reads a database belongs to that database and cannot be handed to another one. This is the
-counter-example behind L14.6's invariant: not touching a database is not incidental to sharing a
-runner, it is the precondition for it.
+It held all four properties and still could not be shared, and that is the part worth keeping.
+Property 3's evidence above is in fact its own callback — it posts every result to
+`worker-service` and writes nothing itself. What disqualified it is not in that list at all:
+`services/algorithm-worker/main.go:86` calls `persistence.GetDB(decrypter)`, `materials.go` imports
+`gorm` at `:10`, takes the handle at `:28`, and at `:87` queries `algo_version` directly
+(`.Where("name = ? and metadata->>'rawPipelineConfig' is not null", …).First(…)`). It writes its
+results through the callback like a well-behaved worker, and reads its inputs straight out of the
+database behind it — which is why that deployment mounts `db_uri.enc` and `behealthy`'s equivalent
+does not.
+
+A worker that reads a database belongs to that database and cannot be handed to another one. This is
+why L14.6 states the no-database invariant as a separate normative clause rather than leaving it to
+be inferred from the relation: the four properties describe how a backend talks to its worker, and
+holding all four is **not sufficient** to make that worker shareable. Not touching a database is an
+additional precondition, and it is the one that decides the question.
 
 [OBSERVED] Read 2026-09-03. `behealthy` `origin/main` at **`0f8b0bd3d`**; `rehealthy-core`
 `origin/develop` at **`52b87a0`**; `helm-charts` `origin/master` at **`1ed2669`**, the same commit
@@ -1326,7 +1335,7 @@ algorithm worker with no database access at all and would invert the counter-exa
 `behealthy/projects/worker-api/src/app.js:49`,
 `rehealthy-core/pkg/cloud/messages.go:35` (`Product` at `:36`, `Material` at `:39`),
 `rehealthy-core/services/algorithm-worker/main.go:86,325,635,651,667,676,686`,
-`rehealthy-core/services/algorithm-worker/materials.go:10,28`,
+`rehealthy-core/services/algorithm-worker/materials.go:10,28,87`,
 `helm-charts/charts/behealthy/values.yaml:76,81,84,85` (mounted secrets `:89`–`:92`, no database
 secret among them), `helm-charts/charts/rehealthy/values.yaml:35,39,42,49,59,63,73`,
 `helm-charts/charts/workers/values.yaml:15,20`
