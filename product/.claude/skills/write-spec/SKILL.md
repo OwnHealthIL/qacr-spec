@@ -201,10 +201,16 @@ example and it is `ready`.
 
 ```
 # QACR-APP-SPEC-nn — <name>
-**RECREATION BRIEF.** Not a specification of behaviour.
+<n> features: <x> recreated, <y> new.   <- a fact, never a document type
 
 header table   Document · Revision (0.1, draft for review) · Epic · Features covered ·
                Not covered · Milestones · Domains · Traces to <current FR and EPIC revisions>
+
+What this      one row per covered feature naming the source that defines its behaviour:
+document         `recreated` — Minuteful Kidney, except departures Dn
+defines          `new` — this document, section 3
+               The precedence rule attaches to these rows, not to the document.
+               spec-check.py checks them against spec-status.js.
 
 How to read this   all features are recreations; the current product is their specification.
                    THE PRECEDENCE RULE, verbatim:
@@ -352,15 +358,43 @@ one.
 4. Strip the archaeology. Notes about what earlier revisions got wrong belong in `CLAUDE.md`, not
    in a delivery document. **This includes the revision's own changelog paragraph** — useful while
    he is reviewing successive drafts, wrong the moment the document is delivered.
+
+   > **Archaeology is what earlier revisions got wrong. It is not what the document is, or how
+   > to read it.** SPEC-05 Rev 0.10 carried a line saying it was a full specification rather
+   > than a recreation brief; it was removed at promotion under this step, and the document
+   > went out with nothing saying which kind it was — beside four siblings that all open with
+   > `RECREATION BRIEF` and a precedence rule pointing the other way. The authority table and
+   > the precedence rule **stay**, always. So does anything that tells a reader how to use the
+   > document. Only the account of how it got here comes out.
 5. Set the document's state to `ready` in `spec-status.js` — `STATE` — so the board shows it. That
    is what tells a developer the document is not still moving under them.
-6. **Rename the file and bump the header row together, in one commit**: `Rev0.n` becomes `Rev1.0`
+6. **Run `generator/ready-check.py <spec.md> generator/` — after the cleaning, before the
+   rename.** Promotion is mostly subtraction, and every promotion so far has been followed
+   within days by corrections that were not disagreements about content: they were damage the
+   cleaning did, or things it should have noticed. This asks what subtraction breaks — a
+   reference to an open item or departure the document no longer defines, a pointer to a
+   section that was renumbered away, a count in prose that a table has outgrown, a departure
+   missing from its own feature's traceability row, a milestone row that no longer names every
+   milestone the document owes, and the two things a delivered document may never lose: the
+   authority table and the precedence rule.
+
+   It is **not** a review of the content — Guy has already done that — and it is **not** a
+   gate. What it finds is fixed in the same pass, before the rename, so it never becomes a
+   revision anybody has to read. Proven against the shipped artefacts: it catches three of the
+   four defects the development team reported in SPEC-04 Rev 1.0 and two of the three an
+   independent verification found in SPEC-05 Rev 1.0.
+
+   **A fresh-eyes pass is deliberately not part of this.** Guy's position, and it is right:
+   changes after ready are fine when someone new reads the document. What is not fine is the
+   promotion introducing them.
+
+7. **Rename the file and bump the header row together, in one commit**: `Rev0.n` becomes `Rev1.0`
    in the filename *and* in the Revision row. The superseded draft stays beside it. Then rebuild
    the board — `spec-status.js` is the only data module it reads, so neither `.docx` moves and
    neither should be committed dirty.
-7. `npm run check`. **Checks 7 and 8 of `layout-check.py` are steps 1 and 5 of this list**, and
+8. `npm run check`. **Checks 7 and 8 of `layout-check.py` are steps 1 and 5 of this list**, and
    they are the only two a machine can make. They exist because this step was got backwards once.
-8. Report: what he approved, what landed where, and what remains open.
+9. Report: what he approved, what landed where, and what remains open.
 
 > **Open items do not block ready.** SPEC-01 went ready carrying one. What blocks ready is a
 > requirement the document's own prescriptive half contradicts — SPEC-04's section 3 stated a

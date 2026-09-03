@@ -57,7 +57,9 @@ if os.path.isdir(SPECS) and any(f.endswith(".md") for f in os.listdir(SPECS)):
     # to cite a superseded FR revision, and only has to be re-issued if something it
     # traces to actually moved. See the module docstring for why that replaced failing
     # every lagging citation.
-    run("Spec impact: no lagging spec traces to a requirement that has moved",
+    # The label is a question, not a claim. It used to assert the all-clear, so a run in
+    # which nothing could be assessed still printed that assertion as its section heading.
+    run("Spec impact: does a lagging spec trace to anything that has moved?",
         [sys.executable, os.path.join(DIR, "spec-impact.py"), DIR, ROOT])
 else:
     print("\nNo specs in specs/ yet — skipping the spec coverage checks.")

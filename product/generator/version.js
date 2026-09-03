@@ -12,9 +12,9 @@
 
 module.exports = {
   // QACR-APP-FR-01 Functional Requirements
-  FR: "1.24",
+  FR: "1.27",
   // QACR-APP-EPIC-01 Epic and Feature Map, and the board generated beside it
-  EPIC: "1.18",
+  EPIC: "1.21",
 
   // Bump these, rebuild, run the checks. Do not edit a revision anywhere else.
   //

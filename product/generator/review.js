@@ -26,6 +26,7 @@ exports.conflicts = [
 ];
 
 exports.scope = [
+  ["Q-107", "What does conformance to WCAG AA add beyond the accessibility requirements now written, and does ADA raise anything further?", "FR-TXT-022, FR-TXT-023", "Guy's direction is that the product should be accessible to WCAG AA. FR-TXT-022 and FR-TXT-023 cover text scaling and the screen reader; the rest of AA — contrast, focus order, target sizes, motion — is unscoped and is deliberately not claimed by either requirement. ADA is a separate question and is not yet assessed. To be scoped as its own piece of work"],
   ["Q-21", "Does doctor-to-patient engagement take place within the application?", "FR-SHR-011, priority undecided", "Product decision per partner. It determines whether the deferred chat and consultation entries apply at all"],
   ["Q-22", "Does the grade-6 reading level apply to mandated regulatory wording?", "FR-TXT-001 against FR-PRT-003", "Regulatory to confirm. Some required wording may not be reducible to grade 6"],
   ["Q-23", "What does the results center contain?", "FR-PRT-001", "Two questions: whether invalidated tests appear, and whether results belonging to another registered user on the same phone number are excluded. The second bears on RA 6.4"],
@@ -36,7 +37,6 @@ exports.scope = [
   ["Q-39", "Can the results center be delivered in time for milestone 3?", "FR-PRT-001 at milestone 3 against the whole of section 18 at milestone 4", "Held open at the reviewer's request. Whatever is decided, the results center and the six controls that protect access to it are to carry the same milestone, so that the screen is never committed without its protection"],
   ["Q-40", "Should FR-ALG-002 move to milestone 1 as well?", "FR-ALG-001 at 1, FR-ALG-002 at 3, FR-RES-006 new at 1", "The review recorded a priority change against this conflict and also accepted the recommendation, which was not to move it. FR-RES-006 should remove the need, because a demonstration build presents a fixed payload and exercises no algorithm version. Confirm that FR-ALG-002 stays at 3"],
   ["Q-41", "Does provider integration testing need to be milestone 3?", "FR-LCM-016 at milestone 4 against FR-SHR-001 to FR-SHR-008, all at milestone 3", "Left open when FR-LCM-006 moved to 3. Provider routing is committed for the study; the integration test that proves a result reaches the right provider is not"],
-  ["Q-99", "Is the real-time capture guidance recorded, as the instructional flow is?", "FR-IMG-024 against FR-FLW-008", "The instructional flow is settled as recorded audio. The capture guidance changes in real time and is drawn from a finite set of messages, so recording it per message is feasible, but it has not been confirmed. It decides whether the guidance wording is authored in the content set alongside its recording or generated from the displayed text"],
 ];
 
 exports.raEdits = [
@@ -64,6 +64,7 @@ exports.consequences = [
 
 // [ref, item, decision taken, where it landed, closed at]
 exports.closed = [
+  ["Q-99", "Is the real-time capture guidance recorded, as the instructional flow is?", "Yes. Settled at the SPEC-05 review: the capture guidance is recorded audio as the instructional flow is. How it is delivered during a scan is E06's and is not SPEC-05's business", "FR-IMG-024, FR-FLW-008", "Rev 1.26"],
   ["Q-105", "No requirement demands that a test be prevented where the backend reports the user has no unused kit remaining", "Settled at Rev 1.22. It needs no requirement of its own: it is one of the reasons the backend refuses a test, which FR-RDY-014 already covers. Guy asked instead that the list of those reasons exist and carry it, which is Appendix I"],
   ["Q-106", "Is a time source the user cannot alter needed for the 24-hour window between tests?", "Settled at Rev 1.22. No. An alterable clock is accepted for that window and no requirement is wanted for it. Q-30 stays open for the timing windows inside a test, where RA 4.18 relies on the timers being enforceable"],
   ["Q-101", "The date-of-birth requirement says the user shall confirm, and configuration can suppress the step", "FR-AUT-012 stays as written. The suppression state is intended for demonstration partners, and the control is guarded by the product manager, who determines which state a partner receives — not by the software. Recorded because a reader who meets that state will ask how it squares with the requirement", "FR-AUT-012", "Rev 1.20"],

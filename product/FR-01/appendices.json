@@ -1,5 +1,5 @@
 {
- "revision": "1.24",
+ "revision": "1.27",
  "part_titles": {
   "terminology.1": "Superseded Component Names",
   "terminology.2": "Names for User-Operated Parts",
@@ -1000,12 +1000,12 @@
     "counts": {
      "1": 15,
      "2": 2,
-     "3": 3,
-     "4": 0,
+     "3": 4,
+     "4": 1,
      "5": 0,
      "TBD": 0
     },
-    "total": 20,
+    "total": 22,
     "unreadable": false
    },
    {
@@ -1024,14 +1024,14 @@
    {
     "area": "12. Timing Control",
     "counts": {
-     "1": 8,
-     "2": 1,
-     "3": 1,
+     "1": 6,
+     "2": 3,
+     "3": 2,
      "4": 1,
      "5": 1,
      "TBD": 0
     },
-    "total": 12,
+    "total": 13,
     "unreadable": false
    },
    {
@@ -1067,10 +1067,10 @@
      "2": 0,
      "3": 5,
      "4": 2,
-     "5": 1,
+     "5": 2,
      "TBD": 0
     },
-    "total": 13,
+    "total": 14,
     "unreadable": false
    },
    {
@@ -1143,12 +1143,12 @@
     "counts": {
      "1": 0,
      "2": 0,
-     "3": 2,
+     "3": 3,
      "4": 0,
      "5": 2,
      "TBD": 0
     },
-    "total": 4,
+    "total": 5,
     "unreadable": false
    },
    {
@@ -1207,14 +1207,14 @@
   "all_areas": {
    "area": "All areas",
    "counts": {
-    "1": 70,
-    "2": 13,
-    "3": 101,
-    "4": 21,
-    "5": 41,
+    "1": 68,
+    "2": 15,
+    "3": 104,
+    "4": 22,
+    "5": 42,
     "TBD": 4
    },
-   "total": 250,
+   "total": 255,
    "unreadable": false
   }
  }

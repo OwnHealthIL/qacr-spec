@@ -113,7 +113,20 @@ requirement. A retired identifier may be discussed in prose; it may not be trace
 and only fails if a requirement **it traces to** moved between the revision it cites and the
 current one. Failing every lagging citation re-issued every spec on every bump, and made the
 citation say nothing, since it was current by construction.
-`check-all.py` — runs them all. `spec-triage.py`, `build-conflicts.py`, `build-m5-proposal.py`,
+`ready-check.py` — **not part of `npm run check`**. It runs by hand on one spec, after the
+cleaning that promotion does and before the rename to 1.0, and asks what subtraction breaks: a
+reference to an open item or departure the document no longer defines, a pointer to a
+renumbered section, a count in prose the table has outgrown, a departure missing from its own
+traceability row, a milestone row that stopped being exhaustive, and the two things a delivered
+document may never lose — the authority table and the precedence rule. Every promotion before it
+existed was followed within days by corrections that were damage the cleaning did.
+`render-pages.py` — converts both documents and writes page images, so section 8.5 can be run.
+`spec-to-docx.py` and `redline.py` — a Word review copy of a spec, with `--since` colouring
+everything that changed from a named revision red. Output goes to `local/review/`, never to
+`specs/`: a second copy of a document where the first one lives is read as current by whoever
+finds it first.
+`retired-citation-probe.py` — finds live prose citing withdrawn identifiers.
+`check-all.py` — runs them all except `ready-check.py`. `spec-triage.py`, `build-conflicts.py`, `build-m5-proposal.py`,
 `apply-m5.py`, `remap-bl.py` — one-off builders and migrations, kept because for a regulated
 document set how a bulk change was made is part of its record.
 
@@ -293,7 +306,24 @@ the reaction wait and absorbs F05.1, F05.3, F05.5 **and F04.8, which belongs to 
 because the waiting-time card cannot be described apart from the countdown it carries.
 Every spec'd feature must appear in exactly one document.
 
-### Two document shapes, chosen by status — this is the most important choice you make
+### Authority is per feature, not per document — this is the most important choice you make
+
+**A document is not one kind of thing.** It covers several features, and each names the source
+that defines its behaviour. **`recreated`** means Minuteful Kidney is authoritative and the
+document records only departures; **`new`** means the document is. SPEC-04 is six of one and one
+of the other.
+
+Every spec therefore opens with a **What this document defines** table, one row per covered
+feature, and the precedence rule attaches to those rows rather than to the document. That is not
+presentation: SPEC-04 shipped ready with a document-wide rule sending any disagreement to the
+shipping product, while F04.7 — a feature with no equivalent there — carried a full behaviour
+section. The rule and the content contradicted each other for two revisions and no guard could
+see it, because there was nothing per-feature to check against.
+
+`spec-check.py` now checks that table against `spec-status.js`. A `New` feature calling itself
+recreated fails, because there is nothing to recreate. An `Unchanged` feature calling itself new
+fails, because that is the tripwire below firing. **`Changed` is deliberately unchecked** — which
+of the two it is, is exactly the question to put to Guy.
 
 **An `Unchanged` feature does not get a behaviour section. It gets a recreation brief.**
 
@@ -309,14 +339,16 @@ where the product has more than twenty, all marked blocking where two only notif
 lot of effort to discover, and the whole feature set had been triaged `Unchanged` — meaning
 the correct document was always one page.
 
-| Status | Shape |
+| Triage status | Authority, and shape |
 |---|---|
 | **Unchanged** | **Recreation brief.** Records departures, undecideds, traceability. Never behaviour. |
 | **Changed** | **Ask Guy for his brief on it first.** A one-liner where the rest is unchanged is a *departure row* inside the brief and needs no behaviour section — the common case. Anything larger needs a behaviour section, and that shape is not settled yet. Never assume which: a `Changed` status says something differs, not how much. |
 | **New** | Full spec, per the template below. The writing earns its place because there is nothing to recreate. |
 
-A mixed document is brief-by-default with behaviour sections only for the features marked
-`Changed` or `New`. SPEC-01 is the worked example: eight features, one behaviour section.
+**Most documents are mixed, and the table is how a reader knows which half they are in.**
+Brief-by-default, with behaviour sections only for the features whose authority row says `new`.
+SPEC-01 is the worked example at one extreme — eight features, all recreated, no behaviour
+statements at all — and SPEC-05 at the other, seven features, all new, fifty statements.
 
 **The brief's shape** — see the live revision of `specs/QACR-APP-SPEC-01`:
 
@@ -354,6 +386,19 @@ question for Guy, and it is a cheap question — one line, answered in a sentenc
 cost of describing a working product and then unpicking it. SPEC-01 ended with **eight
 features, two departures and no behaviour statements at all**, which is what an all-recreation
 brief should look like.
+
+### Promotion is subtraction, so check what it broke
+
+**Run `generator/ready-check.py` after the cleaning and before the rename.** Promoting a spec
+removes the proposals, folds the answered questions away and strips the changelog, and every
+promotion before that check existed was followed within days by two or three corrections. They
+were not disagreements about content — Guy had reviewed that. They were the cleaning's own
+damage: a dangling `U4` left by a renumbered list, a count of ten over a table of twelve, a
+departure missing from its own traceability row, and a line saying what kind of document it was
+removed as archaeology.
+
+**Archaeology is what earlier revisions got wrong. It is not what the document is, or how to
+read it.** The authority table and the precedence rule always stay.
 
 ### A ready spec carries no proposals
 
@@ -707,9 +752,9 @@ Every one of these exists because something got through without it.
 | **The switch-user route is conditional, and Guy was right** | Checked against both clients at his request: the option is offered only where the backend reports more than one patient against the phone number or the address. Otherwise support is the only route. It is future development for QACR (FR-AUT-020, FR-AUT-011, FR-AUT-015, all milestone 5), so support is what applies. |
 | **Q-103, Q-104, Q-105 new; Q-30 widened** | **Q-103** FR-KIT-001 requires the software to prevent the user completing a scan where the code is missing; nothing does and nothing can, since the code is read during the scan. Left as written at Guy's direction — the brief records the product and the register carries the question. **Q-104** the kit-identifier template, a value needing kit manufacturing. **Q-105** no requirement demands prevention where the backend reports no unused kit remaining; left with SPEC-01, which owns FR-RDY-014. **Q-30** was scoped to the section-12 timing windows and now records that the FR-KIT-007 window is defeated by the same alterable clock. |
 | **§8.5 can be run here now, and was** | It could not be, for Rev 1.21: no PDF renderer, so the cover pages were never read as images and the risk that step exists to catch went unchecked through two shipped revisions. `generator/render-pages.py` closes it — LibreOffice headless plus poppler, both Homebrew one-offs. **Run against Rev 1.23 and epic map Rev 1.17: both covers correct**, including the bare `Document no. … Revision 1.23 (Draft)` paragraph that froze at 1.15 and 1.9 and that no guard reads. Word was tried first and rejected: it renders these files best but hangs on any dialog, and a step that can hang does not get run. |
-| **E04's export is grouped, and it must be read at the item level** | At Guy's request the team grouped similar behaviours for review, so the file holds **86 behaviours in 30 review items**, and `pm_mark` and `pm_comment` are properties of the **item**, propagated to every behaviour under it. Counting marks per behaviour therefore multiplies them by the group size and says nothing: it read as 46 `change` when the answer is **16 `change`, 13 `correct`, 1 `wrong` — sixteen departures, against E03's fourteen.** Comparable, not three times worse. **The unit of a departure is the comment, not the line.** |
+| **An export has a `review_mode`, and reading it in the wrong one costs a round** | `baseline` means one behaviour is one item and per-line counts are right; grouped — the field absent and `total_items` below `total_lines` — means `pm_mark` belongs to the group and is propagated down. E04 was grouped: counting per behaviour read as 46 `change` when the answer is **16 `change`, 13 `correct`, 1 `wrong`**. E05 is `baseline`: **181 lines, 76 `change`, 59 `correct`, 45 `unmarked`, 1 `wrong`.** The team moved back to baseline at E05 deliberately. **Check `total_items` against `total_lines` before counting anything**, and see `reviews/README.md`, which now carries both modes. |
 | **How to derive which behaviour a comment is about** | The comment names or **quotes** the behaviour it concerns — *"After a timeout Android never resets the screen again…"*, *"The scanning step waits for the app to accept the dip"*. Guy's rule: **anything not referenced is correct.** So a comment that quotes one behaviour narrows to it — `F04.3~interruption-screen-lock` reads *"all is correct, except for the timer that runs out"*, which is one of its three — and a comment that references nothing specific applies to the item as a whole. |
-| **`complete: false` on an export is a field artefact, not a gap** | `review.reviewed_items` counts *behaviours* while `total_items` counts *items*, so 86 against 30 never reconciles and `complete` never flips. **Check for `pm_mark: unmarked` instead**; E04 now has none. Do not read the flag as an unfinished review — it was read that way once. |
+| **`complete: false` means one thing when grouped and another when baseline** | Grouped, it is a field artefact: `reviewed_items` counts behaviours and `total_items` counts groups, so 86 against 30 never reconciles and the flag never flips — check `pm_mark: unmarked` instead. Baseline, the units agree and **the flag is real**: E05 says 136 of 181 and means it. **Unmarked lines are not a gap either.** Where a feature is new the same answer covers many lines and Guy marks a representative; E05's 45 cluster in F05.6 and F04.8 and almost all resolve to a decision he made on a marked line in the same feature, or to a requirement already written. Derive them rather than asking again. |
 | **SETTLED: the engine is recreated, the flow is authored** | The apparent contradiction — F04.1 `Unchanged` because *"there are no new controls or mechanics"*, against sixteen departures — was two objects, and Guy settled the seam at the SPEC-04 draft. **SPEC-04 recreates the chat flow engine: how a step is presented, confirmed, retained and resumed. It does not specify the flow that engine runs** — which sections exist, in what order, what they say, or what waits sit between them. The triage was right and the unit had never been stated. **The general lesson: when an `Unchanged` feature attracts many `change` marks, ask what unit the status was about before questioning the status.** |
 | **Five of E04's comments are scope boundaries, not behaviour** | The timers to SPEC-05; the dipping step out of existence; the explainer content to E07; the demo controls to a spec nothing plans. **A comment that names another document is a scope boundary, not a behaviour to write.** Two ownership gaps came out of it and are SPEC-04 U6 and U7: **fast-forwarding past a wait and its audio has no requirement and no owner**, and it collides with FR-TIM-008, which admits no exemption from a minimum duration; and **nothing owns the QACR section list** now that SPEC-04 explicitly does not. Jumping to a chosen section is already FR-FLW-007 and is SPEC-04 D9 — only the fast-forward half is new. |
 | **Four of E04's departures are parity-direction decisions, and all four are iOS** | Where the two platforms differ, Guy has chosen the target: the permission bubble, photo upload and the idle window after a timeout *"should work like iOS"*, and so — after a correction at the SPEC-04 Rev 0.2 review — does the view following new bubbles. **These are not the parity question that was closed.** That decision was that *verifying* parity is QA's at the end; choosing which behaviour QACR adopts where they disagree is product content and belongs in the departures table. Do not drop them by misapplying the closure. |

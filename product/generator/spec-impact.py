@@ -36,7 +36,7 @@ SPECDIR = os.path.join(ROOT, "specs")
 SPECNAME = re.compile(r"^(QACR-APP-SPEC-\d{2}) Rev(\d+)\.(\d+)\.md$")
 CITES = re.compile(r"QACR-APP-FR-01\s+Rev\s+(\d+\.\d+)")
 
-fails, notes = [], []
+fails, notes, unchecked, checked = [], [], [], []
 
 
 def reqs_at(ref=None):
@@ -128,8 +128,9 @@ for spec, (rev, fname) in sorted(live.items()):
     sha = commit_for(cited)
     then = reqs_at(sha) if sha else None
     if then is None:
+        unchecked.append(spec)
         print(f"   {spec}: cites Rev {cited}, current is {CURRENT} — NOT CHECKED, "
-              f"that revision predates this repository's history of the data modules")
+              f"that revision cannot be resolved to a commit here")
         continue
 
     moved, note_only = [], []
@@ -154,6 +155,7 @@ for spec, (rev, fname) in sorted(live.items()):
                      f"document was checked against what they are building to")
         print(f"   {spec}: cites Rev {cited} — AFFECTED: {', '.join(moved)}")
     else:
+        checked.append(spec)
         extra = f"; note-only changes to {', '.join(note_only)}" if note_only else ""
         print(f"   {spec}: cites Rev {cited}, current is {CURRENT} — none of its "
               f"{len(claims)} traced requirements moved, so no re-issue is owed{extra}")
@@ -169,4 +171,19 @@ if fails:
     for f in fails:
         print(f"  - {f}")
     sys.exit(1)
-print("no lagging spec traces to a requirement that has moved")
+# Say what was assessed, not just that nothing failed.
+#
+# The closing line used to print unconditionally, so a run in which every lagging spec
+# was NOT CHECKED still ended "no lagging spec traces to a requirement that has moved"
+# — and check-all.py promotes that line to a section heading, so the summary read as an
+# all-clear for documents nothing had looked at. Found by an independent verification
+# run against a tarball, where no revision resolves to a commit and every spec came back
+# unchecked. Not checking is not a failure, but it must never look like a pass.
+if unchecked:
+    print(f"INCOMPLETE: {len(unchecked)} lagging spec(s) could not be assessed — "
+          f"{', '.join(unchecked)}. Their cited revision does not resolve to a commit in "
+          f"this checkout, so whether anything they trace to has moved is UNKNOWN. "
+          f"{len(checked)} lagging spec(s) were assessed and are clear. Run this where the "
+          f"full history is present before trusting a green result.")
+else:
+    print("no lagging spec traces to a requirement that has moved")

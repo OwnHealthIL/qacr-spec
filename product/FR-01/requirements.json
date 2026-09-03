@@ -1279,6 +1279,21 @@
   "sha256": "e71b559fa1421ebfec1ff80191de469e9be357082b8b5c7b3ba24b471ca38414"
  },
  {
+  "id": "FR-COM-014",
+  "text": "Where the user has refused permission for device notifications, the software shall support an SMS message as an alternative means of alerting them that a timed stage requires their attention.",
+  "section_number": "15",
+  "section_name": "Data Transmission and Backend Communication",
+  "milestone": "5",
+  "source_refs": [
+   "SPEC-05 review",
+   "waiting-time UX study"
+  ],
+  "note": "Added at the SPEC-05 review as future development. The study proposes it as the fallback where the notification route is closed, and a wait of minutes is exactly where losing the user costs a kit. It does not weaken FR-COM-012, which tolerates refusal and leaves the on-screen countdown carrying the obligation; it adds a route rather than a condition. A backend capability, adjacent to FR-COM-013",
+  "feature": "F05.5",
+  "epic": "E05",
+  "sha256": "f00cf0d0d6dba18e5e5edadaf6f2687c0f30c94528e5c6e5efdcba35956eb0d7"
+ },
+ {
   "id": "FR-FLW-001",
   "text": "The software shall present the test procedure as a sequence of short, discrete steps, each requiring the user to confirm completion by activating a control provided for that purpose, and shall not advance to the next step without that confirmation.",
   "section_number": "9",
@@ -3328,6 +3343,20 @@
   "sha256": "2baef1dc5214a384bf19ea33b50b91956bb9a94218e77f761db6a490375e5015"
  },
  {
+  "id": "FR-SUP-005",
+  "text": "Where a test is invalidated, the software shall ask the user whether the kit had already been used for a practice or dry run, so that a kit spent in practice is distinguished from a test that failed for another reason.",
+  "section_number": "21",
+  "section_name": "Support and Help",
+  "milestone": "3",
+  "source_refs": [
+   "SPEC-04 review"
+  ],
+  "note": "Added at Guy's direction. The predecessor already carries the idea of a run that does not count, reached through the troubleshooting conversation; what it has no way of establishing is whether the kit in hand was spent that way, which changes both the explanation and the corrective action. Reason categories come from FR-ALG-012 and the messaging from FR-TXT-021",
+  "feature": "F09.2",
+  "epic": "E09",
+  "sha256": "1b92ceabe7084c46013a0cc61b9b0d479f8470add81411b7d6bd0b25d4e121cd"
+ },
+ {
   "id": "FR-TIM-001",
   "text": "For each time-dependent stage of the test flow, the software shall implement a defined start event, minimum duration, permitted completion window and expiry behaviour. These values shall be fixed in the application and shall not be configurable at run time.",
   "section_number": "12",
@@ -3391,7 +3420,7 @@
  },
  {
   "id": "FR-TIM-005",
-  "text": "The software shall display, for each active time-dependent stage, the time remaining until the next action is permitted and the time remaining before the permitted window expires.",
+  "text": "The software shall display, for each active time-dependent stage, the time remaining until the next action is permitted.",
   "section_number": "12",
   "section_name": "Timing Control",
   "milestone": "1",
@@ -3400,14 +3429,14 @@
    "RA 4.4",
    "RA 7.9"
   ],
-  "note": "",
+  "note": "Amended at the SPEC-05 review. The completion window is deliberately not displayed: showing a second clock counting against the user hurries them through the action the window exists to protect. The window is enforced silently and its length is a timing-flex value",
   "feature": "F05.5",
   "epic": "E05",
-  "sha256": "a9a3ec5f6f2c8a455f6769ce85ac842884ccb4640d7b67dd300bd772b24ed701"
+  "sha256": "d8918c32a925aaa8a8256e3d489ba93babb17cbb14f45bb5372e32112273b773"
  },
  {
   "id": "FR-TIM-006",
-  "text": "The software shall measure the time elapsed from the user's confirmation of sample collection to the connection of the Sample Pod to the Mixing Cartridge. If the elapsed time exceeds the defined limit, the software shall prevent the user from proceeding and display an explanatory error message.",
+  "text": "The software shall measure the time elapsed from the user's confirmation of sample collection to the connection of the Sample Pod to the Mixing Cartridge. If the elapsed time exceeds the defined limit, the software shall invalidate the test.",
   "section_number": "12",
   "section_name": "Timing Control",
   "milestone": "3",
@@ -3415,14 +3444,14 @@
    "SRS TSM.6",
    "SRS TSM.7"
   ],
-  "note": "Limit TBD, fixed not configurable; currently specified as 30 minutes. Timed silently in the background: no countdown is shown, so that the user is not hurried",
+  "note": "Limit TBD, fixed not configurable; currently specified as 30 minutes. An exceeded limit invalidates the test rather than blocking the step: confirmed at review, and FR-TIM-012 carries what the user is told and that a new kit is needed. Timed silently in the background: no countdown is shown, so that the user is not hurried",
   "feature": "F05.2",
   "epic": "E05",
-  "sha256": "b725fb014be1f70bff0c3b1acf4907b1ef8cab701cc3a14479ac2ac3168984f6"
+  "sha256": "7857f5073d9a3c0e782d68f5f0da35b690644232d2e582cf57d09d74138e0944"
  },
  {
   "id": "FR-TIM-007",
-  "text": "The software shall present the coloured release button instruction only after both the required Incubation Well residence time has elapsed and the preceding user instructions have been completed.",
+  "text": "The software shall present the coloured release button instruction only after the required Incubation Well residence time has elapsed and no instruction preceding it remains outstanding.",
   "section_number": "12",
   "section_name": "Timing Control",
   "milestone": "1",
@@ -3430,10 +3459,10 @@
    "RA 4.3",
    "RA 7.9"
   ],
-  "note": "",
+  "note": "Narrowed at the SPEC-05 review. An instruction the flow never presented is not outstanding: content that gives way to the clock is dropped whole and ahead of the user, so it is neither completed nor pending",
   "feature": "F05.3",
   "epic": "E05",
-  "sha256": "abec13b45ea68cb1ec96724dc0d067407e4421b562cebf9c60747511f2717f11"
+  "sha256": "c05b3d1924456f34a1fdd1d5581cc7872f3f7d5e41b26a8fd5a34615b6648404"
  },
  {
   "id": "FR-TIM-008",
@@ -3455,11 +3484,11 @@
   "text": "If the coloured release button step is not completed within the permitted timing window, the software shall invalidate the test and prevent continuation.",
   "section_number": "12",
   "section_name": "Timing Control",
-  "milestone": "1",
+  "milestone": "2",
   "source_refs": [
    "RA 4.3"
   ],
-  "note": "",
+  "note": "Moved to milestone 2 at the SPEC-05 review. The demonstration does not void a test on timing grounds, so invalidation arrives with FR-TIM-012, which tells the user why. Milestone 1 previously invalidated with no requirement to explain it",
   "feature": "F05.3",
   "epic": "E05",
   "sha256": "96e575d10cedb8fe7740e6c8238c2fd61f57a8f0db2f2627e5456fa314bf54e5"
@@ -3469,11 +3498,11 @@
   "text": "The software shall permit the Test Board to be scanned only within the validated scanning-time window, and shall invalidate the test if that window has expired.",
   "section_number": "12",
   "section_name": "Timing Control",
-  "milestone": "1",
+  "milestone": "2",
   "source_refs": [
    "RA 4.4"
   ],
-  "note": "",
+  "note": "Moved to milestone 2 at the SPEC-05 review. The demonstration does not void a test on timing grounds, so invalidation arrives with FR-TIM-012, which tells the user why. Milestone 1 previously invalidated with no requirement to explain it",
   "feature": "F05.4",
   "epic": "E05",
   "sha256": "bc4479df70a91851f15e82d1078340ae3fd573a3484ce5c3924e92733489a2e7"
@@ -3495,7 +3524,7 @@
  },
  {
   "id": "FR-TIM-014",
-  "text": "The software shall issue a local device notification when a timed window is about to expire, and shall do so only where the application is in the background at that time.",
+  "text": "The software shall issue a local device notification at the timing events of a stage that require the user's attention, and shall do so only where the application is in the background at that time.",
   "section_number": "12",
   "section_name": "Timing Control",
   "milestone": "4",
@@ -3504,10 +3533,24 @@
    "supports RA 4.3",
    "supports RA 4.4"
   ],
-  "note": "Local notification, not a backend push; see FR-COM-009",
+  "note": "Local notification, not a backend push; see FR-COM-009. Widened at the SPEC-05 review from the about-to-expire warning alone. Which timing events warrant a notification, and how many there are, is the specification's business and not this requirement's — the rule is that the user is reached while the application is in the background",
   "feature": "F05.5",
   "epic": "E05",
-  "sha256": "0546a2246fa33a0c6c5fa63ef3721d4967acf1607d13d248aa79c12898eff782"
+  "sha256": "385ab4367a719696b1b24f2500ed4c1a7e824313ade59b7475528164b780dde7"
+ },
+ {
+  "id": "FR-TIM-015",
+  "text": "The software shall emit the audible signal that marks the end of a timed stage even where the application is not in the foreground.",
+  "section_number": "12",
+  "section_name": "Timing Control",
+  "milestone": "3",
+  "source_refs": [
+   "SPEC-05 review"
+  ],
+  "note": "Added at the SPEC-05 review. The signal alone, not the spoken flow and not the flow advancing: a user who set the phone down during a wait of minutes has to know the stage ended, and nothing else about the application continues while it is away. The platforms grant this differently and it may need a capability declared at release",
+  "feature": "F05.5",
+  "epic": "E05",
+  "sha256": "ffb4eee420fc7e4aaf255e42c42090c4582b08b9e6481a8cbfe1deea4c0f2532"
  },
  {
   "id": "FR-TXT-001",
@@ -3802,5 +3845,35 @@
   "feature": "F07.3",
   "epic": "E07",
   "sha256": "22ba316fc399a6e267bf16d72422e6424637a8fa4df054083cb271d9e22b1fc3"
+ },
+ {
+  "id": "FR-TXT-022",
+  "text": "The software shall scale user-facing text with the text size selected in the device system settings, up to a defined maximum beyond which further increase is not applied. Within that range no text shall be truncated, overlapped or placed beyond reach.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "3",
+  "source_refs": [
+   "SPEC-04 review",
+   "accessibility"
+  ],
+  "note": "Added at Guy's direction. The predecessor scales text from the system setting and caps it above a threshold, and the cap is the part that matters: without it a layout breaks at the largest settings. The maximum is a value to be set, like the other TBD values. Complements FR-TXT-001, which governs whether text can be understood; this governs whether it can be read",
+  "feature": "F07.1",
+  "epic": "E07",
+  "sha256": "9077bd68c531dd49e9798ba097315b4ddd9e02d8afd6024b3efc7caab48ba1fa"
+ },
+ {
+  "id": "FR-TXT-023",
+  "text": "The software shall support the platform screen reader on user-facing content that the software does not itself read aloud, shall not have the screen reader duplicate content the software speaks, and shall not permit screen-reader operation to alter the conduct of a test or the timing of any stage.",
+  "section_number": "10",
+  "section_name": "User-Facing Content",
+  "milestone": "4",
+  "source_refs": [
+   "SPEC-04 review",
+   "accessibility"
+  ],
+  "note": "Added at Guy's direction, with his two constraints written in rather than left to interpretation: the instructional flow is already spoken, so the screen reader applies where it is not, and it may not interfere with the test. Conformance to WCAG AA more broadly is Q-107 and is deliberately not claimed here",
+  "feature": "F07.1",
+  "epic": "E07",
+  "sha256": "a009f207003645219b59e73c0e728dd5e2d37edfd21df6ed1cccfed249dfe853"
  }
 ]

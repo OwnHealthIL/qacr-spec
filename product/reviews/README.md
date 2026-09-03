@@ -8,40 +8,51 @@ to what they sent.
 One export per epic, `acr-behaviour-review-E0n.json`, plus a disposition where one was
 written.
 
-## Read it at the item level, not the line level
+## First read `review_mode`, then choose how to count
 
-**This is the thing to get right before anything else.** From E04 onwards the team groups
-similar behaviours into **review items**, because reviewing 86 statements one at a time is
-worse than reviewing 30 groups. So:
+**The team exports in two modes, and the field says which.** Reading a file in the wrong mode
+is the single most expensive mistake available here — it cost a whole round of analysis once.
 
-| | |
-|---|---|
-| a **behaviour** | one statement about the shipped product, with what iOS does and what Android does |
-| a **review item** | a group of related behaviours — E04 has 30 of them over 86 behaviours, from 1 to 5 each |
-| `pm_mark`, `pm_comment` | properties of the **item**, written once and propagated to every behaviour under it |
+| `review_mode` | What a review item is | Seen in |
+|---|---|---|
+| `baseline` | **one behaviour = one item.** Count marks per line | E05, and E03 by default |
+| absent, with `total_items` < `total_lines` | behaviours **grouped**; `pm_mark` and `pm_comment` belong to the group and are propagated down | E04 |
 
-**Counting marks per behaviour multiplies them by the group size and tells you nothing.**
-E04 read as 46 `change` marks that way; at item level it is 16 `change`, 13 `correct`,
-1 `wrong` — sixteen departures against E03's fourteen, which is comparable rather than
-three times worse. That misreading survived a whole round of analysis.
+**In grouped mode, counting marks per behaviour multiplies them by the group size and tells you
+nothing.** E04 read as 46 `change` marks that way; at item level it is 16 `change`, 13 `correct`,
+1 `wrong` — sixteen departures against E03's fourteen, which is comparable rather than three
+times worse. That misreading survived a whole round.
 
-**The unit of a departure is the comment, not the line.**
+**In baseline mode the line is the unit again** and per-line counts are correct. E05 is
+`baseline`: 181 behaviours, 76 `change`, 59 `correct`, 45 `unmarked`, 1 `wrong`.
 
-### Which behaviour is a comment about
+**The check that works in both modes:** `total_items` against `total_lines`. Equal means
+baseline; smaller means grouped.
 
-The comment names or quotes the behaviour it concerns. The rule, from Guy:
+### Which behaviour a comment is about
 
-> The comment is per item, and it references the relevant behaviour. **Anything not
-> referenced is correct.**
+In grouped mode the comment names or quotes the behaviour it concerns, and Guy's rule applies:
+**anything not referenced is correct.** A comment quoting one statement narrows to it; one
+referencing nothing applies to the whole group.
 
-So a comment quoting one statement narrows to it — *"all is correct, except for the timer
-that runs out"* is one of that item's three — and a comment referencing nothing specific
-applies to the item as a whole.
+In baseline mode the comment belongs to its own line and no derivation is needed.
 
-### `complete: false` is a field artefact
+### `complete: false` means different things in each mode
 
-`review.reviewed_items` counts behaviours while `total_items` counts items, so 86 against
-30 never reconciles and the flag never flips. **Check for `pm_mark: unmarked` instead.**
+In **grouped** mode it is a field artefact: `reviewed_items` counts behaviours while
+`total_items` counts groups, so 86 against 30 never reconciles and the flag never flips. Check
+for `pm_mark: unmarked` instead.
+
+In **baseline** mode the two units agree, so **`complete: false` is real information**. E05
+reports 136 of 181, and the 45 unmarked are deliberate — see below.
+
+### Not every line gets a mark, and that is not a gap
+
+Where a feature is genuinely new, the same answer applies to many lines and Guy marks a
+representative rather than all of them. **Derive the rest rather than asking again**: an
+unmarked line whose subject already has an answer elsewhere in the same feature takes that
+answer. E05's 45 unmarked cluster in F05.6 and F04.8 and almost all resolve to a decision he
+made on a marked line nearby, or to a requirement already written.
 
 ## The marks
 
