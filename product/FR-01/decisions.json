@@ -1,5 +1,13 @@
 [
  {
+  "ref": "Q-99",
+  "question": "Is the real-time capture guidance recorded, as the instructional flow is?",
+  "decision": "Yes. Settled at the SPEC-05 review: the capture guidance is recorded audio as the instructional flow is. How it is delivered during a scan is E06's and is not SPEC-05's business",
+  "where_it_landed": "FR-IMG-024, FR-FLW-008",
+  "closed_at": "Rev 1.26",
+  "comments": ""
+ },
+ {
   "ref": "Q-105",
   "question": "No requirement demands that a test be prevented where the backend reports the user has no unused kit remaining",
   "decision": "Settled at Rev 1.22. It needs no requirement of its own: it is one of the reasons the backend refuses a test, which FR-RDY-014 already covers. Guy asked instead that the list of those reasons exist and carry it, which is Appendix I",
