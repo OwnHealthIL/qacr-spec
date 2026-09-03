@@ -28,6 +28,16 @@ REVPAT = re.compile(r"QACR-APP-(FR|EPIC)-01\s+Rev\s+(\d+\.\d+)")
 # which a spec may legitimately discuss, from one that never existed.
 MANIFEST = json.load(open(os.path.join(DIR, "id-manifest.json"), encoding="utf-8"))["issued"]
 
+# Per-feature triage, so the authority table can be checked against it.
+TRIAGE = json.loads(subprocess.check_output(["node", "-e", f"""
+const E=require('{DIR}/epics.js');
+const spec=require('{DIR}/spec-status.js');
+const D=require('{DIR}/domains.js').DOMAIN;
+const o={{}};
+E.forEach(e=>e.features.forEach(f=>{{ o[f[0]]=spec(f[0], e.code, D[f[0]]).status; }}));
+console.log(JSON.stringify(o));
+"""]).decode())
+
 SPAT = r"\*\*S\d{2}\.\d{2}\*\*"
 NPAT = r"\*\*S\d{2}\.(\d{2})\*\*"
 # The spec directory is shared with the development team, whose rule is to keep every
@@ -116,6 +126,44 @@ for path in SPECS:
     if unknown:
         fails.append(f"{name}: names identifiers that were never issued -> {unknown}")
         print(f"   UNKNOWN ID       : {unknown}")
+    # The authority table, and the tripwire it makes checkable for the first time.
+    #
+    # A spec is not one kind of document. It covers several features and each names the
+    # source that defines its behaviour: `recreated` means Minuteful Kidney is
+    # authoritative and the spec records only departures; `new` means the spec is. SPEC-04
+    # is six of one and one of the other, and its document-wide precedence rule sent F04.7
+    # — a feature with no equivalent to defer to — to the shipping product.
+    #
+    # spec-status.js already holds the triage, so two of the three cases are checkable:
+    # a `New` feature cannot be recreated, because there is nothing to recreate; and an
+    # `Unchanged` feature calling itself new is the section-5 tripwire firing. `Changed`
+    # is deliberately not checked — which of the two it is, is the question CLAUDE.md
+    # says to put to Guy.
+    authority = {}
+    for line in txt.splitlines():
+        m2 = re.match(r"\|\s*(F\d{2}\.\d)\b[^|]*\|(.*?)\|", line)
+        if m2 and ("**recreated**" in m2.group(2) or "**new**" in m2.group(2)):
+            authority[m2.group(1)] = "new" if "**new**" in m2.group(2) else "recreated"
+    if authority:
+        missing_auth = sorted(f for f in covered if f not in authority)
+        if missing_auth:
+            fails.append(f"{name}: has an authority table but these covered features are "
+                         f"not in it -> {missing_auth}. Every covered feature has to name "
+                         f"the source that defines its behaviour")
+        for f, a in sorted(authority.items()):
+            tri = TRIAGE.get(f)
+            if tri == "New" and a == "recreated":
+                fails.append(f"{name}: {f} is triaged New but its authority row says "
+                             f"recreated. There is nothing to recreate")
+            if tri == "Unchanged" and a == "new":
+                fails.append(f"{name}: {f} is triaged Unchanged but its authority row says "
+                             f"new. Either the triage is wrong or the document is "
+                             f"specifying a recreation — section 5's tripwire, and it cuts "
+                             f"both ways")
+        print(f"   authority         : {len(authority)} feature(s) — "
+              f"{sum(1 for v in authority.values() if v=='recreated')} recreated, "
+              f"{sum(1 for v in authority.values() if v=='new')} new")
+
     revs = REVPAT.findall(txt)
     if not revs:
         fails.append(f"{name}: cites no document revision, so it makes no traceability claim to check")

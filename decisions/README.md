@@ -1,7 +1,12 @@
 # decisions/
 
-Questions **this repository** raises that only Product can close. **Empty because ingesting a spec
-has not yet found one.** That is not the same as Product having no open questions — see below.
+Questions **this repository** raises that only Product can close. **Two open**, both raised against
+SPEC-02 Rev 1.1. That is not the same as Product's own open questions — see below.
+
+| | | |
+|---|---|---|
+| `PQ-01` | Does the current product persist an authentication credential? | `FR-SEC-008` · blocks `F02.5` |
+| `PQ-02` | At M3, is anything owed client-side for the OTP attempt limit? | `FR-AUT-018` `FR-AUT-005` · blocks `F02.2` |
 
 One file per question, `PQ-nn.md`. Written by `qacr-context` — the skill that finds silent
 requirements and contradiction stops while assembling a feature's contract — and answered by

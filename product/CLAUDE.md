@@ -293,7 +293,24 @@ the reaction wait and absorbs F05.1, F05.3, F05.5 **and F04.8, which belongs to 
 because the waiting-time card cannot be described apart from the countdown it carries.
 Every spec'd feature must appear in exactly one document.
 
-### Two document shapes, chosen by status — this is the most important choice you make
+### Authority is per feature, not per document — this is the most important choice you make
+
+**A document is not one kind of thing.** It covers several features, and each names the source
+that defines its behaviour. **`recreated`** means Minuteful Kidney is authoritative and the
+document records only departures; **`new`** means the document is. SPEC-04 is six of one and one
+of the other.
+
+Every spec therefore opens with a **What this document defines** table, one row per covered
+feature, and the precedence rule attaches to those rows rather than to the document. That is not
+presentation: SPEC-04 shipped ready with a document-wide rule sending any disagreement to the
+shipping product, while F04.7 — a feature with no equivalent there — carried a full behaviour
+section. The rule and the content contradicted each other for two revisions and no guard could
+see it, because there was nothing per-feature to check against.
+
+`spec-check.py` now checks that table against `spec-status.js`. A `New` feature calling itself
+recreated fails, because there is nothing to recreate. An `Unchanged` feature calling itself new
+fails, because that is the tripwire below firing. **`Changed` is deliberately unchecked** — which
+of the two it is, is exactly the question to put to Guy.
 
 **An `Unchanged` feature does not get a behaviour section. It gets a recreation brief.**
 
@@ -309,14 +326,16 @@ where the product has more than twenty, all marked blocking where two only notif
 lot of effort to discover, and the whole feature set had been triaged `Unchanged` — meaning
 the correct document was always one page.
 
-| Status | Shape |
+| Triage status | Authority, and shape |
 |---|---|
 | **Unchanged** | **Recreation brief.** Records departures, undecideds, traceability. Never behaviour. |
 | **Changed** | **Ask Guy for his brief on it first.** A one-liner where the rest is unchanged is a *departure row* inside the brief and needs no behaviour section — the common case. Anything larger needs a behaviour section, and that shape is not settled yet. Never assume which: a `Changed` status says something differs, not how much. |
 | **New** | Full spec, per the template below. The writing earns its place because there is nothing to recreate. |
 
-A mixed document is brief-by-default with behaviour sections only for the features marked
-`Changed` or `New`. SPEC-01 is the worked example: eight features, one behaviour section.
+**Most documents are mixed, and the table is how a reader knows which half they are in.**
+Brief-by-default, with behaviour sections only for the features whose authority row says `new`.
+SPEC-01 is the worked example at one extreme — eight features, all recreated, no behaviour
+statements at all — and SPEC-05 at the other, seven features, all new, fifty statements.
 
 **The brief's shape** — see the live revision of `specs/QACR-APP-SPEC-01`:
 

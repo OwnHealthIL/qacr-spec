@@ -25,7 +25,7 @@ qacr-spec/
 │   └── specs/                QACR-APP-SPEC-nn briefs, as the PM writes them
 ├── features/                 one file per specified feature — E01 to E04
 ├── evidence/                 what the code does today, cited — 2,855 rows over 83 requirements
-├── decisions/                questions THIS repository raises against a spec — empty
+├── decisions/                questions THIS repository raises against a spec — PQ-01, PQ-02
 ├── tools/                    the parser, the revision differ, the citation checker,
 │                             the vault extractor, the feature-file builder,
 │                             the coverage updater
@@ -37,10 +37,10 @@ qacr-spec/
 none, not that the code does nothing. SPEC-01 to SPEC-04 have been published, so `features/` holds
 E01 to E04 — 25 feature files.
 
-`decisions/` is empty because ingesting a spec has not yet raised a question — which is **not** the
-same as Product having none. The FR document carries its own Decision Log (62 closed) and Review
-Register (48 open), and those are parsed to `product/FR-01/` rather than copied here. See
-`decisions/README.md`.
+`decisions/` holds two questions, `PQ-01` and `PQ-02`, both raised against SPEC-02 Rev 1.1 at the
+development kickoff — which is **not** the same as Product's own open questions. The FR document
+carries its own Decision Log (62 closed) and Review Register (48 open), and those are parsed to
+`product/FR-01/` rather than copied here. See `decisions/README.md`.
 
 ### `product/`
 
