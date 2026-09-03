@@ -48,14 +48,16 @@ much easier to get wrong from memory.
 The table covers **the whole of QACR-APP-FR-01 Rev 1.19** — every claim the vault
 records, for all four products. `coverage.tsv` says which requirements it reached.
 
-`product/` is now at Rev 1.24. Of the nine requirements added since Rev 1.19, the four of Rev 1.20
-have not been through an extraction pass — they carry `extraction_scope` `QACR-APP-FR-01 Rev1.20`
-and no rows, and extracting them is `spec-intake`'s step 2. The five of Rev 1.24 have: FR-KIT-008,
--009 and -010 at SPEC-03's intake, FR-FLW-010 and FR-STA-012 at SPEC-04's. The vault carries
-nothing for any of them — its kit-identification evidence is recorded by functional area rather
-than by requirement, as it is for FR-KIT-001 to -007, and it has no note for the two Rev 1.24
-flow requirements. Nor does it for FR-FLW-006, FR-STA-008, -009 and -010, which SPEC-04's pass
-also covered.
+`product/` is now at Rev 1.27. Of the fourteen requirements added since Rev 1.19, seven have not
+been through an extraction pass — the four of Rev 1.20, and FR-SUP-005, FR-TXT-022, FR-TXT-023 of
+Rev 1.25 — carrying `extraction_scope` `QACR-APP-FR-01 Rev1.20` or `Rev1.27` and no rows; extracting
+them is `spec-intake`'s step 2. The other seven have been through one: FR-KIT-008, -009 and -010 at
+SPEC-03's intake, FR-FLW-010 and FR-STA-012 at SPEC-04's, FR-TIM-015 and FR-COM-014 at SPEC-05's —
+which also covered FR-TIM-004, -012, -014 and FR-COM-009, -012 of the older corpus. The vault
+carries nothing for any of them: its kit-identification evidence is recorded by functional area
+rather than by requirement, as it is for FR-KIT-001 to -007, and it has no note for the flow or
+timing-notification ids. Nor does it for FR-FLW-006, FR-STA-008, -009 and -010, which SPEC-04's
+pass also covered.
 
 ### `coverage.tsv`
 
@@ -63,7 +65,7 @@ also covered.
 requirement  feature  epic  extraction_scope  evidence_rows  state
 ```
 
-One row per requirement in the FR document — all 250, whether or not anyone has looked at it.
+One row per requirement in the FR document — all 255, whether or not anyone has looked at it.
 Maintained by `tools/update_coverage.py`, which **extends and re-counts rather than regenerating**:
 whether anyone has extracted evidence for a requirement is not written down in the PM's document and
 cannot be recovered from it, so a row already here keeps its own `extraction_scope` and only new

@@ -525,7 +525,8 @@
   "title": "Incubation gate and release-button window",
   "epic": "E05",
   "milestones": [
-   "M1"
+   "M1",
+   "M2"
   ],
   "domains": [
    "iOS",
@@ -541,7 +542,8 @@
   "title": "Colour-evolution gate and scanning window",
   "epic": "E05",
   "milestones": [
-   "M1"
+   "M1",
+   "M2"
   ],
   "domains": [
    "iOS",
@@ -558,7 +560,9 @@
   "epic": "E05",
   "milestones": [
    "M1",
-   "M4"
+   "M3",
+   "M4",
+   "M5"
   ],
   "domains": [
    "iOS",
@@ -566,9 +570,11 @@
   ],
   "requirements": [
    "FR-TIM-005",
+   "FR-TIM-015",
    "FR-TIM-014",
    "FR-COM-009",
-   "FR-COM-012"
+   "FR-COM-012",
+   "FR-COM-014"
   ]
  },
  {
@@ -702,7 +708,8 @@
   "epic": "E07",
   "milestones": [
    "M2",
-   "M3"
+   "M3",
+   "M4"
   ],
   "domains": [
    "Content"
@@ -711,7 +718,9 @@
    "FR-TXT-001",
    "FR-TXT-002",
    "FR-TXT-003",
-   "FR-TXT-004"
+   "FR-TXT-004",
+   "FR-TXT-022",
+   "FR-TXT-023"
   ]
  },
  {
@@ -869,7 +878,8 @@
   "epic": "E09",
   "milestones": [
    "M1",
-   "M2"
+   "M2",
+   "M3"
   ],
   "domains": [
    "iOS",
@@ -877,7 +887,8 @@
   ],
   "requirements": [
    "FR-RES-005",
-   "FR-RES-004"
+   "FR-RES-004",
+   "FR-SUP-005"
   ]
  },
  {

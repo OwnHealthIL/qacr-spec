@@ -275,6 +275,86 @@ SPECS = {
             },
         },
     },
+    "SPEC-05": {
+        "id": "QACR-APP-SPEC-05",
+        "file": "QACR-APP-SPEC-05 Rev1.3.md",
+        "revision": "Rev 1.3",
+        "traces": {"FR-01": "1.27", "EPIC-01": "1.21"},
+        # This brief has no departures table and no traceability section:
+        # every feature is NEW, and the header's "What this document defines"
+        # table names the authoritative section per feature. That wording is
+        # the feature-level disposition below (emphasis dropped, as always).
+        # Per requirement, the map carries "new —" plus the section(s) whose
+        # own "Traces:" line names it, so nothing defaults to as-is — which
+        # would assert a current behaviour the brief says does not exist.
+        #
+        # FR-TIM-004 is the exception §3.1 states itself: "a hardened time
+        # source, is future development at milestone 5" — deliberately not
+        # specified by section 3, so its cell carries that instead of "new".
+        #
+        # §8 Open items: two, both keyed to FR-TIM-001 — every timing value is
+        # provisional until the timing-flex study sets it (register Q-05), and
+        # a suspected predecessor defect for the development team to confirm.
+        # Neither blocks building, says the brief. Two "Traces:" lines also
+        # name requirements owned elsewhere — §3.3 FR-IMG-022 (F04.7), §3.4
+        # FR-FLW-008 (F04.2) — which render nowhere here.
+        "departures": {
+            "FR-COM-009": "new — section 3.8",
+            "FR-COM-012": "new — section 3.8",
+            "FR-COM-014": "new — section 3.8",
+            "FR-FLW-009": "new — section 3.3",
+            "FR-TIM-001": "new — sections 2, 3.1 · values provisional, section 8",
+            "FR-TIM-002": "new — section 3.1",
+            "FR-TIM-003": "new — section 3.1",
+            "FR-TIM-004": "future development at M5 — section 3.1",
+            "FR-TIM-005": "new — sections 3.2, 3.4",
+            "FR-TIM-006": "new — section 3.7",
+            "FR-TIM-007": "new — section 3.4",
+            "FR-TIM-008": "new — sections 3.2, 3.5",
+            "FR-TIM-009": "new — sections 3.5, 3.6",
+            "FR-TIM-011": "new — sections 3.5, 3.6",
+            "FR-TIM-012": "new — section 3.6",
+            "FR-TIM-014": "new — section 3.8",
+            "FR-TIM-015": "new — section 3.4",
+        },
+        # Header table: "Features covered | F05.1 ... F05.6, and F04.8" —
+        # F04.8 is an E04 feature specified here because its only use is
+        # inside a timed wait (section 7); its file lands in features/E04/.
+        "features": {
+            "F05.1": {
+                "disposition": "new — this document, section 3",
+                "covers": ["FR-TIM-001", "FR-TIM-002", "FR-TIM-003",
+                           "FR-TIM-004"],
+            },
+            "F05.2": {
+                "disposition": "new — this document, section 3.7. The "
+                               "mechanism exists in Minuteful Kidney and the "
+                               "limit differs; the behaviour is written here",
+                "covers": ["FR-TIM-006"],
+            },
+            "F05.3": {
+                "disposition": "new — this document, section 3.5",
+                "covers": ["FR-TIM-007", "FR-TIM-009"],
+            },
+            "F05.4": {
+                "disposition": "new — this document, sections 3.4 and 3.5",
+                "covers": ["FR-TIM-008", "FR-TIM-011"],
+            },
+            "F05.5": {
+                "disposition": "new — this document, sections 3.2, 3.4 and 3.8",
+                "covers": ["FR-TIM-005", "FR-TIM-015", "FR-TIM-014",
+                           "FR-COM-009", "FR-COM-012", "FR-COM-014"],
+            },
+            "F05.6": {
+                "disposition": "new — this document, section 3.6",
+                "covers": ["FR-TIM-012"],
+            },
+            "F04.8": {
+                "disposition": "new — this document, section 3.3",
+                "covers": ["FR-FLW-009"],
+            },
+        },
+    },
 }
 
 # The §5 cells read "as-is except **D1** · U1 open" and "as-is except **D2**".
