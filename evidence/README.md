@@ -48,16 +48,16 @@ much easier to get wrong from memory.
 The table covers **the whole of QACR-APP-FR-01 Rev 1.19** — every claim the vault
 records, for all four products. `coverage.tsv` says which requirements it reached.
 
-`product/` is now at Rev 1.27. Of the fourteen requirements added since Rev 1.19, nine have not been
-through an extraction pass — the four of Rev 1.20, and the five of Rev 1.25–1.27 (FR-COM-014,
-FR-SUP-005, FR-TIM-015, FR-TXT-022, FR-TXT-023) — carrying `extraction_scope` `QACR-APP-FR-01
-Rev1.20` or `Rev1.27` and no rows; extracting them is `spec-intake`'s step 2. The five of Rev 1.24
-have been through one: FR-KIT-008,
--009 and -010 at SPEC-03's intake, FR-FLW-010 and FR-STA-012 at SPEC-04's. The vault carries
-nothing for any of them — its kit-identification evidence is recorded by functional area rather
-than by requirement, as it is for FR-KIT-001 to -007, and it has no note for the two Rev 1.24
-flow requirements. Nor does it for FR-FLW-006, FR-STA-008, -009 and -010, which SPEC-04's pass
-also covered.
+`product/` is now at Rev 1.27. Of the fourteen requirements added since Rev 1.19, seven have not
+been through an extraction pass — the four of Rev 1.20, and FR-SUP-005, FR-TXT-022, FR-TXT-023 of
+Rev 1.25 — carrying `extraction_scope` `QACR-APP-FR-01 Rev1.20` or `Rev1.27` and no rows; extracting
+them is `spec-intake`'s step 2. The other seven have been through one: FR-KIT-008, -009 and -010 at
+SPEC-03's intake, FR-FLW-010 and FR-STA-012 at SPEC-04's, FR-TIM-015 and FR-COM-014 at SPEC-05's —
+which also covered FR-TIM-004, -012, -014 and FR-COM-009, -012 of the older corpus. The vault
+carries nothing for any of them: its kit-identification evidence is recorded by functional area
+rather than by requirement, as it is for FR-KIT-001 to -007, and it has no note for the flow or
+timing-notification ids. Nor does it for FR-FLW-006, FR-STA-008, -009 and -010, which SPEC-04's
+pass also covered.
 
 ### `coverage.tsv`
 
